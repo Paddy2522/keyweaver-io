@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terms of Service — Captio by Keyweaver</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:     #0A0A0F;
+      --surface: #13131A;
+      --lift:    #1C1C28;
+      --edge:    #2A2A3D;
+      --accent:  #5B6BF8;
+      --accent2: #7B8BFF;
+      --text:    #E8E8F0;
+      --muted:   #6B6B88;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--ink); color: var(--text);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem; height: 56px;
+      border-bottom: 1px solid var(--edge);
+      position: sticky; top: 0;
+      background: rgba(10,10,15,0.9);
+      backdrop-filter: blur(12px);
+      z-index: 100;
+    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-logo-mark {
+      width: 28px; height: 28px; background: var(--accent);
+      border-radius: 6px; display: flex; align-items: center; justify-content: center;
+    }
+    .nav-logo-mark svg { width: 16px; height: 16px; }
+    .nav-logo-name {
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 15px; color: var(--text); letter-spacing: -0.01em;
+    }
+    .nav-logo-name span { color: var(--muted); font-weight: 400; }
+    .nav-back { font-size: 13px; color: var(--muted); text-decoration: none; }
+    .nav-back:hover { color: var(--text); }
+
+    .page {
+      max-width: 720px; margin: 0 auto;
+      padding: 4rem 2rem 6rem;
+    }
+
+    .legal-header { margin-bottom: 3rem; }
+    .legal-label {
+      font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--accent); font-weight: 600; margin-bottom: 0.75rem;
+    }
+    .legal-header h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.25rem; font-weight: 800;
+      letter-spacing: -0.03em; color: var(--text);
+      margin-bottom: 0.75rem;
+    }
+    .legal-meta { font-size: 13px; color: var(--muted); }
+    .legal-meta a { color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
+
+    .summary-box {
+      background: var(--lift); border: 1px solid var(--edge);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 10px 10px 0;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 3rem;
+    }
+    .summary-box h2 { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 0.75rem; }
+    .summary-box ul { list-style: none; }
+    .summary-box li {
+      font-size: 13px; color: var(--muted); line-height: 1.6;
+      padding: 3px 0; display: flex; gap: 8px;
+    }
+    .summary-box li::before { content: '→'; color: var(--accent); flex-shrink: 0; }
+
+    .legal-body h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.1rem; font-weight: 700;
+      color: var(--text); margin: 2.5rem 0 0.75rem;
+      padding-top: 2.5rem;
+      border-top: 1px solid var(--edge);
+    }
+    .legal-body h2:first-child { margin-top: 0; padding-top: 0; border-top: none; }
+    .legal-body h3 { font-size: 14px; font-weight: 600; color: var(--text); margin: 1.5rem 0 0.5rem; }
+    .legal-body p { font-size: 14px; color: var(--muted); line-height: 1.8; margin-bottom: 1rem; }
+    .legal-body ul, .legal-body ol { margin: 0.5rem 0 1rem 1.25rem; }
+    .legal-body li { font-size: 14px; color: var(--muted); line-height: 1.7; margin-bottom: 0.35rem; }
+    .legal-body a { color: var(--accent2); text-decoration: none; }
+    .legal-body a:hover { text-decoration: underline; }
+    .legal-body strong { color: var(--text); font-weight: 600; }
+
+    .toc {
+      background: var(--surface); border: 1px solid var(--edge);
+      border-radius: 10px; padding: 1.25rem 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+    .toc h2 { font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; }
+    .toc ol { margin: 0 0 0 1rem; }
+    .toc li { font-size: 13px; color: var(--muted); line-height: 1.7; }
+    .toc a { color: var(--muted); text-decoration: none; }
+    .toc a:hover { color: var(--accent2); }
+
+    footer {
+      border-top: 1px solid var(--edge); padding: 2rem;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+    }
+    footer p { font-size: 13px; color: var(--muted); }
+    .footer-links { display: flex; gap: 1.5rem; list-style: none; }
+    .footer-links a { font-size: 13px; color: var(--muted); text-decoration: none; }
+    .footer-links a:hover { color: var(--text); }
+
+    @media (max-width: 640px) {
+      nav { padding: 0 1rem; }
+      .page { padding: 3rem 1.25rem 5rem; }
+      .legal-header h1 { font-size: 1.75rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <div class="nav-logo-mark">
+      <svg viewBox="0 0 16 16" fill="none">
+        <rect x="1" y="5" width="14" height="4" rx="1.5" fill="white" opacity="0.9"/>
+        <rect x="3" y="10.5" width="8" height="2" rx="1" fill="white" opacity="0.45"/>
+        <rect x="1" y="2" width="5" height="2" rx="1" fill="white" opacity="0.35"/>
+      </svg>
+    </div>
+    <span class="nav-logo-name">Captio <span>by Keyweaver</span></span>
+  </a>
+  <a href="/legal/privacy" class="nav-back">Privacy Policy →</a>
+</nav>
+
+<div class="page">
+
+  <div class="legal-header">
+    <p class="legal-label">Legal</p>
+    <h1>Terms of Service</h1>
+    <p class="legal-meta">
+      Last updated: 1 June 2026 · Keyweaver Ltd ·
+      Questions: <a href="mailto:hello@keyweaver.io">hello@keyweaver.io</a>
+    </p>
+  </div>
+
+  <div class="summary-box">
+    <h2>Plain English summary</h2>
+    <ul>
+      <li>You get a personal, non-transferable licence to use Captio. You may not resell or redistribute it.</li>
+      <li>Credits are non-refundable once used. Unused credit packs can be refunded within 14 days.</li>
+      <li>Monthly subscriptions renew automatically. Cancel any time — you keep access until the period ends.</li>
+      <li>Don't use Captio to process audio you don't have the right to transcribe.</li>
+      <li>We may suspend accounts that abuse the service or violate these terms.</li>
+    </ul>
+  </div>
+
+  <div class="toc">
+    <h2>Contents</h2>
+    <ol>
+      <li><a href="#s1">Acceptance of terms</a></li>
+      <li><a href="#s2">The service</a></li>
+      <li><a href="#s3">Accounts</a></li>
+      <li><a href="#s4">Licence to use the plugin</a></li>
+      <li><a href="#s5">Credits and payments</a></li>
+      <li><a href="#s6">Subscriptions</a></li>
+      <li><a href="#s7">Acceptable use</a></li>
+      <li><a href="#s8">Your content</a></li>
+      <li><a href="#s9">Intellectual property</a></li>
+      <li><a href="#s10">Disclaimers and liability</a></li>
+      <li><a href="#s11">Suspension and termination</a></li>
+      <li><a href="#s12">Changes to the service</a></li>
+      <li><a href="#s13">Governing law</a></li>
+      <li><a href="#s14">Contact</a></li>
+    </ol>
+  </div>
+
+  <div class="legal-body">
+
+    <h2 id="s1">1. Acceptance of terms</h2>
+    <p>By creating a Keyweaver account or downloading and installing Captio, you agree to be bound by these Terms of Service ("Terms"). If you do not agree, do not use the service.</p>
+    <p>These Terms form a legally binding agreement between you and Keyweaver Ltd ("Keyweaver", "we", "us"), a company registered in England and Wales.</p>
+    <p>If you are using Captio on behalf of a company or organisation, you represent that you have authority to bind that entity to these Terms.</p>
+
+    <h2 id="s2">2. The service</h2>
+    <p>Captio is an AI-powered subtitle and caption generator that operates as a plugin inside Adobe After Effects. It uses the OpenAI Whisper API to transcribe audio and creates native After Effects text layers timed to the speech.</p>
+    <p>The service includes the Captio plugin, the keyweaver.io website, and the backend API at keyweaver-backend.vercel.app.</p>
+    <p>We do not guarantee that the service will be available at all times. We may carry out maintenance, updates, or suspend the service temporarily without notice.</p>
+
+    <h2 id="s3">3. Accounts</h2>
+    <p>You must create a Keyweaver account to use Captio beyond the free tier. You must provide accurate information and keep it up to date.</p>
+    <p>You are responsible for keeping your password secure and for all activity that occurs under your account. Notify us immediately at <a href="mailto:hello@keyweaver.io">hello@keyweaver.io</a> if you suspect unauthorised access.</p>
+    <p>One account per person. You may not share accounts or create accounts on behalf of others without their consent.</p>
+
+    <h2 id="s4">4. Licence to use the plugin</h2>
+    <p>Subject to these Terms and payment of any applicable fees, we grant you a personal, non-exclusive, non-transferable, revocable licence to:</p>
+    <ul>
+      <li>Install and use the Captio plugin on your own computers</li>
+      <li>Use the plugin to generate captions for your own creative projects</li>
+    </ul>
+    <p>You may not:</p>
+    <ul>
+      <li>Redistribute, resell, sublicence, or make the plugin available to third parties</li>
+      <li>Decompile, reverse-engineer, or attempt to extract the source code</li>
+      <li>Remove or alter any copyright or proprietary notices</li>
+      <li>Use the plugin to build a competing product or service</li>
+      <li>Use automated scripts or bots to interact with the plugin or API</li>
+    </ul>
+    <p>Commercial use — using Captio to produce captions for client work — is permitted on the Credits and Monthly plans.</p>
+
+    <h2 id="s5">5. Credits and payments</h2>
+
+    <h3>What credits are</h3>
+    <p>Keyweaver Credits are a prepaid unit of service. 1 credit = 1 minute of audio transcribed. Fractional minutes round up. Credits are deducted at the point of transcription, not at the point of purchase.</p>
+
+    <h3>Purchasing credits</h3>
+    <p>Credit packs are purchased as one-time payments. Prices are shown in GBP, EUR, and USD. The currency charged is selected at checkout and shown on your invoice.</p>
+
+    <h3>Credit expiry</h3>
+    <p>Credits purchased as a one-time pack never expire. Credits on the Monthly plan are subject to the rollover policy described in Section 6.</p>
+
+    <h3>Refunds</h3>
+    <p>Credits that have been consumed are non-refundable. Unused credit packs may be refunded within 14 days of purchase. To request a refund, email <a href="mailto:hello@keyweaver.io">hello@keyweaver.io</a>.</p>
+
+    <h3>Taxes</h3>
+    <p>Prices shown may be exclusive of VAT. VAT is added at checkout where applicable based on your billing location.</p>
+
+    <h2 id="s6">6. Subscriptions</h2>
+    <p>The Monthly plan is a recurring subscription billed monthly. Your subscription renews automatically on the same date each month unless you cancel.</p>
+
+    <h3>Credit allocation</h3>
+    <p>300 credits are added to your account at the start of each billing period. Up to 150 unused credits roll over to the next period. Credits beyond the rollover limit are forfeited at renewal.</p>
+
+    <h3>Cancellation</h3>
+    <p>You may cancel your subscription at any time from your <a href="/account">account page</a>. Cancellation takes effect at the end of the current billing period. You retain access to Monthly plan features and your remaining credits until that date.</p>
+
+    <h3>Refunds on subscriptions</h3>
+    <p>Monthly subscription fees are non-refundable once the billing period has started. If you cancel, you will not be charged for the next period.</p>
+
+    <h3>Price changes</h3>
+    <p>We will give you at least 30 days' notice of any price change by email. Continued use after the effective date constitutes acceptance of the new price.</p>
+
+    <h2 id="s7">7. Acceptable use</h2>
+    <p>You agree not to use Captio to:</p>
+    <ul>
+      <li>Transcribe audio you do not own or have the rights to transcribe</li>
+      <li>Process audio containing illegally obtained recordings</li>
+      <li>Generate captions for content that is defamatory, obscene, or illegal</li>
+      <li>Circumvent or attempt to circumvent usage limits or credit checks</li>
+      <li>Probe, scan, or test the vulnerability of our systems</li>
+      <li>Transmit malware, viruses, or any malicious code</li>
+      <li>Impersonate any person or entity</li>
+    </ul>
+    <p>We reserve the right to suspend accounts that violate these restrictions without refund.</p>
+
+    <h2 id="s8">8. Your content</h2>
+    <p>You retain all rights to the audio you submit and the captions generated from it. We do not claim any ownership of your content.</p>
+    <p>By using Captio, you grant us a limited licence to process your audio solely for the purpose of providing the transcription service. This licence ends when the transcription is complete. We do not use your audio or transcripts to train AI models.</p>
+    <p>You represent and warrant that you have all necessary rights to submit your audio for transcription and that doing so does not infringe any third-party rights.</p>
+
+    <h2 id="s9">9. Intellectual property</h2>
+    <p>The Captio plugin, the keyweaver.io website, and all associated software, designs, and documentation are owned by Keyweaver Ltd and protected by copyright and other intellectual property laws.</p>
+    <p>"Captio", "Keyweaver", and associated logos are trademarks of Keyweaver Ltd. You may not use them without our prior written consent.</p>
+
+    <h2 id="s10">10. Disclaimers and liability</h2>
+
+    <h3>Service provided as-is</h3>
+    <p>The service is provided "as is" without warranties of any kind, express or implied. We do not warrant that the service will be uninterrupted, error-free, or that transcriptions will be perfectly accurate. Whisper transcription accuracy depends on audio quality, speaker clarity, and language.</p>
+
+    <h3>Limitation of liability</h3>
+    <p>To the maximum extent permitted by law, Keyweaver's total liability to you for any claims arising from these Terms or your use of the service shall not exceed the greater of:</p>
+    <ul>
+      <li>The total amount you paid to us in the 12 months before the claim arose, or</li>
+      <li>£50</li>
+    </ul>
+    <p>We are not liable for any indirect, consequential, incidental, or punitive damages, including loss of profits, data, or goodwill.</p>
+    <p>Nothing in these Terms limits liability that cannot be excluded by law, including liability for death or personal injury caused by negligence, or fraud.</p>
+
+    <h2 id="s11">11. Suspension and termination</h2>
+    <p>We may suspend or terminate your account if:</p>
+    <ul>
+      <li>You violate these Terms</li>
+      <li>You fail to pay any amounts due</li>
+      <li>We are required to do so by law</li>
+      <li>Your use poses a security risk to us or other users</li>
+    </ul>
+    <p>We will give you reasonable notice where possible before suspension, except where immediate action is required. On termination, your licence to use the plugin ends and unused credits are forfeited unless termination is caused by our breach.</p>
+    <p>You may terminate your account at any time from your <a href="/account">account page</a>.</p>
+
+    <h2 id="s12">12. Changes to the service and terms</h2>
+    <p>We may modify these Terms at any time. Material changes will be notified by email at least 14 days before they take effect. Continued use of the service after the effective date constitutes acceptance.</p>
+    <p>We may also modify, discontinue, or add features to the service at any time. We will give reasonable notice of significant changes that affect paid functionality.</p>
+
+    <h2 id="s13">13. Governing law</h2>
+    <p>These Terms are governed by the laws of England and Wales. Any disputes shall be subject to the exclusive jurisdiction of the courts of England and Wales.</p>
+    <p>If you are a consumer in another country, you may also have rights under the laws of your country that cannot be waived by these Terms.</p>
+
+    <h2 id="s14">14. Contact</h2>
+    <p>For any questions about these Terms: <a href="mailto:hello@keyweaver.io">hello@keyweaver.io</a></p>
+    <p>Keyweaver Ltd · Registered in England and Wales · <strong>[Company number to be added before launch]</strong></p>
+
+  </div>
+
+</div>
+
+<footer>
+  <p>© 2026 Keyweaver. All rights reserved.</p>
+  <ul class="footer-links">
+    <li><a href="/legal/privacy">Privacy</a></li>
+    <li><a href="/legal/cookies">Cookies</a></li>
+    <li><a href="/help">Help</a></li>
+    <li><a href="/">Home</a></li>
+  </ul>
+</footer>
+
+</body>
+</html>

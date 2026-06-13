@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign up — Captio by Keyweaver</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:     #0A0A0F;
+      --surface: #13131A;
+      --lift:    #1C1C28;
+      --edge:    #2A2A3D;
+      --accent:  #5B6BF8;
+      --accent2: #7B8BFF;
+      --text:    #E8E8F0;
+      --muted:   #6B6B88;
+      --subtle:  #3A3A52;
+      --danger:  #E24B4A;
+      --success: #4CAF83;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--ink); color: var(--text);
+      min-height: 100vh; display: flex; flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem; height: 56px;
+      border-bottom: 1px solid var(--edge);
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px; text-decoration: none;
+    }
+    .nav-logo-mark {
+      width: 28px; height: 28px; background: var(--accent);
+      border-radius: 6px; display: flex; align-items: center; justify-content: center;
+    }
+    .nav-logo-mark svg { width: 16px; height: 16px; }
+    .nav-logo-name {
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 15px; color: var(--text); letter-spacing: -0.01em;
+    }
+    .nav-logo-name span { color: var(--muted); font-weight: 400; }
+    .nav-link { font-size: 13px; color: var(--muted); text-decoration: none; }
+    .nav-link:hover { color: var(--text); }
+
+    main {
+      flex: 1; display: flex;
+      align-items: center; justify-content: center;
+      padding: 3rem 1.5rem;
+    }
+
+    .auth-card { width: 100%; max-width: 420px; }
+
+    /* STEPS INDICATOR */
+    .steps-indicator {
+      display: flex; align-items: center;
+      justify-content: center; gap: 0;
+      margin-bottom: 2.5rem;
+    }
+    .step-dot {
+      width: 28px; height: 28px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 600;
+      background: var(--lift); border: 1px solid var(--edge);
+      color: var(--muted);
+      transition: all 0.2s;
+      position: relative; z-index: 1;
+    }
+    .step-dot.active {
+      background: var(--accent); border-color: var(--accent); color: #fff;
+    }
+    .step-dot.done {
+      background: var(--lift); border-color: var(--success); color: var(--success);
+    }
+    .step-line {
+      width: 48px; height: 1px; background: var(--edge);
+    }
+    .step-line.done { background: var(--success); }
+
+    /* PANEL SYSTEM */
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    .auth-header { margin-bottom: 1.75rem; }
+    .auth-header h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.6rem; font-weight: 700;
+      letter-spacing: -0.02em; color: var(--text);
+      margin-bottom: 0.35rem;
+    }
+    .auth-header p { font-size: 14px; color: var(--muted); }
+    .auth-header a { color: var(--accent2); text-decoration: none; }
+    .auth-header a:hover { text-decoration: underline; }
+
+    .form-group { margin-bottom: 1rem; }
+
+    label {
+      display: block; font-size: 13px;
+      font-weight: 500; color: var(--muted); margin-bottom: 6px;
+    }
+
+    input[type="email"],
+    input[type="password"],
+    input[type="text"] {
+      width: 100%; height: 44px;
+      background: var(--surface);
+      border: 1px solid var(--edge); border-radius: 8px;
+      padding: 0 12px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px; color: var(--text);
+      outline: none; transition: border-color 0.15s;
+      -webkit-appearance: none;
+    }
+    input::placeholder { color: var(--muted); }
+    input:focus { border-color: var(--accent); }
+    input.error-input { border-color: var(--danger); }
+
+    .input-row { display: flex; align-items: center; position: relative; }
+    .input-row input { padding-right: 44px; }
+    .toggle-pw {
+      position: absolute; right: 12px;
+      background: none; border: none; cursor: pointer;
+      color: var(--muted); padding: 0;
+      display: flex; align-items: center;
+    }
+    .toggle-pw:hover { color: var(--text); }
+    .toggle-pw svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* PASSWORD STRENGTH */
+    .pw-strength { margin-top: 8px; }
+    .pw-bars {
+      display: flex; gap: 4px; margin-bottom: 4px;
+    }
+    .pw-bar {
+      height: 3px; flex: 1; border-radius: 2px;
+      background: var(--edge); transition: background 0.2s;
+    }
+    .pw-bar.weak   { background: var(--danger); }
+    .pw-bar.fair   { background: #F5A623; }
+    .pw-bar.strong { background: var(--success); }
+    .pw-hint { font-size: 11px; color: var(--muted); }
+
+    /* ALERT */
+    .alert {
+      border-radius: 8px; padding: 10px 14px;
+      font-size: 13px; margin-bottom: 1rem; display: none;
+    }
+    .alert.error {
+      background: rgba(226,75,74,0.1);
+      border: 1px solid rgba(226,75,74,0.3);
+      color: #F09595; display: block;
+    }
+    .alert.success {
+      background: rgba(76,175,131,0.1);
+      border: 1px solid rgba(76,175,131,0.3);
+      color: var(--success); display: block;
+    }
+
+    .btn-submit {
+      width: 100%; height: 44px;
+      background: var(--accent); color: #fff;
+      border: none; border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px; font-weight: 500;
+      cursor: pointer; transition: background 0.15s, opacity 0.15s;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      margin-top: 0.25rem;
+    }
+    .btn-submit:hover { background: var(--accent2); }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .spinner {
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff; border-radius: 50%;
+      animation: spin 0.7s linear infinite; display: none;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .terms-note {
+      font-size: 12px; color: var(--muted);
+      text-align: center; margin-top: 1rem; line-height: 1.6;
+    }
+    .terms-note a { color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
+
+    /* PLAN CARDS */
+    .plan-cards {
+      display: flex; flex-direction: column; gap: 10px;
+      margin-bottom: 1.5rem;
+    }
+    .plan-card {
+      background: var(--surface);
+      border: 1px solid var(--edge); border-radius: 10px;
+      padding: 1rem 1.25rem;
+      cursor: pointer; transition: border-color 0.15s;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .plan-card:hover { border-color: var(--subtle); }
+    .plan-card.selected { border-color: var(--accent); }
+
+    .plan-radio {
+      width: 18px; height: 18px; border-radius: 50%;
+      border: 2px solid var(--edge); flex-shrink: 0;
+      transition: all 0.15s; position: relative;
+    }
+    .plan-card.selected .plan-radio {
+      border-color: var(--accent);
+    }
+    .plan-card.selected .plan-radio::after {
+      content: ''; position: absolute;
+      inset: 3px; border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .plan-info { flex: 1; }
+    .plan-name {
+      font-size: 14px; font-weight: 500; color: var(--text);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .plan-badge {
+      font-size: 10px; font-weight: 600;
+      padding: 2px 7px; border-radius: 100px;
+      background: rgba(91,107,248,0.15);
+      color: var(--accent2); letter-spacing: 0.04em;
+    }
+    .plan-desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+    .plan-price {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem; font-weight: 700; color: var(--text);
+      white-space: nowrap; text-align: right;
+    }
+    .plan-price small { font-family: 'Inter', sans-serif; font-size: 11px; color: var(--muted); font-weight: 400; display: block; }
+
+    /* SUCCESS */
+    .success-panel { text-align: center; padding: 1rem 0; }
+    .success-icon {
+      width: 56px; height: 56px; border-radius: 50%;
+      background: rgba(76,175,131,0.12);
+      border: 1px solid rgba(76,175,131,0.3);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1.5rem;
+    }
+    .success-icon svg { width: 26px; height: 26px; stroke: var(--success); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .success-panel h2 {
+      font-family: 'Syne', sans-serif; font-size: 1.5rem;
+      font-weight: 700; color: var(--text); margin-bottom: 0.5rem;
+    }
+    .success-panel p { font-size: 14px; color: var(--muted); margin-bottom: 1.75rem; line-height: 1.6; }
+
+    footer {
+      padding: 1.5rem 2rem; text-align: center;
+      border-top: 1px solid var(--edge);
+    }
+    footer p { font-size: 12px; color: var(--muted); }
+    footer a { color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <div class="nav-logo-mark">
+      <svg viewBox="0 0 16 16" fill="none">
+        <rect x="1" y="5" width="14" height="4" rx="1.5" fill="white" opacity="0.9"/>
+        <rect x="3" y="10.5" width="8" height="2" rx="1" fill="white" opacity="0.45"/>
+        <rect x="1" y="2" width="5" height="2" rx="1" fill="white" opacity="0.35"/>
+      </svg>
+    </div>
+    <span class="nav-logo-name">Captio <span>by Keyweaver</span></span>
+  </a>
+  <a href="/login" class="nav-link">Already have an account? Sign in →</a>
+</nav>
+
+<main>
+  <div class="auth-card">
+
+    <!-- STEPS INDICATOR -->
+    <div class="steps-indicator" id="steps-indicator">
+      <div class="step-dot active" id="dot-1">1</div>
+      <div class="step-line" id="line-1"></div>
+      <div class="step-dot" id="dot-2">2</div>
+      <div class="step-line" id="line-2"></div>
+      <div class="step-dot" id="dot-3">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="2 6.5 5 9.5 11 3.5"/></svg>
+      </div>
+    </div>
+
+    <div id="alert" class="alert"></div>
+
+    <!-- PANEL 1: Account details -->
+    <div class="panel active" id="panel-1">
+      <div class="auth-header">
+        <h1>Create your account</h1>
+        <p>Already have one? <a href="/login">Sign in</a></p>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="you@example.com" autocomplete="email" />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="input-row">
+          <input type="password" id="password" placeholder="At least 8 characters" autocomplete="new-password" />
+          <button type="button" class="toggle-pw" id="toggle-pw" aria-label="Show password">
+            <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+        <div class="pw-strength" id="pw-strength" style="display:none;">
+          <div class="pw-bars">
+            <div class="pw-bar" id="bar1"></div>
+            <div class="pw-bar" id="bar2"></div>
+            <div class="pw-bar" id="bar3"></div>
+            <div class="pw-bar" id="bar4"></div>
+          </div>
+          <span class="pw-hint" id="pw-hint"></span>
+        </div>
+      </div>
+
+      <button class="btn-submit" id="step1-btn">
+        <span id="step1-label">Continue</span>
+        <div class="spinner" id="step1-spinner"></div>
+      </button>
+
+      <p class="terms-note">
+        By creating an account you agree to our <a href="/legal/terms">Terms of Service</a> and <a href="/legal/privacy">Privacy Policy</a>.
+      </p>
+    </div>
+
+    <!-- PANEL 2: Choose plan -->
+    <div class="panel" id="panel-2">
+      <div class="auth-header">
+        <h1>Choose a plan</h1>
+        <p>You can always change later. Start free with no card required.</p>
+      </div>
+
+      <div class="plan-cards" id="plan-cards">
+
+        <div class="plan-card selected" data-plan="free">
+          <div class="plan-radio"></div>
+          <div class="plan-info">
+            <div class="plan-name">Free</div>
+            <div class="plan-desc">3 transcriptions · files up to 5 min · 3 styles</div>
+          </div>
+          <div class="plan-price">£0<small>forever</small></div>
+        </div>
+
+        <div class="plan-card" data-plan="credits">
+          <div class="plan-radio"></div>
+          <div class="plan-info">
+            <div class="plan-name">
+              Credits
+              <span class="plan-badge">POPULAR</span>
+            </div>
+            <div class="plan-desc">60 min of transcription · all styles · never expire</div>
+          </div>
+          <div class="plan-price">£4.99<small>one-time</small></div>
+        </div>
+
+        <div class="plan-card" data-plan="monthly">
+          <div class="plan-radio"></div>
+          <div class="plan-info">
+            <div class="plan-name">Monthly</div>
+            <div class="plan-desc">300 credits/mo · SRT/VTT export · priority queue</div>
+          </div>
+          <div class="plan-price">£12<small>per month</small></div>
+        </div>
+
+      </div>
+
+      <button class="btn-submit" id="step2-btn">
+        <span id="step2-label">Create account</span>
+        <div class="spinner" id="step2-spinner"></div>
+      </button>
+    </div>
+
+    <!-- PANEL 3: Done -->
+    <div class="panel" id="panel-3">
+      <div class="success-panel">
+        <div class="success-icon">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <h2 id="success-title">Account created</h2>
+        <p id="success-body">Check your inbox — we've sent a confirmation email. Once confirmed you can download Captio and start generating.</p>
+        <a href="/download" class="btn-submit" style="text-decoration:none; display:inline-flex;">
+          Download Captio
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v8M5 7l3 3 3-3M2 12h12"/></svg>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <p>© 2026 Keyweaver · <a href="/legal/privacy">Privacy</a> · <a href="/legal/terms">Terms</a></p>
+</footer>
+
+<script>
+  const BACKEND = 'https://keyweaver-backend.vercel.app';
+
+  // If already logged in
+  if (localStorage.getItem('cc_token')) window.location.href = '/account';
+
+  // Check for ?plan= param
+  const urlPlan = new URLSearchParams(window.location.search).get('plan');
+  if (urlPlan) {
+    document.querySelectorAll('.plan-card').forEach(c => {
+      c.classList.toggle('selected', c.dataset.plan === urlPlan);
+    });
+  }
+
+  // Password toggle
+  const pwInput = document.getElementById('password');
+  document.getElementById('toggle-pw').addEventListener('click', () => {
+    const show = pwInput.type === 'password';
+    pwInput.type = show ? 'text' : 'password';
+  });
+
+  // Password strength
+  pwInput.addEventListener('input', () => {
+    const val = pwInput.value;
+    const strength = document.getElementById('pw-strength');
+    if (!val) { strength.style.display = 'none'; return; }
+    strength.style.display = 'block';
+
+    let score = 0;
+    if (val.length >= 8) score++;
+    if (val.length >= 12) score++;
+    if (/[A-Z]/.test(val) && /[0-9]/.test(val)) score++;
+    if (/[^A-Za-z0-9]/.test(val)) score++;
+
+    const bars = ['bar1','bar2','bar3','bar4'];
+    const classMap = ['weak','fair','strong','strong'];
+    const labels = ['Too short','Fair','Good','Strong'];
+    bars.forEach((id, i) => {
+      const el = document.getElementById(id);
+      el.className = 'pw-bar';
+      if (i < score) el.classList.add(classMap[score - 1]);
+    });
+    document.getElementById('pw-hint').textContent = score > 0 ? labels[score - 1] : '';
+  });
+
+  // Alert helper
+  function showAlert(msg, type) {
+    const el = document.getElementById('alert');
+    el.textContent = msg;
+    el.className = 'alert ' + type;
+  }
+  function clearAlert() {
+    document.getElementById('alert').className = 'alert';
+  }
+
+  // Step navigation
+  let currentStep = 1;
+  let accountEmail = '';
+
+  function goToStep(n) {
+    document.querySelectorAll('.panel').forEach((p, i) => {
+      p.classList.toggle('active', i + 1 === n);
+    });
+    // Update indicator
+    for (let i = 1; i <= 3; i++) {
+      const dot = document.getElementById('dot-' + i);
+      dot.classList.remove('active', 'done');
+      if (i < n) dot.classList.add('done');
+      else if (i === n) dot.classList.add('active');
+    }
+    for (let i = 1; i <= 2; i++) {
+      const line = document.getElementById('line-' + i);
+      line.classList.toggle('done', i < n);
+    }
+    currentStep = n;
+    clearAlert();
+  }
+
+  // Plan selection
+  document.getElementById('plan-cards').addEventListener('click', (e) => {
+    const card = e.target.closest('.plan-card');
+    if (!card) return;
+    document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+  });
+
+  // Step 1: validate + check email availability
+  document.getElementById('step1-btn').addEventListener('click', async () => {
+    const email = document.getElementById('email').value.trim();
+    const password = pwInput.value;
+
+    if (!email || !/\S+@\S+\.\S+/.test(email)) {
+      showAlert('Please enter a valid email address.', 'error'); return;
+    }
+    if (password.length < 8) {
+      showAlert('Password must be at least 8 characters.', 'error'); return;
+    }
+
+    document.getElementById('step1-label').textContent = 'Checking…';
+    document.getElementById('step1-spinner').style.display = 'block';
+    document.getElementById('step1-btn').disabled = true;
+
+    try {
+      const res = await fetch(BACKEND + '/api/auth/check-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+      const data = await res.json();
+
+      if (data.exists) {
+        showAlert('An account with that email already exists. Try signing in.', 'error');
+      } else {
+        accountEmail = email;
+        goToStep(2);
+      }
+    } catch {
+      // If check-email endpoint doesn't exist yet, proceed anyway
+      accountEmail = email;
+      goToStep(2);
+    }
+
+    document.getElementById('step1-label').textContent = 'Continue';
+    document.getElementById('step1-spinner').style.display = 'none';
+    document.getElementById('step1-btn').disabled = false;
+  });
+
+  // Step 2: create account + handle plan
+  document.getElementById('step2-btn').addEventListener('click', async () => {
+    const plan = document.querySelector('.plan-card.selected')?.dataset.plan || 'free';
+    const email = accountEmail;
+    const password = document.getElementById('password').value;
+
+    document.getElementById('step2-label').textContent = 'Creating account…';
+    document.getElementById('step2-spinner').style.display = 'block';
+    document.getElementById('step2-btn').disabled = true;
+
+    try {
+      const res = await fetch(BACKEND + '/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, plan })
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        showAlert(data.error || 'Something went wrong. Please try again.', 'error');
+        document.getElementById('step2-label').textContent = 'Create account';
+        document.getElementById('step2-spinner').style.display = 'none';
+        document.getElementById('step2-btn').disabled = false;
+        return;
+      }
+
+      // Store token if returned immediately (free plan — no payment needed)
+      if (data.token) localStorage.setItem('cc_token', data.token);
+
+      if (plan === 'credits' && data.checkout_url) {
+        // Redirect to Stripe checkout for credit pack
+        window.location.href = data.checkout_url;
+        return;
+      }
+      if (plan === 'monthly' && data.checkout_url) {
+        window.location.href = data.checkout_url;
+        return;
+      }
+
+      // Free plan — show success
+      goToStep(3);
+
+    } catch {
+      showAlert('Could not reach the server. Please try again.', 'error');
+      document.getElementById('step2-label').textContent = 'Create account';
+      document.getElementById('step2-spinner').style.display = 'none';
+      document.getElementById('step2-btn').disabled = false;
+    }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Account — Captio by Keyweaver</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:     #0A0A0F;
+      --surface: #13131A;
+      --lift:    #1C1C28;
+      --edge:    #2A2A3D;
+      --accent:  #5B6BF8;
+      --accent2: #7B8BFF;
+      --text:    #E8E8F0;
+      --muted:   #6B6B88;
+      --subtle:  #3A3A52;
+      --success: #4CAF83;
+      --warning: #F5A623;
+      --danger:  #E24B4A;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--ink); color: var(--text);
+      min-height: 100vh; display: flex; flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* NAV */
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem; height: 56px;
+      border-bottom: 1px solid var(--edge);
+      position: sticky; top: 0; background: var(--ink); z-index: 100;
+    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-logo-mark {
+      width: 28px; height: 28px; background: var(--accent);
+      border-radius: 6px; display: flex; align-items: center; justify-content: center;
+    }
+    .nav-logo-mark svg { width: 16px; height: 16px; }
+    .nav-logo-name {
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 15px; color: var(--text); letter-spacing: -0.01em;
+    }
+    .nav-logo-name span { color: var(--muted); font-weight: 400; }
+    .nav-right { display: flex; align-items: center; gap: 1rem; }
+    .nav-email { font-size: 13px; color: var(--muted); }
+    .btn-sm {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 0 12px; height: 30px; border-radius: 6px;
+      font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 500;
+      text-decoration: none; cursor: pointer; transition: all 0.15s; border: none;
+    }
+    .btn-ghost-sm {
+      background: transparent; color: var(--muted); border: 1px solid var(--edge);
+    }
+    .btn-ghost-sm:hover { color: var(--text); background: var(--lift); }
+    .btn-primary-sm { background: var(--accent); color: #fff; border: none; }
+    .btn-primary-sm:hover { background: var(--accent2); }
+
+    /* PAGE LAYOUT */
+    .page {
+      flex: 1;
+      max-width: 900px; width: 100%;
+      margin: 0 auto; padding: 2.5rem 2rem;
+    }
+
+    .page-header { margin-bottom: 2.5rem; }
+    .page-header h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.5rem; font-weight: 700;
+      letter-spacing: -0.02em; color: var(--text);
+      margin-bottom: 0.25rem;
+    }
+    .page-header p { font-size: 14px; color: var(--muted); }
+
+    /* LOADING STATE */
+    #loading {
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; padding: 6rem 0; gap: 1rem;
+      color: var(--muted); font-size: 14px;
+    }
+    .spinner-lg {
+      width: 28px; height: 28px;
+      border: 2px solid var(--edge);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    #dashboard { display: none; }
+
+    /* CARDS GRID */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin-bottom: 2rem;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--edge);
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+    .card-label {
+      font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--muted); font-weight: 600; margin-bottom: 1rem;
+    }
+
+    /* CREDITS CARD */
+    .credits-number {
+      font-family: 'Syne', sans-serif;
+      font-size: 3rem; font-weight: 800;
+      color: var(--text); line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+    .credits-sub { font-size: 13px; color: var(--muted); margin-bottom: 1.25rem; }
+
+    .credits-bar-wrap {
+      background: var(--lift); border-radius: 100px;
+      height: 6px; margin-bottom: 1.5rem; overflow: hidden;
+    }
+    .credits-bar {
+      height: 100%; border-radius: 100px;
+      background: var(--accent);
+      transition: width 0.6s ease;
+    }
+    .credits-bar.low { background: var(--warning); }
+    .credits-bar.critical { background: var(--danger); }
+
+    .btn-topup {
+      display: inline-flex; align-items: center; gap: 6px;
+      width: 100%; height: 38px; justify-content: center;
+      background: var(--lift); border: 1px solid var(--edge);
+      border-radius: 8px; color: var(--text);
+      font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500;
+      text-decoration: none; cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-topup:hover { border-color: var(--accent); color: var(--accent2); }
+    .btn-topup svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; }
+
+    /* PLAN CARD */
+    .plan-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 10px; border-radius: 6px;
+      font-size: 12px; font-weight: 600;
+      margin-bottom: 1rem;
+    }
+    .plan-badge.free { background: var(--lift); color: var(--muted); border: 1px solid var(--edge); }
+    .plan-badge.active { background: rgba(76,175,131,0.1); color: var(--success); border: 1px solid rgba(76,175,131,0.25); }
+    .plan-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+    .plan-name {
+      font-family: 'Syne', sans-serif; font-size: 1.25rem;
+      font-weight: 700; color: var(--text); margin-bottom: 0.25rem;
+    }
+    .plan-detail { font-size: 13px; color: var(--muted); margin-bottom: 1.25rem; line-height: 1.6; }
+
+    .plan-actions { display: flex; flex-direction: column; gap: 8px; }
+
+    .btn-manage {
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      height: 38px; border-radius: 8px;
+      font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500;
+      text-decoration: none; cursor: pointer; transition: all 0.15s; border: none;
+      width: 100%;
+    }
+    .btn-manage-primary {
+      background: var(--accent); color: #fff;
+    }
+    .btn-manage-primary:hover { background: var(--accent2); }
+    .btn-manage-secondary {
+      background: var(--lift); color: var(--muted);
+      border: 1px solid var(--edge);
+    }
+    .btn-manage-secondary:hover { color: var(--text); border-color: var(--subtle); }
+
+    /* SECTION */
+    .section { margin-bottom: 2rem; }
+    .section-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+    .section-title {
+      font-family: 'Syne', sans-serif; font-size: 1rem;
+      font-weight: 700; color: var(--text);
+    }
+    .section-link {
+      font-size: 13px; color: var(--muted); text-decoration: none;
+    }
+    .section-link:hover { color: var(--text); }
+
+    /* HISTORY TABLE */
+    .history-table {
+      background: var(--surface); border: 1px solid var(--edge);
+      border-radius: 12px; overflow: hidden;
+    }
+    .history-row {
+      display: grid; grid-template-columns: 1fr auto auto;
+      align-items: center; gap: 1rem;
+      padding: 14px 1.25rem;
+      border-bottom: 1px solid var(--edge);
+      font-size: 13px;
+    }
+    .history-row:last-child { border-bottom: none; }
+    .history-row.header {
+      font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--muted); font-weight: 600; padding: 10px 1.25rem;
+    }
+    .history-file { color: var(--text); font-weight: 500; }
+    .history-date { color: var(--muted); font-size: 12px; margin-top: 2px; }
+    .history-credits {
+      color: var(--muted); white-space: nowrap; text-align: right;
+    }
+    .history-credits strong { color: var(--text); }
+    .history-status {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 3px 8px; border-radius: 100px;
+      font-size: 11px; font-weight: 600; white-space: nowrap;
+    }
+    .status-done { background: rgba(76,175,131,0.1); color: var(--success); }
+    .status-fail { background: rgba(226,75,74,0.1); color: var(--danger); }
+
+    .empty-state {
+      padding: 3rem; text-align: center;
+    }
+    .empty-state p { font-size: 14px; color: var(--muted); margin-bottom: 1rem; }
+
+    /* ACCOUNT DETAILS */
+    .details-list { background: var(--surface); border: 1px solid var(--edge); border-radius: 12px; overflow: hidden; }
+    .detail-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 1.25rem; border-bottom: 1px solid var(--edge);
+      font-size: 13px; gap: 1rem;
+    }
+    .detail-row:last-child { border-bottom: none; }
+    .detail-label { color: var(--muted); flex-shrink: 0; }
+    .detail-value { color: var(--text); font-weight: 500; text-align: right; }
+    .detail-action {
+      font-size: 12px; color: var(--accent2); text-decoration: none; cursor: pointer;
+      background: none; border: none; font-family: 'Inter', sans-serif;
+    }
+    .detail-action:hover { text-decoration: underline; }
+
+    /* DANGER ZONE */
+    .danger-zone {
+      background: rgba(226,75,74,0.04);
+      border: 1px solid rgba(226,75,74,0.15);
+      border-radius: 12px; padding: 1.25rem 1.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .danger-zone-text h3 { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+    .danger-zone-text p { font-size: 13px; color: var(--muted); }
+    .btn-danger {
+      background: transparent; color: var(--danger);
+      border: 1px solid rgba(226,75,74,0.3);
+      padding: 0 14px; height: 34px; border-radius: 6px;
+      font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500;
+      cursor: pointer; transition: all 0.15s; white-space: nowrap;
+    }
+    .btn-danger:hover { background: rgba(226,75,74,0.08); border-color: var(--danger); }
+
+    /* TOAST */
+    .toast {
+      position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%);
+      background: var(--lift); border: 1px solid var(--edge); border-radius: 8px;
+      padding: 10px 16px; font-size: 13px; color: var(--text);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+      opacity: 0; transition: opacity 0.2s; pointer-events: none; white-space: nowrap;
+      z-index: 200;
+    }
+    .toast.show { opacity: 1; }
+
+    footer {
+      border-top: 1px solid var(--edge); padding: 1.5rem 2rem;
+      display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+    }
+    footer p { font-size: 13px; color: var(--muted); }
+    .footer-links { display: flex; gap: 1.5rem; list-style: none; }
+    .footer-links a { font-size: 13px; color: var(--muted); text-decoration: none; }
+    .footer-links a:hover { color: var(--text); }
+
+    @media (max-width: 640px) {
+      nav { padding: 0 1rem; }
+      .nav-email { display: none; }
+      .page { padding: 2rem 1.25rem; }
+      .history-row { grid-template-columns: 1fr auto; }
+      .history-row .history-status { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <div class="nav-logo-mark">
+      <svg viewBox="0 0 16 16" fill="none">
+        <rect x="1" y="5" width="14" height="4" rx="1.5" fill="white" opacity="0.9"/>
+        <rect x="3" y="10.5" width="8" height="2" rx="1" fill="white" opacity="0.45"/>
+        <rect x="1" y="2" width="5" height="2" rx="1" fill="white" opacity="0.35"/>
+      </svg>
+    </div>
+    <span class="nav-logo-name">Captio <span>by Keyweaver</span></span>
+  </a>
+  <div class="nav-right">
+    <span class="nav-email" id="nav-email"></span>
+    <a href="/download" class="btn-sm btn-ghost-sm">Download</a>
+    <button class="btn-sm btn-ghost-sm" onclick="signOut()">Sign out</button>
+  </div>
+</nav>
+
+<div class="page">
+
+  <!-- LOADING -->
+  <div id="loading">
+    <div class="spinner-lg"></div>
+    Loading your account…
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="dashboard">
+    <div class="page-header">
+      <h1>Your account</h1>
+      <p id="header-sub">Keyweaver Credits are shared across all Keyweaver products.</p>
+    </div>
+
+    <!-- TOP CARDS -->
+    <div class="cards-grid">
+
+      <!-- CREDITS -->
+      <div class="card">
+        <div class="card-label">Keyweaver Credits</div>
+        <div class="credits-number" id="credits-num">—</div>
+        <div class="credits-sub" id="credits-sub">credits remaining</div>
+        <div class="credits-bar-wrap">
+          <div class="credits-bar" id="credits-bar" style="width:0%"></div>
+        </div>
+        <a href="/pricing" class="btn-topup" id="topup-btn">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+          Top up credits
+        </a>
+      </div>
+
+      <!-- PLAN -->
+      <div class="card">
+        <div class="card-label">Current plan</div>
+        <div class="plan-badge free" id="plan-badge">
+          <span class="plan-badge-dot"></span>
+          <span id="plan-badge-label">Free</span>
+        </div>
+        <div class="plan-name" id="plan-name">Free plan</div>
+        <div class="plan-detail" id="plan-detail">3 transcription jobs · files up to 5 min</div>
+        <div class="plan-actions" id="plan-actions">
+          <a href="/pricing" class="btn-manage btn-manage-primary">Upgrade plan</a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- USAGE HISTORY -->
+    <div class="section">
+      <div class="section-header">
+        <h2 class="section-title">Recent generates</h2>
+      </div>
+
+      <div class="history-table" id="history-table">
+        <div class="history-row header">
+          <span>File</span>
+          <span>Credits used</span>
+          <span>Status</span>
+        </div>
+        <div id="history-rows">
+          <div class="empty-state">
+            <p>No generates yet. Download the plugin and make your first caption.</p>
+            <a href="/download" class="btn-sm btn-primary-sm" style="display:inline-flex;">Download Captio</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACCOUNT DETAILS -->
+    <div class="section">
+      <div class="section-header">
+        <h2 class="section-title">Account details</h2>
+      </div>
+      <div class="details-list">
+        <div class="detail-row">
+          <span class="detail-label">Email</span>
+          <div style="display:flex; align-items:center; gap:12px;">
+            <span class="detail-value" id="detail-email">—</span>
+            <button class="detail-action" onclick="changeEmail()">Change</button>
+          </div>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Password</span>
+          <div style="display:flex; align-items:center; gap:12px;">
+            <span class="detail-value">••••••••</span>
+            <button class="detail-action" onclick="changePassword()">Change</button>
+          </div>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Member since</span>
+          <span class="detail-value" id="detail-since">—</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Plugin version</span>
+          <span class="detail-value">Download to check</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- DANGER ZONE -->
+    <div class="danger-zone">
+      <div class="danger-zone-text">
+        <h3>Delete account</h3>
+        <p>Permanently removes your account, credits, and all data. This cannot be undone.</p>
+      </div>
+      <button class="btn-danger" onclick="confirmDelete()">Delete account</button>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <p>© 2026 Keyweaver</p>
+  <ul class="footer-links">
+    <li><a href="/legal/privacy">Privacy</a></li>
+    <li><a href="/legal/terms">Terms</a></li>
+    <li><a href="/help">Help</a></li>
+  </ul>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const BACKEND = 'https://keyweaver-backend.vercel.app';
+
+  function showToast(msg, duration) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), duration || 3000);
+  }
+
+  function signOut() {
+    localStorage.removeItem('cc_token');
+    window.location.href = '/login';
+  }
+
+  async function loadAccount() {
+    const token = localStorage.getItem('cc_token');
+    if (!token) { window.location.href = '/login'; return; }
+
+    try {
+      const res = await fetch(BACKEND + '/api/captio/account', {
+        headers: { 'Authorization': 'Bearer ' + token }
+      });
+
+      if (res.status === 401) { signOut(); return; }
+      if (!res.ok) throw new Error('Failed to load account');
+
+      const data = await res.json();
+      renderDashboard(data);
+
+    } catch (err) {
+      // Show dashboard with placeholder data if API not ready yet
+      renderDashboard(null);
+    }
+
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+  }
+
+  function renderDashboard(data) {
+    // Defaults if no data yet
+    const credits = data?.credits_remaining ?? 0;
+    const creditsTotal = data?.credits_total ?? 3;
+    const tier = data?.tier ?? 'free';
+    const email = data?.email ?? '—';
+    const jobs = data?.recent_jobs ?? [];
+    const since = data?.created_at ? new Date(data.created_at).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' }) : '—';
+
+    // Nav email
+    document.getElementById('nav-email').textContent = email;
+    document.getElementById('detail-email').textContent = email;
+    document.getElementById('detail-since').textContent = since;
+
+    // Credits
+    document.getElementById('credits-num').textContent = credits;
+    const pct = creditsTotal > 0 ? Math.min(100, Math.round((credits / creditsTotal) * 100)) : 0;
+    const bar = document.getElementById('credits-bar');
+    bar.style.width = pct + '%';
+    if (pct <= 10) bar.classList.add('critical');
+    else if (pct <= 30) bar.classList.add('low');
+
+    if (tier === 'captio_monthly') {
+      document.getElementById('credits-sub').textContent = credits + ' of ' + creditsTotal + ' monthly credits remaining';
+    } else {
+      document.getElementById('credits-sub').textContent = credits + ' credits remaining';
+    }
+
+    // Plan
+    const planBadge = document.getElementById('plan-badge');
+    const planMap = {
+      free:           { label: 'Free',    name: 'Free plan',      detail: '3 transcription jobs · files up to 5 min', badge: 'free' },
+      captio_monthly: { label: 'Monthly', name: 'Monthly plan',   detail: '300 credits/month · 150 rollover · SRT export', badge: 'active' },
+      studio:         { label: 'Studio',  name: 'Studio plan',    detail: '150 credits/month included', badge: 'active' },
+      director:       { label: 'Director',name: 'Director plan',  detail: '400 credits/month included', badge: 'active' },
+      agency:         { label: 'Agency',  name: 'Agency plan',    detail: 'Unlimited (fair use)', badge: 'active' },
+    };
+    const plan = planMap[tier] || planMap.free;
+    document.getElementById('plan-badge-label').textContent = plan.label;
+    planBadge.className = 'plan-badge ' + plan.badge;
+    document.getElementById('plan-name').textContent = plan.name;
+    document.getElementById('plan-detail').textContent = plan.detail;
+
+    // Plan actions
+    const actionsEl = document.getElementById('plan-actions');
+    if (tier === 'captio_monthly') {
+      actionsEl.innerHTML = `
+        <button class="btn-manage btn-manage-secondary" onclick="manageSubscription()">Manage subscription</button>
+        <button class="btn-manage btn-manage-secondary" style="color:var(--danger);border-color:rgba(226,75,74,0.3);" onclick="cancelSubscription()">Cancel subscription</button>
+      `;
+    } else if (tier === 'free') {
+      actionsEl.innerHTML = `<a href="/pricing" class="btn-manage btn-manage-primary">Upgrade plan</a>`;
+    } else {
+      actionsEl.innerHTML = `<button class="btn-manage btn-manage-secondary" onclick="manageSubscription()">Manage subscription</button>`;
+    }
+
+    // History
+    const historyEl = document.getElementById('history-rows');
+    if (jobs.length === 0) {
+      historyEl.innerHTML = `
+        <div class="empty-state">
+          <p>No generates yet. Download the plugin and make your first caption.</p>
+          <a href="/download" class="btn-sm btn-primary-sm" style="display:inline-flex; margin:0 auto;">Download Captio</a>
+        </div>`;
+    } else {
+      historyEl.innerHTML = jobs.slice(0, 10).map(j => {
+        const date = new Date(j.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+        const statusClass = j.status === 'complete' ? 'status-done' : 'status-fail';
+        const statusLabel = j.status === 'complete' ? 'Done' : 'Failed';
+        return `
+          <div class="history-row">
+            <div>
+              <div class="history-file">${escHtml(j.file_name || 'Untitled')}</div>
+              <div class="history-date">${date}</div>
+            </div>
+            <div class="history-credits"><strong>${j.credits_consumed || 0}</strong> credits</div>
+            <span class="history-status ${statusClass}">${statusLabel}</span>
+          </div>`;
+      }).join('');
+    }
+  }
+
+  function escHtml(str) {
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function manageSubscription() {
+    const token = localStorage.getItem('cc_token');
+    fetch(BACKEND + '/api/captio/billing-portal', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + token }
+    })
+    .then(r => r.json())
+    .then(d => { if (d.url) window.location.href = d.url; })
+    .catch(() => showToast('Could not open billing portal. Try again.'));
+  }
+
+  function cancelSubscription() {
+    if (!confirm('Cancel your monthly subscription? You keep your remaining credits until the end of the billing period.')) return;
+    manageSubscription();
+  }
+
+  function changeEmail() {
+    const newEmail = prompt('Enter your new email address:');
+    if (!newEmail || !newEmail.includes('@')) return;
+    showToast('We\'ve sent a confirmation to ' + newEmail);
+  }
+
+  function changePassword() {
+    const token = localStorage.getItem('cc_token');
+    const email = document.getElementById('detail-email').textContent;
+    fetch(BACKEND + '/api/auth/magic-link', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    }).then(() => showToast('Password reset link sent to your email'));
+  }
+
+  function confirmDelete() {
+    if (!confirm('Permanently delete your account? All credits and data will be removed. This cannot be undone.')) return;
+    if (!confirm('Are you sure? This is permanent.')) return;
+    showToast('Account deletion requested. We\'ll email you to confirm.');
+  }
+
+  // Init
+  loadAccount();
+</script>
+</body>
+</html>

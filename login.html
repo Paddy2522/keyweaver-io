@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign in — Captio by Keyweaver</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:     #0A0A0F;
+      --surface: #13131A;
+      --lift:    #1C1C28;
+      --edge:    #2A2A3D;
+      --accent:  #5B6BF8;
+      --accent2: #7B8BFF;
+      --text:    #E8E8F0;
+      --muted:   #6B6B88;
+      --subtle:  #3A3A52;
+      --danger:  #E24B4A;
+      --success: #4CAF83;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--ink);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* NAV */
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem; height: 56px;
+      border-bottom: 1px solid var(--edge);
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none;
+    }
+    .nav-logo-mark {
+      width: 28px; height: 28px;
+      background: var(--accent); border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .nav-logo-mark svg { width: 16px; height: 16px; }
+    .nav-logo-name {
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 15px; color: var(--text); letter-spacing: -0.01em;
+    }
+    .nav-logo-name span { color: var(--muted); font-weight: 400; }
+    .nav-link {
+      font-size: 13px; color: var(--muted); text-decoration: none;
+    }
+    .nav-link:hover { color: var(--text); }
+
+    /* MAIN */
+    main {
+      flex: 1; display: flex;
+      align-items: center; justify-content: center;
+      padding: 3rem 1.5rem;
+    }
+
+    .auth-card {
+      width: 100%; max-width: 400px;
+    }
+
+    .auth-header { margin-bottom: 2rem; text-align: center; }
+    .auth-header h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.75rem; font-weight: 700;
+      letter-spacing: -0.02em; color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+    .auth-header p { font-size: 14px; color: var(--muted); }
+    .auth-header a { color: var(--accent2); text-decoration: none; }
+    .auth-header a:hover { text-decoration: underline; }
+
+    /* FORM */
+    .form-group { margin-bottom: 1rem; }
+
+    label {
+      display: block;
+      font-size: 13px; font-weight: 500;
+      color: var(--muted); margin-bottom: 6px;
+    }
+
+    input[type="email"],
+    input[type="password"],
+    input[type="text"] {
+      width: 100%; height: 44px;
+      background: var(--surface);
+      border: 1px solid var(--edge);
+      border-radius: 8px;
+      padding: 0 12px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px; color: var(--text);
+      outline: none;
+      transition: border-color 0.15s;
+      -webkit-appearance: none;
+    }
+    input::placeholder { color: var(--muted); }
+    input:focus { border-color: var(--accent); }
+    input.error { border-color: var(--danger); }
+
+    .input-row {
+      display: flex; align-items: center;
+      position: relative;
+    }
+    .input-row input { padding-right: 44px; }
+    .toggle-pw {
+      position: absolute; right: 12px;
+      background: none; border: none; cursor: pointer;
+      color: var(--muted); padding: 0;
+      display: flex; align-items: center;
+    }
+    .toggle-pw:hover { color: var(--text); }
+    .toggle-pw svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+    .form-footer-row {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+    }
+    .remember-label {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 13px; color: var(--muted); cursor: pointer;
+      margin: 0;
+    }
+    input[type="checkbox"] {
+      width: 16px; height: 16px;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+    .forgot-link {
+      font-size: 13px; color: var(--muted);
+      text-decoration: none;
+    }
+    .forgot-link:hover { color: var(--text); }
+
+    .btn-submit {
+      width: 100%; height: 44px;
+      background: var(--accent); color: #fff;
+      border: none; border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px; font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s, opacity 0.15s;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .btn-submit:hover { background: var(--accent2); }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .spinner {
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* DIVIDER */
+    .or-divider {
+      display: flex; align-items: center; gap: 12px;
+      margin: 1.5rem 0;
+    }
+    .or-divider::before,
+    .or-divider::after {
+      content: ''; flex: 1;
+      height: 1px; background: var(--edge);
+    }
+    .or-divider span {
+      font-size: 12px; color: var(--muted);
+      white-space: nowrap;
+    }
+
+    /* MAGIC LINK */
+    .btn-magic {
+      width: 100%; height: 44px;
+      background: var(--lift); color: var(--text);
+      border: 1px solid var(--edge); border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px; font-weight: 500;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .btn-magic:hover { border-color: var(--subtle); background: var(--surface); }
+    .btn-magic svg { width: 17px; height: 17px; stroke: var(--muted); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* ALERT */
+    .alert {
+      border-radius: 8px; padding: 10px 14px;
+      font-size: 13px; margin-bottom: 1rem;
+      display: none;
+    }
+    .alert.error {
+      background: rgba(226,75,74,0.1);
+      border: 1px solid rgba(226,75,74,0.3);
+      color: #F09595;
+      display: block;
+    }
+    .alert.success {
+      background: rgba(76,175,131,0.1);
+      border: 1px solid rgba(76,175,131,0.3);
+      color: #4CAF83;
+      display: block;
+    }
+
+    /* FOOTER */
+    footer {
+      padding: 1.5rem 2rem;
+      text-align: center;
+      border-top: 1px solid var(--edge);
+    }
+    footer p { font-size: 12px; color: var(--muted); }
+    footer a { color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <div class="nav-logo-mark">
+      <svg viewBox="0 0 16 16" fill="none">
+        <rect x="1" y="5" width="14" height="4" rx="1.5" fill="white" opacity="0.9"/>
+        <rect x="3" y="10.5" width="8" height="2" rx="1" fill="white" opacity="0.45"/>
+        <rect x="1" y="2" width="5" height="2" rx="1" fill="white" opacity="0.35"/>
+      </svg>
+    </div>
+    <span class="nav-logo-name">Captio <span>by Keyweaver</span></span>
+  </a>
+  <a href="/signup" class="nav-link">No account? Sign up →</a>
+</nav>
+
+<main>
+  <div class="auth-card">
+    <div class="auth-header">
+      <h1>Welcome back</h1>
+      <p>No account yet? <a href="/signup">Sign up free</a></p>
+    </div>
+
+    <div id="alert" class="alert"></div>
+
+    <form id="login-form" novalidate>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email" required />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="input-row">
+          <input type="password" id="password" name="password" placeholder="••••••••" autocomplete="current-password" required />
+          <button type="button" class="toggle-pw" id="toggle-pw" aria-label="Show password">
+            <svg id="pw-eye" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="form-footer-row">
+        <label class="remember-label">
+          <input type="checkbox" id="remember" /> Remember me
+        </label>
+        <a href="/forgot-password" class="forgot-link">Forgot password?</a>
+      </div>
+
+      <button type="submit" class="btn-submit" id="submit-btn">
+        <span id="btn-label">Sign in</span>
+        <div class="spinner" id="spinner"></div>
+      </button>
+    </form>
+
+    <div class="or-divider"><span>or</span></div>
+
+    <button class="btn-magic" id="magic-btn">
+      <svg viewBox="0 0 24 24"><path d="M4 4l16 16M4 20L20 4"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg>
+      Send magic link
+    </button>
+
+    <div id="magic-form" style="display:none; margin-top:1rem;">
+      <div class="form-group">
+        <label for="magic-email">Your email address</label>
+        <input type="email" id="magic-email" placeholder="you@example.com" autocomplete="email" />
+      </div>
+      <button type="button" class="btn-submit" id="magic-send">
+        <span id="magic-label">Send link</span>
+        <div class="spinner" id="magic-spinner"></div>
+      </button>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <p>By signing in you agree to our <a href="/legal/terms">Terms</a> and <a href="/legal/privacy">Privacy Policy</a>.</p>
+</footer>
+
+<script>
+  const BACKEND = 'https://keyweaver-backend.vercel.app';
+
+  // Password toggle
+  const pwInput = document.getElementById('password');
+  const toggleBtn = document.getElementById('toggle-pw');
+  toggleBtn.addEventListener('click', () => {
+    const show = pwInput.type === 'password';
+    pwInput.type = show ? 'text' : 'password';
+    document.getElementById('pw-eye').innerHTML = show
+      ? '<path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>'
+      : '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+  });
+
+  function showAlert(msg, type) {
+    const el = document.getElementById('alert');
+    el.textContent = msg;
+    el.className = 'alert ' + type;
+  }
+
+  function setLoading(loading) {
+    const btn = document.getElementById('submit-btn');
+    document.getElementById('btn-label').textContent = loading ? 'Signing in…' : 'Sign in';
+    document.getElementById('spinner').style.display = loading ? 'block' : 'none';
+    btn.disabled = loading;
+  }
+
+  // Login form
+  document.getElementById('login-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+
+    if (!email || !password) {
+      showAlert('Please enter your email and password.', 'error');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const res = await fetch(BACKEND + '/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        showAlert(data.error || 'Incorrect email or password.', 'error');
+        setLoading(false);
+        return;
+      }
+
+      // Store token — same key the panel uses
+      localStorage.setItem('cc_token', data.token);
+
+      // Redirect to account dashboard
+      window.location.href = '/account';
+
+    } catch (err) {
+      showAlert('Could not reach the server. Please try again.', 'error');
+      setLoading(false);
+    }
+  });
+
+  // Magic link toggle
+  const magicBtn = document.getElementById('magic-btn');
+  const magicForm = document.getElementById('magic-form');
+  let magicOpen = false;
+
+  magicBtn.addEventListener('click', () => {
+    magicOpen = !magicOpen;
+    magicForm.style.display = magicOpen ? 'block' : 'none';
+    magicBtn.querySelector('span') && null;
+    magicBtn.innerHTML = magicOpen
+      ? `<svg viewBox="0 0 24 24" width="17" height="17" stroke="currentColor" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg> Cancel`
+      : `<svg viewBox="0 0 24 24" width="17" height="17" stroke="#6B6B88" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l16 16M4 20L20 4"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg> Send magic link`;
+  });
+
+  document.getElementById('magic-send').addEventListener('click', async () => {
+    const email = document.getElementById('magic-email').value.trim();
+    if (!email) { showAlert('Enter your email address first.', 'error'); return; }
+
+    document.getElementById('magic-label').textContent = 'Sending…';
+    document.getElementById('magic-spinner').style.display = 'block';
+    document.getElementById('magic-send').disabled = true;
+
+    try {
+      const res = await fetch(BACKEND + '/api/auth/magic-link', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+
+      if (res.ok) {
+        showAlert('Check your inbox — we sent a sign-in link.', 'success');
+        magicForm.style.display = 'none';
+      } else {
+        showAlert('Something went wrong. Try again.', 'error');
+      }
+    } catch {
+      showAlert('Could not reach the server.', 'error');
+    }
+
+    document.getElementById('magic-label').textContent = 'Send link';
+    document.getElementById('magic-spinner').style.display = 'none';
+    document.getElementById('magic-send').disabled = false;
+  });
+
+  // If already logged in, redirect
+  if (localStorage.getItem('cc_token')) {
+    window.location.href = '/account';
+  }
+</script>
+</body>
+</html>

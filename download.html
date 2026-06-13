@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Download Captio — Captio by Keyweaver</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:     #0A0A0F;
+      --surface: #13131A;
+      --lift:    #1C1C28;
+      --edge:    #2A2A3D;
+      --accent:  #5B6BF8;
+      --accent2: #7B8BFF;
+      --text:    #E8E8F0;
+      --muted:   #6B6B88;
+      --subtle:  #3A3A52;
+      --success: #4CAF83;
+      --warning: #F5A623;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--ink); color: var(--text);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem; height: 56px;
+      background: rgba(10,10,15,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--edge);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-logo-mark {
+      width: 28px; height: 28px; background: var(--accent);
+      border-radius: 6px; display: flex; align-items: center; justify-content: center;
+    }
+    .nav-logo-mark svg { width: 16px; height: 16px; }
+    .nav-logo-name {
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 15px; color: var(--text); letter-spacing: -0.01em;
+    }
+    .nav-logo-name span { color: var(--muted); font-weight: 400; }
+    .nav-links { display: flex; align-items: center; gap: 1.5rem; list-style: none; }
+    .nav-links a { font-size: 14px; color: var(--muted); text-decoration: none; }
+    .nav-links a:hover { color: var(--text); }
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 0 1rem; height: 34px; border-radius: 6px;
+      font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500;
+      text-decoration: none; cursor: pointer; transition: all 0.15s; border: none;
+    }
+    .btn-ghost {
+      background: transparent; color: var(--muted); border: 1px solid var(--edge);
+    }
+    .btn-ghost:hover { color: var(--text); border-color: var(--subtle); background: var(--lift); }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: var(--accent2); }
+
+    /* LAYOUT */
+    .page { padding-top: 56px; }
+
+    /* HERO */
+    .hero {
+      padding: 5rem 2rem 3rem;
+      text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 50% 60% at 50% 0%, rgba(91,107,248,0.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 5px 12px;
+      background: var(--lift); border: 1px solid var(--edge); border-radius: 100px;
+      font-size: 12px; font-weight: 500; color: var(--muted);
+      letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 1.5rem;
+    }
+    .version-dot { width: 6px; height: 6px; background: var(--success); border-radius: 50%; }
+    .hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 800; letter-spacing: -0.03em;
+      color: var(--text); margin-bottom: 1rem;
+    }
+    .hero p { font-size: 1rem; color: var(--muted); max-width: 480px; margin: 0 auto 2.5rem; line-height: 1.7; }
+
+    /* OS TOGGLE */
+    .os-toggle {
+      display: inline-flex;
+      background: var(--lift); border: 1px solid var(--edge);
+      border-radius: 10px; padding: 4px; gap: 4px;
+      margin-bottom: 2rem;
+    }
+    .os-btn {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 20px; border-radius: 7px;
+      font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500;
+      color: var(--muted); background: transparent; border: none;
+      cursor: pointer; transition: all 0.15s;
+    }
+    .os-btn.active { background: var(--surface); color: var(--text); border: 1px solid var(--edge); }
+    .os-btn svg { width: 16px; height: 16px; fill: currentColor; }
+
+    /* DOWNLOAD CARD */
+    .download-card {
+      display: inline-flex; align-items: center; gap: 1.5rem;
+      background: var(--surface); border: 1px solid var(--edge);
+      border-radius: 14px; padding: 1.5rem 2rem;
+      text-align: left; flex-wrap: wrap; justify-content: center;
+    }
+    .download-card-info h3 {
+      font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700;
+      color: var(--text); margin-bottom: 4px;
+    }
+    .download-card-info p { font-size: 13px; color: var(--muted); }
+
+    .btn-download {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 0 1.5rem; height: 48px; border-radius: 10px;
+      background: var(--accent); color: #fff;
+      font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 500;
+      text-decoration: none; white-space: nowrap;
+      transition: background 0.15s;
+    }
+    .btn-download:hover { background: var(--accent2); }
+    .btn-download svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* REQUIREMENTS */
+    .reqs {
+      display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap;
+      margin-top: 1.5rem;
+    }
+    .req {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; color: var(--muted);
+    }
+    .req svg { width: 14px; height: 14px; stroke: var(--muted); fill: none; stroke-width: 2; stroke-linecap: round; }
+
+    /* CONTENT */
+    .content {
+      max-width: 760px; margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+
+    .section-label {
+      font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--accent); font-weight: 600; margin-bottom: 0.5rem;
+    }
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.5rem; font-weight: 700;
+      letter-spacing: -0.02em; color: var(--text);
+      margin-bottom: 2rem;
+    }
+
+    /* INSTALL STEPS */
+    .install-steps { display: flex; flex-direction: column; gap: 0; }
+
+    .install-step {
+      display: grid; grid-template-columns: 48px 1fr;
+      gap: 0 1.25rem; position: relative;
+    }
+
+    .install-step:not(:last-child)::before {
+      content: '';
+      position: absolute;
+      left: 22px; top: 48px; bottom: 0;
+      width: 1px; background: var(--edge);
+    }
+
+    .step-number {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--lift); border: 1px solid var(--edge);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700;
+      color: var(--accent); flex-shrink: 0; position: relative; z-index: 1;
+    }
+
+    .step-body {
+      padding-bottom: 2.5rem;
+    }
+    .step-body h3 {
+      font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700;
+      color: var(--text); margin-bottom: 0.5rem;
+      padding-top: 10px;
+    }
+    .step-body p { font-size: 14px; color: var(--muted); line-height: 1.7; }
+    .step-body p + p { margin-top: 0.5rem; }
+
+    .step-note {
+      display: flex; gap: 10px;
+      background: var(--lift); border: 1px solid var(--edge);
+      border-radius: 8px; padding: 12px 14px;
+      margin-top: 1rem;
+    }
+    .step-note svg { width: 16px; height: 16px; stroke: var(--warning); fill: none; stroke-width: 2; stroke-linecap: round; flex-shrink: 0; margin-top: 1px; }
+    .step-note p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+    .step-note p strong { color: var(--text); font-weight: 500; }
+
+    .step-success {
+      display: flex; gap: 10px;
+      background: rgba(76,175,131,0.06); border: 1px solid rgba(76,175,131,0.2);
+      border-radius: 8px; padding: 12px 14px; margin-top: 1rem;
+    }
+    .step-success svg { width: 16px; height: 16px; stroke: var(--success); fill: none; stroke-width: 2; stroke-linecap: round; flex-shrink: 0; margin-top: 1px; }
+    .step-success p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+    .code-block {
+      background: var(--surface); border: 1px solid var(--edge);
+      border-radius: 8px; padding: 12px 16px; margin-top: 1rem;
+      font-family: 'JetBrains Mono', 'Courier New', monospace;
+      font-size: 13px; color: var(--accent2);
+      display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+    }
+    .copy-btn {
+      background: none; border: none; cursor: pointer;
+      color: var(--muted); font-size: 12px; font-family: 'Inter', sans-serif;
+      white-space: nowrap; padding: 2px 8px;
+      border-radius: 4px; transition: all 0.15s;
+    }
+    .copy-btn:hover { background: var(--lift); color: var(--text); }
+
+    .img-placeholder {
+      background: var(--surface); border: 1px solid var(--edge);
+      border-radius: 10px; padding: 2rem;
+      margin-top: 1rem; text-align: center;
+      font-size: 13px; color: var(--muted);
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+    }
+    .img-placeholder svg { width: 28px; height: 28px; stroke: var(--subtle); fill: none; stroke-width: 1.5; stroke-linecap: round; }
+
+    /* OS PANELS */
+    .os-panel { display: none; }
+    .os-panel.active { display: block; }
+
+    /* COMPATIBILITY TABLE */
+    .compat-table {
+      width: 100%; border-collapse: collapse;
+      margin-top: 1.5rem;
+    }
+    .compat-table th {
+      font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--muted); font-weight: 600;
+      padding: 0 12px 10px; text-align: left;
+      border-bottom: 1px solid var(--edge);
+    }
+    .compat-table td {
+      padding: 12px; font-size: 13px; color: var(--muted);
+      border-bottom: 1px solid var(--edge);
+    }
+    .compat-table tr:last-child td { border-bottom: none; }
+    .compat-table td:first-child { color: var(--text); font-weight: 500; }
+
+    .badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 2px 8px; border-radius: 100px;
+      font-size: 11px; font-weight: 600;
+    }
+    .badge-green { background: rgba(76,175,131,0.12); color: var(--success); }
+    .badge-muted { background: var(--lift); color: var(--muted); }
+
+    /* FAQ */
+    .faq { margin-top: 1rem; }
+    .faq-item {
+      border-bottom: 1px solid var(--edge);
+    }
+    .faq-q {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 0; cursor: pointer; gap: 1rem;
+    }
+    .faq-q span {
+      font-size: 14px; font-weight: 500; color: var(--text);
+    }
+    .faq-q svg {
+      width: 16px; height: 16px; stroke: var(--muted); fill: none;
+      stroke-width: 2; stroke-linecap: round; flex-shrink: 0;
+      transition: transform 0.2s;
+    }
+    .faq-item.open .faq-q svg { transform: rotate(180deg); }
+    .faq-a {
+      font-size: 14px; color: var(--muted); line-height: 1.7;
+      padding-bottom: 1rem; display: none;
+    }
+    .faq-item.open .faq-a { display: block; }
+
+    /* DIVIDER */
+    hr { border: none; border-top: 1px solid var(--edge); }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--edge);
+      padding: 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    footer p { font-size: 13px; color: var(--muted); }
+    .footer-links { display: flex; gap: 1.5rem; list-style: none; }
+    .footer-links a { font-size: 13px; color: var(--muted); text-decoration: none; }
+    .footer-links a:hover { color: var(--text); }
+
+    @media (max-width: 640px) {
+      nav { padding: 0 1rem; }
+      .nav-links { display: none; }
+      .content { padding: 3rem 1.25rem; }
+      .hero { padding: 4rem 1.25rem 2.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <div class="nav-logo-mark">
+      <svg viewBox="0 0 16 16" fill="none">
+        <rect x="1" y="5" width="14" height="4" rx="1.5" fill="white" opacity="0.9"/>
+        <rect x="3" y="10.5" width="8" height="2" rx="1" fill="white" opacity="0.45"/>
+        <rect x="1" y="2" width="5" height="2" rx="1" fill="white" opacity="0.35"/>
+      </svg>
+    </div>
+    <span class="nav-logo-name">Captio <span>by Keyweaver</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/#how-it-works">How it works</a></li>
+    <li><a href="/#pricing">Pricing</a></li>
+    <li><a href="/help">Help</a></li>
+  </ul>
+  <div style="display:flex;gap:0.75rem;">
+    <a href="/login" class="btn btn-ghost">Sign in</a>
+    <a href="/signup" class="btn btn-primary">Sign up free</a>
+  </div>
+</nav>
+
+<div class="page">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-eyebrow">
+      <span class="version-dot"></span>
+      Version 1.0 · Free to install
+    </div>
+    <h1>Download Captio</h1>
+    <p>An After Effects plugin — install it once and it lives inside your panel. No browser required to use it.</p>
+
+    <!-- OS TOGGLE -->
+    <div class="os-toggle" role="group" aria-label="Operating system">
+      <button class="os-btn active" id="os-win" onclick="switchOS('win')">
+        <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M0 2.286L6.571 1.4v6.343H0zm7.429-.857L16 0v7.743H7.429zm0 8.143H16V16l-8.571-1.2zM0 8.457h6.571v6.257L0 13.8z"/></svg>
+        Windows
+      </button>
+      <button class="os-btn" id="os-mac" onclick="switchOS('mac')">
+        <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M11.182.008C11.148-.03 9.923.023 8.857 1.18c-1.066 1.156-.902 2.482-.878 2.516s1.52.087 2.475-1.258.762-3.158.728-3.43zM7.68 4.56c-.353 0-1.058.34-2.148 1.019-1.09.679-2.246 1.985-2.246 4.088 0 3.023 2.05 6.332 3.953 6.332.673 0 1.358-.253 2.07-.76.71-.507 1.056-.76 1.728-.76.672 0 1.078.267 1.656.76.578.494 1.128.76 1.8.76C16.177 16 18 12.437 18 9.667c0-1.956-.915-3.477-2.745-4.562-.955-.571-2.09-.735-2.745-.735-.57 0-1.283.268-2.14.803-.432.267-.764.44-.945.44s-.512-.173-.945-.44c-.857-.535-1.77-.613-1.8-.613z"/></svg>
+        macOS
+      </button>
+    </div>
+
+    <!-- WINDOWS DOWNLOAD -->
+    <div class="os-panel active" id="panel-win">
+      <div class="download-card">
+        <div class="download-card-info">
+          <h3>Captio-v1.0-win.zip</h3>
+          <p>Windows 10 / 11 · After Effects 2021 or later · ~2 MB</p>
+        </div>
+        <a href="#" class="btn-download" id="win-download-btn">
+          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download for Windows
+        </a>
+      </div>
+    </div>
+
+    <!-- MAC DOWNLOAD -->
+    <div class="os-panel" id="panel-mac">
+      <div class="download-card">
+        <div class="download-card-info">
+          <h3>Captio-v1.0-mac.zip</h3>
+          <p>macOS 12 Monterey or later · After Effects 2021 or later · ~2 MB</p>
+        </div>
+        <a href="#" class="btn-download" id="mac-download-btn">
+          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download for macOS
+        </a>
+      </div>
+    </div>
+
+    <div class="reqs">
+      <span class="req">
+        <svg viewBox="0 0 14 14"><circle cx="7" cy="7" r="5.5"/><polyline points="4.5 7 6.5 9 9.5 5"/></svg>
+        After Effects 2021+
+      </span>
+      <span class="req">
+        <svg viewBox="0 0 14 14"><circle cx="7" cy="7" r="5.5"/><polyline points="4.5 7 6.5 9 9.5 5"/></svg>
+        Windows 10 / macOS 12+
+      </span>
+      <span class="req">
+        <svg viewBox="0 0 14 14"><circle cx="7" cy="7" r="5.5"/><polyline points="4.5 7 6.5 9 9.5 5"/></svg>
+        Free Keyweaver account
+      </span>
+    </div>
+  </div>
+
+  <!-- INSTALL GUIDE -->
+  <div class="content">
+
+    <!-- WINDOWS GUIDE -->
+    <div class="os-panel active" id="guide-win">
+      <p class="section-label">Installation guide</p>
+      <h2 class="section-title">Installing on Windows</h2>
+
+      <div class="install-steps">
+
+        <div class="install-step">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h3>Download and unzip</h3>
+            <p>Download the zip file above and extract it. You should see a folder called <code style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent2); background:var(--lift); padding:1px 5px; border-radius:4px;">com.captioncraft.panel</code>.</p>
+          </div>
+        </div>
+
+        <div class="install-step">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h3>Copy to the CEP extensions folder</h3>
+            <p>Move the <code style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent2); background:var(--lift); padding:1px 5px; border-radius:4px;">com.captioncraft.panel</code> folder into:</p>
+            <div class="code-block">
+              <span>C:\Users\<em>YourName</em>\AppData\Roaming\Adobe\CEP\extensions\</span>
+              <button class="copy-btn" onclick="copyPath(this, 'AppData\\Roaming\\Adobe\\CEP\\extensions\\')">Copy</button>
+            </div>
+            <div class="step-note">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <p><strong>Can't see the AppData folder?</strong> In File Explorer, go to View → Show → Hidden items. AppData is a hidden folder.</p>
+            </div>
+            <p style="margin-top:1rem; font-size:13px; color:var(--muted);">If the <code style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent2); background:var(--lift); padding:1px 5px; border-radius:4px;">extensions</code> folder doesn't exist, create it.</p>
+          </div>
+        </div>
+
+        <div class="install-step">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h3>Enable unsigned extensions</h3>
+            <p>Adobe requires a registry edit to allow third-party CEP plugins. Open <strong>Registry Editor</strong> (search for <code style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent2); background:var(--lift); padding:1px 5px; border-radius:4px;">regedit</code> in the Start menu) and navigate to:</p>
+            <div class="code-block">
+              <span>HKEY_CURRENT_USER\SOFTWARE\Adobe\CSXS.12</span>
+              <button class="copy-btn" onclick="copyPath(this, 'HKEY_CURRENT_USER\\SOFTWARE\\Adobe\\CSXS.12')">Copy</button>
+            </div>
+            <p style="margin-top:0.75rem;">Create a new <strong>String Value</strong> named <code style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent2); background:var(--lift); padding:1px 5px; border-radius:4px;">PlayerDebugMode</code> and set its value to <code style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent2); background:var(--lift); padding:1px 5px; border-radius:4px;">1</code>.</p>
+            <div class="step-note">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <p>If <code style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent2);">CSXS.12</code> doesn't exist, try <code style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent2);">CSXS.11</code> or <code style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent2);">CSXS.13</code> — the number matches your AE version. You only need to do this once.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="install-step">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h3>Open the panel in After Effects</h3>
+            <p>Launch After Effects (or restart it if it was open). Go to:</p>
+            <p style="margin-top:0.5rem; font-weight:500; color:var(--text);">Window → Extensions → Captio by Keyweaver</p>
+            <div class="step-success">
+              <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              <p>The panel will open on the right side. Sign in with your Keyweaver account and you're ready to generate.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- MAC GUIDE -->
+    <div class="os-panel" id="guide-mac">
+      <p class="section-label">Installation guide</p>
+      <h2 class="section-title">Installing on macOS</h2>
+
+      <div class="install-steps">
+
+        <div class="install-step">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h3>Download and unzip</h3>
+            <p>Download the zip file above. Double-click it to extract. You should see a folder called <code style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent2); background:var(--lift); padding:1px 5px; border-radius:4px;">com.captioncraft.panel</code>.</p>
+          </div>
+        </div>
+
+        <div class="install-step">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h3>Copy to the CEP extensions folder</h3>
+            <p>Move the folder into:</p>
+            <div class="code-block">
+              <span>~/Library/Application Support/Adobe/CEP/extensions/</span>
+              <button class="copy-btn" onclick="copyPath(this, '~/Library/Application Support/Adobe/CEP/extensions/')">Copy</button>
+            </div>
+            <div class="step-note">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <p><strong>Can't see the Library folder?</strong> In Finder, hold <strong>Option</strong> and click the Go menu — Library appears in the list.</p>
+            </div>
+            <p style="margin-top:1rem; font-size:13px; color:var(--muted);">If the <code style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent2); background:var(--lift); padding:1px 5px; border-radius:4px;">extensions</code> folder doesn't exist, create it.</p>
+          </div>
+        </div>
+
+        <div class="install-step">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h3>Enable unsigned extensions</h3>
+            <p>Open Terminal and run:</p>
+            <div class="code-block">
+              <span>defaults write com.adobe.CSXS.12 PlayerDebugMode 1</span>
+              <button class="copy-btn" onclick="copyPath(this, 'defaults write com.adobe.CSXS.12 PlayerDebugMode 1')">Copy</button>
+            </div>
+            <div class="step-note">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <p>Replace <code style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent2);">CSXS.12</code> with your version if needed. You only need to do this once.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="install-step">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h3>Open the panel in After Effects</h3>
+            <p>Launch After Effects (or restart it). Go to:</p>
+            <p style="margin-top:0.5rem; font-weight:500; color:var(--text);">Window → Extensions → Captio by Keyweaver</p>
+            <div class="step-success">
+              <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              <p>The panel will open. Sign in with your Keyweaver account and you're ready to generate.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <hr style="margin: 3rem 0;" />
+
+    <!-- COMPATIBILITY -->
+    <p class="section-label">Compatibility</p>
+    <h2 class="section-title" style="margin-bottom:0;">Supported versions</h2>
+
+    <table class="compat-table">
+      <thead>
+        <tr>
+          <th>After Effects</th>
+          <th>Windows</th>
+          <th>macOS</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>2025 (v25)</td>
+          <td><span class="badge badge-green">✓ Supported</span></td>
+          <td><span class="badge badge-green">✓ Supported</span></td>
+        </tr>
+        <tr>
+          <td>2024 (v24)</td>
+          <td><span class="badge badge-green">✓ Supported</span></td>
+          <td><span class="badge badge-green">✓ Supported</span></td>
+        </tr>
+        <tr>
+          <td>2023 (v23)</td>
+          <td><span class="badge badge-green">✓ Supported</span></td>
+          <td><span class="badge badge-green">✓ Supported</span></td>
+        </tr>
+        <tr>
+          <td>2022 (v22)</td>
+          <td><span class="badge badge-green">✓ Supported</span></td>
+          <td><span class="badge badge-green">✓ Supported</span></td>
+        </tr>
+        <tr>
+          <td>2021 (v18)</td>
+          <td><span class="badge badge-green">✓ Supported</span></td>
+          <td><span class="badge badge-green">✓ Supported</span></td>
+        </tr>
+        <tr>
+          <td>2020 and earlier</td>
+          <td><span class="badge badge-muted">Not supported</span></td>
+          <td><span class="badge badge-muted">Not supported</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <hr style="margin: 3rem 0;" />
+
+    <!-- FAQ -->
+    <p class="section-label">Troubleshooting</p>
+    <h2 class="section-title" style="margin-bottom:0;">Common questions</h2>
+
+    <div class="faq">
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span>The panel doesn't appear in Window → Extensions</span>
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-a">Make sure you've set PlayerDebugMode to 1 in the registry (Windows) or via Terminal (Mac), then fully quit and relaunch After Effects. Restarting AE is required — it doesn't hot-reload extensions. Also double-check the folder is named exactly <code style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent2);">com.captioncraft.panel</code> with no extra nesting.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span>I see a blank white panel</span>
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-a">This usually means the CEP debug flag isn't set. Re-run the registry edit (Windows) or Terminal command (Mac) and restart AE. If the panel still shows blank, right-click inside it and choose Inspect — check the console for errors.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span>After Effects says the extension is not compatible</span>
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-a">Captio requires After Effects 2021 or later. If you're on an older version, you'll need to update AE. You can check your version under Help → About After Effects.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span>Transcription fails or returns an error</span>
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-a">Check that you're signed in and have Keyweaver Credits available. Files must be under 25 MB on the free and credits plans. If the file is larger, use the Export Audio option in AE to create a smaller audio-only export first, then generate captions from that.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span>Can I use Captio on multiple computers?</span>
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-a">Yes. Install the plugin on as many machines as you like. Your credits and subscription are tied to your Keyweaver account, not to a specific device. Sign in on each machine and your balance follows you.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span>Still stuck?</span>
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-a">Head to the <a href="/help" style="color:var(--accent2);">help page</a> for the full guide, or email us at <a href="mailto:hello@keyweaver.io" style="color:var(--accent2);">hello@keyweaver.io</a>.</div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<footer>
+  <p>© 2026 Keyweaver. All rights reserved.</p>
+  <ul class="footer-links">
+    <li><a href="/legal/privacy">Privacy</a></li>
+    <li><a href="/legal/terms">Terms</a></li>
+    <li><a href="/help">Help</a></li>
+    <li><a href="/about">About</a></li>
+  </ul>
+</footer>
+
+<script>
+  function switchOS(os) {
+    document.getElementById('os-win').classList.toggle('active', os === 'win');
+    document.getElementById('os-mac').classList.toggle('active', os === 'mac');
+    document.getElementById('panel-win').classList.toggle('active', os === 'win');
+    document.getElementById('panel-mac').classList.toggle('active', os === 'mac');
+    document.getElementById('guide-win').classList.toggle('active', os === 'win');
+    document.getElementById('guide-mac').classList.toggle('active', os === 'mac');
+  }
+
+  // Auto-detect OS
+  if (navigator.platform.includes('Mac') || navigator.userAgent.includes('Mac')) {
+    switchOS('mac');
+  }
+
+  // Handle #mac anchor
+  if (window.location.hash === '#mac') switchOS('mac');
+
+  function copyPath(btn, text) {
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = 'Copy', 2000);
+    });
+  }
+
+  function toggleFaq(el) {
+    el.parentElement.classList.toggle('open');
+  }
+</script>
+
+</body>
+</html>

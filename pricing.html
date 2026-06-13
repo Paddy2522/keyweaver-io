@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pricing — Captio by Keyweaver</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:     #0A0A0F;
+      --surface: #13131A;
+      --lift:    #1C1C28;
+      --edge:    #2A2A3D;
+      --accent:  #5B6BF8;
+      --accent2: #7B8BFF;
+      --text:    #E8E8F0;
+      --muted:   #6B6B88;
+      --subtle:  #3A3A52;
+      --success: #4CAF83;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--ink); color: var(--text);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem; height: 56px;
+      background: rgba(10,10,15,0.9);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--edge);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-logo-mark {
+      width: 28px; height: 28px; background: var(--accent);
+      border-radius: 6px; display: flex; align-items: center; justify-content: center;
+    }
+    .nav-logo-mark svg { width: 16px; height: 16px; }
+    .nav-logo-name {
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 15px; color: var(--text); letter-spacing: -0.01em;
+    }
+    .nav-logo-name span { color: var(--muted); font-weight: 400; }
+    .nav-links { display: flex; align-items: center; gap: 1.5rem; list-style: none; }
+    .nav-links a { font-size: 14px; color: var(--muted); text-decoration: none; }
+    .nav-links a:hover { color: var(--text); }
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 0 1rem; height: 34px; border-radius: 6px;
+      font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500;
+      text-decoration: none; cursor: pointer; transition: all 0.15s; border: none;
+    }
+    .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--edge); }
+    .btn-ghost:hover { color: var(--text); border-color: var(--subtle); background: var(--lift); }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: var(--accent2); }
+
+    /* HERO */
+    .hero {
+      padding: 7rem 2rem 3.5rem;
+      text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 50% 55% at 50% 0%, rgba(91,107,248,0.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800; letter-spacing: -0.03em;
+      color: var(--text); margin-bottom: 0.75rem;
+    }
+    .hero p { font-size: 1rem; color: var(--muted); max-width: 440px; margin: 0 auto 2rem; line-height: 1.7; }
+
+    /* CURRENCY TOGGLE */
+    .currency-toggle {
+      display: inline-flex;
+      background: var(--lift); border: 1px solid var(--edge);
+      border-radius: 10px; padding: 4px; gap: 4px;
+    }
+    .currency-btn {
+      padding: 7px 18px; border-radius: 7px;
+      font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500;
+      color: var(--muted); background: transparent; border: none;
+      cursor: pointer; transition: all 0.15s;
+    }
+    .currency-btn.active {
+      background: var(--surface); color: var(--text);
+      border: 1px solid var(--edge);
+    }
+
+    /* PRICING GRID */
+    .pricing-section {
+      max-width: 960px; margin: 3rem auto 0;
+      padding: 0 2rem 5rem;
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      align-items: start;
+    }
+
+    .pricing-card {
+      background: var(--surface);
+      border: 1px solid var(--edge);
+      border-radius: 14px;
+      padding: 2rem 1.75rem;
+      position: relative;
+      transition: border-color 0.2s;
+    }
+    .pricing-card:hover { border-color: var(--subtle); }
+    .pricing-card.featured {
+      border-color: var(--accent);
+      background: linear-gradient(180deg, rgba(91,107,248,0.06) 0%, var(--surface) 40%);
+    }
+
+    .featured-badge {
+      position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
+      background: var(--accent); color: #fff;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.05em;
+      padding: 3px 14px; border-radius: 100px; white-space: nowrap;
+    }
+
+    .card-tier {
+      font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--muted); font-weight: 600; margin-bottom: 1rem;
+    }
+
+    .card-price {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.75rem; font-weight: 800;
+      color: var(--text); line-height: 1;
+      margin-bottom: 0.2rem; display: flex; align-items: flex-start; gap: 2px;
+    }
+    .card-price sup {
+      font-size: 1.1rem; font-weight: 700;
+      margin-top: 0.5rem;
+    }
+    .card-price-period {
+      font-size: 13px; color: var(--muted); margin-bottom: 1.25rem;
+    }
+
+    .card-desc {
+      font-size: 13px; color: var(--muted); line-height: 1.6;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--edge);
+      margin-bottom: 1.5rem;
+    }
+
+    .card-features { list-style: none; margin-bottom: 2rem; }
+    .card-features li {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 13px; color: var(--muted);
+      padding: 5px 0; line-height: 1.5;
+    }
+    .card-features li svg {
+      width: 15px; height: 15px; flex-shrink: 0;
+      stroke: var(--success); fill: none;
+      stroke-width: 2.5; stroke-linecap: round; margin-top: 1px;
+    }
+    .card-features li.dim svg { stroke: var(--subtle); }
+    .card-features li.dim { color: var(--subtle); }
+
+    .card-cta {
+      display: flex; align-items: center; justify-content: center;
+      width: 100%; height: 44px; border-radius: 9px;
+      font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 500;
+      text-decoration: none; cursor: pointer; transition: all 0.15s; border: none;
+    }
+    .cta-primary { background: var(--accent); color: #fff; }
+    .cta-primary:hover { background: var(--accent2); }
+    .cta-outline {
+      background: transparent; color: var(--text);
+      border: 1px solid var(--edge);
+    }
+    .cta-outline:hover { border-color: var(--subtle); background: var(--lift); }
+    .cta-accent-outline {
+      background: transparent; color: var(--accent2);
+      border: 1px solid var(--accent);
+    }
+    .cta-accent-outline:hover { background: rgba(91,107,248,0.08); }
+
+    /* CREDIT MODEL EXPLAINER */
+    .credit-explainer {
+      background: var(--lift); border: 1px solid var(--edge);
+      border-radius: 12px; padding: 1.5rem 2rem;
+      display: flex; align-items: center; gap: 2rem;
+      flex-wrap: wrap; margin-top: 1.5rem;
+    }
+    .credit-explainer-icon {
+      width: 44px; height: 44px; border-radius: 10px;
+      background: rgba(91,107,248,0.1); border: 1px solid rgba(91,107,248,0.2);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .credit-explainer-icon svg { width: 22px; height: 22px; stroke: var(--accent2); fill: none; stroke-width: 1.75; stroke-linecap: round; }
+    .credit-explainer h3 { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+    .credit-explainer p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+    /* COMPARISON TABLE */
+    .comparison-section {
+      max-width: 960px; margin: 0 auto;
+      padding: 0 2rem 5rem;
+    }
+
+    .comparison-label {
+      font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--accent); font-weight: 600; margin-bottom: 0.5rem;
+    }
+    .comparison-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.5rem; font-weight: 700;
+      letter-spacing: -0.02em; color: var(--text);
+      margin-bottom: 2rem;
+    }
+
+    .comp-table {
+      width: 100%; border-collapse: collapse;
+      background: var(--surface); border: 1px solid var(--edge);
+      border-radius: 12px; overflow: hidden;
+    }
+
+    .comp-table thead tr {
+      border-bottom: 1px solid var(--edge);
+    }
+    .comp-table th {
+      padding: 1rem 1.25rem; text-align: left;
+      font-size: 13px; font-weight: 600; color: var(--text);
+    }
+    .comp-table th:first-child { color: var(--muted); font-weight: 500; }
+    .comp-table th.featured-col {
+      color: var(--accent2);
+      background: rgba(91,107,248,0.04);
+    }
+
+    .comp-table tbody tr {
+      border-bottom: 1px solid var(--edge);
+      transition: background 0.1s;
+    }
+    .comp-table tbody tr:last-child { border-bottom: none; }
+    .comp-table tbody tr:hover { background: var(--lift); }
+
+    .comp-table td {
+      padding: 13px 1.25rem; font-size: 13px; color: var(--muted);
+      vertical-align: middle;
+    }
+    .comp-table td.featured-col {
+      background: rgba(91,107,248,0.02);
+    }
+    .comp-table td:first-child { color: var(--text); }
+
+    .comp-table .group-row td {
+      padding: 10px 1.25rem 6px;
+      font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--accent); font-weight: 600;
+      background: rgba(91,107,248,0.03);
+      border-bottom: 1px solid var(--edge);
+    }
+
+    .check {
+      display: inline-flex; width: 20px; height: 20px;
+      background: rgba(76,175,131,0.1); border-radius: 50%;
+      align-items: center; justify-content: center;
+    }
+    .check svg { width: 11px; height: 11px; stroke: var(--success); fill: none; stroke-width: 3; stroke-linecap: round; }
+
+    .cross {
+      display: inline-flex; width: 20px; height: 20px;
+      align-items: center; justify-content: center;
+    }
+    .cross svg { width: 11px; height: 11px; stroke: var(--subtle); fill: none; stroke-width: 2.5; stroke-linecap: round; }
+
+    /* FAQ */
+    .faq-section {
+      max-width: 680px; margin: 0 auto;
+      padding: 0 2rem 5rem;
+    }
+    .faq-title {
+      font-family: 'Syne', sans-serif; font-size: 1.5rem;
+      font-weight: 700; letter-spacing: -0.02em;
+      color: var(--text); margin-bottom: 1.5rem; text-align: center;
+    }
+    .faq-item { border-bottom: 1px solid var(--edge); }
+    .faq-q {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 0; cursor: pointer; gap: 1rem;
+    }
+    .faq-q span { font-size: 14px; font-weight: 500; color: var(--text); }
+    .faq-q svg { width: 16px; height: 16px; stroke: var(--muted); fill: none; stroke-width: 2; stroke-linecap: round; flex-shrink: 0; transition: transform 0.2s; }
+    .faq-item.open .faq-q svg { transform: rotate(180deg); }
+    .faq-a { font-size: 14px; color: var(--muted); line-height: 1.7; padding-bottom: 1rem; display: none; }
+    .faq-item.open .faq-a { display: block; }
+    .faq-a a { color: var(--accent2); text-decoration: none; }
+
+    /* BOTTOM CTA */
+    .bottom-cta {
+      text-align: center;
+      padding: 4rem 2rem 5rem;
+      border-top: 1px solid var(--edge);
+    }
+    .bottom-cta h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.5rem, 4vw, 2.5rem);
+      font-weight: 800; letter-spacing: -0.02em;
+      color: var(--text); margin-bottom: 0.75rem;
+    }
+    .bottom-cta p { font-size: 1rem; color: var(--muted); margin-bottom: 2rem; }
+    .bottom-cta-actions { display: flex; align-items: center; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+
+    .btn-xl {
+      height: 50px; padding: 0 2rem; border-radius: 10px; font-size: 15px;
+    }
+    .btn-lg {
+      height: 44px; padding: 0 1.5rem; border-radius: 8px; font-size: 14px;
+    }
+
+    footer {
+      border-top: 1px solid var(--edge); padding: 2rem;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+    }
+    footer p { font-size: 13px; color: var(--muted); }
+    .footer-links { display: flex; gap: 1.5rem; list-style: none; }
+    .footer-links a { font-size: 13px; color: var(--muted); text-decoration: none; }
+    .footer-links a:hover { color: var(--text); }
+
+    @media (max-width: 720px) {
+      .pricing-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+      .nav-links { display: none; }
+      .comp-table th:nth-child(2), .comp-table td:nth-child(2) { display: none; }
+    }
+    @media (max-width: 500px) {
+      nav { padding: 0 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <div class="nav-logo-mark">
+      <svg viewBox="0 0 16 16" fill="none">
+        <rect x="1" y="5" width="14" height="4" rx="1.5" fill="white" opacity="0.9"/>
+        <rect x="3" y="10.5" width="8" height="2" rx="1" fill="white" opacity="0.45"/>
+        <rect x="1" y="2" width="5" height="2" rx="1" fill="white" opacity="0.35"/>
+      </svg>
+    </div>
+    <span class="nav-logo-name">Captio <span>by Keyweaver</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/#how-it-works">How it works</a></li>
+    <li><a href="/#styles">Styles</a></li>
+    <li><a href="/help">Help</a></li>
+  </ul>
+  <div style="display:flex;gap:0.75rem;">
+    <a href="/login" class="btn btn-ghost">Sign in</a>
+    <a href="/signup" class="btn btn-primary">Get started free</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>Simple, honest pricing</h1>
+  <p>Start free. Pay only when you need more. Credits never expire and work across all Keyweaver products.</p>
+
+  <div class="currency-toggle" role="group" aria-label="Currency">
+    <button class="currency-btn active" onclick="setCurrency('GBP')">£ GBP</button>
+    <button class="currency-btn" onclick="setCurrency('EUR')">€ EUR</button>
+    <button class="currency-btn" onclick="setCurrency('USD')">$ USD</button>
+  </div>
+</div>
+
+<!-- PRICING CARDS -->
+<div class="pricing-section">
+  <div class="pricing-grid">
+
+    <!-- FREE -->
+    <div class="pricing-card">
+      <div class="card-tier">Free</div>
+      <div class="card-price"><sup id="sym-free">£</sup><span id="price-free">0</span></div>
+      <div class="card-price-period">forever</div>
+      <div class="card-desc">Get started with no commitment. Three generates to try Captio with real footage.</div>
+      <ul class="card-features">
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>3 transcription jobs</li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Files up to 5 minutes</li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>3 caption styles</li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Full style editor</li>
+        <li class="dim"><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Top-up credits</li>
+        <li class="dim"><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>SRT / VTT export</li>
+        <li class="dim"><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Files over 5 minutes</li>
+      </ul>
+      <a href="/signup" class="card-cta cta-outline">Start for free</a>
+    </div>
+
+    <!-- CREDITS -->
+    <div class="pricing-card featured">
+      <div class="featured-badge">Most popular</div>
+      <div class="card-tier">Credits</div>
+      <div class="card-price"><sup id="sym-credits">£</sup><span id="price-credits">4</span><span id="price-credits-dec" style="font-size:1.4rem; font-weight:700; margin-top:0.7rem; color:var(--muted)">.99</span></div>
+      <div class="card-price-period" id="credits-period">one-time · <span id="credits-count">60</span> credits</div>
+      <div class="card-desc">Buy a pack of credits whenever you need them. No subscription, no expiry.</div>
+      <ul class="card-features">
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg><span id="credits-feature">60 minutes of transcription</span></li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Files up to 2 hours</li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>All 8 caption styles</li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Full style editor</li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Credits never expire</li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Top up any time</li>
+        <li class="dim"><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>SRT / VTT export</li>
+      </ul>
+      <a href="/signup?plan=credits" class="card-cta cta-primary" id="cta-credits">Buy credits</a>
+    </div>
+
+    <!-- MONTHLY -->
+    <div class="pricing-card">
+      <div class="card-tier">Monthly</div>
+      <div class="card-price"><sup id="sym-monthly">£</sup><span id="price-monthly">12</span></div>
+      <div class="card-price-period">per month · <span id="monthly-count">300</span> credits included</div>
+      <div class="card-desc">Best value for regular users. Credits refresh monthly and unused ones roll over.</div>
+      <ul class="card-features">
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>300 credits per month</li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Files up to 4 hours</li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>All 8 caption styles</li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Full style editor</li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Up to 150 credits roll over</li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>SRT / VTT / CSV export</li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Priority transcription queue</li>
+      </ul>
+      <a href="/signup?plan=monthly" class="card-cta cta-accent-outline">Start monthly</a>
+    </div>
+
+  </div>
+
+  <!-- CREDIT EXPLAINER -->
+  <div class="credit-explainer">
+    <div class="credit-explainer-icon">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+    </div>
+    <div>
+      <h3>How credits work</h3>
+      <p>1 Keyweaver Credit = 1 minute of audio transcribed. Fractional minutes round up — a 5 min 20 sec file costs 6 credits. Credits are shared across all Keyweaver products and never expire on the Credits plan.</p>
+    </div>
+  </div>
+</div>
+
+<!-- COMPARISON TABLE -->
+<div class="comparison-section">
+  <p class="comparison-label">Compare plans</p>
+  <h2 class="comparison-title">Everything in detail</h2>
+
+  <table class="comp-table">
+    <thead>
+      <tr>
+        <th style="width:40%;">Feature</th>
+        <th>Free</th>
+        <th class="featured-col">Credits</th>
+        <th>Monthly</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <tr class="group-row"><td colspan="4">Transcription</td></tr>
+      <tr>
+        <td>Transcription jobs</td>
+        <td>3 total</td>
+        <td class="featured-col">Unlimited</td>
+        <td>Unlimited</td>
+      </tr>
+      <tr>
+        <td>Max file length</td>
+        <td>5 minutes</td>
+        <td class="featured-col">2 hours</td>
+        <td>4 hours</td>
+      </tr>
+      <tr>
+        <td>Max file size</td>
+        <td>25 MB</td>
+        <td class="featured-col">25 MB</td>
+        <td>25 MB</td>
+      </tr>
+      <tr>
+        <td>Word-level timestamps</td>
+        <td><span class="check"><svg viewBox="0 0 11 11"><polyline points="1.5 5.5 4 8.5 9.5 2"/></svg></span></td>
+        <td class="featured-col"><span class="check"><svg viewBox="0 0 11 11"><polyline points="1.5 5.5 4 8.5 9.5 2"/></svg></span></td>
+        <td><span class="check"><svg viewBox="0 0 11 11"><polyline points="1.5 5.5 4 8.5 9.5 2"/></svg></span></td>
+      </tr>
+      <tr>
+        <td>Auto language detection</td>
+        <td><span class="check"><svg viewBox="0 0 11 11"><polyline points="1.5 5.5 4 8.5 9.5 2"/></svg></span></td>
+        <td class="featured-col"><span class="check"><svg viewBox="0 0 11 11"><polyline points="1.5 5.5 4 8.5 9.5 2"/></svg></span></td>
+        <td><span class="check"><svg viewBox="0 0 11 11"><polyline points="1.5 5.5 4 8.5 9.5 2"/></svg></span></td>
+      </tr>
+      <tr>
+        <td>Priority queue</td>
+        <td><span class="cross"><svg viewBox="0 0 11 11"><line x1="2" y1="2" x2="9" y2="9"/><line x1="9" y1="2" x2="2" y2="9"/></svg></span></td>
+        <td class="featured-col"><span class="cross"><svg viewBox="0 0 11 11"><line x1="2" y1="2" x2="9" y2="9"/><line x1="9" y1="2" x2="2" y2="9"/></svg></span></td>
+        <td><span class="check"><svg viewBox="0 0 11 11"><polyline points="1.5 5.5 4 8.5 9.5 2"/></svg></span></td>
+      </tr>
+
+      <tr class="group-row"><td colspan="4">Styles & editing</td></tr>
+      <tr>
+        <td>Caption styles</td>
+        <td>3 styles</td>
+        <td class="featured-col">All 8 styles</td>
+        <td>All 8 styles</td>
+      </tr>
+      <tr>
+        <td>Style editor (font, colour, size)</td>
+        <td><span class="check"><svg viewBox="0 0 11 11"><polyline points="1.5 5.5 4 8.5 9.5 2"/></svg></span></td>
+        <td class="featured-col"><span class="check"><svg viewBox="0 0 11 11"><polyline points="1.5 5.5 4 8.5 9.5 2"/></svg></span></td>
+        <td><span class="check"><svg viewBox="0 0 11 11"><polyline points="1.5 5.5 4 8.5 9.5 2"/></svg></span></td>
+      </tr>
+      <tr>
+        <td>Text editing in panel</td>
+        <td><span class="check"><svg viewBox="0 0 11 11"><polyline points="1.5 5.5 4 8.5 9.5 2"/></svg></span></td>
+        <td class="featured-col"><span class="check"><svg viewBox="0 0 11 11"><polyline points="1.5 5.5 4 8.5 9.5 2"/></svg></span></td>
+        <td><span class="check"><svg viewBox="0 0 11 11"><polyline points="1.5 5.5 4 8.5 9.5 2"/></svg></span></td>
+      </tr>
+      <tr>
+        <td>Animations (Roll, Spotlight, Fade On…)</td>
+        <td><span class="check"><svg viewBox="0 0 11 11"><polyline points="1.5 5.5 4 8.5 9.5 2"/></svg></span></td>
+        <td class="featured-col"><span class="check"><svg viewBox="0 0 11 11"><polyline points="1.5 5.5 4 8.5 9.5 2"/></svg></span></td>
+        <td><span class="check"><svg viewBox="0 0 11 11"><polyline points="1.5 5.5 4 8.5 9.5 2"/></svg></span></td>
+      </tr>
+      <tr>
+        <td>Background shapes (pill, bar, fullwidth)</td>
+        <td><span class="check"><svg viewBox="0 0 11 11"><polyline points="1.5 5.5 4 8.5 9.5 2"/></svg></span></td>
+        <td class="featured-col"><span class="check"><svg viewBox="0 0 11 11"><polyline points="1.5 5.5 4 8.5 9.5 2"/></svg></span></td>
+        <td><span class="check"><svg viewBox="0 0 11 11"><polyline points="1.5 5.5 4 8.5 9.5 2"/></svg></span></td>
+      </tr>
+      <tr>
+        <td>Native AE text layers (fully editable)</td>
+        <td><span class="check"><svg viewBox="0 0 11 11"><polyline points="1.5 5.5 4 8.5 9.5 2"/></svg></span></td>
+        <td class="featured-col"><span class="check"><svg viewBox="0 0 11 11"><polyline points="1.5 5.5 4 8.5 9.5 2"/></svg></span></td>
+        <td><span class="check"><svg viewBox="0 0 11 11"><polyline points="1.5 5.5 4 8.5 9.5 2"/></svg></span></td>
+      </tr>
+
+      <tr class="group-row"><td colspan="4">Export</td></tr>
+      <tr>
+        <td>After Effects project (native)</td>
+        <td><span class="check"><svg viewBox="0 0 11 11"><polyline points="1.5 5.5 4 8.5 9.5 2"/></svg></span></td>
+        <td class="featured-col"><span class="check"><svg viewBox="0 0 11 11"><polyline points="1.5 5.5 4 8.5 9.5 2"/></svg></span></td>
+        <td><span class="check"><svg viewBox="0 0 11 11"><polyline points="1.5 5.5 4 8.5 9.5 2"/></svg></span></td>
+      </tr>
+      <tr>
+        <td>SRT subtitle file</td>
+        <td><span class="cross"><svg viewBox="0 0 11 11"><line x1="2" y1="2" x2="9" y2="9"/><line x1="9" y1="2" x2="2" y2="9"/></svg></span></td>
+        <td class="featured-col"><span class="cross"><svg viewBox="0 0 11 11"><line x1="2" y1="2" x2="9" y2="9"/><line x1="9" y1="2" x2="2" y2="9"/></svg></span></td>
+        <td><span class="check"><svg viewBox="0 0 11 11"><polyline points="1.5 5.5 4 8.5 9.5 2"/></svg></span></td>
+      </tr>
+      <tr>
+        <td>VTT subtitle file</td>
+        <td><span class="cross"><svg viewBox="0 0 11 11"><line x1="2" y1="2" x2="9" y2="9"/><line x1="9" y1="2" x2="2" y2="9"/></svg></span></td>
+        <td class="featured-col"><span class="cross"><svg viewBox="0 0 11 11"><line x1="2" y1="2" x2="9" y2="9"/><line x1="9" y1="2" x2="2" y2="9"/></svg></span></td>
+        <td><span class="check"><svg viewBox="0 0 11 11"><polyline points="1.5 5.5 4 8.5 9.5 2"/></svg></span></td>
+      </tr>
+      <tr>
+        <td>CSV transcript</td>
+        <td><span class="cross"><svg viewBox="0 0 11 11"><line x1="2" y1="2" x2="9" y2="9"/><line x1="9" y1="2" x2="2" y2="9"/></svg></span></td>
+        <td class="featured-col"><span class="cross"><svg viewBox="0 0 11 11"><line x1="2" y1="2" x2="9" y2="9"/><line x1="9" y1="2" x2="2" y2="9"/></svg></span></td>
+        <td><span class="check"><svg viewBox="0 0 11 11"><polyline points="1.5 5.5 4 8.5 9.5 2"/></svg></span></td>
+      </tr>
+
+      <tr class="group-row"><td colspan="4">Credits &amp; billing</td></tr>
+      <tr>
+        <td>Credits included</td>
+        <td>3 jobs free</td>
+        <td class="featured-col">60 per pack</td>
+        <td>300 / month</td>
+      </tr>
+      <tr>
+        <td>Unused credits roll over</td>
+        <td>—</td>
+        <td class="featured-col">Never expire</td>
+        <td>Up to 150</td>
+      </tr>
+      <tr>
+        <td>Top up any time</td>
+        <td><span class="cross"><svg viewBox="0 0 11 11"><line x1="2" y1="2" x2="9" y2="9"/><line x1="9" y1="2" x2="2" y2="9"/></svg></span></td>
+        <td class="featured-col"><span class="check"><svg viewBox="0 0 11 11"><polyline points="1.5 5.5 4 8.5 9.5 2"/></svg></span></td>
+        <td><span class="check"><svg viewBox="0 0 11 11"><polyline points="1.5 5.5 4 8.5 9.5 2"/></svg></span></td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<!-- FAQ -->
+<div class="faq-section">
+  <h2 class="faq-title">Questions</h2>
+
+  <div class="faq-item">
+    <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+      <span>Do credits expire?</span>
+      <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="faq-a">Credits purchased as a one-time pack never expire. On the Monthly plan, up to 150 unused credits roll over each month — any beyond that are forfeited at the renewal date.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+      <span>What counts as one credit?</span>
+      <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="faq-a">1 credit = 1 minute of audio transcribed. Fractional minutes always round up — so a 5 minute 20 second file costs 6 credits. Re-applying a style or editing cue text after a generate costs nothing.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+      <span>Can I cancel my monthly subscription at any time?</span>
+      <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="faq-a">Yes. Cancel any time from your <a href="/account">account page</a>. You keep access to your credits and Monthly features until the end of the current billing period. No questions asked.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+      <span>What currencies are supported?</span>
+      <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="faq-a">GBP, EUR, and USD. Your currency is selected at checkout and shown on your invoices. Stripe handles the conversion securely — we never store card details.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+      <span>Is there a refund policy?</span>
+      <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="faq-a">We offer refunds for unused credit packs within 14 days of purchase. Monthly subscriptions are non-refundable once the billing period has started, but you can cancel immediately to prevent future charges. Email <a href="mailto:hello@keyweaver.io">hello@keyweaver.io</a> for any billing queries.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+      <span>Are credits shared between Captio and Keyweaver?</span>
+      <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="faq-a">Yes. Keyweaver Credits are platform-wide. One balance covers everything — Captio transcription today, and any future Keyweaver products you use.</div>
+  </div>
+
+</div>
+
+<!-- BOTTOM CTA -->
+<div class="bottom-cta">
+  <h2>Ready to generate?</h2>
+  <p>Download the plugin and get your first three captions for free.</p>
+  <div class="bottom-cta-actions">
+    <a href="/download" class="btn btn-primary btn-xl">Download free</a>
+    <a href="/signup" class="btn btn-ghost btn-lg">Create account</a>
+  </div>
+</div>
+
+<footer>
+  <p>© 2026 Keyweaver. All rights reserved.</p>
+  <ul class="footer-links">
+    <li><a href="/legal/privacy">Privacy</a></li>
+    <li><a href="/legal/terms">Terms</a></li>
+    <li><a href="/help">Help</a></li>
+    <li><a href="/about">About</a></li>
+  </ul>
+</footer>
+
+<script>
+  const prices = {
+    GBP: { sym: '£', credits: { whole: '4', dec: '.99' }, monthly: '12' },
+    EUR: { sym: '€', credits: { whole: '5', dec: '.99' }, monthly: '14' },
+    USD: { sym: '$', credits: { whole: '5', dec: '.99' }, monthly: '15' },
+  };
+
+  let current = 'GBP';
+
+  // Auto-detect currency from locale
+  try {
+    const locale = navigator.language || 'en-GB';
+    if (locale.startsWith('en-US')) current = 'USD';
+    else if (['de','fr','es','it','nl','pt','pl'].some(l => locale.startsWith(l))) current = 'EUR';
+  } catch(e) {}
+
+  function setCurrency(c) {
+    current = c;
+    document.querySelectorAll('.currency-btn').forEach(b => {
+      b.classList.toggle('active', b.textContent.includes(c));
+    });
+    const p = prices[c];
+    ['free','credits','monthly'].forEach(t => {
+      document.getElementById('sym-' + t).textContent = p.sym;
+    });
+    document.getElementById('price-free').textContent = '0';
+    document.getElementById('price-credits').textContent = p.credits.whole;
+    document.getElementById('price-credits-dec').textContent = p.credits.dec;
+    document.getElementById('price-monthly').textContent = p.monthly;
+
+    // Update signup links with currency param
+    document.getElementById('cta-credits').href = '/signup?plan=credits&currency=' + c;
+  }
+
+  setCurrency(current);
+</script>
+
+</body>
+</html>
