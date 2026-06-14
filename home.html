@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Captio by Keyweaver — AI Subtitles for After Effects</title>
+  <meta name="description" content="AI-powered subtitle generator that lives inside Adobe After Effects. Transcribe, style, and sync captions in seconds." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:     #0A0A0F;
+      --surface: #13131A;
+      --lift:    #1C1C28;
+      --edge:    #2A2A3D;
+      --accent:  #5B6BF8;
+      --accent2: #7B8BFF;
+      --text:    #E8E8F0;
+      --muted:   #6B6B88;
+      --subtle:  #3A3A52;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--ink);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem;
+      height: 56px;
+      background: rgba(10, 10, 15, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--edge);
+    }
+
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none;
+    }
+    .nav-logo-mark {
+      width: 28px; height: 28px;
+      background: var(--accent);
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .nav-logo-mark svg { width: 16px; height: 16px; }
+    .nav-logo-name {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--text);
+      letter-spacing: -0.01em;
+    }
+    .nav-logo-name span { color: var(--muted); font-weight: 400; }
+
+    .nav-links {
+      display: flex; align-items: center; gap: 1.5rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 14px; color: var(--muted); text-decoration: none;
+      transition: color 0.15s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    .nav-cta {
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 0 1rem; height: 34px;
+      border-radius: 6px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px; font-weight: 500;
+      text-decoration: none; cursor: pointer;
+      transition: all 0.15s; border: none;
+    }
+    .btn-ghost {
+      background: transparent; color: var(--muted);
+      border: 1px solid var(--edge);
+    }
+    .btn-ghost:hover { color: var(--text); border-color: var(--subtle); background: var(--lift); }
+    .btn-primary {
+      background: var(--accent); color: #fff;
+    }
+    .btn-primary:hover { background: var(--accent2); }
+    .btn-lg {
+      height: 44px; padding: 0 1.5rem; font-size: 14px; border-radius: 8px;
+    }
+    .btn-xl {
+      height: 52px; padding: 0 2rem; font-size: 15px; border-radius: 10px;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 7rem 2rem 4rem;
+      text-align: center;
+      position: relative; overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(91,107,248,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 5px 12px;
+      background: var(--lift);
+      border: 1px solid var(--edge);
+      border-radius: 100px;
+      font-size: 12px; font-weight: 500;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+    }
+    .hero-eyebrow-dot {
+      width: 6px; height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+    }
+
+    .hero-headline {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(2.8rem, 7vw, 5.5rem);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      max-width: 900px;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Animated caption effect on headline */
+    .caption-word {
+      display: inline-block;
+      position: relative;
+      transition: color 0.2s;
+    }
+    .caption-word.active {
+      color: var(--accent2);
+    }
+    .caption-word.active::after {
+      content: '';
+      position: absolute;
+      bottom: 2px; left: -2px; right: -2px; height: 3px;
+      background: var(--accent);
+      border-radius: 2px;
+      opacity: 0.6;
+    }
+
+    .hero-sub {
+      font-size: 1.125rem;
+      color: var(--muted);
+      max-width: 520px;
+      margin-bottom: 2.5rem;
+      line-height: 1.7;
+    }
+
+    .hero-actions {
+      display: flex; align-items: center; gap: 1rem;
+      flex-wrap: wrap; justify-content: center;
+    }
+
+    .hero-note {
+      margin-top: 1rem;
+      font-size: 12px; color: var(--muted);
+    }
+
+    /* ── CAPTION DEMO ── */
+    .caption-demo {
+      margin: 4rem auto 0;
+      max-width: 720px; width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--edge);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .caption-demo-bar {
+      display: flex; align-items: center; gap: 6px;
+      padding: 10px 14px;
+      background: var(--lift);
+      border-bottom: 1px solid var(--edge);
+    }
+    .demo-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+    .caption-demo-screen {
+      position: relative;
+      aspect-ratio: 16 / 7;
+      background: #07070D;
+      display: flex; align-items: flex-end; justify-content: center;
+      padding-bottom: 10%;
+    }
+
+    /* fake video content */
+    .demo-video-bg {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .demo-scene-line {
+      width: 60%; height: 1px; background: var(--edge);
+      position: absolute; bottom: 30%;
+    }
+    .demo-scene-shape {
+      width: 120px; height: 80px;
+      border: 1px solid var(--subtle);
+      border-radius: 4px;
+      opacity: 0.3;
+    }
+
+    .demo-caption-bar {
+      position: relative; z-index: 2;
+      background: rgba(0,0,0,0.75);
+      border-radius: 6px;
+      padding: 8px 20px;
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(14px, 2.5vw, 20px);
+      font-weight: 600;
+      color: #fff;
+      display: flex; gap: 0.4em;
+      min-height: 44px; align-items: center;
+    }
+
+    .demo-word {
+      transition: color 0.15s, background 0.15s;
+      border-radius: 3px;
+      padding: 0 2px;
+    }
+    .demo-word.lit {
+      color: var(--accent2);
+      background: rgba(91,107,248,0.2);
+    }
+
+    /* ── HOW IT WORKS ── */
+    section { padding: 6rem 2rem; }
+
+    .section-label {
+      font-size: 11px; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--accent);
+      font-weight: 600; margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700; letter-spacing: -0.02em;
+      color: var(--text);
+      line-height: 1.15;
+    }
+
+    .section-sub {
+      color: var(--muted); font-size: 1rem;
+      max-width: 480px; margin-top: 0.75rem;
+      line-height: 1.7;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1px;
+      background: var(--edge);
+      border: 1px solid var(--edge);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-top: 3.5rem;
+    }
+
+    .step {
+      background: var(--surface);
+      padding: 2rem 1.75rem;
+    }
+
+    .step-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 11px; letter-spacing: 0.08em;
+      color: var(--accent); font-weight: 700;
+      margin-bottom: 1rem; display: block;
+    }
+
+    .step-icon {
+      width: 40px; height: 40px;
+      background: var(--lift);
+      border: 1px solid var(--edge);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 1.25rem;
+    }
+    .step-icon svg { width: 20px; height: 20px; stroke: var(--accent2); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+    .step h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem; font-weight: 700;
+      color: var(--text); margin-bottom: 0.5rem;
+    }
+    .step p {
+      font-size: 0.875rem; color: var(--muted); line-height: 1.6;
+    }
+
+    /* ── STYLES SHOWCASE ── */
+    .styles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-top: 3rem;
+    }
+
+    .style-card {
+      background: var(--surface);
+      border: 1px solid var(--edge);
+      border-radius: 10px;
+      overflow: hidden;
+      transition: border-color 0.2s, transform 0.2s;
+      cursor: default;
+    }
+    .style-card:hover {
+      border-color: var(--subtle);
+      transform: translateY(-2px);
+    }
+
+    .style-preview {
+      aspect-ratio: 16/7;
+      background: #07070D;
+      display: flex; align-items: flex-end; justify-content: center;
+      padding: 0 12px 12px;
+      font-size: 12px; font-weight: 600;
+      position: relative;
+    }
+
+    .style-label-pill {
+      background: rgba(0,0,0,0.8);
+      border-radius: 4px;
+      padding: 4px 10px;
+      white-space: nowrap;
+    }
+
+    .style-info {
+      padding: 10px 12px;
+      border-top: 1px solid var(--edge);
+    }
+    .style-name { font-size: 13px; font-weight: 500; color: var(--text); }
+    .style-tier {
+      font-size: 11px; color: var(--muted);
+      margin-top: 2px;
+    }
+    .tier-free { color: #4CAF83; }
+    .tier-pay  { color: #F5A623; }
+    .tier-monthly { color: var(--accent2); }
+
+    /* ── PRICING ── */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-top: 3rem;
+      max-width: 900px;
+    }
+
+    .pricing-card {
+      background: var(--surface);
+      border: 1px solid var(--edge);
+      border-radius: 12px;
+      padding: 2rem 1.75rem;
+      position: relative;
+    }
+    .pricing-card.featured {
+      border-color: var(--accent);
+    }
+
+    .pricing-badge {
+      position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+      background: var(--accent);
+      color: #fff; font-size: 11px; font-weight: 600;
+      padding: 3px 12px; border-radius: 100px;
+      letter-spacing: 0.04em; white-space: nowrap;
+    }
+
+    .pricing-tier {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.1rem; font-weight: 700;
+      color: var(--text); margin-bottom: 0.5rem;
+    }
+
+    .pricing-price {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.25rem; font-weight: 800;
+      color: var(--text); line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+    .pricing-price sup { font-size: 1rem; font-weight: 600; vertical-align: top; margin-top: 0.4rem; }
+    .pricing-price sub { font-size: 0.875rem; font-weight: 400; color: var(--muted); }
+
+    .pricing-desc {
+      font-size: 13px; color: var(--muted);
+      margin-bottom: 1.5rem; line-height: 1.5;
+    }
+
+    .pricing-features {
+      list-style: none;
+      margin-bottom: 1.75rem;
+    }
+    .pricing-features li {
+      font-size: 13px; color: var(--muted);
+      padding: 5px 0;
+      display: flex; align-items: flex-start; gap: 8px;
+    }
+    .pricing-features li svg {
+      width: 14px; height: 14px; flex-shrink: 0;
+      stroke: #4CAF83; fill: none;
+      stroke-width: 2.5; stroke-linecap: round; margin-top: 2px;
+    }
+
+    .btn-outline-accent {
+      background: transparent; color: var(--accent2);
+      border: 1px solid var(--accent);
+    }
+    .btn-outline-accent:hover { background: rgba(91,107,248,0.1); }
+
+    /* ── DOWNLOAD ── */
+    .download-box {
+      background: var(--surface);
+      border: 1px solid var(--edge);
+      border-radius: 16px;
+      padding: 3rem 2.5rem;
+      display: flex; align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap; gap: 2rem;
+      max-width: 900px;
+    }
+
+    .download-reqs {
+      margin-top: 1rem;
+      display: flex; gap: 1.5rem; flex-wrap: wrap;
+    }
+    .req-badge {
+      font-size: 12px; color: var(--muted);
+      display: flex; align-items: center; gap: 5px;
+    }
+    .req-badge svg {
+      width: 13px; height: 13px;
+      stroke: var(--muted); fill: none;
+      stroke-width: 2; stroke-linecap: round;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--edge);
+      padding: 2.5rem 2rem;
+      display: flex; align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap; gap: 1rem;
+    }
+
+    footer p { font-size: 13px; color: var(--muted); }
+
+    .footer-links {
+      display: flex; gap: 1.5rem; list-style: none;
+    }
+    .footer-links a {
+      font-size: 13px; color: var(--muted);
+      text-decoration: none;
+    }
+    .footer-links a:hover { color: var(--text); }
+
+    /* ── CONTAINER ── */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* ── MISC ── */
+    .text-center { text-align: center; }
+    .flex-center { display: flex; justify-content: center; }
+
+    .divider {
+      border: none;
+      border-top: 1px solid var(--edge);
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      nav { padding: 0 1rem; }
+      .nav-links { display: none; }
+      section { padding: 4rem 1.25rem; }
+      .hero { padding: 6rem 1.25rem 3rem; }
+      .download-box { padding: 2rem 1.5rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .caption-word, .demo-word { transition: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="/" class="nav-logo">
+    <div class="nav-logo-mark">
+      <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="1" y="5" width="14" height="4" rx="1.5" fill="white" opacity="0.9"/>
+        <rect x="3" y="10.5" width="8" height="2" rx="1" fill="white" opacity="0.45"/>
+        <rect x="1" y="2" width="5" height="2" rx="1" fill="white" opacity="0.35"/>
+      </svg>
+    </div>
+    <span class="nav-logo-name">Captio <span>by Keyweaver</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#how-it-works">How it works</a></li>
+    <li><a href="#styles">Styles</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="/help">Help</a></li>
+  </ul>
+  <div class="nav-cta">
+    <a href="/login" class="btn btn-ghost">Sign in</a>
+    <a href="/download" class="btn btn-primary">Download free</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">
+    <span class="hero-eyebrow-dot"></span>
+    Adobe After Effects plugin
+  </div>
+
+  <h1 class="hero-headline" id="hero-headline">
+    <!-- words injected by JS for animation -->
+  </h1>
+
+  <p class="hero-sub">
+    AI transcribes your audio, builds native AE text layers, and syncs every caption to the frame. No round-tripping. No copy-paste. Works entirely inside After Effects.
+  </p>
+
+  <div class="hero-actions">
+    <a href="/download" class="btn btn-primary btn-xl">
+      Download free
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M8 2v8M5 7l3 3 3-3M2 12h12" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+    <a href="#how-it-works" class="btn btn-ghost btn-xl">See how it works</a>
+  </div>
+  <p class="hero-note">Free plan includes 3 transcriptions · No credit card required</p>
+
+  <!-- mini demo -->
+  <div class="caption-demo">
+    <div class="caption-demo-bar">
+      <div class="demo-dot" style="background:#FF5F57"></div>
+      <div class="demo-dot" style="background:#FEBC2E"></div>
+      <div class="demo-dot" style="background:#28C840"></div>
+      <span style="margin-left:8px; font-size:11px; color:var(--muted); font-family:'Inter',sans-serif;">Captio by Keyweaver · After Effects 2026</span>
+    </div>
+    <div class="caption-demo-screen">
+      <div class="demo-video-bg">
+        <div class="demo-scene-shape"></div>
+        <div class="demo-scene-line"></div>
+      </div>
+      <div class="demo-caption-bar" id="demo-caption">
+        <!-- words injected by JS -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how-it-works">
+  <div class="container">
+    <p class="section-label">How it works</p>
+    <h2 class="section-title">Generate in three steps</h2>
+    <p class="section-sub">Everything happens inside After Effects. No browser tabs, no exports, no re-linking.</p>
+
+    <div class="steps">
+      <div class="step">
+        <span class="step-num">01</span>
+        <div class="step-icon">
+          <svg viewBox="0 0 24 24"><path d="M15 10l4.553-2.169A1 1 0 0121 8.82v6.36a1 1 0 01-1.447.893L15 14M3 8a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/></svg>
+        </div>
+        <h3>Select your footage</h3>
+        <p>Pick any video or audio item in your AE project. Captio reads the file path and calculates the credit cost before you commit.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">02</span>
+        <div class="step-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 18.5A6.5 6.5 0 105.5 12M12 18.5V21m0-2.5H9.5m2.5 0H15"/><circle cx="12" cy="8" r="1" fill="currentColor" stroke="none"/><path d="M12 11v4"/></svg>
+        </div>
+        <h3>Transcribe with AI</h3>
+        <p>One click sends your audio to OpenAI Whisper. Word-level timestamps come back in seconds and are stored for re-use.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">03</span>
+        <div class="step-icon">
+          <svg viewBox="0 0 24 24"><rect x="3" y="13" width="18" height="6" rx="2"/><path d="M3 9h18M7 5h4"/></svg>
+        </div>
+        <h3>Style and export</h3>
+        <p>Native AE text layers land in your timeline — perfectly timed, fully editable, with your chosen style applied.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- STYLES -->
+<section id="styles">
+  <div class="container">
+    <p class="section-label">Style library</p>
+    <h2 class="section-title">Eight caption styles, built in After Effects</h2>
+    <p class="section-sub">Every style is a real AE preset — not a filter. Change colours, fonts, and animation at any time.</p>
+
+    <div class="styles-grid">
+
+      <div class="style-card">
+        <div class="style-preview" style="background:#07070D;">
+          <div class="style-label-pill" style="color:#fff; font-family:'Inter',sans-serif;">Clean White</div>
+        </div>
+        <div class="style-info">
+          <div class="style-name">Clean White</div>
+          <div class="style-tier tier-free">Free</div>
+        </div>
+      </div>
+
+      <div class="style-card">
+        <div class="style-preview" style="background:#07070D;">
+          <div class="style-label-pill" style="color:#FFE04B; font-family:'Inter',sans-serif; background:transparent; font-weight:700; font-size:13px;">Bold Yellow</div>
+        </div>
+        <div class="style-info">
+          <div class="style-name">Bold Yellow</div>
+          <div class="style-tier tier-free">Free</div>
+        </div>
+      </div>
+
+      <div class="style-card">
+        <div class="style-preview" style="background:#07070D; align-items:flex-end;">
+          <div style="width:100%; background:#1a3a6b; padding:5px 12px; font-family:'Inter',sans-serif; font-size:12px; font-weight:600; color:#fff;">Lower Bar</div>
+        </div>
+        <div class="style-info">
+          <div class="style-name">Lower Bar</div>
+          <div class="style-tier tier-free">Free</div>
+        </div>
+      </div>
+
+      <div class="style-card">
+        <div class="style-preview" style="background:#07070D;">
+          <div class="style-label-pill" style="font-family:'Inter',sans-serif;">
+            <span style="color:var(--muted)">Word </span><span style="color:var(--accent2); background:rgba(91,107,248,0.2); border-radius:2px; padding:0 2px;">Highlight</span>
+          </div>
+        </div>
+        <div class="style-info">
+          <div class="style-name">Word Highlight</div>
+          <div class="style-tier tier-pay">Pay-as-you-go</div>
+        </div>
+      </div>
+
+      <div class="style-card">
+        <div class="style-preview" style="background:#07070D;">
+          <div class="style-label-pill" style="color:#fff; font-family:'Inter',sans-serif; opacity:0.7;">Fade In</div>
+        </div>
+        <div class="style-info">
+          <div class="style-name">Fade In</div>
+          <div class="style-tier tier-pay">Pay-as-you-go</div>
+        </div>
+      </div>
+
+      <div class="style-card">
+        <div class="style-preview" style="background:#07070D;">
+          <div class="style-label-pill" style="color:#fff; font-family:'Inter',sans-serif; text-shadow:0 -6px 0 rgba(255,255,255,0.2);">Slide Up</div>
+        </div>
+        <div class="style-info">
+          <div class="style-name">Slide Up</div>
+          <div class="style-tier tier-pay">Pay-as-you-go</div>
+        </div>
+      </div>
+
+      <div class="style-card">
+        <div class="style-preview" style="background:#07070D;">
+          <div class="style-label-pill" style="color:#fff; font-family:'Inter',sans-serif; -webkit-text-stroke:1px #888;">Outlined</div>
+        </div>
+        <div class="style-info">
+          <div class="style-name">Outlined Text</div>
+          <div class="style-tier tier-monthly">Monthly</div>
+        </div>
+      </div>
+
+      <div class="style-card">
+        <div class="style-preview" style="background:#07070D;">
+          <div class="style-label-pill" style="color:#fff; font-family:'Courier New',monospace; font-size:11px; letter-spacing:0.04em;">Typewriter_</div>
+        </div>
+        <div class="style-info">
+          <div class="style-name">Typewriter</div>
+          <div class="style-tier tier-monthly">Monthly</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="container">
+    <p class="section-label">Pricing</p>
+    <h2 class="section-title">Start free, grow as you need</h2>
+    <p class="section-sub">Credits are shared across the Keyweaver platform. 1 credit = 1 minute of transcription.</p>
+
+    <div class="pricing-grid">
+
+      <div class="pricing-card">
+        <div class="pricing-tier">Free</div>
+        <div class="pricing-price"><sup>£</sup>0</div>
+        <div class="pricing-desc">3 transcription jobs to get started.</div>
+        <ul class="pricing-features">
+          <li><svg viewBox="0 0 14 14"><polyline points="2 7 5.5 10.5 12 3.5"/></svg>3 free generates</li>
+          <li><svg viewBox="0 0 14 14"><polyline points="2 7 5.5 10.5 12 3.5"/></svg>Files up to 5 minutes</li>
+          <li><svg viewBox="0 0 14 14"><polyline points="2 7 5.5 10.5 12 3.5"/></svg>3 free styles</li>
+        </ul>
+        <a href="/download" class="btn btn-ghost btn-lg" style="width:100%;justify-content:center;">Download free</a>
+      </div>
+
+      <div class="pricing-card featured">
+        <div class="pricing-badge">Most popular</div>
+        <div class="pricing-tier">Credits</div>
+        <div class="pricing-price"><sup>£</sup>4<sub>.99</sub></div>
+        <div class="pricing-desc">60 credits, never expire. Top up any time.</div>
+        <ul class="pricing-features">
+          <li><svg viewBox="0 0 14 14"><polyline points="2 7 5.5 10.5 12 3.5"/></svg>60 minutes of transcription</li>
+          <li><svg viewBox="0 0 14 14"><polyline points="2 7 5.5 10.5 12 3.5"/></svg>Files up to 2 hours</li>
+          <li><svg viewBox="0 0 14 14"><polyline points="2 7 5.5 10.5 12 3.5"/></svg>All styles included</li>
+          <li><svg viewBox="0 0 14 14"><polyline points="2 7 5.5 10.5 12 3.5"/></svg>Credits never expire</li>
+        </ul>
+        <a href="/signup" class="btn btn-primary btn-lg" style="width:100%;justify-content:center;">Buy credits</a>
+      </div>
+
+      <div class="pricing-card">
+        <div class="pricing-tier">Monthly</div>
+        <div class="pricing-price"><sup>£</sup>12<sub>/mo</sub></div>
+        <div class="pricing-desc">300 credits/month with rollover.</div>
+        <ul class="pricing-features">
+          <li><svg viewBox="0 0 14 14"><polyline points="2 7 5.5 10.5 12 3.5"/></svg>300 credits per month</li>
+          <li><svg viewBox="0 0 14 14"><polyline points="2 7 5.5 10.5 12 3.5"/></svg>Files up to 4 hours</li>
+          <li><svg viewBox="0 0 14 14"><polyline points="2 7 5.5 10.5 12 3.5"/></svg>All styles + premium</li>
+          <li><svg viewBox="0 0 14 14"><polyline points="2 7 5.5 10.5 12 3.5"/></svg>SRT / VTT / CSV export</li>
+          <li><svg viewBox="0 0 14 14"><polyline points="2 7 5.5 10.5 12 3.5"/></svg>Up to 150 credits roll over</li>
+        </ul>
+        <a href="/signup?plan=monthly" class="btn btn-outline-accent btn-lg" style="width:100%;justify-content:center;">Start monthly</a>
+      </div>
+
+    </div>
+
+    <p style="margin-top:1.5rem; font-size:13px; color:var(--muted); text-align:center;">
+      Prices shown in GBP · EUR and USD also available · <a href="/pricing" style="color:var(--muted); text-decoration:underline; text-underline-offset:3px;">Full pricing details</a>
+    </p>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- DOWNLOAD -->
+<section id="download-section">
+  <div class="container flex-center">
+    <div class="download-box">
+      <div>
+        <p class="section-label" style="margin-bottom:0.5rem;">Get started</p>
+        <h2 class="section-title" style="font-size:1.8rem;">Download Captio</h2>
+        <div class="download-reqs">
+          <span class="req-badge">
+            <svg viewBox="0 0 13 13"><rect x="1.5" y="1.5" width="10" height="10" rx="1.5"/><path d="M4 6.5h5M6.5 4v5"/></svg>
+            After Effects 2021 or later
+          </span>
+          <span class="req-badge">
+            <svg viewBox="0 0 13 13"><rect x="1.5" y="1.5" width="10" height="10" rx="1.5"/><path d="M4 6.5h5M6.5 4v5"/></svg>
+            Windows 10 / macOS 12+
+          </span>
+          <span class="req-badge">
+            <svg viewBox="0 0 13 13"><rect x="1.5" y="1.5" width="10" height="10" rx="1.5"/><path d="M4 6.5h5M6.5 4v5"/></svg>
+            Free to install
+          </span>
+        </div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-start;">
+        <a href="/download" class="btn btn-primary btn-xl">
+          Download for Windows
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M8 2v8M5 7l3 3 3-3M2 12h12" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <a href="/download#mac" class="btn btn-ghost" style="font-size:13px;">Also available for macOS →</a>
+        <a href="/help/install" style="font-size:12px; color:var(--muted); text-decoration:underline; text-underline-offset:3px;">Installation guide</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 Keyweaver. All rights reserved.</p>
+  <ul class="footer-links">
+    <li><a href="/legal/privacy">Privacy</a></li>
+    <li><a href="/legal/terms">Terms</a></li>
+    <li><a href="/legal/cookies">Cookies</a></li>
+    <li><a href="/help">Help</a></li>
+    <li><a href="/about">About</a></li>
+  </ul>
+</footer>
+
+<script>
+  // ── HERO HEADLINE ANIMATION ──
+  const headlineWords = ['AI', 'captions,', 'built', 'natively', 'in', 'After', 'Effects.'];
+  const hl = document.getElementById('hero-headline');
+  headlineWords.forEach(w => {
+    const span = document.createElement('span');
+    span.className = 'caption-word';
+    span.textContent = w;
+    hl.appendChild(span);
+    hl.appendChild(document.createTextNode(' '));
+  });
+
+  let hlIdx = 0;
+  const hlSpans = hl.querySelectorAll('.caption-word');
+  function cycleHeadline() {
+    hlSpans.forEach(s => s.classList.remove('active'));
+    hlSpans[hlIdx].classList.add('active');
+    hlIdx = (hlIdx + 1) % hlSpans.length;
+  }
+  cycleHeadline();
+  setInterval(cycleHeadline, 420);
+
+  // ── DEMO CAPTION ANIMATION ──
+  const demoSentences = [
+    ['Select', 'your', 'footage', 'item', 'in', 'After', 'Effects'],
+    ['Click', 'Generate', 'to', 'transcribe', 'your', 'audio'],
+    ['Captions', 'appear', 'as', 'native', 'AE', 'text', 'layers'],
+    ['Style,', 'colour,', 'animate', 'and', 'export', 'instantly'],
+  ];
+  let sentIdx = 0, wordIdx = 0;
+  const demoCap = document.getElementById('demo-caption');
+
+  function buildSentence(words) {
+    demoCap.innerHTML = '';
+    words.forEach(w => {
+      const sp = document.createElement('span');
+      sp.className = 'demo-word';
+      sp.textContent = w;
+      demoCap.appendChild(sp);
+    });
+  }
+
+  function advanceDemoWord() {
+    const sentence = demoSentences[sentIdx];
+    if (wordIdx === 0) buildSentence(sentence);
+    const words = demoCap.querySelectorAll('.demo-word');
+    words.forEach((w, i) => w.classList.toggle('lit', i < wordIdx + 1));
+    wordIdx++;
+    if (wordIdx >= sentence.length) {
+      wordIdx = 0;
+      sentIdx = (sentIdx + 1) % demoSentences.length;
+      setTimeout(advanceDemoWord, 1400);
+    } else {
+      setTimeout(advanceDemoWord, 320);
+    }
+  }
+  advanceDemoWord();
+</script>
+</body>
+</html>
