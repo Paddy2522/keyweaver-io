@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Help — Captio by Keyweaver</title>
+  <title>Help — Cuemark by Keyweaver</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet" />
@@ -238,7 +238,7 @@
         <rect x="1" y="2" width="5" height="2" rx="1" fill="white" opacity="0.35"/>
       </svg>
     </div>
-    <span class="nav-logo-name">Captio <span>by Keyweaver</span></span>
+    <span class="nav-logo-name">Cuemark <span>by Keyweaver</span></span>
   </a>
   <ul class="nav-links">
     <li><a href="/#pricing">Pricing</a></li>
@@ -261,7 +261,7 @@
       <a href="#credits" class="sidebar-link">Credits & account</a>
     </div>
     <div class="sidebar-section">
-      <div class="sidebar-label">Using Captio</div>
+      <div class="sidebar-label">Using Cuemark</div>
       <a href="#generate" class="sidebar-link">Generate tab</a>
       <a href="#text" class="sidebar-link">Text tab</a>
       <a href="#style" class="sidebar-link">Style tab</a>
@@ -283,13 +283,13 @@
   <main class="main">
 
     <p class="section-label">Help centre</p>
-    <h1>Using Captio</h1>
+    <h1>Using Cuemark</h1>
     <p class="page-sub">Everything you need to go from footage to finished captions inside After Effects.</p>
 
     <!-- INSTALL -->
     <div class="help-section" id="install">
       <h2>Installation</h2>
-      <p>Captio is a CEP panel for Adobe After Effects. Install it once and it appears permanently under <strong>Window → Extensions</strong>.</p>
+      <p>Cuemark is a CEP panel for Adobe After Effects. Install it once and it appears permanently under <strong>Window → Extensions</strong>.</p>
       <p>Full step-by-step instructions for Windows and macOS are on the <a href="/download">download page</a>, including the registry edit required to enable third-party plugins.</p>
       <div class="note note-warn">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
@@ -306,35 +306,35 @@
           <div class="step-num">1</div>
           <div class="step-body">
             <h4>Open the panel</h4>
-            <p>In After Effects, go to Window → Extensions → Captio by Keyweaver. Sign in with your Keyweaver account.</p>
+            <p>In After Effects, go to Window → Extensions → Cuemark by Keyweaver. Sign in with your Keyweaver account.</p>
           </div>
         </div>
         <div class="step">
           <div class="step-num">2</div>
           <div class="step-body">
-            <h4>Select your footage</h4>
-            <p>In the Generate tab, click <strong>Select footage</strong> and choose a video or audio item from your project. The panel shows the filename, duration, and credit cost.</p>
+            <h4>Open your edit comp</h4>
+            <p>Open the composition you want subtitles in (your main edit comp with video or audio — not the <code>Cuemark Subtitles</code> precomp). If several layers have footage, you will choose which layer to transcribe when you generate.</p>
           </div>
         </div>
         <div class="step">
           <div class="step-num">3</div>
           <div class="step-body">
-            <h4>Click Generate</h4>
-            <p>Captio reads the file, sends the audio to Whisper for transcription, and builds native text layers in your comp. The process takes around the same time as real-time playback.</p>
+            <h4>Click Generate Subtitles</h4>
+            <p>On the Generate tab, click <strong>Generate Subtitles</strong>. A confirmation shows duration and credit cost (1 credit per started minute). Cuemark sends the audio to Whisper, then builds native text layers in your comp.</p>
           </div>
         </div>
         <div class="step">
           <div class="step-num">4</div>
           <div class="step-body">
-            <h4>Style and edit</h4>
-            <p>The panel switches to the PRESETS tab. Pick a style, then use the TEXT and STYLE tabs to tweak. All changes update your AE layers live.</p>
+            <h4>Edit and style</h4>
+            <p>The panel switches to the <strong>Text</strong> tab. Review and save cue edits, then use <strong>Presets</strong> and <strong>Style</strong> to change look and animation. Style changes apply to your AE layers automatically.</p>
           </div>
         </div>
       </div>
 
       <div class="note note-success">
         <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-        <p>Captions are placed in a precomp called <code>Captio Subtitles</code> inside your edit comp. One undo removes everything cleanly.</p>
+        <p>Captions are placed in a precomp called <code>Cuemark Subtitles</code> inside your edit comp. One undo removes everything cleanly. Older projects may still show <code>Captio Subtitles</code> until you generate again — Cuemark renames these automatically.</p>
       </div>
     </div>
 
@@ -355,25 +355,28 @@
       <h2>Generate tab</h2>
       <p>The Generate tab is where you kick off transcription.</p>
 
-      <h3>Selecting footage</h3>
-      <p>Click <strong>Select footage</strong> to choose from your AE project panel. Only video and audio items are listed. The panel shows the duration and credit cost before you commit.</p>
+      <h3>Choosing source footage</h3>
+      <p>With your edit comp active, click <strong>Generate Subtitles</strong>. Cuemark scans the comp for video and audio layers with files on disk. If there is one layer, it is selected automatically; if there are several, a picker asks which layer to transcribe. Duration and credit cost are shown in the confirmation before transcription starts.</p>
 
       <h3>Max words per line</h3>
-      <p>Use the dropdown to control how many words appear on each caption line. The default is 6. Shorter lines work better for vertical video; longer lines suit landscape formats.</p>
+      <p>Use the dropdown to control line length. The default is <strong>Auto</strong> (Whisper decides wrapping). Pick a number to force shorter or longer lines. Change this and generate again to re-wrap the same transcript without spending credits.</p>
+
+      <h3>Export subtitles (SRT / VTT / CSV)</h3>
+      <p>After subtitles exist, the Generate tab shows <strong>Export subtitles</strong> with SRT, VTT, and CSV buttons. Exports use the text from your saved cues in the Text tab.</p>
 
       <h3>Re-generating</h3>
-      <p>If you generate again on the same footage, Captio uses the cached transcript — no credits are deducted for a second generate. Credits are only consumed when the audio is sent to Whisper for the first time.</p>
+      <p>If you generate again on the same footage, Cuemark uses the cached transcript — no credits are deducted for a second generate. Credits are only consumed when the audio is sent to Whisper for the first time.</p>
 
       <div class="note note-warn">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        <p>Files over 25 MB are compressed to audio before uploading. Captio handles this automatically using the bundled ffmpeg — you don't need to export audio manually.</p>
+        <p>Clips are limited to <strong>15 minutes</strong> per generate. Split longer footage into sections. Audio uploads are capped at <strong>4&nbsp;MB</strong>; for video files, Cuemark extracts audio automatically with the bundled ffmpeg — you usually do not need to export audio manually.</p>
       </div>
     </div>
 
     <!-- TEXT TAB -->
     <div class="help-section" id="text">
       <h2>Text tab</h2>
-      <p>The Text tab shows every caption cue as an editable text box. Click a cue to scrub the After Effects playhead to that moment. Edit the text directly — changes are applied to the AE layer immediately.</p>
+      <p>The Text tab shows every caption cue as an editable text box. Click a cue to scrub the After Effects playhead to that moment. Edits are not written to AE until you save each line.</p>
 
       <h3>Saving edits</h3>
       <p>Each row has a <strong>Save</strong> button that turns blue when you've made a change. Click it (or press Ctrl+Enter) to write the edit to the AE layer. You'll see a spinner while the layer updates.</p>
@@ -389,10 +392,10 @@
     <!-- STYLE TAB -->
     <div class="help-section" id="style">
       <h2>Style tab</h2>
-      <p>The Style tab controls the appearance of all caption layers. Changes apply to all cues at once.</p>
+      <p>The Style tab controls the appearance of all caption layers. Most changes apply automatically after a short delay — there is no separate Apply button.</p>
 
       <h3>Typography</h3>
-      <p>Use the font picker to browse installed fonts — each option renders in its own typeface. Font size, bold, italic, and text case (lowercase / Title Case / UPPERCASE) are all controllable.</p>
+      <p>Use the font picker to browse installed fonts — each option renders in its own typeface. Font size, bold, italic, and text case (<strong>aa</strong> as generated, <strong>Aa</strong> title case, <strong>AA</strong> uppercase) are all controllable.</p>
 
       <h3>Colour</h3>
       <p>Set the text colour using the colour picker. For the background, toggle it on and pick a colour and opacity separately.</p>
@@ -400,9 +403,9 @@
       <h3>Background shape</h3>
       <p>Three shapes are available:</p>
       <ul>
-        <li><strong>Pill</strong> — rounded rectangle that hugs the text tightly</li>
+        <li><strong>Rounded</strong> — rounded rectangle that hugs the text (pill shape)</li>
         <li><strong>Bar</strong> — full comp-width bar behind the text</li>
-        <li><strong>Fullwidth</strong> — a solid block covering the full frame</li>
+        <li><strong>Lower third</strong> — a solid block across the lower portion of the frame</li>
       </ul>
 
       <h3>Outline and shadow</h3>
@@ -418,42 +421,47 @@
     <!-- PRESETS TAB -->
     <div class="help-section" id="presets">
       <h2>Presets tab</h2>
-      <p>Presets are complete style configurations — font, colour, animation, background — saved as a single tap. The built-in presets cover the most common caption styles.</p>
+      <p>Presets are complete style configurations — font, colour, animation, background — applied with one click. Ten built-in presets ship with Cuemark:</p>
+      <ul>
+        <li>Colour Highlight, Impact Words, Highlight Words, Word Banner, Box Cascade</li>
+        <li>Word Stamp, Typing Words, Drop Words, Elegant Highlight, Bold Fade On</li>
+      </ul>
       <p>Applying a preset rebuilds all AE layers with the new style. This does not consume credits — only transcription does.</p>
-      <p>You can save your own presets from the Style tab once you've dialled in the settings you want.</p>
     </div>
 
     <!-- ANIMATIONS -->
     <div class="help-section" id="animations">
       <h2>Animations</h2>
-      <p>Nine animation types are available from the Style tab dropdown. All are applied as native After Effects text animators — fully editable after generation.</p>
+      <p>Fourteen animation types are available from the Style tab dropdown (including <strong>None</strong>). All are applied as native After Effects text animators — fully editable after generation.</p>
 
       <table class="anim-table">
         <thead>
           <tr>
             <th>Animation</th>
             <th>What it does</th>
-            <th>Plan</th>
           </tr>
         </thead>
         <tbody>
-          <tr><td>None</td><td>Static text, appears instantly at cue in-point</td><td>All</td></tr>
-          <tr><td>Fade On</td><td>Each cue fades in softly over the cue duration</td><td>All</td></tr>
-          <tr><td>Roll</td><td>Words rotate in on the Y axis, word by word</td><td>All</td></tr>
-          <tr><td>Drop</td><td>Characters drop in from above</td><td>All</td></tr>
-          <tr><td>Rise</td><td>Cue slides up from below the frame</td><td>All</td></tr>
-          <tr><td>Drift Down</td><td>Cue drifts down gently as it fades in</td><td>All</td></tr>
-          <tr><td>Cascade</td><td>Characters reveal left to right with a blur</td><td>All</td></tr>
-          <tr><td>Spotlight</td><td>Each word highlights in your accent colour as it's spoken, using real word timestamps</td><td>All</td></tr>
-          <tr><td>Punch</td><td>Each word appears as a separate full-screen layer timed to speech</td><td>All</td></tr>
-          <tr><td>Stamp</td><td>Each word stamps in with a scale pop</td><td>All</td></tr>
-          <tr><td>Typewriter</td><td>Text types on character by character per cue</td><td>Monthly</td></tr>
+          <tr><td>None</td><td>Static text, appears instantly at cue in-point</td></tr>
+          <tr><td>Roll</td><td>Words rotate in on the Y axis, word by word</td></tr>
+          <tr><td>Spotlight</td><td>Each word highlights in your accent colour as it's spoken, using word timestamps</td></tr>
+          <tr><td>Highlighter</td><td>Spoken words get a coloured highlight bar behind them</td></tr>
+          <tr><td>Impact</td><td>Each word appears as a separate full-screen layer timed to speech</td></tr>
+          <tr><td>Karaoke</td><td>Progressive word reveal synced to speech</td></tr>
+          <tr><td>Fade On</td><td>Each cue fades in softly over the cue duration</td></tr>
+          <tr><td>Drop</td><td>Characters drop in from above</td></tr>
+          <tr><td>Cascade</td><td>Characters reveal left to right with a blur</td></tr>
+          <tr><td>Drift Down</td><td>Cue drifts down gently as it fades in</td></tr>
+          <tr><td>Rise</td><td>Cue slides up from below the frame</td></tr>
+          <tr><td>Punch</td><td>Each word punches in with emphasis, timed to speech</td></tr>
+          <tr><td>Stamp</td><td>Each word stamps in with a scale pop</td></tr>
+          <tr><td>Typewriter</td><td>Text types on character by character per cue</td></tr>
         </tbody>
       </table>
 
       <div class="note note-info">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-        <p>Spotlight and Punch use word-level timestamps from Whisper. They require a generate made after 28 May 2026. If you have an older generate, re-generate the captions to get word timestamps.</p>
+        <p>Spotlight, Highlighter, Impact, Karaoke, and Punch use word-level timestamps from Whisper. They require a generate made after word-timestamp support was added. If an older generate lacks word timestamps, re-generate the captions.</p>
       </div>
     </div>
 
@@ -477,10 +485,10 @@
       <p>Make sure the footage item in your AE project matches the file you intended to transcribe. If you've trimmed or sped up the footage in AE after generating, the timestamps will no longer match. Re-generate from the source file.</p>
 
       <h3>After Effects freezes during generate</h3>
-      <p>Large files (over 1 hour) can take a moment to build layers. AE may appear to hang — wait a few seconds for it to complete. If it freezes consistently, try splitting your footage into shorter sections.</p>
+      <p>Building many caption layers can take a few seconds. AE may appear to hang — wait for the status message to finish. If it freezes consistently, try a shorter clip (under 15 minutes) or fewer words per line.</p>
 
       <h3>Style changes don't apply</h3>
-      <p>Make sure you click <strong>Apply style</strong> after making changes in the Style tab. Some controls update live; others require the apply button.</p>
+      <p>Make sure you have a <code>Cuemark Subtitles</code> layer selected or subtitles already generated. Style updates apply automatically; check the status bar at the bottom of the panel for errors. Text tab edits must be saved before they appear in exports.</p>
     </div>
 
     <!-- FAQ -->
@@ -489,7 +497,7 @@
 
       <div class="faq-item">
         <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-          <span>Does Captio work with any language?</span>
+          <span>Does Cuemark work with any language?</span>
           <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
         <div class="faq-a">Whisper supports 57 languages. Language is auto-detected — you don't need to specify it. Quality varies by language; English, Spanish, French, German, Japanese, and Chinese have the highest accuracy.</div>
@@ -500,7 +508,7 @@
           <span>Can I edit the AE layers directly after generating?</span>
           <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
-        <div class="faq-a">Yes — captions are native AE text layers. You can edit them in the Timeline, apply effects, change expressions, or move them like any other layer. The Captio panel can still re-apply styles after manual edits, but editing text directly in AE won't sync back to the panel's Text tab.</div>
+        <div class="faq-a">Yes — captions are native AE text layers. You can edit them in the Timeline, apply effects, change expressions, or move them like any other layer. The Cuemark panel can still re-apply styles after manual edits, but editing text directly in AE won't sync back to the panel's Text tab.</div>
       </div>
 
       <div class="faq-item">
@@ -513,7 +521,7 @@
 
       <div class="faq-item">
         <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-          <span>Can I use Captio on client work?</span>
+          <span>Can I use Cuemark on client work?</span>
           <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
         <div class="faq-a">Yes. Commercial use is permitted on the Credits and Monthly plans. Generated captions are yours — there are no watermarks or attribution requirements.</div>
@@ -521,7 +529,7 @@
 
       <div class="faq-item">
         <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-          <span>Does Captio work offline?</span>
+          <span>Does Cuemark work offline?</span>
           <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
         <div class="faq-a">An internet connection is required to transcribe audio, as this is handled by the OpenAI Whisper API. Styling, editing text, and switching presets all work without a connection once captions have been generated.</div>
@@ -529,10 +537,10 @@
 
       <div class="faq-item">
         <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-          <span>Will Captio keep getting updates?</span>
+          <span>Will Cuemark keep getting updates?</span>
           <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
-        <div class="faq-a">Yes. Captio is actively developed. Updates are installed by replacing the plugin folder and restarting AE — no installer needed. We'll notify you of significant updates by email.</div>
+        <div class="faq-a">Yes. Cuemark is actively developed. Updates are installed by replacing the plugin folder and restarting AE — no installer needed. We'll notify you of significant updates by email.</div>
       </div>
 
     </div>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Account — Captio by Keyweaver</title>
+  <title>Account — Cuemark by Keyweaver</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -312,7 +312,7 @@
         <rect x="1" y="2" width="5" height="2" rx="1" fill="white" opacity="0.35"/>
       </svg>
     </div>
-    <span class="nav-logo-name">Captio <span>by Keyweaver</span></span>
+    <span class="nav-logo-name">Cuemark <span>by Keyweaver</span></span>
   </a>
   <div class="nav-right">
     <span class="nav-email" id="nav-email"></span>
@@ -384,7 +384,7 @@
         <div id="history-rows">
           <div class="empty-state">
             <p>No generates yet. Download the plugin and make your first caption.</p>
-            <a href="/download" class="btn-sm btn-primary-sm" style="display:inline-flex;">Download Captio</a>
+            <a href="/download" class="btn-sm btn-primary-sm" style="display:inline-flex;">Download Cuemark</a>
           </div>
         </div>
       </div>
@@ -514,8 +514,8 @@
     // Plan
     const planBadge = document.getElementById('plan-badge');
     const planMap = {
-      free:           { label: 'Free',    name: 'Free plan',      detail: '3 transcription jobs · files up to 5 min', badge: 'free' },
-      captio_monthly: { label: 'Monthly', name: 'Monthly plan',   detail: '300 credits/month · 150 rollover · SRT export', badge: 'active' },
+      free:           { label: 'Free',    name: 'Free plan',      detail: '3 transcription jobs · clips up to 15 min', badge: 'free' },
+      captio_monthly: { label: 'Monthly', name: 'Monthly plan',   detail: '300 credits/month · up to 150 rollover', badge: 'active' },
       studio:         { label: 'Studio',  name: 'Studio plan',    detail: '150 credits/month included', badge: 'active' },
       director:       { label: 'Director',name: 'Director plan',  detail: '400 credits/month included', badge: 'active' },
       agency:         { label: 'Agency',  name: 'Agency plan',    detail: 'Unlimited (fair use)', badge: 'active' },
@@ -545,7 +545,7 @@
       historyEl.innerHTML = `
         <div class="empty-state">
           <p>No generates yet. Download the plugin and make your first caption.</p>
-          <a href="/download" class="btn-sm btn-primary-sm" style="display:inline-flex; margin:0 auto;">Download Captio</a>
+          <a href="/download" class="btn-sm btn-primary-sm" style="display:inline-flex; margin:0 auto;">Download Cuemark</a>
         </div>`;
     } else {
       historyEl.innerHTML = jobs.slice(0, 10).map(j => {
