@@ -349,7 +349,7 @@
   <div class="hero">
     <div class="hero-eyebrow">
       <span class="version-dot"></span>
-      Version 1.0 · Free to install
+      Version 1.1.0 · Free to install
     </div>
     <h1>Download Cuemark</h1>
     <p>An After Effects plugin — install it once and it lives inside your panel. No browser required to use it.</p>
@@ -370,28 +370,36 @@
     <div class="os-panel active" id="panel-win">
       <div class="download-card">
         <div class="download-card-info">
-          <h3>Cuemark-v1.0-win.zip</h3>
-          <p>Windows 10 / 11 · After Effects 2022 or later · ~2 MB</p>
+          <h3>Cuemark-Setup-1.1.0.exe</h3>
+          <p>Windows 10 / 11 · After Effects 2022+ · One-click install (~50 MB)</p>
         </div>
-        <a href="#" class="btn-download" id="win-download-btn">
+        <a href="/downloads/Cuemark-Setup-1.1.0.exe" class="btn-download" id="win-download-btn">
           <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Download for Windows
+          Download installer
         </a>
       </div>
+      <p style="margin-top:1rem; font-size:13px; color:var(--muted);">
+        Prefer a zip? <a href="/downloads/Cuemark-Install-win-v1.1.0.zip" style="color:var(--accent2);">Cuemark-Install-win-v1.1.0.zip</a>
+        — extract, then double-click <strong>Install-Cuemark.cmd</strong>.
+      </p>
     </div>
 
     <!-- MAC DOWNLOAD -->
     <div class="os-panel" id="panel-mac">
       <div class="download-card">
         <div class="download-card-info">
-          <h3>Cuemark-v1.0-mac.zip</h3>
-          <p>macOS 12 Monterey or later · After Effects 2022 or later · ~2 MB</p>
+          <h3>Cuemark-Install-mac-v1.1.0.zip</h3>
+          <p>macOS 12+ · After Effects 2022+ · ~50 MB (includes ffmpeg)</p>
         </div>
-        <a href="#" class="btn-download" id="mac-download-btn">
+        <a href="/downloads/Cuemark-Install-mac-v1.1.0.zip" class="btn-download" id="mac-download-btn">
           <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           Download for macOS
         </a>
       </div>
+      <p style="margin-top:1rem; font-size:13px; color:var(--muted);">
+        After extracting, double-click <strong>Install-Cuemark.command</strong>.
+        If macOS blocks it, right-click → Open once.
+      </p>
     </div>
 
     <div class="reqs">
@@ -423,59 +431,39 @@
         <div class="install-step">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h3>Download and unzip</h3>
-            <p>Download the zip file above and extract it. You should see a folder called <code style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent2); background:var(--lift); padding:1px 5px; border-radius:4px;">com.captioncraft.panel</code>.</p>
+            <h3>Run the installer</h3>
+            <p>Download <strong>Cuemark-Setup-1.1.0.exe</strong> and run it. The installer copies Cuemark into your Adobe extensions folder and configures After Effects to load it — you do not need Registry Editor.</p>
+            <p style="margin-top:0.5rem; font-size:13px; color:var(--muted);">Using the zip instead? Extract it and double-click <strong>Install-Cuemark.cmd</strong>.</p>
           </div>
         </div>
 
         <div class="install-step">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h3>Copy to the CEP extensions folder</h3>
-            <p>Move the <code style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent2); background:var(--lift); padding:1px 5px; border-radius:4px;">com.captioncraft.panel</code> folder into:</p>
-            <div class="code-block">
-              <span>C:\Users\<em>YourName</em>\AppData\Roaming\Adobe\CEP\extensions\</span>
-              <button class="copy-btn" onclick="copyPath(this, 'AppData\\Roaming\\Adobe\\CEP\\extensions\\')">Copy</button>
-            </div>
-            <div class="step-note">
-              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-              <p><strong>Can't see the AppData folder?</strong> In File Explorer, go to View → Show → Hidden items. AppData is a hidden folder.</p>
-            </div>
-            <p style="margin-top:1rem; font-size:13px; color:var(--muted);">If the <code style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent2); background:var(--lift); padding:1px 5px; border-radius:4px;">extensions</code> folder doesn't exist, create it.</p>
+            <h3>Restart After Effects</h3>
+            <p>Fully quit After Effects if it was open, then launch it again. Extensions only load on startup.</p>
           </div>
         </div>
 
         <div class="install-step">
           <div class="step-number">3</div>
           <div class="step-body">
-            <h3>Enable unsigned extensions</h3>
-            <p>Adobe requires a registry edit to allow third-party CEP plugins. Open <strong>Registry Editor</strong> (search for <code style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent2); background:var(--lift); padding:1px 5px; border-radius:4px;">regedit</code> in the Start menu) and navigate to:</p>
-            <div class="code-block">
-              <span>HKEY_CURRENT_USER\SOFTWARE\Adobe\CSXS.12</span>
-              <button class="copy-btn" onclick="copyPath(this, 'HKEY_CURRENT_USER\\SOFTWARE\\Adobe\\CSXS.12')">Copy</button>
-            </div>
-            <p style="margin-top:0.75rem;">Create a new <strong>String Value</strong> named <code style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent2); background:var(--lift); padding:1px 5px; border-radius:4px;">PlayerDebugMode</code> and set its value to <code style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent2); background:var(--lift); padding:1px 5px; border-radius:4px;">1</code>.</p>
-            <div class="step-note">
-              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-              <p>If <code style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent2);">CSXS.12</code> doesn't exist, try <code style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent2);">CSXS.11</code> or <code style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent2);">CSXS.13</code> — the number matches your AE version. You only need to do this once.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="install-step">
-          <div class="step-number">4</div>
-          <div class="step-body">
-            <h3>Open the panel in After Effects</h3>
-            <p>Launch After Effects (or restart it if it was open). Go to:</p>
+            <h3>Open Cuemark</h3>
+            <p>Go to:</p>
             <p style="margin-top:0.5rem; font-weight:500; color:var(--text);">Window → Extensions → Cuemark by Keyweaver</p>
             <div class="step-success">
               <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-              <p>The panel will open on the right side. Sign in with your Keyweaver account and you're ready to generate.</p>
+              <p>Sign in with your Keyweaver account and you're ready to generate.</p>
             </div>
           </div>
         </div>
 
       </div>
+
+      <details style="margin-top:2rem; font-size:13px; color:var(--muted);">
+        <summary style="cursor:pointer; color:var(--text); font-weight:500;">Manual install (advanced)</summary>
+        <p style="margin-top:0.75rem;">Copy <code style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent2);">com.captioncraft.panel</code> to <code style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent2);">%AppData%\Adobe\CEP\extensions\</code> and set <code style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent2);">PlayerDebugMode</code> to <code style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent2);">1</code> under <code style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent2);">HKCU\Software\Adobe\CSXS.12</code>. The installer does this automatically.</p>
+      </details>
     </div>
 
     <!-- MAC GUIDE -->
@@ -488,53 +476,32 @@
         <div class="install-step">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h3>Download and unzip</h3>
-            <p>Download the zip file above. Double-click it to extract. You should see a folder called <code style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent2); background:var(--lift); padding:1px 5px; border-radius:4px;">com.captioncraft.panel</code>.</p>
+            <h3>Run the installer</h3>
+            <p>Download the zip, extract it, and double-click <strong>Install-Cuemark.command</strong>. It copies Cuemark into your CEP extensions folder and enables third-party panels in After Effects — no Terminal commands needed.</p>
+            <div class="step-note">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <p>If macOS says the installer is from an unidentified developer, right-click <strong>Install-Cuemark.command</strong> → <strong>Open</strong> once.</p>
+            </div>
           </div>
         </div>
 
         <div class="install-step">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h3>Copy to the CEP extensions folder</h3>
-            <p>Move the folder into:</p>
-            <div class="code-block">
-              <span>~/Library/Application Support/Adobe/CEP/extensions/</span>
-              <button class="copy-btn" onclick="copyPath(this, '~/Library/Application Support/Adobe/CEP/extensions/')">Copy</button>
-            </div>
-            <div class="step-note">
-              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-              <p><strong>Can't see the Library folder?</strong> In Finder, hold <strong>Option</strong> and click the Go menu — Library appears in the list.</p>
-            </div>
-            <p style="margin-top:1rem; font-size:13px; color:var(--muted);">If the <code style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent2); background:var(--lift); padding:1px 5px; border-radius:4px;">extensions</code> folder doesn't exist, create it.</p>
+            <h3>Restart After Effects</h3>
+            <p>Fully quit After Effects if it was open, then launch it again.</p>
           </div>
         </div>
 
         <div class="install-step">
           <div class="step-number">3</div>
           <div class="step-body">
-            <h3>Enable unsigned extensions</h3>
-            <p>Open Terminal and run:</p>
-            <div class="code-block">
-              <span>defaults write com.adobe.CSXS.12 PlayerDebugMode 1</span>
-              <button class="copy-btn" onclick="copyPath(this, 'defaults write com.adobe.CSXS.12 PlayerDebugMode 1')">Copy</button>
-            </div>
-            <div class="step-note">
-              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-              <p>Replace <code style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent2);">CSXS.12</code> with your version if needed. You only need to do this once.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="install-step">
-          <div class="step-number">4</div>
-          <div class="step-body">
-            <h3>Open the panel in After Effects</h3>
-            <p>Launch After Effects (or restart it). Go to:</p>
+            <h3>Open Cuemark</h3>
+            <p>Go to:</p>
             <p style="margin-top:0.5rem; font-weight:500; color:var(--text);">Window → Extensions → Cuemark by Keyweaver</p>
             <div class="step-success">
               <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-              <p>The panel will open. Sign in with your Keyweaver account and you're ready to generate.</p>
+              <p>Sign in with your Keyweaver account and you're ready to generate.</p>
             </div>
           </div>
         </div>
@@ -598,7 +565,7 @@
           <span>The panel doesn't appear in Window → Extensions</span>
           <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
-        <div class="faq-a">Make sure you've set PlayerDebugMode to 1 in the registry (Windows) or via Terminal (Mac), then fully quit and relaunch After Effects. Restarting AE is required — it doesn't hot-reload extensions. Also double-check the folder is named exactly <code style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent2);">com.captioncraft.panel</code> with no extra nesting.</div>
+        <div class="faq-a">Run the Cuemark installer again, then fully quit and relaunch After Effects. Restarting AE is required — it doesn't hot-reload extensions. If you installed manually, check the folder is named exactly <code style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent2);">com.captioncraft.panel</code> with no extra nesting.</div>
       </div>
 
       <div class="faq-item">
@@ -606,7 +573,7 @@
           <span>I see a blank white panel</span>
           <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
-        <div class="faq-a">This usually means the CEP debug flag isn't set. Re-run the registry edit (Windows) or Terminal command (Mac) and restart AE. If the panel still shows blank, right-click inside it and choose Inspect — check the console for errors.</div>
+        <div class="faq-a">Re-run the Cuemark installer and restart AE. If the panel still shows blank, right-click inside it and choose Inspect — check the console for errors.</div>
       </div>
 
       <div class="faq-item">

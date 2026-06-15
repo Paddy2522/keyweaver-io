@@ -289,8 +289,8 @@
     <!-- INSTALL -->
     <div class="help-section" id="install">
       <h2>Installation</h2>
-      <p>Cuemark is a CEP panel for Adobe After Effects. Install it once and it appears permanently under <strong>Window → Extensions</strong>.</p>
-      <p>Full step-by-step instructions for Windows and macOS are on the <a href="/download">download page</a>, including the registry edit required to enable third-party plugins.</p>
+      <p>Cuemark is a CEP panel for Adobe After Effects. Install it once with the <a href="/download">download installer</a> — it appears under <strong>Window → Extensions</strong> after you restart AE.</p>
+      <p>Full step-by-step instructions for Windows and macOS are on the <a href="/download">download page</a>. The installer copies files and configures After Effects automatically — no Registry Editor or Terminal required.</p>
       <div class="note note-warn">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
         <p>After installing, you must fully quit and relaunch After Effects. Restarting is required — closing and reopening a panel is not enough.</p>
@@ -470,10 +470,10 @@
       <h2>Troubleshooting</h2>
 
       <h3>Panel doesn't appear in Window → Extensions</h3>
-      <p>The PlayerDebugMode registry key hasn't been set, or After Effects wasn't fully restarted after installation. See the <a href="/download">install guide</a> for the exact steps.</p>
+      <p>Re-run the <a href="/download">Cuemark installer</a>, then fully quit and relaunch After Effects. See the install guide for the exact steps.</p>
 
       <h3>Blank white panel</h3>
-      <p>This is almost always the debug mode flag not being set. Re-run the registry edit (Windows) or Terminal command (Mac) and fully relaunch AE. If still blank, right-click inside the panel and choose <strong>Inspect</strong> to see any JavaScript errors.</p>
+      <p>Re-run the Cuemark installer from the <a href="/download">download page</a> and fully relaunch AE. If still blank, right-click inside the panel and choose <strong>Inspect</strong> to see any JavaScript errors.</p>
 
       <h3>Generate fails with a network error</h3>
       <p>Check your internet connection. If you're on a corporate network, the firewall may be blocking outgoing requests to <code>keyweaver-backend.vercel.app</code>. Try on a different network or hotspot.</p>
