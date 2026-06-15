@@ -96,7 +96,16 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    #dashboard { display: none; }
+    #dashboard, #load-error { display: none; }
+
+    #load-error {
+      text-align: center; padding: 4rem 1rem; color: var(--muted);
+    }
+    #load-error h2 {
+      font-family: 'Syne', sans-serif; font-size: 1.25rem; color: var(--text);
+      margin-bottom: 0.75rem;
+    }
+    #load-error p { font-size: 14px; line-height: 1.6; margin-bottom: 1.25rem; }
 
     /* CARDS GRID */
     .cards-grid {
@@ -330,6 +339,13 @@
   </div>
 
   <!-- DASHBOARD -->
+  <div id="load-error">
+    <h2>Could not load your account</h2>
+    <p id="load-error-msg">The server did not respond. Your sign-in may still be valid — try again in a moment.</p>
+    <button class="btn-sm btn-primary-sm" type="button" onclick="loadAccount()">Try again</button>
+    <a href="/login" class="btn-sm btn-ghost-sm" style="margin-left:8px;">Sign in again</a>
+  </div>
+
   <div id="dashboard">
     <div class="page-header">
       <h1>Your account</h1>
@@ -459,9 +475,35 @@
     window.location.href = '/login';
   }
 
+  function showLoadError(message) {
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'none';
+    document.getElementById('load-error').style.display = 'block';
+    if (message) {
+      document.getElementById('load-error-msg').textContent = message;
+    }
+  }
+
+  function absorbTokenFromHash() {
+    const hash = window.location.hash.replace(/^#/, '');
+    if (!hash) return;
+    const params = new URLSearchParams(hash);
+    const token = params.get('token');
+    if (token) {
+      localStorage.setItem('cc_token', token);
+      history.replaceState(null, '', window.location.pathname + window.location.search);
+    }
+  }
+
   async function loadAccount() {
+    absorbTokenFromHash();
+
     const token = localStorage.getItem('cc_token');
     if (!token) { window.location.href = '/login'; return; }
+
+    document.getElementById('loading').style.display = 'flex';
+    document.getElementById('dashboard').style.display = 'none';
+    document.getElementById('load-error').style.display = 'none';
 
     try {
       const res = await fetch(BACKEND + '/api/captio/account', {
@@ -469,18 +511,20 @@
       });
 
       if (res.status === 401) { signOut(); return; }
-      if (!res.ok) throw new Error('Failed to load account');
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        showLoadError(data.error || 'Could not load account data (HTTP ' + res.status + ').');
+        return;
+      }
 
       const data = await res.json();
       renderDashboard(data);
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
 
     } catch (err) {
-      // Show dashboard with placeholder data if API not ready yet
-      renderDashboard(null);
+      showLoadError('Network error — check your connection and try again.');
     }
-
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('dashboard').style.display = 'block';
   }
 
   function renderDashboard(data) {
@@ -586,25 +630,16 @@
   }
 
   function changeEmail() {
-    const newEmail = prompt('Enter your new email address:');
-    if (!newEmail || !newEmail.includes('@')) return;
-    showToast('We\'ve sent a confirmation to ' + newEmail);
+    showToast('Email changes are not self-serve yet — contact hello@keyweaver.io');
   }
 
   function changePassword() {
-    const token = localStorage.getItem('cc_token');
-    const email = document.getElementById('detail-email').textContent;
-    fetch(BACKEND + '/api/captio/magic-link', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email })
-    }).then(() => showToast('Password reset link sent to your email'));
+    window.location.href = '/forgot-password';
   }
 
   function confirmDelete() {
-    if (!confirm('Permanently delete your account? All credits and data will be removed. This cannot be undone.')) return;
-    if (!confirm('Are you sure? This is permanent.')) return;
-    showToast('Account deletion requested. We\'ll email you to confirm.');
+    if (!confirm('Delete your account permanently?')) return;
+    showToast('Account deletion is not self-serve yet — email hello@keyweaver.io and we will process your request.');
   }
 
   // Init

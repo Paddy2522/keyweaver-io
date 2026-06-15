@@ -353,6 +353,9 @@
     </div>
     <h1>Download Cuemark</h1>
     <p>An After Effects plugin — install it once and it lives inside your panel. No browser required to use it.</p>
+    <p style="font-size:13px;color:var(--muted);max-width:520px;margin:-1.5rem auto 2rem;line-height:1.6;">
+      Installers are hosted on <a href="https://github.com/Paddy2522/keyweaver-io/releases" style="color:var(--accent2);">GitHub Releases</a> — large files are not bundled in the website deploy.
+    </p>
 
     <!-- OS TOGGLE -->
     <div class="os-toggle" role="group" aria-label="Operating system">
@@ -373,13 +376,13 @@
           <h3>Cuemark-Setup-1.1.0.exe</h3>
           <p>Windows 10 / 11 · After Effects 2022+ · One-click install (~50 MB)</p>
         </div>
-        <a href="/downloads/Cuemark-Setup-1.1.0.exe" class="btn-download" id="win-download-btn">
+        <a href="#" class="btn-download" id="win-download-btn" data-file="winExe">
           <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           Download installer
         </a>
       </div>
       <p style="margin-top:1rem; font-size:13px; color:var(--muted);">
-        Prefer a zip? <a href="/downloads/Cuemark-Install-win-v1.1.0.zip" style="color:var(--accent2);">Cuemark-Install-win-v1.1.0.zip</a>
+        Prefer a zip? <a href="#" id="win-zip-link" data-file="winZip" style="color:var(--accent2);">Cuemark-Install-win-v1.1.0.zip</a>
         — extract, then double-click <strong>Install-Cuemark.cmd</strong>.
       </p>
     </div>
@@ -391,7 +394,7 @@
           <h3>Cuemark-Install-mac-v1.1.0.zip</h3>
           <p>macOS 12+ · After Effects 2022+ · ~50 MB (includes ffmpeg)</p>
         </div>
-        <a href="/downloads/Cuemark-Install-mac-v1.1.0.zip" class="btn-download" id="mac-download-btn">
+        <a href="#" class="btn-download" id="mac-download-btn" data-file="macZip">
           <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           Download for macOS
         </a>
@@ -652,6 +655,35 @@
   function toggleFaq(el) {
     el.parentElement.classList.toggle('open');
   }
+
+  // Resolve download URLs (GitHub Releases — Vercel cannot host ~140 MB of installers)
+  (async function loadDownloadUrls() {
+    const fileNames = {
+      winExe: 'Cuemark-Setup-1.1.0.exe',
+      winZip: 'Cuemark-Install-win-v1.1.0.zip',
+      macZip: 'Cuemark-Install-mac-v1.1.0.zip'
+    };
+
+    function applyUrls(manifest) {
+      const prefix = manifest.fallbackPrefix || '/downloads/';
+      document.querySelectorAll('[data-file]').forEach(el => {
+        const key = el.getAttribute('data-file');
+        const url = (manifest.files && manifest.files[key]) || (prefix + fileNames[key]);
+        el.href = url;
+        if (key === 'winExe' && el.id === 'win-download-btn' && manifest.releasePage) {
+          el.setAttribute('title', 'Hosted on GitHub Releases');
+        }
+      });
+    }
+
+    try {
+      const res = await fetch('/downloads.json');
+      if (res.ok) applyUrls(await res.json());
+      else applyUrls({ fallbackPrefix: '/downloads/', files: {} });
+    } catch {
+      applyUrls({ fallbackPrefix: '/downloads/', files: {} });
+    }
+  })();
 </script>
 
 </body>

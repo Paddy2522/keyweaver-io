@@ -351,7 +351,7 @@
           <div class="plan-radio"></div>
           <div class="plan-info">
             <div class="plan-name">Free</div>
-            <div class="plan-desc">3 transcriptions · files up to 5 min · 3 styles</div>
+            <div class="plan-desc">3 transcriptions · clips up to 15 min · 10 presets</div>
           </div>
           <div class="plan-price">£0<small>forever</small></div>
         </div>
@@ -392,7 +392,7 @@
           <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
         </div>
         <h2 id="success-title">Account created</h2>
-        <p id="success-body">Check your inbox — we've sent a confirmation email. Once confirmed you can Download Cuemark and start generating.</p>
+        <p id="success-body">Your account is ready. Download Cuemark, install it, then <strong>sign in inside After Effects</strong> with the same email and password (web sign-in does not log the panel in automatically).</p>
         <a href="/download" class="btn-submit" style="text-decoration:none; display:inline-flex;">
           Download Cuemark
           <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v8M5 7l3 3 3-3M2 12h12"/></svg>
@@ -413,8 +413,10 @@
   // If already logged in
   if (localStorage.getItem('cc_token')) window.location.href = '/account';
 
-  // Check for ?plan= param
-  const urlPlan = new URLSearchParams(window.location.search).get('plan');
+  // Check for ?plan= and ?currency= params
+  const urlParams = new URLSearchParams(window.location.search);
+  const urlPlan = urlParams.get('plan');
+  const urlCurrency = urlParams.get('currency');
   if (urlPlan) {
     document.querySelectorAll('.plan-card').forEach(c => {
       c.classList.toggle('selected', c.dataset.plan === urlPlan);
@@ -524,9 +526,7 @@
         goToStep(2);
       }
     } catch {
-      // If check-email endpoint doesn't exist yet, proceed anyway
-      accountEmail = email;
-      goToStep(2);
+      showAlert('Could not verify email availability. Check your connection and try again.', 'error');
     }
 
     document.getElementById('step1-label').textContent = 'Continue';
@@ -548,7 +548,12 @@
       const res = await fetch(BACKEND + '/api/auth/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, plan })
+        body: JSON.stringify({
+          email,
+          password,
+          plan,
+          currency: urlCurrency || undefined
+        })
       });
       const data = await res.json();
 
@@ -564,12 +569,18 @@
       if (data.token) localStorage.setItem('cc_token', data.token);
 
       if (plan === 'credits' && data.checkout_url) {
-        // Redirect to Stripe checkout for credit pack
         window.location.href = data.checkout_url;
         return;
       }
       if (plan === 'monthly' && data.checkout_url) {
         window.location.href = data.checkout_url;
+        return;
+      }
+      if ((plan === 'credits' || plan === 'monthly') && !data.checkout_url) {
+        showAlert('Payment setup failed — no checkout URL returned. Try again or contact hello@keyweaver.io.', 'error');
+        document.getElementById('step2-label').textContent = 'Create account';
+        document.getElementById('step2-spinner').style.display = 'none';
+        document.getElementById('step2-btn').disabled = false;
         return;
       }
 

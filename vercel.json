@@ -1,0 +1,19 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/legal/terms", "destination": "/terms.html" },
+    { "source": "/legal/privacy", "destination": "/privacy.html" },
+    { "source": "/legal/cookies", "destination": "/cookies.html" },
+    { "source": "/forgot-password", "destination": "/forgot-password.html" },
+    { "source": "/about", "destination": "/about.html" }
+  ],
+  "headers": [
+    {
+      "source": "/downloads/(.*)",
+      "headers": [
+        { "key": "Content-Disposition", "value": "attachment" }
+      ]
+    }
+  ]
+}

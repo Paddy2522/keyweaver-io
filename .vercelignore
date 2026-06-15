@@ -1,0 +1,4 @@
+# Large installer binaries (~140 MB total) exceed Vercel Hobby deploy limits.
+# Host them on GitHub Releases — see downloads/README.md and downloads.json.
+downloads/*.exe
+downloads/*.zip

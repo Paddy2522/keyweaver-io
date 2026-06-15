@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About — Cuemark by Keyweaver</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --ink: #0A0A0F; --lift: #1C1C28; --edge: #2A2A3D;
+      --accent: #5B6BF8; --text: #E8E8F0; --muted: #6B6B88;
+    }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--ink); color: var(--text); }
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem; height: 56px; border-bottom: 1px solid var(--edge);
+      position: sticky; top: 0; background: rgba(10,10,15,0.9); backdrop-filter: blur(12px);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text); }
+    .nav-logo-mark { width: 28px; height: 28px; background: var(--accent); border-radius: 6px; }
+    .nav-logo-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; }
+    .nav-logo-name span { color: var(--muted); font-weight: 400; }
+    .nav-back { font-size: 13px; color: var(--muted); text-decoration: none; }
+    .page { max-width: 720px; margin: 0 auto; padding: 4rem 2rem 6rem; }
+    h1 { font-family: 'Syne', sans-serif; font-size: 2.25rem; font-weight: 800; margin-bottom: 1rem; }
+    p { color: var(--muted); line-height: 1.75; margin-bottom: 1rem; font-size: 15px; }
+    .card {
+      background: var(--lift); border: 1px solid var(--edge); border-radius: 12px;
+      padding: 1.5rem; margin: 2rem 0;
+    }
+    .card h2 { font-size: 1rem; margin-bottom: 0.5rem; color: var(--text); }
+    a { color: #7B8BFF; }
+    footer {
+      border-top: 1px solid var(--edge); padding: 2rem; text-align: center;
+      font-size: 13px; color: var(--muted);
+    }
+    footer a { color: var(--muted); margin: 0 0.5rem; }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="/" class="nav-logo">
+    <div class="nav-logo-mark"></div>
+    <span class="nav-logo-name">Cuemark <span>by Keyweaver</span></span>
+  </a>
+  <a href="/" class="nav-back">← Home</a>
+</nav>
+
+<div class="page">
+  <h1>About Keyweaver</h1>
+  <p>Keyweaver builds creative tools for motion designers and video editors. Cuemark is our AI subtitle generator for Adobe After Effects — transcribe, style, and sync captions without leaving your timeline.</p>
+  <p>We are based in England and Wales. Cuemark runs on the same Keyweaver account and credits system as our other products.</p>
+
+  <div class="card">
+    <h2>Contact</h2>
+    <p style="margin:0;">General enquiries: <a href="mailto:hello@keyweaver.io">hello@keyweaver.io</a><br />
+    Privacy: <a href="mailto:privacy@keyweaver.io">privacy@keyweaver.io</a></p>
+  </div>
+
+  <p><a href="/download">Download Cuemark</a> · <a href="/help">Help centre</a> · <a href="/pricing">Pricing</a></p>
+</div>
+
+<footer>
+  © 2026 Keyweaver ·
+  <a href="/legal/privacy">Privacy</a> ·
+  <a href="/legal/terms">Terms</a>
+</footer>
+</body>
+</html>
