@@ -594,7 +594,7 @@
   function changePassword() {
     const token = localStorage.getItem('cc_token');
     const email = document.getElementById('detail-email').textContent;
-    fetch(BACKEND + '/api/auth/magic-link', {
+    fetch(BACKEND + '/api/captio/magic-link', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email })

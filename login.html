@@ -392,7 +392,7 @@
     document.getElementById('magic-send').disabled = true;
 
     try {
-      const res = await fetch(BACKEND + '/api/auth/magic-link', {
+      const res = await fetch(BACKEND + '/api/captio/magic-link', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email })
