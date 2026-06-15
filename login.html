@@ -330,6 +330,16 @@
     btn.disabled = loading;
   }
 
+  function getBrowserFingerprint() {
+    const key = 'cc_web_device_id';
+    let id = localStorage.getItem(key);
+    if (!id) {
+      id = 'web_' + crypto.randomUUID();
+      localStorage.setItem(key, id);
+    }
+    return id;
+  }
+
   // Login form
   document.getElementById('login-form').addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -347,7 +357,7 @@
       const res = await fetch(BACKEND + '/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email, password, deviceFingerprint: getBrowserFingerprint(), deviceName: 'Web Browser' })
       });
       const data = await res.json();
 
