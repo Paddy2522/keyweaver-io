@@ -3,3 +3,9 @@
 /legal/cookies  /cookies.html  200
 /forgot-password /forgot-password.html 200
 /about          /about.html    200
+/download       /download.html 200
+/login          /login.html    200
+/signup         /signup.html   200
+/account        /account.html  200
+/pricing        /pricing.html  200
+/help           /help.html     200
