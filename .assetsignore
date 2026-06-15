@@ -1,0 +1,8 @@
+# Exclude large installers (hosted on GitHub Releases) and dev-only backend route stubs.
+downloads/*.exe
+downloads/*.zip
+app/
+*.ts
+.env*
+.vercelignore
+vercel.json
