@@ -1,0 +1,3 @@
+# Installer binaries are published via GitHub Releases (see downloads.json).
+downloads/*.exe
+downloads/*.zip
