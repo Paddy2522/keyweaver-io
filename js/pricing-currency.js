@@ -14,14 +14,37 @@
     'lt', 'lu', 'mt', 'cy', 'hr', 'sl',
   ]);
 
-  function detectDisplayCurrency() {
-    const langs = navigator.languages?.length ? [...navigator.languages] : [navigator.language || 'en-GB'];
+  const UK_TIMEZONES = new Set([
+    'Europe/London',
+    'Europe/Belfast',
+    'Europe/Guernsey',
+    'Europe/Isle_of_Man',
+    'Europe/Jersey',
+  ]);
 
-    for (const raw of langs) {
-      const loc = (raw || '').toLowerCase();
-      if (loc.endsWith('-us') || loc === 'en-us') return 'USD';
-      if (loc.endsWith('-ca')) return 'USD';
+  function getTimezone() {
+    try {
+      return Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+    } catch (e) {
+      return '';
     }
+  }
+
+  function currencyFromTimezone(tz) {
+    if (!tz) return null;
+    if (UK_TIMEZONES.has(tz)) return 'GBP';
+    if (tz.startsWith('America/')) return 'USD';
+    if (tz.startsWith('Europe/')) return 'EUR';
+    return null;
+  }
+
+  function detectDisplayCurrency() {
+    // Timezone reflects where the user actually is — prefer over browser language
+    // (many UK machines still report en-US in navigator.languages).
+    const tzCurrency = currencyFromTimezone(getTimezone());
+    if (tzCurrency) return tzCurrency;
+
+    const langs = navigator.languages?.length ? [...navigator.languages] : [navigator.language || 'en-GB'];
 
     for (const raw of langs) {
       const loc = (raw || '').toLowerCase();
@@ -29,15 +52,10 @@
       const lang = parts[0];
       const region = parts[1];
       if (region === 'gb' || region === 'uk') return 'GBP';
+      if (region === 'us' || region === 'ca') return 'USD';
       if (EUR_LANGS.has(lang)) return 'EUR';
       if (region && EUR_REGIONS.has(region)) return 'EUR';
     }
-
-    try {
-      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
-      if (tz.startsWith('America/')) return 'USD';
-      if (tz.startsWith('Europe/') && tz !== 'Europe/London') return 'EUR';
-    } catch (e) {}
 
     return 'GBP';
   }
