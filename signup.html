@@ -512,7 +512,7 @@
     document.getElementById('step1-btn').disabled = true;
 
     try {
-      const res = await fetch(BACKEND + '/api/auth/check-email', {
+      const res = await fetch(BACKEND + '/api/captio/check-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email })
@@ -545,7 +545,7 @@
     document.getElementById('step2-btn').disabled = true;
 
     try {
-      const res = await fetch(BACKEND + '/api/auth/signup', {
+      const res = await fetch(BACKEND + '/api/captio/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

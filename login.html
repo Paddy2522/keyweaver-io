@@ -280,9 +280,12 @@
 
     <div class="or-divider"><span>or</span></div>
 
-    <p class="magic-unavailable" style="font-size:13px;color:var(--muted);text-align:center;line-height:1.5;">
-      Email sign-in links are not available yet. Use your password, or
-      <a href="/forgot-password" style="color:var(--accent2);">reset your password</a>.
+    <button type="button" class="btn-magic" id="magic-btn">
+      <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      Email me a sign-in link
+    </button>
+    <p id="magic-sent" style="display:none;font-size:13px;color:var(--success);text-align:center;margin-top:0.75rem;line-height:1.5;">
+      Check your inbox for a sign-in link. It expires in 15 minutes.
     </p>
 
   </div>
@@ -356,10 +359,10 @@
     setLoading(true);
 
     try {
-      const res = await fetch(BACKEND + '/api/auth/login', {
+      const res = await fetch(BACKEND + '/api/captio/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, deviceFingerprint: getBrowserFingerprint(), deviceName: 'Web Browser' })
+        body: JSON.stringify({ email, password })
       });
       const data = await res.json();
 
@@ -381,7 +384,39 @@
     }
   });
 
-  // Magic link UI removed until /api/auth/magic-link/verify is deployed on the backend.
+  // Email sign-in link (Cuemark accounts)
+  document.getElementById('magic-btn').addEventListener('click', async () => {
+    const email = document.getElementById('email').value.trim();
+    if (!email || !/\S+@\S+\.\S+/.test(email)) {
+      showAlert('Enter your email above first, then request a sign-in link.', 'error');
+      return;
+    }
+
+    const btn = document.getElementById('magic-btn');
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+
+    try {
+      const res = await fetch(BACKEND + '/api/captio/magic-link', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        showAlert(data.error || 'Could not send sign-in link. Try your password instead.', 'error');
+      } else {
+        document.getElementById('magic-sent').style.display = 'block';
+        showAlert('', '');
+        document.getElementById('alert').className = 'alert';
+      }
+    } catch {
+      showAlert('Could not reach the server. Try again.', 'error');
+    }
+
+    btn.disabled = false;
+    btn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> Email me a sign-in link';
+  });
 
   // If already logged in, redirect
   if (localStorage.getItem('cc_token')) {

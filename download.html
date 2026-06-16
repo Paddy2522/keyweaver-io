@@ -419,7 +419,8 @@
       </div>
       <p class="install-hint">
         After extracting, double-click <strong>Install-Cuemark.command</strong>.
-        If macOS blocks it, right-click → Open once.
+        If macOS blocks it, right-click → <strong>Open</strong> once.
+        For video transcription, install <strong>ffmpeg</strong> (<code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent2);">brew install ffmpeg</code>) or export audio-only from your footage.
       </p>
     </div>
 
@@ -634,6 +635,14 @@
           <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
         <div class="faq-a">Yes. Install the plugin on as many machines as you like. Your credits and subscription are tied to your Keyweaver account, not to a specific device. Sign in on each machine and your balance follows you.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span>macOS blocked Install-Cuemark.command</span>
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-a">Extract the zip fully first. Then right-click <strong>Install-Cuemark.command</strong> → <strong>Open</strong> (not double-click the first time). macOS may also quarantine files downloaded from the web — the installer clears quarantine when it runs. If it still will not open, run <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent2);">xattr -cr .</code> in the extracted folder, then try again.</div>
       </div>
 
       <div class="faq-item">
