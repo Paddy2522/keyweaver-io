@@ -623,7 +623,7 @@
       data?.is_monthly === true ||
       (data?.billing_cycle === 'monthly' && !!data?.stripe_subscription_id);
     const sub = data?.subscription;
-    const isCanceling = sub?.is_canceling === true || data?.subscription_status === 'canceling';
+    const isCanceling = sub?.is_canceling === true || data?.subscription_status === 'cancelled' || data?.subscription_status === 'canceling';
     const subEnds = sub?.ends_at
       ? new Date(sub.ends_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
       : null;
