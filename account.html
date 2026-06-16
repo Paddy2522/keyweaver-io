@@ -175,6 +175,11 @@
       font-weight: 700; color: var(--text); margin-bottom: 0.25rem;
     }
     .plan-detail { font-size: 13px; color: var(--muted); margin-bottom: 1.25rem; line-height: 1.6; }
+    .plan-cancel-note {
+      font-size: 13px; color: var(--muted); line-height: 1.6;
+      margin-bottom: 0.75rem; padding: 10px 12px;
+      background: var(--lift); border: 1px solid var(--edge); border-radius: 8px;
+    }
 
     .plan-actions { display: flex; flex-direction: column; gap: 8px; }
 
@@ -612,8 +617,16 @@
   function renderDashboard(data) {
     const credits = data?.credits_remaining ?? 0;
     const creditsTotal = data?.credits_total ?? 3;
-    const plan = data?.plan ?? (data?.tier === 'captio_monthly' ? 'monthly' : 'free');
-    const isMonthly = plan === 'monthly' || data?.is_monthly;
+    const plan = data?.plan ?? 'free';
+    const isMonthly =
+      plan === 'monthly' ||
+      data?.is_monthly === true ||
+      (data?.billing_cycle === 'monthly' && !!data?.stripe_subscription_id);
+    const sub = data?.subscription;
+    const isCanceling = sub?.is_canceling === true || data?.subscription_status === 'canceling';
+    const subEnds = sub?.ends_at
+      ? new Date(sub.ends_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
+      : null;
     const email = data?.email ?? '—';
     const jobs = data?.recent_jobs ?? [];
     const since = data?.created_at ? new Date(data.created_at).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' }) : '—';
@@ -632,7 +645,13 @@
     else if (pct <= 30) bar.classList.add('low');
 
     if (isMonthly) {
-      document.getElementById('credits-sub').textContent = credits + ' of ' + creditsTotal + ' monthly credits remaining';
+      if (creditsTotal > 300) {
+        document.getElementById('credits-sub').textContent =
+          credits + ' credits remaining (monthly allowance + top-ups)';
+      } else {
+        document.getElementById('credits-sub').textContent =
+          credits + ' of ' + creditsTotal + ' monthly credits remaining';
+      }
     } else {
       document.getElementById('credits-sub').textContent = credits + ' credits remaining';
     }
@@ -659,10 +678,17 @@
     // Plan actions
     const actionsEl = document.getElementById('plan-actions');
     if (isMonthly) {
-      actionsEl.innerHTML = `
-        <button class="btn-manage btn-manage-secondary" onclick="manageSubscription()">Manage subscription</button>
-        <button class="btn-manage btn-manage-secondary" style="color:var(--danger);border-color:rgba(226,75,74,0.3);" onclick="cancelSubscription()">Cancel subscription</button>
-      `;
+      if (isCanceling) {
+        actionsEl.innerHTML = `
+          <p class="plan-cancel-note">Subscription cancelled${subEnds ? ' — access until <strong>' + subEnds + '</strong>' : ''}. Your remaining credits stay on your account.</p>
+          <button class="btn-manage btn-manage-secondary" onclick="manageSubscription()">View billing in Stripe</button>
+        `;
+      } else {
+        actionsEl.innerHTML = `
+          <button class="btn-manage btn-manage-secondary" onclick="manageSubscription()">Manage subscription</button>
+          <button class="btn-manage btn-manage-secondary" style="color:var(--danger);border-color:rgba(226,75,74,0.3);" onclick="cancelSubscription()">Cancel subscription</button>
+        `;
+      }
     } else if (tier === 'free' || tier === 'spark') {
       actionsEl.innerHTML = `
         <a href="/pricing" class="btn-manage btn-manage-primary">Upgrade plan</a>
