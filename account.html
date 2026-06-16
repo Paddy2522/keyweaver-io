@@ -768,7 +768,31 @@
   }
 
   function changeEmail() {
-    showToast('Email changes are not self-serve yet — contact hello@keyweaver.io');
+    const newEmail = prompt('New email address:');
+    if (!newEmail) return;
+    const password = prompt('Enter your current password to confirm:');
+    if (!password) return;
+
+    const token = localStorage.getItem('cc_token');
+    fetch(BACKEND + '/api/captio/account/change-email', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      },
+      body: JSON.stringify({ new_email: newEmail.trim(), password })
+    })
+    .then(r => r.json().then(d => ({ ok: r.ok, data: d })))
+    .then(({ ok, data }) => {
+      if (ok && data.email) {
+        showToast('Email updated to ' + data.email);
+        document.getElementById('detail-email').textContent = data.email;
+        document.getElementById('nav-email').textContent = data.email;
+      } else {
+        showToast(data.error || 'Could not update email.');
+      }
+    })
+    .catch(() => showToast('Could not reach the server.'));
   }
 
   function changePassword() {
@@ -776,8 +800,29 @@
   }
 
   function confirmDelete() {
-    if (!confirm('Delete your account permanently?')) return;
-    showToast('Account deletion is not self-serve yet — email hello@keyweaver.io and we will process your request.');
+    if (!confirm('Delete your account permanently? Your credits and data will be removed. This cannot be undone.')) return;
+    const password = prompt('Enter your password to confirm deletion:');
+    if (!password) return;
+
+    const token = localStorage.getItem('cc_token');
+    fetch(BACKEND + '/api/captio/account/delete', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      },
+      body: JSON.stringify({ password, confirm: true })
+    })
+    .then(r => r.json().then(d => ({ ok: r.ok, data: d })))
+    .then(({ ok, data }) => {
+      if (ok && data.deleted) {
+        localStorage.removeItem('cc_token');
+        window.location.href = '/?deleted=1';
+      } else {
+        showToast(data.error || 'Could not delete account.');
+      }
+    })
+    .catch(() => showToast('Could not reach the server.'));
   }
 
   // Init
