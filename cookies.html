@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/css/nav-brand.css" />
   <title>Cookie Policy — Cuemark by Keyweaver</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -20,10 +21,8 @@
       position: sticky; top: 0; background: rgba(10,10,15,0.9); backdrop-filter: blur(12px); z-index: 100;
     }
     .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text); }
-    .nav-logo-mark { width: 28px; height: 28px; background: var(--accent); border-radius: 6px; }
-    .nav-logo-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; }
-    .nav-logo-name span { color: var(--muted); font-weight: 400; }
-    .nav-back { font-size: 13px; color: var(--muted); text-decoration: none; }
+
+.nav-back { font-size: 13px; color: var(--muted); text-decoration: none; }
     .page { max-width: 720px; margin: 0 auto; padding: 4rem 2rem 6rem; }
     .legal-label { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin-bottom: 0.75rem; }
     h1 { font-family: 'Syne', sans-serif; font-size: 2.25rem; font-weight: 800; margin-bottom: 0.75rem; }
@@ -48,8 +47,7 @@
 <body>
 <nav>
   <a href="/" class="nav-logo">
-    <div class="nav-logo-mark"></div>
-    <span class="nav-logo-name">Cuemark <span>by Keyweaver</span></span>
+    <img src="/images/cuemark-logo.svg" alt="Cuemark by Keyweaver" class="nav-logo-img" width="266" height="28" />
   </a>
   <a href="/legal/privacy" class="nav-back">← Privacy Policy</a>
 </nav>

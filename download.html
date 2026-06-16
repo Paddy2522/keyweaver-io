@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/css/nav-brand.css" />
   <title>Download Cuemark — Cuemark by Keyweaver</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -40,17 +41,8 @@
       border-bottom: 1px solid var(--edge);
     }
     .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-    .nav-logo-mark {
-      width: 28px; height: 28px; background: var(--accent);
-      border-radius: 6px; display: flex; align-items: center; justify-content: center;
-    }
-    .nav-logo-mark svg { width: 16px; height: 16px; }
-    .nav-logo-name {
-      font-family: 'Syne', sans-serif; font-weight: 700;
-      font-size: 15px; color: var(--text); letter-spacing: -0.01em;
-    }
-    .nav-logo-name span { color: var(--muted); font-weight: 400; }
-    .nav-links { display: flex; align-items: center; gap: 1.5rem; list-style: none; }
+
+.nav-links { display: flex; align-items: center; gap: 1.5rem; list-style: none; }
     .nav-links a { font-size: 14px; color: var(--muted); text-decoration: none; }
     .nav-links a:hover { color: var(--text); }
     .btn {
@@ -339,14 +331,7 @@
 
 <nav>
   <a href="/" class="nav-logo">
-    <div class="nav-logo-mark">
-      <svg viewBox="0 0 16 16" fill="none">
-        <rect x="1" y="5" width="14" height="4" rx="1.5" fill="white" opacity="0.9"/>
-        <rect x="3" y="10.5" width="8" height="2" rx="1" fill="white" opacity="0.45"/>
-        <rect x="1" y="2" width="5" height="2" rx="1" fill="white" opacity="0.35"/>
-      </svg>
-    </div>
-    <span class="nav-logo-name">Cuemark <span>by Keyweaver</span></span>
+    <img src="/images/cuemark-logo.svg" alt="Cuemark by Keyweaver" class="nav-logo-img" width="266" height="28" />
   </a>
   <ul class="nav-links">
     <li><a href="/#how-it-works">How it works</a></li>

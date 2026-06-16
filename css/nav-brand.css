@@ -1,0 +1,13 @@
+/* Cuemark nav wordmark — height matches legacy 28px icon lockup */
+.nav-logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.nav-logo-img {
+  height: 28px;
+  width: auto;
+  display: block;
+}
