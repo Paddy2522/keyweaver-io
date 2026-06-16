@@ -367,7 +367,7 @@
   <div class="hero">
     <div class="hero-eyebrow">
       <span class="version-dot"></span>
-      Version 1.1.0 · Free to install
+      Version 1.1.1 · Free to install
     </div>
     <h1>Download Cuemark</h1>
     <p>An After Effects plugin — install it once and it lives inside your panel. No browser required to use it.</p>
@@ -392,8 +392,8 @@
       <div class="download-card download-card-primary">
         <div class="download-card-info">
           <span class="download-badge">Recommended for Windows</span>
-          <h3>Cuemark-Install-win-v1.1.0.zip</h3>
-          <p>Windows 10 / 11 · After Effects 2022+ · Extract, then run <strong>Install-Cuemark.cmd</strong></p>
+          <h3>Cuemark-Install-win-v1.1.1.zip</h3>
+          <p>Windows 10 / 11 · After Effects 2022+ · ~48 MB download</p>
         </div>
         <a href="#" class="btn-download" id="win-download-btn" data-file="winZip">
           <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -402,20 +402,17 @@
       </div>
       <p class="win-alt-download">
         After download: right-click the zip → <strong>Extract All</strong> → open the folder → double-click <strong>Install-Cuemark.cmd</strong>.
-        This avoids the Windows SmartScreen warning that can appear with the .exe installer.
-      </p>
-      <p class="win-alt-download" style="margin-top:0.75rem;">
-        Prefer a one-click setup? <a href="#" id="win-exe-link" data-file="winExe">Cuemark-Setup-1.1.0.exe</a>
-        — Windows may show “unrecognised app”; click <strong>More info</strong> → <strong>Run anyway</strong>.
+        A command window runs briefly while Cuemark installs — then restart After Effects.
       </p>
     </div>
 
     <!-- MAC DOWNLOAD -->
     <div class="os-panel" id="panel-mac">
-      <div class="download-card">
+      <div class="download-card download-card-primary">
         <div class="download-card-info">
-          <h3>Cuemark-Install-mac-v1.1.0.zip</h3>
-          <p>macOS 12+ · After Effects 2022+ · ~50 MB (includes ffmpeg)</p>
+          <span class="download-badge">Recommended for macOS</span>
+          <h3>Cuemark-Install-mac-v1.1.1.zip</h3>
+          <p>macOS 12+ · After Effects 2022+ · ~12 MB download</p>
         </div>
         <a href="#" class="btn-download" id="mac-download-btn" data-file="macZip">
           <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -458,7 +455,7 @@
           <div class="step-number">1</div>
           <div class="step-body">
             <h3>Download and extract</h3>
-            <p>Download <strong>Cuemark-Install-win-v1.1.0.zip</strong>, then right-click it and choose <strong>Extract All</strong>. Open the extracted folder.</p>
+            <p>Download <strong>Cuemark-Install-win-v1.1.1.zip</strong>, then right-click it and choose <strong>Extract All</strong>. Open the extracted folder.</p>
           </div>
         </div>
 
@@ -467,10 +464,6 @@
           <div class="step-body">
             <h3>Run Install-Cuemark.cmd</h3>
             <p>Double-click <strong>Install-Cuemark.cmd</strong>. It copies Cuemark into your Adobe extensions folder and configures After Effects — no Registry Editor needed. A command window will open briefly while it installs.</p>
-            <div class="step-success">
-              <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-              <p>This zip method avoids the Windows SmartScreen “unrecognised app” warning that can appear if you use the .exe installer instead.</p>
-            </div>
           </div>
         </div>
 
@@ -498,11 +491,6 @@
       </div>
 
       <details style="margin-top:2rem; font-size:13px; color:var(--muted);">
-        <summary style="cursor:pointer; color:var(--text); font-weight:500;">One-click .exe installer (may show SmartScreen)</summary>
-        <p style="margin-top:0.75rem;">You can use <strong>Cuemark-Setup-1.1.0.exe</strong> instead of the zip. If Windows shows “Windows protected your PC”, click <strong>More info</strong> → <strong>Run anyway</strong>. We will offer a signed build later so this goes away.</p>
-      </details>
-
-      <details style="margin-top:1rem; font-size:13px; color:var(--muted);">
         <summary style="cursor:pointer; color:var(--text); font-weight:500;">Manual install (advanced)</summary>
         <p style="margin-top:0.75rem;">Copy <code style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent2);">com.captioncraft.panel</code> to <code style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent2);">%AppData%\Adobe\CEP\extensions\</code> and set <code style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent2);">PlayerDebugMode</code> to <code style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent2);">1</code> under <code style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent2);">HKCU\Software\Adobe\CSXS.12</code>. The installer does this automatically.</p>
       </details>
@@ -604,10 +592,10 @@
 
       <div class="faq-item">
         <div class="faq-q" onclick="toggleFaq(this)">
-          <span>Windows says “unrecognised app” or SmartScreen blocked the installer</span>
+          <span>Windows blocked the installer or showed a security warning</span>
           <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
-        <div class="faq-a">Use the <strong>zip download</strong> and run <strong>Install-Cuemark.cmd</strong> — that usually avoids SmartScreen entirely. If you used the .exe instead, click <strong>More info</strong> → <strong>Run anyway</strong>. The installer is not code-signed yet; we will add signing later.</div>
+        <div class="faq-a">Use the <strong>zip download</strong> and run <strong>Install-Cuemark.cmd</strong> from the extracted folder — not a standalone .exe. If Windows still warns about the script, click <strong>More info</strong> → <strong>Run anyway</strong>.</div>
       </div>
 
       <div class="faq-item">
@@ -706,9 +694,8 @@
   // Resolve download URLs (GitHub Releases — Vercel cannot host ~140 MB of installers)
   (async function loadDownloadUrls() {
     const fileNames = {
-      winExe: 'Cuemark-Setup-1.1.0.exe',
-      winZip: 'Cuemark-Install-win-v1.1.0.zip',
-      macZip: 'Cuemark-Install-mac-v1.1.0.zip'
+      winZip: 'Cuemark-Install-win-v1.1.1.zip',
+      macZip: 'Cuemark-Install-mac-v1.1.1.zip'
     };
 
     function applyUrls(manifest) {
@@ -717,8 +704,8 @@
         const key = el.getAttribute('data-file');
         const url = (manifest.files && manifest.files[key]) || (prefix + fileNames[key]);
         el.href = url;
-        if (key === 'winZip' && el.id === 'win-download-btn' && manifest.releasePage) {
-          el.setAttribute('title', 'Recommended — avoids Windows SmartScreen');
+        if (key === 'winZip' && el.id === 'win-download-btn') {
+          el.setAttribute('title', 'Extract zip, then run Install-Cuemark.cmd');
         }
       });
     }
