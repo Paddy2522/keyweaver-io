@@ -290,7 +290,16 @@
     <div class="help-section" id="install">
       <h2>Installation</h2>
       <p>Cuemark is a CEP panel for Adobe After Effects. Download the <a href="/download">zip for your platform</a>, extract it, and run <strong>Install-Cuemark.cmd</strong> (Windows) or <strong>Install-Cuemark.command</strong> (macOS). The panel appears under <strong>Window → Extensions</strong> after you restart AE.</p>
-      <p>Full step-by-step instructions are on the <a href="/download">download page</a>. No Registry Editor or Terminal required.</p>
+      <p>Full step-by-step instructions are on the <a href="/download">download page</a>.</p>
+
+      <h3>Windows</h3>
+      <p>If SmartScreen shows <strong>Windows protected your PC</strong>, click <strong>More info</strong> → <strong>Run anyway</strong>. The installer only copies files to your user AppData folder and enables Adobe’s CEP debug flag — no admin rights required.</p>
+
+      <h3>macOS</h3>
+      <p>If macOS says the installer <strong>cannot be opened because the developer cannot be verified</strong>, right-click <strong>Install-Cuemark.command</strong> → <strong>Open</strong> → <strong>Open</strong> once. The installer clears quarantine attributes automatically when possible.</p>
+      <p>If the script still won’t run, open Terminal in the extracted folder and run:</p>
+      <p><code>xattr -cr .</code> then <code>chmod +x Install-Cuemark.command cuemark-install-macos.sh</code> and double-click the installer again.</p>
+      <p>The Mac download does not include Windows ffmpeg (~97&nbsp;MB). For video files, install ffmpeg on your Mac (<code>brew install ffmpeg</code>) or export audio from After Effects before generating.</p>
       <div class="note note-warn">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
         <p>After installing, you must fully quit and relaunch After Effects. Restarting is required — closing and reopening a panel is not enough.</p>
@@ -471,6 +480,12 @@
 
       <h3>Panel doesn't appear in Window → Extensions</h3>
       <p>Re-run the <a href="/download">Cuemark installer</a>, then fully quit and relaunch After Effects. See the install guide for the exact steps.</p>
+
+      <h3>macOS installer blocked (Gatekeeper)</h3>
+      <p>Right-click <strong>Install-Cuemark.command</strong> → <strong>Open</strong> → <strong>Open</strong>. If that fails, run <code>xattr -cr .</code> in the extracted zip folder, then try again. See <a href="#install">Installation</a> for full steps.</p>
+
+      <h3>Video generate fails on Mac</h3>
+      <p>The Mac zip does not bundle ffmpeg. Install it with Homebrew (<code>brew install ffmpeg</code>) or pre-export audio from your footage in After Effects, then generate from the audio file.</p>
 
       <h3>Blank white panel</h3>
       <p>Re-run the Cuemark installer from the <a href="/download">download page</a> and fully relaunch AE. If still blank, right-click inside the panel and choose <strong>Inspect</strong> to see any JavaScript errors.</p>

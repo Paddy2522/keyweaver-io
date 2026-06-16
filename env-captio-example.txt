@@ -17,6 +17,11 @@ STRIPE_PRICE_MONTHLY=price_...
 
 # Diagnostic endpoint after deploy:
 # GET https://keyweaver-backend.vercel.app/api/captio/billing-config
+
+# Optional: allow captio_monthly tier in Supabase (run once)
+# Supabase → SQL editor → paste section 4 from captio_auth_migration.sql
+# Or set POSTGRES_URL on Vercel (Database → Connection string URI) plus:
+# CAPTIO_INTERNAL_API_KEY=... then POST /api/captio/admin/migrate-tier with header x-captio-admin-key
 #   → webhook_endpoint must match the URL configured in Stripe Dashboard
 #   → webhook_secret_set must be true
 #
