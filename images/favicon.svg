@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 129.15 129.15">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+      }
+
+      .cls-1, .cls-2 {
+        stroke: #fff;
+        stroke-linecap: round;
+        stroke-linejoin: bevel;
+        stroke-width: 3px;
+      }
+
+      .cls-3 {
+        fill: #5b6bf8;
+      }
+
+      .cls-2 {
+        fill: #fff;
+      }
+    </style>
+  </defs>
+  <g id="Layer_8" data-name="Layer 8">
+    <g id="Layer_9_copy" data-name="Layer 9 copy">
+      <g id="Layer_4_copy" data-name="Layer 4 copy">
+        <rect class="cls-3" width="129.15" height="129.15" rx="16.34" ry="16.34"/>
+      </g>
+      <g id="Layer_5_copy" data-name="Layer 5 copy">
+        <path class="cls-1" d="M19.2,90.35s16.56-51.44,31.68-51.55c15.27-.11,17.53,50.44,32.76,51.55,14.43,1.05,26.31-51.55,26.31-51.55"/>
+      </g>
+      <g id="Layer_6_copy_2" data-name="Layer 6 copy 2">
+        <circle class="cls-2" cx="19.71" cy="89.23" r="3.11"/>
+      </g>
+      <g id="Layer_6_copy_2-2" data-name="Layer 6 copy 2">
+        <circle class="cls-2" cx="109.67" cy="39.3" r="3.11"/>
+      </g>
+    </g>
+  </g>
+</svg>
