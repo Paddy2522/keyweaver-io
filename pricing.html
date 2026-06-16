@@ -83,21 +83,10 @@
     }
     .hero p { font-size: 1rem; color: var(--muted); max-width: 440px; margin: 0 auto 2rem; line-height: 1.7; }
 
-    /* CURRENCY TOGGLE */
-    .currency-toggle {
-      display: inline-flex;
-      background: var(--lift); border: 1px solid var(--edge);
-      border-radius: 10px; padding: 4px; gap: 4px;
-    }
-    .currency-btn {
-      padding: 7px 18px; border-radius: 7px;
-      font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500;
-      color: var(--muted); background: transparent; border: none;
-      cursor: pointer; transition: all 0.15s;
-    }
-    .currency-btn.active {
-      background: var(--surface); color: var(--text);
-      border: 1px solid var(--edge);
+    .currency-note {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 0.25rem;
     }
 
     /* PRICING GRID */
@@ -374,11 +363,7 @@
   <h1>Simple, honest pricing</h1>
   <p>Start free. Pay only when you need more. Credits never expire and work across all Keyweaver products.</p>
 
-  <div class="currency-toggle" role="group" aria-label="Currency">
-    <button class="currency-btn active" onclick="setCurrency('GBP')">£ GBP</button>
-    <button class="currency-btn" onclick="setCurrency('EUR')">€ EUR</button>
-    <button class="currency-btn" onclick="setCurrency('USD')">$ USD</button>
-  </div>
+  <p class="currency-note" id="currency-note">Prices shown in British pounds (GBP).</p>
 </div>
 
 <!-- PRICING CARDS -->
@@ -627,7 +612,7 @@
       <span>What currencies are supported?</span>
       <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
     </div>
-    <div class="faq-a">GBP, EUR, and USD. Your currency is selected at checkout and shown on your invoices. Stripe handles the conversion securely — we never store card details.</div>
+    <div class="faq-a">We show GBP in the UK, EUR across most of Europe, and USD in the United States and Canada — based on your browser locale. Stripe checkout uses the same currency for your region. We never store card details.</div>
   </div>
 
   <div class="faq-item">
@@ -668,51 +653,18 @@
   </ul>
 </footer>
 
+<script src="/js/pricing-currency.js"></script>
 <script>
   const BACKEND = 'https://keyweaver-backend.vercel.app';
-  const prices = {
-    GBP: { sym: '£', credits: { whole: '4', dec: '.99' }, monthly: '12' },
-    EUR: { sym: '€', credits: { whole: '5', dec: '.99' }, monthly: '14' },
-    USD: { sym: '$', credits: { whole: '5', dec: '.99' }, monthly: '15' },
-  };
-
-  let current = 'GBP';
-
-  // Auto-detect currency from locale
-  try {
-    const locale = navigator.language || 'en-GB';
-    if (locale.startsWith('en-US')) current = 'USD';
-    else if (['de','fr','es','it','nl','pt','pl'].some(l => locale.startsWith(l))) current = 'EUR';
-  } catch(e) {}
-
-  function setCurrency(c) {
-    current = c;
-    document.querySelectorAll('.currency-btn').forEach(b => {
-      b.classList.toggle('active', b.textContent.includes(c));
-    });
-    const p = prices[c];
-    ['free','credits','monthly'].forEach(t => {
-      document.getElementById('sym-' + t).textContent = p.sym;
-    });
-    document.getElementById('price-free').textContent = '0';
-    document.getElementById('price-credits').textContent = p.credits.whole;
-    document.getElementById('price-credits-dec').textContent = p.credits.dec;
-    document.getElementById('price-monthly').textContent = p.monthly;
-
-    document.getElementById('cta-credits').dataset.plan = 'credits';
-    document.getElementById('cta-monthly').dataset.plan = 'monthly';
-    document.getElementById('cta-credits').dataset.currency = c;
-    document.getElementById('cta-monthly').dataset.currency = c;
-  }
+  CuemarkPricing.applyPricingPage(CuemarkPricing.detectDisplayCurrency());
 
   async function startPlanCheckout(e, plan) {
     e.preventDefault();
     const btn = e.currentTarget;
-    const currency = btn.dataset.currency || current;
     const token = localStorage.getItem('cc_token');
 
     if (!token) {
-      window.location.href = '/signup?plan=' + encodeURIComponent(plan) + '&currency=' + encodeURIComponent(currency);
+      window.location.href = '/signup?plan=' + encodeURIComponent(plan);
       return;
     }
 
@@ -727,7 +679,7 @@
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ' + token
         },
-        body: JSON.stringify({ plan, currency })
+        body: JSON.stringify({ plan })
       });
       const data = await res.json();
       if (res.ok && data.checkout_url) {
@@ -745,8 +697,6 @@
 
   document.getElementById('cta-credits').addEventListener('click', (e) => startPlanCheckout(e, 'credits'));
   document.getElementById('cta-monthly').addEventListener('click', (e) => startPlanCheckout(e, 'monthly'));
-
-  setCurrency(current);
 </script>
 
 </body>

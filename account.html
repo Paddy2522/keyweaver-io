@@ -495,6 +495,30 @@
     }
   }
 
+  async function maybeFulfillCheckout(token) {
+    const params = new URLSearchParams(window.location.search);
+    const sessionId = params.get('session_id');
+    if (!sessionId) return;
+
+    try {
+      await fetch(BACKEND + '/api/captio/fulfill-checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({ session_id: sessionId })
+      });
+    } catch {
+      // Account load still proceeds; webhook may have fulfilled already.
+    }
+
+    params.delete('session_id');
+    params.delete('welcome');
+    const query = params.toString();
+    history.replaceState(null, '', window.location.pathname + (query ? '?' + query : ''));
+  }
+
   async function loadAccount() {
     absorbTokenFromHash();
 
@@ -504,6 +528,8 @@
     document.getElementById('loading').style.display = 'flex';
     document.getElementById('dashboard').style.display = 'none';
     document.getElementById('load-error').style.display = 'none';
+
+    await maybeFulfillCheckout(token);
 
     try {
       const res = await fetch(BACKEND + '/api/captio/account', {
@@ -638,7 +664,7 @@
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ' + token
         },
-        body: JSON.stringify({ plan: 'credits', currency: 'gbp' })
+        body: JSON.stringify({ plan: 'credits' })
       });
       const data = await res.json();
       if (res.ok && data.checkout_url) {

@@ -17,3 +17,11 @@ STRIPE_PRICE_MONTHLY=price_...
 
 # Diagnostic endpoint after deploy:
 # GET https://keyweaver-backend.vercel.app/api/captio/billing-config
+#   → webhook_endpoint must match the URL configured in Stripe Dashboard
+#   → webhook_secret_set must be true
+#
+# If payment succeeded but credits are missing:
+# 1. Confirm Stripe webhook points to webhook_endpoint above (NOT /api/stripe/webhook)
+# 2. Redeploy after setting STRIPE_CAPTIO_WEBHOOK_SECRET
+# 3. Resend the checkout.session.completed event from Stripe → Developers → Events
+# 4. Or open /account?session_id=cs_... while signed in (fulfills on load)

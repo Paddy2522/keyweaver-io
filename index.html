@@ -736,7 +736,7 @@
 
       <div class="pricing-card">
         <div class="pricing-tier">Free</div>
-        <div class="pricing-price"><sup>£</sup>0</div>
+        <div class="pricing-price" data-home-price="free"><sup data-price-sym>£</sup><span data-price-val>0</span></div>
         <div class="pricing-desc">3 transcription jobs to get started.</div>
         <ul class="pricing-features">
           <li><svg viewBox="0 0 14 14"><polyline points="2 7 5.5 10.5 12 3.5"/></svg>3 free generates</li>
@@ -750,7 +750,7 @@
       <div class="pricing-card featured">
         <div class="pricing-badge">Most popular</div>
         <div class="pricing-tier">Credits</div>
-        <div class="pricing-price"><sup>£</sup>4<sub>.99</sub></div>
+        <div class="pricing-price" data-home-price="credits"><sup data-price-sym>£</sup><span data-price-whole>4</span><sub data-price-dec>.99</sub></div>
         <div class="pricing-desc">60 credits, never expire. Top up any time.</div>
         <ul class="pricing-features">
           <li><svg viewBox="0 0 14 14"><polyline points="2 7 5.5 10.5 12 3.5"/></svg>60 minutes of transcription</li>
@@ -764,7 +764,7 @@
 
       <div class="pricing-card">
         <div class="pricing-tier">Monthly</div>
-        <div class="pricing-price"><sup>£</sup>12<sub>/mo</sub></div>
+        <div class="pricing-price" data-home-price="monthly"><sup data-price-sym>£</sup><span data-price-val>12</span><sub>/mo</sub></div>
         <div class="pricing-desc">300 credits/month with rollover.</div>
         <ul class="pricing-features">
           <li><svg viewBox="0 0 14 14"><polyline points="2 7 5.5 10.5 12 3.5"/></svg>300 credits per month</li>
@@ -777,8 +777,8 @@
 
     </div>
 
-    <p style="margin-top:1.5rem; font-size:13px; color:var(--muted); text-align:center;">
-      Prices shown in GBP · EUR and USD also available · <a href="/pricing" style="color:var(--muted); text-decoration:underline; text-underline-offset:3px;">Full pricing details</a>
+    <p id="home-currency-note" style="margin-top:1.5rem; font-size:13px; color:var(--muted); text-align:center;">
+      Prices shown in GBP · <a href="/pricing" style="color:var(--muted); text-decoration:underline; text-underline-offset:3px;">Full pricing details</a>
     </p>
   </div>
 </section>
@@ -891,6 +891,12 @@
     }
   }
   advanceDemoWord();
+
+  // ── LOCALISED PRICING ──
+</script>
+<script src="/js/pricing-currency.js"></script>
+<script>
+  CuemarkPricing.applyHomePricing(CuemarkPricing.detectDisplayCurrency());
 </script>
 </body>
 </html>

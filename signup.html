@@ -365,7 +365,7 @@
             </div>
             <div class="plan-desc">60 min of transcription · all styles · never expire</div>
           </div>
-          <div class="plan-price">£4.99<small>one-time</small></div>
+          <div class="plan-price" id="signup-price-credits">£4.99<small>one-time</small></div>
         </div>
 
         <div class="plan-card" data-plan="monthly">
@@ -374,7 +374,7 @@
             <div class="plan-name">Monthly</div>
             <div class="plan-desc">300 credits/mo · SRT/VTT export · priority queue</div>
           </div>
-          <div class="plan-price">£12<small>per month</small></div>
+          <div class="plan-price" id="signup-price-monthly">£12<small>per month</small></div>
         </div>
 
       </div>
@@ -407,16 +407,18 @@
   <p>© 2026 Keyweaver · <a href="/legal/privacy">Privacy</a> · <a href="/legal/terms">Terms</a></p>
 </footer>
 
+<script src="/js/pricing-currency.js"></script>
 <script>
   const BACKEND = 'https://keyweaver-backend.vercel.app';
+
+  CuemarkPricing.applySignupPlans(CuemarkPricing.detectDisplayCurrency());
 
   // If already logged in
   if (localStorage.getItem('cc_token')) window.location.href = '/account';
 
-  // Check for ?plan= and ?currency= params
+  // Check for ?plan= param
   const urlParams = new URLSearchParams(window.location.search);
   const urlPlan = urlParams.get('plan');
-  const urlCurrency = urlParams.get('currency');
   if (urlPlan) {
     document.querySelectorAll('.plan-card').forEach(c => {
       c.classList.toggle('selected', c.dataset.plan === urlPlan);
@@ -551,8 +553,7 @@
         body: JSON.stringify({
           email,
           password,
-          plan,
-          currency: urlCurrency || undefined
+          plan
         })
       });
       const data = await res.json();
