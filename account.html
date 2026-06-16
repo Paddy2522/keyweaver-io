@@ -796,7 +796,29 @@
   }
 
   function changePassword() {
-    window.location.href = '/forgot-password';
+    const currentPassword = prompt('Current password:');
+    if (!currentPassword) return;
+    const newPassword = prompt('New password (at least 8 characters):');
+    if (!newPassword) return;
+
+    const token = localStorage.getItem('cc_token');
+    fetch(BACKEND + '/api/captio/account/change-password', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      },
+      body: JSON.stringify({ current_password: currentPassword, new_password: newPassword })
+    })
+    .then(r => r.json().then(d => ({ ok: r.ok, data: d })))
+    .then(({ ok, data }) => {
+      if (ok && data.updated) {
+        showToast('Password updated.');
+      } else {
+        showToast(data.error || 'Could not update password.');
+      }
+    })
+    .catch(() => showToast('Could not reach the server.'));
   }
 
   function confirmDelete() {

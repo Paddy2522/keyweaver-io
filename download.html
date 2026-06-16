@@ -365,7 +365,7 @@
   <div class="hero">
     <div class="hero-eyebrow">
       <span class="version-dot"></span>
-      Version 1.1.1 · Free to install
+      Version <span id="download-version">1.1.1</span> · Free to install
     </div>
     <h1>Download Cuemark</h1>
     <p>An After Effects plugin — install it once and it lives inside your panel. No browser required to use it.</p>
@@ -390,7 +390,7 @@
       <div class="download-card download-card-primary">
         <div class="download-card-info">
           <span class="download-badge">Recommended for Windows</span>
-          <h3>Cuemark-Install-win-v1.1.1.zip</h3>
+          <h3 id="win-zip-name">Cuemark-Install-win-v1.1.1.zip</h3>
           <p>Windows 10 / 11 · After Effects 2022+ · ~48 MB download</p>
         </div>
         <a href="#" class="btn-download" id="win-download-btn" data-file="winZip">
@@ -409,7 +409,7 @@
       <div class="download-card download-card-primary">
         <div class="download-card-info">
           <span class="download-badge">Recommended for macOS</span>
-          <h3>Cuemark-Install-mac-v1.1.1.zip</h3>
+          <h3 id="mac-zip-name">Cuemark-Install-mac-v1.1.1.zip</h3>
           <p>macOS 12+ · After Effects 2022+ · ~12 MB download</p>
         </div>
         <a href="#" class="btn-download" id="mac-download-btn" data-file="macZip">
@@ -700,12 +700,26 @@
 
   // Resolve download URLs (GitHub Releases — Vercel cannot host ~140 MB of installers)
   (async function loadDownloadUrls() {
+    let version = '1.1.1';
     const fileNames = {
-      winZip: 'Cuemark-Install-win-v1.1.1.zip',
-      macZip: 'Cuemark-Install-mac-v1.1.1.zip'
+      winZip: '',
+      macZip: ''
     };
 
+    function setVersion(v) {
+      version = v || version;
+      fileNames.winZip = 'Cuemark-Install-win-v' + version + '.zip';
+      fileNames.macZip = 'Cuemark-Install-mac-v' + version + '.zip';
+      const verEl = document.getElementById('download-version');
+      if (verEl) verEl.textContent = version;
+      const winName = document.getElementById('win-zip-name');
+      const macName = document.getElementById('mac-zip-name');
+      if (winName) winName.textContent = fileNames.winZip;
+      if (macName) macName.textContent = fileNames.macZip;
+    }
+
     function applyUrls(manifest) {
+      if (manifest.version) setVersion(manifest.version);
       const prefix = manifest.fallbackPrefix || '/downloads/';
       document.querySelectorAll('[data-file]').forEach(el => {
         const key = el.getAttribute('data-file');
@@ -720,8 +734,12 @@
     try {
       const res = await fetch('/downloads.json');
       if (res.ok) applyUrls(await res.json());
-      else applyUrls({ fallbackPrefix: '/downloads/', files: {} });
+      else {
+        setVersion(version);
+        applyUrls({ fallbackPrefix: '/downloads/', files: {} });
+      }
     } catch {
+      setVersion(version);
       applyUrls({ fallbackPrefix: '/downloads/', files: {} });
     }
   })();
