@@ -574,10 +574,10 @@
   }
 
   function renderDashboard(data) {
-    // Defaults if no data yet
     const credits = data?.credits_remaining ?? 0;
     const creditsTotal = data?.credits_total ?? 3;
-    const tier = data?.tier ?? 'free';
+    const plan = data?.plan ?? (data?.tier === 'captio_monthly' ? 'monthly' : 'free');
+    const isMonthly = plan === 'monthly' || data?.is_monthly;
     const email = data?.email ?? '—';
     const jobs = data?.recent_jobs ?? [];
     const since = data?.created_at ? new Date(data.created_at).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' }) : '—';
@@ -595,7 +595,7 @@
     if (pct <= 10) bar.classList.add('critical');
     else if (pct <= 30) bar.classList.add('low');
 
-    if (tier === 'captio_monthly') {
+    if (isMonthly) {
       document.getElementById('credits-sub').textContent = credits + ' of ' + creditsTotal + ' monthly credits remaining';
     } else {
       document.getElementById('credits-sub').textContent = credits + ' credits remaining';
@@ -606,20 +606,23 @@
     const planMap = {
       free:           { label: 'Free',    name: 'Free plan',      detail: '3 transcription jobs · clips up to 15 min', badge: 'free' },
       spark:          { label: 'Free',    name: 'Free plan',      detail: '3 transcription jobs · clips up to 15 min', badge: 'free' },
+      monthly:        { label: 'Monthly', name: 'Monthly plan',   detail: '300 credits/month · up to 150 rollover', badge: 'active' },
       captio_monthly: { label: 'Monthly', name: 'Monthly plan',   detail: '300 credits/month · up to 150 rollover', badge: 'active' },
       studio:         { label: 'Studio',  name: 'Studio plan',    detail: '150 credits/month included', badge: 'active' },
       director:       { label: 'Director',name: 'Director plan',  detail: '400 credits/month included', badge: 'active' },
       agency:         { label: 'Agency',  name: 'Agency plan',    detail: 'Unlimited (fair use)', badge: 'active' },
     };
-    const plan = planMap[tier] || planMap.free;
-    document.getElementById('plan-badge-label').textContent = plan.label;
-    planBadge.className = 'plan-badge ' + plan.badge;
-    document.getElementById('plan-name').textContent = plan.name;
-    document.getElementById('plan-detail').textContent = plan.detail;
+    const tier = data?.tier ?? 'spark';
+    const planKey = isMonthly ? 'monthly' : (planMap[tier] ? tier : 'free');
+    const planInfo = planMap[planKey] || planMap.free;
+    document.getElementById('plan-badge-label').textContent = planInfo.label;
+    planBadge.className = 'plan-badge ' + planInfo.badge;
+    document.getElementById('plan-name').textContent = planInfo.name;
+    document.getElementById('plan-detail').textContent = planInfo.detail;
 
     // Plan actions
     const actionsEl = document.getElementById('plan-actions');
-    if (tier === 'captio_monthly') {
+    if (isMonthly) {
       actionsEl.innerHTML = `
         <button class="btn-manage btn-manage-secondary" onclick="manageSubscription()">Manage subscription</button>
         <button class="btn-manage btn-manage-secondary" style="color:var(--danger);border-color:rgba(226,75,74,0.3);" onclick="cancelSubscription()">Cancel subscription</button>

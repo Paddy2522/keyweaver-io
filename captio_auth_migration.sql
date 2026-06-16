@@ -42,5 +42,9 @@ alter table profiles
 -- magic_link_tokens: only the service role can read/write (all access via backend)
 alter table magic_link_tokens enable row level security;
 
--- No public access — backend uses service role key which bypasses RLS
--- (This matches the pattern used by sessions table in Keyweaver)
+-- ── 4. Allow Cuemark monthly tier (optional — code also works via billing_cycle) ──
+-- Run if you want profiles.tier = captio_monthly instead of spark + billing fields.
+
+alter table profiles drop constraint if exists profiles_tier_check;
+alter table profiles add constraint profiles_tier_check
+  check (tier in ('spark', 'studio', 'director', 'team', 'agency', 'captio_monthly'));
