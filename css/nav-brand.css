@@ -1,13 +1,39 @@
-/* Cuemark nav wordmark — height matches legacy 28px icon lockup */
+/* Cuemark nav lockup — icon from brand SVG + web-font wordmark (SVG <img> cannot load New Hero) */
 .nav-logo {
   display: flex;
   align-items: center;
+  gap: 10px;
   text-decoration: none;
   flex-shrink: 0;
+  color: var(--text, #e8e8f0);
 }
 
-.nav-logo-img {
+.nav-logo-icon {
+  width: 28px;
   height: 28px;
-  width: auto;
+  flex-shrink: 0;
   display: block;
+}
+
+.nav-logo-lockup {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.nav-logo-title {
+  font-family: 'Syne', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: -0.01em;
+  color: inherit;
+}
+
+.nav-logo-sub {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--muted, #6b6b88);
 }
