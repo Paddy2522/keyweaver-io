@@ -495,55 +495,91 @@
     }
   }
 
+  async function syncBilling(token) {
+    try {
+      const res = await fetch(BACKEND + '/api/captio/sync-billing', {
+        method: 'POST',
+        headers: { 'Authorization': 'Bearer ' + token }
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.monthly_applied) {
+        showToast('Monthly subscription synced — credits updated.');
+        return true;
+      }
+    } catch {}
+    return false;
+  }
+
   async function maybeFulfillCheckout(token) {
     const params = new URLSearchParams(window.location.search);
     const sessionId = params.get('session_id');
-    if (!sessionId) return;
+    const welcome = params.get('welcome');
 
-    for (let attempt = 0; attempt < 4; attempt++) {
-      if (attempt > 0) {
-        await new Promise((resolve) => setTimeout(resolve, 1500));
-      }
+    if (!sessionId && !welcome) return;
 
-      try {
-        const res = await fetch(BACKEND + '/api/captio/fulfill-checkout', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token
-          },
-          body: JSON.stringify({ session_id: sessionId })
-        });
-        const data = await res.json().catch(() => ({}));
+    let fulfilled = false;
 
-        if (res.ok && (data.fulfilled || data.reason === 'already_fulfilled')) {
-          if (data.fulfilled) {
+    if (sessionId) {
+      for (let attempt = 0; attempt < 4; attempt++) {
+        if (attempt > 0) {
+          await new Promise((resolve) => setTimeout(resolve, 1500));
+        }
+
+        try {
+          const res = await fetch(BACKEND + '/api/captio/fulfill-checkout', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify({ session_id: sessionId })
+          });
+          const data = await res.json().catch(() => ({}));
+
+          if (res.ok && data.fulfilled) {
             showToast('Subscription active — credits added.');
+            fulfilled = true;
+            break;
           }
-          break;
-        }
 
-        if (attempt === 3 && !data.fulfilled) {
-          showToast('Payment received — credits may take a moment to appear. Refresh if needed.');
-        }
-      } catch {
-        if (attempt === 3) {
-          showToast('Payment received — refresh shortly if credits are missing.');
+          if (res.ok && data.reason === 'already_fulfilled') {
+            fulfilled = true;
+            break;
+          }
+
+          if (attempt === 3 && !fulfilled) {
+            const detail = data.reason || data.error || ('HTTP ' + res.status);
+            showToast('Could not apply purchase (' + detail + '). Trying sync…');
+          }
+        } catch {
+          if (attempt === 3) {
+            showToast('Could not reach server — trying sync…');
+          }
         }
       }
     }
 
-    params.delete('session_id');
-    params.delete('welcome');
-    const query = params.toString();
-    history.replaceState(null, '', window.location.pathname + (query ? '?' + query : ''));
+    if (!fulfilled) {
+      fulfilled = await syncBilling(token);
+    }
+
+    if (sessionId || welcome) {
+      params.delete('session_id');
+      params.delete('welcome');
+      const query = params.toString();
+      history.replaceState(null, '', window.location.pathname + (query ? '?' + query : ''));
+    }
   }
 
   async function loadAccount() {
     absorbTokenFromHash();
 
     const token = localStorage.getItem('cc_token');
-    if (!token) { window.location.href = '/login'; return; }
+    if (!token) {
+      const next = encodeURIComponent(window.location.pathname + window.location.search);
+      window.location.href = '/login?next=' + next;
+      return;
+    }
 
     document.getElementById('loading').style.display = 'flex';
     document.getElementById('dashboard').style.display = 'none';
