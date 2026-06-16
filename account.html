@@ -500,17 +500,37 @@
     const sessionId = params.get('session_id');
     if (!sessionId) return;
 
-    try {
-      await fetch(BACKEND + '/api/captio/fulfill-checkout', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token
-        },
-        body: JSON.stringify({ session_id: sessionId })
-      });
-    } catch {
-      // Account load still proceeds; webhook may have fulfilled already.
+    for (let attempt = 0; attempt < 4; attempt++) {
+      if (attempt > 0) {
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+      }
+
+      try {
+        const res = await fetch(BACKEND + '/api/captio/fulfill-checkout', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+          },
+          body: JSON.stringify({ session_id: sessionId })
+        });
+        const data = await res.json().catch(() => ({}));
+
+        if (res.ok && (data.fulfilled || data.reason === 'already_fulfilled')) {
+          if (data.fulfilled) {
+            showToast('Subscription active — credits added.');
+          }
+          break;
+        }
+
+        if (attempt === 3 && !data.fulfilled) {
+          showToast('Payment received — credits may take a moment to appear. Refresh if needed.');
+        }
+      } catch {
+        if (attempt === 3) {
+          showToast('Payment received — refresh shortly if credits are missing.');
+        }
+      }
     }
 
     params.delete('session_id');
