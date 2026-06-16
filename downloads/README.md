@@ -1,39 +1,36 @@
 # Cuemark installer downloads
 
-The three installer files total **~140 MB**. That is too large to ship inside a Vercel static deploy (Hobby plan output is capped around **100 MB**), which is why `/downloads/*.exe` and `/downloads/*.zip` returned **404** on keyweaver.io even though they were committed to git.
+Installer zips total **~60 MB** (Windows ~48 MB with bundled ffmpeg, macOS ~12 MB). They are too large to ship inside the Cloudflare Workers static deploy, which is why `/downloads/*.zip` on keyweaver.io would 404 if committed to the site repo.
 
-## How downloads work now
+## How downloads work
 
 1. **Website** (`download.html`) loads `/downloads.json`, which points at **GitHub Releases** URLs.
-2. **Vercel** ignores the binary files via `.vercelignore` so the site deploy stays small and reliable.
-3. **GitHub Releases** hosts the actual `.exe` / `.zip` files (free, CDN-backed, no size issue for this use case).
+2. **Cloudflare** ignores binaries via `.assetsignore` so deploys stay small and reliable.
+3. **GitHub Releases** hosts the zip files (CDN-backed, anonymous download on the public repo).
 
-## One-time setup (per version)
+## Publish a new version
 
-After building installers (`scripts/build-cuemark-release.ps1`):
-
-1. Open [keyweaver-io Releases](https://github.com/Paddy2522/keyweaver-io/releases)
-2. **Draft a new release** — tag `v1.1.0` (must match `downloads.json`)
-3. Attach these files from `dist/cuemark-release/` or `Captio/Website/downloads/`:
-   - `Cuemark-Setup-1.1.0.exe`
-   - `Cuemark-Install-win-v1.1.0.zip`
-   - `Cuemark-Install-mac-v1.1.0.zip`
-4. Publish the release
-5. Verify links work, e.g.  
-   `https://github.com/Paddy2522/keyweaver-io/releases/download/v1.1.0/Cuemark-Setup-1.1.0.exe`
-
-Or run from Keyweaver repo root (requires [GitHub CLI](https://cli.github.com/) logged in):
+From the Keyweaver repo root (requires [GitHub CLI](https://cli.github.com/) logged in):
 
 ```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts\build-cuemark-release.ps1
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts\publish-cuemark-github-release.ps1
 ```
 
-## Bumping a version
+Or build once and publish existing artifacts:
 
-1. Build new installers
-2. Update `downloads.json` (`version`, tag, and file URLs)
-3. Create new GitHub release with matching tag
-4. Update version strings on `download.html` if filenames change
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts\publish-cuemark-github-release.ps1 -SkipBuild
+```
+
+Then update `downloads.json` (`version`, tag, file URLs) and version strings on `download.html` if filenames change. Push the website repo so Cloudflare redeploys.
+
+## Current release (v1.1.1)
+
+- `Cuemark-Install-win-v1.1.1.zip` — extract, run `Install-Cuemark.cmd`
+- `Cuemark-Install-mac-v1.1.1.zip` — extract, run `Install-Cuemark.command`
+
+No standalone `.exe` is offered on the website (unsigned installers trigger SmartScreen).
 
 ## Local / fallback
 

@@ -138,12 +138,10 @@
       border: 1px solid rgba(76, 175, 131, 0.35);
       border-radius: 100px; padding: 3px 8px; margin-bottom: 6px;
     }
-    .win-alt-download {
+    .install-hint {
       margin-top: 1.25rem; font-size: 13px; color: var(--muted); line-height: 1.6;
       max-width: 520px; margin-left: auto; margin-right: auto;
     }
-    .win-alt-download a { color: var(--accent2); text-decoration: none; }
-    .win-alt-download a:hover { text-decoration: underline; }
 
     .btn-download {
       display: inline-flex; align-items: center; gap: 8px;
@@ -400,7 +398,7 @@
           Download for Windows
         </a>
       </div>
-      <p class="win-alt-download">
+      <p class="install-hint">
         After download: right-click the zip → <strong>Extract All</strong> → open the folder → double-click <strong>Install-Cuemark.cmd</strong>.
         A command window runs briefly while Cuemark installs — then restart After Effects.
       </p>
@@ -419,7 +417,7 @@
           Download for macOS
         </a>
       </div>
-      <p style="margin-top:1rem; font-size:13px; color:var(--muted);">
+      <p class="install-hint">
         After extracting, double-click <strong>Install-Cuemark.command</strong>.
         If macOS blocks it, right-click → Open once.
       </p>
@@ -595,7 +593,7 @@
           <span>Windows blocked the installer or showed a security warning</span>
           <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
-        <div class="faq-a">Use the <strong>zip download</strong> and run <strong>Install-Cuemark.cmd</strong> from the extracted folder — not a standalone .exe. If Windows still warns about the script, click <strong>More info</strong> → <strong>Run anyway</strong>.</div>
+        <div class="faq-a">Extract the zip fully, then run <strong>Install-Cuemark.cmd</strong> from the extracted folder (not from inside the zip). If Windows warns about the script, click <strong>More info</strong> → <strong>Run anyway</strong>.</div>
       </div>
 
       <div class="faq-item">
