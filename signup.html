@@ -577,7 +577,8 @@
         return;
       }
       if ((plan === 'credits' || plan === 'monthly') && !data.checkout_url) {
-        showAlert('Payment setup failed — no checkout URL returned. Try again or contact hello@keyweaver.io.', 'error');
+        if (data.token) localStorage.setItem('cc_token', data.token);
+        showAlert(data.error || 'Payment setup failed — no checkout URL returned. Sign in and try again from Pricing, or contact hello@keyweaver.io.', 'error');
         document.getElementById('step2-label').textContent = 'Create account';
         document.getElementById('step2-spinner').style.display = 'none';
         document.getElementById('step2-btn').disabled = false;
