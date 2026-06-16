@@ -418,7 +418,7 @@
         <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Top up any time</li>
         <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>SRT / VTT / CSV export</li>
       </ul>
-      <a href="/signup?plan=credits" class="card-cta cta-primary" id="cta-credits">Buy credits</a>
+      <a href="#" class="card-cta cta-primary" id="cta-credits">Buy credits</a>
     </div>
 
     <!-- MONTHLY -->
@@ -435,7 +435,7 @@
         <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Up to 150 credits roll over</li>
         <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>SRT / VTT / CSV export</li>
       </ul>
-      <a href="/signup?plan=monthly" class="card-cta cta-accent-outline">Start monthly</a>
+      <a href="#" class="card-cta cta-accent-outline" id="cta-monthly">Start monthly</a>
     </div>
 
   </div>
@@ -669,6 +669,7 @@
 </footer>
 
 <script>
+  const BACKEND = 'https://keyweaver-backend.vercel.app';
   const prices = {
     GBP: { sym: '£', credits: { whole: '4', dec: '.99' }, monthly: '12' },
     EUR: { sym: '€', credits: { whole: '5', dec: '.99' }, monthly: '14' },
@@ -698,9 +699,52 @@
     document.getElementById('price-credits-dec').textContent = p.credits.dec;
     document.getElementById('price-monthly').textContent = p.monthly;
 
-    // Update signup links with currency param
-    document.getElementById('cta-credits').href = '/signup?plan=credits&currency=' + c;
+    document.getElementById('cta-credits').dataset.plan = 'credits';
+    document.getElementById('cta-monthly').dataset.plan = 'monthly';
+    document.getElementById('cta-credits').dataset.currency = c;
+    document.getElementById('cta-monthly').dataset.currency = c;
   }
+
+  async function startPlanCheckout(e, plan) {
+    e.preventDefault();
+    const btn = e.currentTarget;
+    const currency = btn.dataset.currency || current;
+    const token = localStorage.getItem('cc_token');
+
+    if (!token) {
+      window.location.href = '/signup?plan=' + encodeURIComponent(plan) + '&currency=' + encodeURIComponent(currency);
+      return;
+    }
+
+    const label = btn.textContent;
+    btn.textContent = 'Redirecting…';
+    btn.style.pointerEvents = 'none';
+
+    try {
+      const res = await fetch(BACKEND + '/api/captio/checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({ plan, currency })
+      });
+      const data = await res.json();
+      if (res.ok && data.checkout_url) {
+        window.location.href = data.checkout_url;
+        return;
+      }
+      alert(data.error || 'Could not start checkout. Try again from your account page.');
+    } catch {
+      alert('Could not reach the server. Please try again.');
+    }
+
+    btn.textContent = label;
+    btn.style.pointerEvents = '';
+  }
+
+  document.getElementById('cta-credits').addEventListener('click', (e) => startPlanCheckout(e, 'credits'));
+  document.getElementById('cta-monthly').addEventListener('click', (e) => startPlanCheckout(e, 'monthly'));
 
   setCurrency(current);
 </script>

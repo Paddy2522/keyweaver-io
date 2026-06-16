@@ -1,32 +1,27 @@
-# ── New env vars needed in Vercel for these routes ───────────────────────────
-# Add these in Vercel dashboard → keyweaver-backend → Settings → Environment Variables
+# Cuemark billing — Vercel env vars (keyweaver-backend)
+# Dashboard → Settings → Environment Variables → redeploy after changes
 
-# Already exists (Keyweaver)
-NEXT_PUBLIC_SUPABASE_URL=
-SUPABASE_SERVICE_ROLE_KEY=
-STRIPE_SECRET_KEY=
-RESEND_API_KEY=
-
-# New — add these
 NEXT_PUBLIC_SITE_URL=https://keyweaver.io
+STRIPE_SECRET_KEY=sk_live_...
 
-# Stripe webhook secret — get from Stripe dashboard after registering the webhook
-# Stripe → Developers → Webhooks → Add endpoint
+# Webhook: Stripe → Developers → Webhooks
 # URL: https://keyweaver-backend.vercel.app/api/captio/stripe-webhook
-# Events to listen for:
-#   checkout.session.completed
-#   invoice.paid
-#   invoice.payment_failed
-#   customer.subscription.deleted
-STRIPE_WEBHOOK_SECRET=whsec_...
+# Events: checkout.session.completed, invoice.paid, invoice.payment_failed, customer.subscription.deleted
+STRIPE_CAPTIO_WEBHOOK_SECRET=whsec_...
+# Legacy alias also supported:
+# STRIPE_WEBHOOK_SECRET=whsec_...
 
-# Stripe Price IDs — get from Stripe dashboard → Products → Prices
-# keyweaver_credits_499 product (one-time)
+# Per-currency price IDs (preferred)
 STRIPE_PRICE_CREDITS_GBP=price_...
 STRIPE_PRICE_CREDITS_EUR=price_...
 STRIPE_PRICE_CREDITS_USD=price_...
-
-# keyweaver_monthly_1200 product (recurring)
 STRIPE_PRICE_MONTHLY_GBP=price_...
 STRIPE_PRICE_MONTHLY_EUR=price_...
 STRIPE_PRICE_MONTHLY_USD=price_...
+
+# Legacy single-price fallbacks (GBP only)
+# STRIPE_PRICE_CREDITS=price_...
+# STRIPE_PRICE_MONTHLY=price_...
+
+# Diagnostic endpoint after deploy:
+# GET https://keyweaver-backend.vercel.app/api/captio/billing-config

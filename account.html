@@ -559,6 +559,7 @@
     const planBadge = document.getElementById('plan-badge');
     const planMap = {
       free:           { label: 'Free',    name: 'Free plan',      detail: '3 transcription jobs · clips up to 15 min', badge: 'free' },
+      spark:          { label: 'Free',    name: 'Free plan',      detail: '3 transcription jobs · clips up to 15 min', badge: 'free' },
       captio_monthly: { label: 'Monthly', name: 'Monthly plan',   detail: '300 credits/month · up to 150 rollover', badge: 'active' },
       studio:         { label: 'Studio',  name: 'Studio plan',    detail: '150 credits/month included', badge: 'active' },
       director:       { label: 'Director',name: 'Director plan',  detail: '400 credits/month included', badge: 'active' },
@@ -577,8 +578,11 @@
         <button class="btn-manage btn-manage-secondary" onclick="manageSubscription()">Manage subscription</button>
         <button class="btn-manage btn-manage-secondary" style="color:var(--danger);border-color:rgba(226,75,74,0.3);" onclick="cancelSubscription()">Cancel subscription</button>
       `;
-    } else if (tier === 'free') {
-      actionsEl.innerHTML = `<a href="/pricing" class="btn-manage btn-manage-primary">Upgrade plan</a>`;
+    } else if (tier === 'free' || tier === 'spark') {
+      actionsEl.innerHTML = `
+        <a href="/pricing" class="btn-manage btn-manage-primary">Upgrade plan</a>
+        <button class="btn-manage btn-manage-secondary" onclick="buyCredits()">Buy credits</button>
+      `;
     } else {
       actionsEl.innerHTML = `<button class="btn-manage btn-manage-secondary" onclick="manageSubscription()">Manage subscription</button>`;
     }
@@ -620,8 +624,31 @@
       headers: { 'Authorization': 'Bearer ' + token }
     })
     .then(r => r.json())
-    .then(d => { if (d.url) window.location.href = d.url; })
+    .then(d => { if (d.url) window.location.href = d.url; else showToast(d.error || 'Could not open billing portal.'); })
     .catch(() => showToast('Could not open billing portal. Try again.'));
+  }
+
+  async function buyCredits() {
+    const token = localStorage.getItem('cc_token');
+    if (!token) { window.location.href = '/login'; return; }
+    try {
+      const res = await fetch(BACKEND + '/api/captio/checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({ plan: 'credits', currency: 'gbp' })
+      });
+      const data = await res.json();
+      if (res.ok && data.checkout_url) {
+        window.location.href = data.checkout_url;
+      } else {
+        showToast(data.error || 'Could not start checkout.');
+      }
+    } catch {
+      showToast('Could not reach the server.');
+    }
   }
 
   function cancelSubscription() {
