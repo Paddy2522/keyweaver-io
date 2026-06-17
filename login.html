@@ -176,6 +176,11 @@
     }
 
     /* MAGIC LINK */
+    .cuemark-turnstile-wrap {
+      margin: 0 0 1rem;
+      min-height: 68px;
+    }
+
     .btn-magic {
       width: 100%; height: 44px;
       background: var(--lift); color: var(--text);
@@ -267,6 +272,10 @@
 
     <div class="or-divider"><span>or</span></div>
 
+    <div class="cuemark-turnstile-wrap" id="login-turnstile-wrap">
+      <div id="login-turnstile"></div>
+    </div>
+
     <button type="button" class="btn-magic" id="magic-btn">
       <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
       Email me a sign-in link
@@ -282,8 +291,16 @@
   <p>By signing in you agree to our <a href="/legal/terms">Terms</a> and <a href="/legal/privacy">Privacy Policy</a>.</p>
 </footer>
 
+<script src="/js/turnstile-config.js"></script>
+<script src="/js/cuemark-turnstile.js"></script>
 <script>
   const BACKEND = 'https://keyweaver-backend.vercel.app';
+
+  if (window.CuemarkTurnstile) {
+    const wrap = document.getElementById('login-turnstile-wrap');
+    if (wrap) wrap.style.display = CuemarkTurnstile.enabled() ? '' : 'none';
+    CuemarkTurnstile.mount('login-turnstile').catch(function () {});
+  }
 
   function loginRedirectTarget() {
     const next = new URLSearchParams(window.location.search).get('next');
@@ -388,15 +405,28 @@
     btn.disabled = true;
     btn.textContent = 'Sending…';
 
+    let turnstileToken = '';
+    try {
+      if (window.CuemarkTurnstile) {
+        turnstileToken = await CuemarkTurnstile.requireToken('login-turnstile');
+      }
+    } catch (err) {
+      showAlert(err.message || 'Please complete the security check.', 'error');
+      btn.disabled = false;
+      btn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> Email me a sign-in link';
+      return;
+    }
+
     try {
       const res = await fetch(BACKEND + '/api/captio/magic-link', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email })
+        body: JSON.stringify({ email, turnstile_token: turnstileToken || undefined })
       });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
         showAlert(data.error || 'Could not send sign-in link. Try your password instead.', 'error');
+        if (window.CuemarkTurnstile) CuemarkTurnstile.reset('login-turnstile');
       } else {
         document.getElementById('magic-sent').style.display = 'block';
         showAlert('', '');

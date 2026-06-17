@@ -205,6 +205,11 @@
 
     .marketing-name-wrap { margin-top: 1rem; }
 
+    .cuemark-turnstile-wrap {
+      margin: 1rem 0 0.25rem;
+      min-height: 68px;
+    }
+
     /* PLAN CARDS */
     .plan-cards {
       display: flex; flex-direction: column; gap: 10px;
@@ -400,6 +405,10 @@
         </span>
       </label>
 
+      <div class="cuemark-turnstile-wrap" id="signup-turnstile-wrap">
+        <div id="signup-turnstile"></div>
+      </div>
+
       <button class="btn-submit" id="step2-btn">
         <span id="step2-label">Create account</span>
         <div class="spinner" id="step2-spinner"></div>
@@ -428,6 +437,8 @@
   <p>© 2026 Keyweaver · <a href="/legal/privacy">Privacy</a> · <a href="/legal/terms">Terms</a></p>
 </footer>
 
+<script src="/js/turnstile-config.js"></script>
+<script src="/js/cuemark-turnstile.js"></script>
 <script src="/js/pricing-currency.js"></script>
 <script>
   const BACKEND = 'https://keyweaver-backend.vercel.app';
@@ -508,6 +519,11 @@
     }
     currentStep = n;
     clearAlert();
+    if (n === 2 && window.CuemarkTurnstile) {
+      const wrap = document.getElementById('signup-turnstile-wrap');
+      if (wrap) wrap.style.display = CuemarkTurnstile.enabled() ? '' : 'none';
+      CuemarkTurnstile.mount('signup-turnstile').catch(function () {});
+    }
   }
 
   // Plan selection
@@ -588,6 +604,19 @@
     document.getElementById('step2-spinner').style.display = 'block';
     document.getElementById('step2-btn').disabled = true;
 
+    let turnstileToken = '';
+    try {
+      if (window.CuemarkTurnstile) {
+        turnstileToken = await CuemarkTurnstile.requireToken('signup-turnstile');
+      }
+    } catch (err) {
+      showAlert(err.message || 'Please complete the security check.', 'error');
+      document.getElementById('step2-label').textContent = 'Create account';
+      document.getElementById('step2-spinner').style.display = 'none';
+      document.getElementById('step2-btn').disabled = false;
+      return;
+    }
+
     try {
       const res = await fetch(BACKEND + '/api/captio/signup', {
         method: 'POST',
@@ -597,13 +626,15 @@
           password,
           plan,
           marketing_opt_in: marketingOptIn,
-          name: marketingOptIn ? name : undefined
+          name: marketingOptIn ? name : undefined,
+          turnstile_token: turnstileToken || undefined
         })
       });
       const data = await res.json();
 
       if (!res.ok) {
         showAlert(data.error || 'Something went wrong. Please try again.', 'error');
+        if (window.CuemarkTurnstile) CuemarkTurnstile.reset('signup-turnstile');
         document.getElementById('step2-label').textContent = 'Create account';
         document.getElementById('step2-spinner').style.display = 'none';
         document.getElementById('step2-btn').disabled = false;

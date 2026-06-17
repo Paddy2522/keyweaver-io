@@ -82,6 +82,7 @@
           '<textarea id="kw-help-message" name="message" placeholder="Tell us what you need…" maxlength="4000" required></textarea>' +
         '</div>' +
         '<input type="text" class="kw-help-hp" name="company" tabindex="-1" autocomplete="off" aria-hidden="true" />' +
+        '<div class="kw-field cuemark-turnstile-wrap"><div id="kw-help-turnstile"></div></div>' +
         '<button type="submit" class="kw-help-submit" id="kw-help-submit">' +
           '<span class="kw-help-submit-label">Send message</span>' +
           '<span class="kw-help-spinner" aria-hidden="true"></span>' +
@@ -120,6 +121,9 @@
       lastFocus = document.activeElement;
       var nameInput = document.getElementById('kw-help-name');
       if (nameInput) nameInput.focus();
+      if (window.CuemarkTurnstile) {
+        CuemarkTurnstile.mount('kw-help-turnstile').catch(function () {});
+      }
     } else if (lastFocus && lastFocus.focus) {
       lastFocus.focus();
     }
@@ -195,21 +199,29 @@
     submitBtn.disabled = true;
     submitBtn.classList.add('is-loading');
 
-    fetch(BACKEND + '/api/captio/contact', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        name: name,
-        email: email,
-        type: type,
-        message: message,
-        page: window.location.href
-      })
+    var turnstilePromise = window.CuemarkTurnstile
+      ? CuemarkTurnstile.requireToken('kw-help-turnstile')
+      : Promise.resolve('');
+
+    turnstilePromise.then(function (turnstileToken) {
+      return fetch(BACKEND + '/api/captio/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: name,
+          email: email,
+          type: type,
+          message: message,
+          page: window.location.href,
+          turnstile_token: turnstileToken || undefined
+        })
+      });
     })
       .then(function (res) { return res.json().then(function (data) { return { ok: res.ok, data: data }; }); })
       .then(function (result) {
         if (!result.ok) {
           showError((result.data && result.data.error) || 'Could not send your message. Try again or email hello@keyweaver.io.');
+          if (window.CuemarkTurnstile) CuemarkTurnstile.reset('kw-help-turnstile');
           submitBtn.disabled = false;
           submitBtn.classList.remove('is-loading');
           return;
@@ -218,8 +230,9 @@
         successEl.classList.add('is-visible');
         submitBtn.classList.remove('is-loading');
       })
-      .catch(function () {
-        showError('Could not reach the server. Check your connection or email hello@keyweaver.io.');
+      .catch(function (err) {
+        showError(err && err.message ? err.message : 'Could not reach the server. Check your connection or email hello@keyweaver.io.');
+        if (window.CuemarkTurnstile) CuemarkTurnstile.reset('kw-help-turnstile');
         submitBtn.disabled = false;
         submitBtn.classList.remove('is-loading');
       });
