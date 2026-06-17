@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" href="/images/favicon.svg" type="image/svg+xml" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/css/nav-brand.css" />
+  <title>Release notes — Cuemark by Keyweaver</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --ink: #0A0A0F; --surface: #13131A; --lift: #1C1C28; --edge: #2A2A3D;
+      --accent: #5B6BF8; --accent2: #7B8BFF; --text: #E8E8F0; --muted: #6B6B88;
+      --success: #4CAF83;
+    }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--ink); color: var(--text); }
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem; height: 56px; border-bottom: 1px solid var(--edge);
+      position: sticky; top: 0; background: rgba(10,10,15,0.9); backdrop-filter: blur(12px); z-index: 10;
+    }
+    .nav-back { font-size: 13px; color: var(--muted); text-decoration: none; }
+    .nav-back:hover { color: var(--text); }
+    .page { max-width: 720px; margin: 0 auto; padding: 4rem 2rem 6rem; }
+    .page-label { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin-bottom: 0.75rem; }
+    h1 { font-family: 'Syne', sans-serif; font-size: 2.25rem; font-weight: 800; margin-bottom: 0.75rem; letter-spacing: -0.02em; }
+    .page-intro { color: var(--muted); font-size: 15px; line-height: 1.7; margin-bottom: 2.5rem; }
+    .page-intro a { color: var(--accent2); text-decoration: none; }
+    #changelog-list { display: flex; flex-direction: column; gap: 1.5rem; }
+    .changelog-release {
+      background: var(--surface); border: 1px solid var(--edge); border-radius: 12px;
+      padding: 1.5rem 1.75rem;
+    }
+    .changelog-release.is-latest { border-color: rgba(91,107,248,0.45); }
+    .changelog-release-head {
+      display: flex; align-items: center; flex-wrap: wrap; gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+    .changelog-version {
+      font-family: 'Syne', sans-serif; font-size: 1.35rem; font-weight: 700; margin: 0;
+    }
+    .changelog-date { font-size: 13px; color: var(--muted); }
+    .changelog-badge {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+      background: rgba(76,175,131,0.15); color: var(--success);
+      padding: 3px 10px; border-radius: 100px;
+    }
+    .changelog-section-title {
+      font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--muted); margin: 0 0 0.5rem;
+    }
+    .changelog-section-title:not(:first-of-type) { margin-top: 1.25rem; }
+    .changelog-release ul {
+      margin: 0; padding-left: 1.2rem; color: var(--muted); font-size: 14px; line-height: 1.75;
+    }
+    .changelog-release li + li { margin-top: 0.35rem; }
+    .changelog-error {
+      padding: 1rem 1.25rem; border-radius: 8px;
+      background: rgba(226,75,74,0.1); border: 1px solid rgba(226,75,74,0.25);
+      color: #f0a0a0; font-size: 14px;
+    }
+    footer {
+      border-top: 1px solid var(--edge); padding: 2rem; text-align: center;
+      font-size: 13px; color: var(--muted);
+    }
+    footer a { color: var(--muted); margin: 0 0.5rem; text-decoration: none; }
+    footer a:hover { color: var(--text); }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="/" class="nav-logo" aria-label="Cuemark by Keyweaver">
+    <img src="/images/cuemark-logo.svg" alt="" class="nav-logo-img" width="327" height="28" />
+  </a>
+  <a href="/download" class="nav-back">← Download</a>
+</nav>
+
+<div class="page">
+  <p class="page-label">Cuemark releases</p>
+  <h1>Release notes</h1>
+  <p class="page-intro">
+    What changed in each Cuemark plugin and website update.
+    Download the latest from the <a href="/download">download page</a>.
+  </p>
+  <div id="changelog-list">
+    <p style="color:var(--muted);font-size:14px;">Loading release notes…</p>
+  </div>
+</div>
+
+<footer>
+  <p>© 2026 Keyweaver</p>
+  <a href="/download">Download</a>
+  <a href="/help">Help</a>
+  <a href="/legal/privacy">Privacy</a>
+</footer>
+
+<script src="/js/changelog.js"></script>
+<script>
+  (async function () {
+    var list = document.getElementById('changelog-list');
+    try {
+      var data = await CuemarkChangelog.fetchChangelog();
+      CuemarkChangelog.renderAll(list, data);
+    } catch (err) {
+      list.innerHTML = '<div class="changelog-error">Could not load release notes. Try again later.</div>';
+    }
+  })();
+</script>
+</body>
+</html>

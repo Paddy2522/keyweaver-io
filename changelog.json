@@ -1,0 +1,51 @@
+{
+  "product": "Cuemark",
+  "releases": [
+    {
+      "version": "1.1.2",
+      "date": "2026-06-17",
+      "panel": [
+        "Generate confirm waits for your credit balance before transcribing",
+        "Clear message when you do not have enough credits (with link to buy more)",
+        "Video files always use bundled ffmpeg for audio extract — including small clips",
+        "Improved credit balance loading and error states"
+      ],
+      "website": [
+        "Free tier copy now reflects 3 credits (~3 minutes), not \"3 jobs\"",
+        "Login returns you to the page you came from after sign-in",
+        "Release notes page added",
+        "Outlined brand logo and favicon on all pages"
+      ]
+    },
+    {
+      "version": "1.1.1",
+      "date": "2026-06-14",
+      "panel": [
+        "SRT, VTT, and CSV subtitle export from the Generate tab",
+        "Bundled ffmpeg on Windows — video transcribe without AE Render Queue",
+        "Per-edit-comp subtitle sessions (Cuemark Subtitles precomp per comp)",
+        "15-minute max clip length per generate",
+        "Cuemark rebrand and version update notice in panel"
+      ],
+      "website": [
+        "Zip-first Windows installer (SmartScreen-friendly)",
+        "Account self-serve: change email, password, delete account",
+        "Magic link sign-in and billing fixes",
+        "Download URLs via GitHub Releases"
+      ]
+    },
+    {
+      "version": "1.1.0",
+      "date": "2026-06-12",
+      "panel": [
+        "Initial public Cuemark release for After Effects 2022+",
+        "AI transcription with 10 presets and 14 animations",
+        "Style, Text, and Presets tabs with native AE text layers"
+      ],
+      "website": [
+        "keyweaver.io marketing site and signup flow",
+        "Free plan with 3 starter credits"
+      ]
+    }
+  ]
+}

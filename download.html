@@ -305,6 +305,47 @@
     }
     .faq-item.open .faq-a { display: block; }
 
+    /* RELEASE NOTES */
+    .release-notes-section { margin-top: 3rem; }
+    .release-notes-section .section-label {
+      font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--accent); font-weight: 600; margin-bottom: 0.75rem;
+    }
+    .release-notes-section .section-title {
+      font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 700;
+      letter-spacing: -0.02em; margin-bottom: 1.25rem;
+    }
+    #changelog-latest { margin-bottom: 1rem; }
+    #changelog-latest .changelog-release {
+      background: var(--surface); border: 1px solid var(--edge); border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+    }
+    #changelog-latest .changelog-release.is-latest { border-color: rgba(91,107,248,0.45); }
+    #changelog-latest .changelog-release-head {
+      display: flex; align-items: center; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1rem;
+    }
+    #changelog-latest .changelog-version {
+      font-family: 'Syne', sans-serif; font-size: 1.15rem; font-weight: 700; margin: 0;
+    }
+    #changelog-latest .changelog-date { font-size: 13px; color: var(--muted); }
+    #changelog-latest .changelog-badge {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+      background: rgba(76,175,131,0.15); color: var(--success);
+      padding: 3px 10px; border-radius: 100px;
+    }
+    #changelog-latest .changelog-section-title {
+      font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--muted); margin: 0 0 0.5rem;
+    }
+    #changelog-latest .changelog-section-title:not(:first-of-type) { margin-top: 1rem; }
+    #changelog-latest ul {
+      margin: 0; padding-left: 1.2rem; color: var(--muted); font-size: 14px; line-height: 1.7;
+    }
+    .changelog-all-link {
+      font-size: 14px; color: var(--accent2); text-decoration: none; font-weight: 500;
+    }
+    .changelog-all-link:hover { color: var(--text); }
+
     /* DIVIDER */
     hr { border: none; border-top: 1px solid var(--edge); }
 
@@ -351,7 +392,7 @@
   <div class="hero">
     <div class="hero-eyebrow">
       <span class="version-dot"></span>
-      Version <span id="download-version">1.1.1</span> · Free to install
+      Version <span id="download-version">1.1.2</span> · Free to install
     </div>
     <h1>Download Cuemark</h1>
     <p>An After Effects plugin — install it once and it lives inside your panel. No browser required to use it.</p>
@@ -569,6 +610,16 @@
 
     <hr style="margin: 3rem 0;" />
 
+    <!-- RELEASE NOTES -->
+    <div class="release-notes-section">
+      <p class="section-label">Release notes</p>
+      <h2 class="section-title">What's new</h2>
+      <div id="changelog-latest"></div>
+      <a href="/changelog" class="changelog-all-link">View all releases →</a>
+    </div>
+
+    <hr style="margin: 3rem 0;" />
+
     <!-- FAQ -->
     <p class="section-label">Troubleshooting</p>
     <h2 class="section-title" style="margin-bottom:0;">Common questions</h2>
@@ -650,6 +701,7 @@
   <ul class="footer-links">
     <li><a href="/legal/privacy">Privacy</a></li>
     <li><a href="/legal/terms">Terms</a></li>
+    <li><a href="/changelog">Release notes</a></li>
     <li><a href="/help">Help</a></li>
     <li><a href="/about">About</a></li>
   </ul>
@@ -686,7 +738,7 @@
 
   // Resolve download URLs (GitHub Releases — Vercel cannot host ~140 MB of installers)
   (async function loadDownloadUrls() {
-    let version = '1.1.1';
+    let version = '1.1.2';
     const fileNames = {
       winZip: '',
       macZip: ''
@@ -727,6 +779,19 @@
     } catch {
       setVersion(version);
       applyUrls({ fallbackPrefix: '/downloads/', files: {} });
+    }
+  })();
+</script>
+<script src="/js/changelog.js"></script>
+<script>
+  (async function () {
+    var el = document.getElementById('changelog-latest');
+    if (!el) { return; }
+    try {
+      var data = await CuemarkChangelog.fetchChangelog();
+      CuemarkChangelog.renderLatest(el, data);
+    } catch (e) {
+      el.innerHTML = '<p style="font-size:14px;color:var(--muted);"><a href="/changelog" style="color:var(--accent2);">View release notes</a></p>';
     }
   })();
 </script>
