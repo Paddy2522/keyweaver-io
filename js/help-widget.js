@@ -110,6 +110,33 @@
   var closeBtn = panel.querySelector('.kw-help-close');
   var lastFocus = null;
 
+  function prefillFromAccount() {
+    var token = localStorage.getItem('cc_token');
+    if (!token) {
+      return;
+    }
+    var emailEl = document.getElementById('kw-help-email');
+    if (!emailEl || emailEl.value.trim()) {
+      return;
+    }
+    fetch(BACKEND + '/api/captio/account', {
+      headers: { Authorization: 'Bearer ' + token }
+    })
+      .then(function (res) {
+        if (!res.ok) {
+          return null;
+        }
+        return res.json();
+      })
+      .then(function (data) {
+        if (!data || !data.email || emailEl.value.trim()) {
+          return;
+        }
+        emailEl.value = data.email;
+      })
+      .catch(function () {});
+  }
+
   function setOpen(open) {
     launcher.setAttribute('aria-expanded', open ? 'true' : 'false');
     panel.setAttribute('aria-hidden', open ? 'false' : 'true');
@@ -119,8 +146,14 @@
 
     if (open) {
       lastFocus = document.activeElement;
+      prefillFromAccount();
       var nameInput = document.getElementById('kw-help-name');
-      if (nameInput) nameInput.focus();
+      if (nameInput && !nameInput.value.trim()) {
+        nameInput.focus();
+      } else {
+        var emailInput = document.getElementById('kw-help-email');
+        if (emailInput) emailInput.focus();
+      }
       if (window.CuemarkTurnstile) {
         CuemarkTurnstile.prepare('kw-help-turnstile-wrap', 'kw-help-turnstile').catch(function () {});
       }
