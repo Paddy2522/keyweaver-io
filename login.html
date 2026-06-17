@@ -261,6 +261,10 @@
         <a href="/forgot-password" class="forgot-link">Sign-in link</a>
       </div>
 
+      <div class="cuemark-turnstile-wrap" id="login-turnstile-wrap">
+        <div id="login-turnstile"></div>
+      </div>
+
       <button type="submit" class="btn-submit" id="submit-btn">
         <span id="btn-label">Sign in</span>
         <div class="spinner" id="spinner"></div>
@@ -268,10 +272,6 @@
     </form>
 
     <div class="or-divider"><span>or</span></div>
-
-    <div class="cuemark-turnstile-wrap" id="login-turnstile-wrap">
-      <div id="login-turnstile"></div>
-    </div>
 
     <button type="button" class="btn-magic" id="magic-btn">
       <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
@@ -362,16 +362,28 @@
 
     setLoading(true);
 
+    let turnstileToken = '';
+    try {
+      if (window.CuemarkTurnstile) {
+        turnstileToken = await CuemarkTurnstile.requireToken('login-turnstile');
+      }
+    } catch (err) {
+      showAlert(err.message || 'Please complete the security check.', 'error');
+      setLoading(false);
+      return;
+    }
+
     try {
       const res = await fetch(BACKEND + '/api/captio/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email, password, turnstile_token: turnstileToken || undefined })
       });
       const data = await res.json();
 
       if (!res.ok) {
         showAlert(data.error || 'Incorrect email or password.', 'error');
+        if (window.CuemarkTurnstile) CuemarkTurnstile.reset('login-turnstile');
         setLoading(false);
         return;
       }
@@ -383,6 +395,7 @@
 
     } catch (err) {
       showAlert('Could not reach the server. Please try again.', 'error');
+      if (window.CuemarkTurnstile) CuemarkTurnstile.reset('login-turnstile');
       setLoading(false);
     }
   });

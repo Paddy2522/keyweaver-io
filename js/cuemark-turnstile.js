@@ -59,6 +59,31 @@
     return scriptPromise;
   }
 
+  /** Mount only if this container does not already have a live widget. */
+  function ensureMounted(containerId) {
+    return loadConfig().then(function () {
+      return loadScript().then(function () {
+        if (!enabled()) {
+          return null;
+        }
+        var el = document.getElementById(containerId);
+        if (!el) {
+          return null;
+        }
+        if (widgets[containerId] != null && global.turnstile) {
+          return widgets[containerId];
+        }
+        el.innerHTML = '';
+        widgets[containerId] = global.turnstile.render(el, {
+          sitekey: siteKey(),
+          theme: 'dark'
+        });
+        return widgets[containerId];
+      });
+    });
+  }
+
+  /** Force a fresh widget (after failed submit or token consumed). */
   function mount(containerId) {
     return loadConfig().then(function () {
       return loadScript().then(function () {
@@ -70,7 +95,10 @@
           return null;
         }
         if (widgets[containerId] != null && global.turnstile) {
-          global.turnstile.remove(widgets[containerId]);
+          try {
+            global.turnstile.remove(widgets[containerId]);
+          } catch (removeErr) {}
+          widgets[containerId] = null;
         }
         el.innerHTML = '';
         widgets[containerId] = global.turnstile.render(el, {
@@ -93,7 +121,7 @@
       if (!key) {
         return null;
       }
-      return mount(containerId);
+      return ensureMounted(containerId);
     });
   }
 
@@ -105,24 +133,34 @@
   }
 
   function reset(containerId) {
-    if (!enabled() || !global.turnstile || widgets[containerId] == null) {
+    var el = document.getElementById(containerId);
+    if (!enabled() || !global.turnstile) {
+      widgets[containerId] = null;
+      if (el) { el.innerHTML = ''; }
       return;
     }
-    global.turnstile.reset(widgets[containerId]);
+    if (widgets[containerId] != null) {
+      try {
+        global.turnstile.reset(widgets[containerId]);
+      } catch (resetErr) {
+        widgets[containerId] = null;
+        if (el) { el.innerHTML = ''; }
+      }
+      return;
+    }
+    if (el) { el.innerHTML = ''; }
   }
 
   function requireToken(containerId) {
-    return loadConfig().then(function () {
+    return ensureMounted(containerId).then(function () {
       if (!enabled()) {
         return '';
       }
-      return mount(containerId).then(function () {
-        var token = getToken(containerId);
-        if (token) {
-          return token;
-        }
-        throw new Error('Please complete the security check.');
-      });
+      var token = getToken(containerId);
+      if (token) {
+        return token;
+      }
+      throw new Error('Please complete the security check.');
     });
   }
 
@@ -130,6 +168,7 @@
     loadConfig: loadConfig,
     enabled: enabled,
     prepare: prepare,
+    ensureMounted: ensureMounted,
     mount: mount,
     getToken: getToken,
     reset: reset,

@@ -157,8 +157,13 @@
       if (window.CuemarkTurnstile) {
         CuemarkTurnstile.prepare('kw-help-turnstile-wrap', 'kw-help-turnstile').catch(function () {});
       }
-    } else if (lastFocus && lastFocus.focus) {
-      lastFocus.focus();
+    } else {
+      if (window.CuemarkTurnstile) {
+        CuemarkTurnstile.reset('kw-help-turnstile');
+      }
+      if (lastFocus && lastFocus.focus) {
+        lastFocus.focus();
+      }
     }
   }
 
@@ -232,12 +237,18 @@
     submitBtn.disabled = true;
     submitBtn.classList.add('is-loading');
 
-    var turnstilePromise = window.CuemarkTurnstile
-      ? CuemarkTurnstile.requireToken('kw-help-turnstile')
-      : Promise.resolve('');
+    let turnstileToken = '';
+    if (window.CuemarkTurnstile && CuemarkTurnstile.enabled()) {
+      turnstileToken = CuemarkTurnstile.getToken('kw-help-turnstile');
+      if (!turnstileToken) {
+        showError('Please complete the security check below.');
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('is-loading');
+        return;
+      }
+    }
 
-    turnstilePromise.then(function (turnstileToken) {
-      return fetch(BACKEND + '/api/captio/contact', {
+    fetch(BACKEND + '/api/captio/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -248,8 +259,7 @@
           page: window.location.href,
           turnstile_token: turnstileToken || undefined
         })
-      });
-    })
+      })
       .then(function (res) { return res.json().then(function (data) { return { ok: res.ok, data: data }; }); })
       .then(function (result) {
         if (!result.ok) {
@@ -262,6 +272,7 @@
         form.style.display = 'none';
         successEl.classList.add('is-visible');
         submitBtn.classList.remove('is-loading');
+        if (window.CuemarkTurnstile) CuemarkTurnstile.reset('kw-help-turnstile');
       })
       .catch(function (err) {
         showError(err && err.message ? err.message : 'Could not reach the server. Check your connection or email hello@keyweaver.io.');
