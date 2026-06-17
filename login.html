@@ -283,6 +283,12 @@
 <script>
   const BACKEND = 'https://keyweaver-backend.vercel.app';
 
+  function loginRedirectTarget() {
+    const next = new URLSearchParams(window.location.search).get('next');
+    if (!next || !next.startsWith('/') || next.startsWith('//')) return '/account';
+    return next;
+  }
+
   const loginErrors = {
     invalid_link: 'That sign-in link is invalid. Request a new one or use your password.',
     link_used: 'That sign-in link was already used. Sign in with your password instead.',
@@ -360,8 +366,7 @@
       // Store token — same key the panel uses
       localStorage.setItem('cc_token', data.token);
 
-      // Redirect to account dashboard
-      window.location.href = '/account';
+      window.location.href = loginRedirectTarget();
 
     } catch (err) {
       showAlert('Could not reach the server. Please try again.', 'error');
@@ -403,9 +408,8 @@
     btn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> Email me a sign-in link';
   });
 
-  // If already logged in, redirect
   if (localStorage.getItem('cc_token')) {
-    window.location.href = '/account';
+    window.location.href = loginRedirectTarget();
   }
 </script>
 </body>
