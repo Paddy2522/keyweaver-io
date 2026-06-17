@@ -291,15 +291,12 @@
   <p>By signing in you agree to our <a href="/legal/terms">Terms</a> and <a href="/legal/privacy">Privacy Policy</a>.</p>
 </footer>
 
-<script src="/js/turnstile-config.js"></script>
 <script src="/js/cuemark-turnstile.js"></script>
 <script>
   const BACKEND = 'https://keyweaver-backend.vercel.app';
 
   if (window.CuemarkTurnstile) {
-    const wrap = document.getElementById('login-turnstile-wrap');
-    if (wrap) wrap.style.display = CuemarkTurnstile.enabled() ? '' : 'none';
-    CuemarkTurnstile.mount('login-turnstile').catch(function () {});
+    CuemarkTurnstile.prepare('login-turnstile-wrap', 'login-turnstile').catch(function () {});
   }
 
   function loginRedirectTarget() {

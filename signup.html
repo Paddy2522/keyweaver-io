@@ -437,7 +437,6 @@
   <p>© 2026 Keyweaver · <a href="/legal/privacy">Privacy</a> · <a href="/legal/terms">Terms</a></p>
 </footer>
 
-<script src="/js/turnstile-config.js"></script>
 <script src="/js/cuemark-turnstile.js"></script>
 <script src="/js/pricing-currency.js"></script>
 <script>
@@ -520,9 +519,7 @@
     currentStep = n;
     clearAlert();
     if (n === 2 && window.CuemarkTurnstile) {
-      const wrap = document.getElementById('signup-turnstile-wrap');
-      if (wrap) wrap.style.display = CuemarkTurnstile.enabled() ? '' : 'none';
-      CuemarkTurnstile.mount('signup-turnstile').catch(function () {});
+      CuemarkTurnstile.prepare('signup-turnstile-wrap', 'signup-turnstile').catch(function () {});
     }
   }
 

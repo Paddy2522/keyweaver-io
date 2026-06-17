@@ -82,7 +82,7 @@
           '<textarea id="kw-help-message" name="message" placeholder="Tell us what you need…" maxlength="4000" required></textarea>' +
         '</div>' +
         '<input type="text" class="kw-help-hp" name="company" tabindex="-1" autocomplete="off" aria-hidden="true" />' +
-        '<div class="kw-field cuemark-turnstile-wrap"><div id="kw-help-turnstile"></div></div>' +
+        '<div class="kw-field cuemark-turnstile-wrap" id="kw-help-turnstile-wrap"><div id="kw-help-turnstile"></div></div>' +
         '<button type="submit" class="kw-help-submit" id="kw-help-submit">' +
           '<span class="kw-help-submit-label">Send message</span>' +
           '<span class="kw-help-spinner" aria-hidden="true"></span>' +
@@ -122,7 +122,7 @@
       var nameInput = document.getElementById('kw-help-name');
       if (nameInput) nameInput.focus();
       if (window.CuemarkTurnstile) {
-        CuemarkTurnstile.mount('kw-help-turnstile').catch(function () {});
+        CuemarkTurnstile.prepare('kw-help-turnstile-wrap', 'kw-help-turnstile').catch(function () {});
       }
     } else if (lastFocus && lastFocus.focus) {
       lastFocus.focus();
