@@ -1,25 +1,72 @@
-{
-  "product": "Cuemark",
-  "releases": [
-    {
-      "version": "1.0.0",
-      "date": "2026-06-18",
-      "panel": [
-        "Cuemark by Keyweaver — AI subtitles as native After Effects text layers",
-        "10 presets and 13 animations with full Style, Text, and Presets controls",
-        "SRT, VTT, and CSV subtitle export from the Generate tab",
-        "Bundled ffmpeg on Windows — video transcription without the AE Render Queue",
-        "Per-edit-comp subtitle sessions (Cuemark Subtitles precomp per comp)",
-        "15-minute max clip length per generate; credit balance checked before transcribe",
-        "Account menu with in-panel update notice when a newer version is available"
-      ],
-      "website": [
-        "keyweaver.io — signup, account, pricing, help, and download pages",
-        "Windows and macOS zip installers via GitHub Releases",
-        "Free plan with 3 starter credits (~3 minutes of transcription)",
-        "Magic-link sign-in, self-serve account settings, and Stripe billing"
-      ]
-    }
-  ]
-}
-
+{
+
+  "product": "Cuemark",
+
+  "releases": [
+
+    {
+
+      "version": "1.0.1",
+
+      "date": "2026-06-19",
+
+      "panel": [
+
+        "Fix highlight colour picker — RGB and hex editing no longer closes the dialog mid-edit",
+
+        "Hex paste in Style tab colour fields improved (beforeinput + paste handlers)"
+
+      ],
+
+      "website": [
+
+        "Home page hero demo now plays the Cuemark screen recording video",
+
+        "Download links updated to v1.0.1 Windows and macOS installers"
+
+      ]
+
+    },
+
+    {
+
+      "version": "1.0.0",
+
+      "date": "2026-06-18",
+
+      "panel": [
+
+        "Cuemark by Keyweaver — AI subtitles as native After Effects text layers",
+
+        "10 presets and 13 animations with full Style, Text, and Presets controls",
+
+        "SRT, VTT, and CSV subtitle export from the Generate tab",
+
+        "Bundled ffmpeg on Windows — video transcription without the AE Render Queue",
+
+        "Per-edit-comp subtitle sessions (Cuemark Subtitles precomp per comp)",
+
+        "15-minute max clip length per generate; credit balance checked before transcribe",
+
+        "Account menu with in-panel update notice when a newer version is available"
+
+      ],
+
+      "website": [
+
+        "keyweaver.io — signup, account, pricing, help, and download pages",
+
+        "Windows and macOS zip installers via GitHub Releases",
+
+        "Free plan with 3 starter credits (~3 minutes of transcription)",
+
+        "Magic-link sign-in, self-serve account settings, and Stripe billing"
+
+      ]
+
+    }
+
+  ]
+
+}
+

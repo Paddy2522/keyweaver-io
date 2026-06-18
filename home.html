@@ -188,49 +188,17 @@
 
     .caption-demo-screen {
       position: relative;
-      aspect-ratio: 16 / 7;
+      aspect-ratio: 16 / 9;
       background: #07070D;
-      display: flex; align-items: flex-end; justify-content: center;
-      padding-bottom: 10%;
+      overflow: hidden;
     }
 
-    /* fake video content */
-    .demo-video-bg {
-      position: absolute; inset: 0;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .demo-scene-line {
-      width: 60%; height: 1px; background: var(--edge);
-      position: absolute; bottom: 30%;
-    }
-    .demo-scene-shape {
-      width: 120px; height: 80px;
-      border: 1px solid var(--subtle);
-      border-radius: 4px;
-      opacity: 0.3;
-    }
-
-    .demo-caption-bar {
-      position: relative; z-index: 2;
-      background: rgba(0,0,0,0.75);
-      border-radius: 6px;
-      padding: 8px 20px;
-      font-family: 'Inter', sans-serif;
-      font-size: clamp(14px, 2.5vw, 20px);
-      font-weight: 600;
-      color: #fff;
-      display: flex; gap: 0.4em;
-      min-height: 44px; align-items: center;
-    }
-
-    .demo-word {
-      transition: color 0.15s, background 0.15s;
-      border-radius: 3px;
-      padding: 0 2px;
-    }
-    .demo-word.lit {
-      color: var(--accent2);
-      background: rgba(91,107,248,0.2);
+    .demo-hero-video {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
     }
 
     /* ── HOW IT WORKS ── */
@@ -546,13 +514,9 @@
       <span style="margin-left:8px; font-size:11px; color:var(--muted); font-family:'Inter',sans-serif;">Cuemark by Keyweaver · After Effects 2022+</span>
     </div>
     <div class="caption-demo-screen">
-      <div class="demo-video-bg">
-        <div class="demo-scene-shape"></div>
-        <div class="demo-scene-line"></div>
-      </div>
-      <div class="demo-caption-bar" id="demo-caption">
-        <!-- words injected by JS -->
-      </div>
+      <video class="demo-hero-video" autoplay muted loop playsinline preload="metadata" aria-label="Cuemark subtitle demo in After Effects">
+        <source src="/videos/website-main-video.mp4" type="video/mp4" />
+      </video>
     </div>
   </div>
 </section>
@@ -832,42 +796,6 @@
   }
   cycleHeadline();
   setInterval(cycleHeadline, 420);
-
-  // ── DEMO CAPTION ANIMATION ──
-  const demoSentences = [
-    ['Open', 'your', 'edit', 'comp', 'in', 'After', 'Effects'],
-    ['Click', 'Generate', 'Subtitles', 'to', 'transcribe'],
-    ['Captions', 'appear', 'as', 'native', 'AE', 'text', 'layers'],
-    ['Pick', 'presets,', 'style,', 'and', 'export', 'SRT'],
-  ];
-  let sentIdx = 0, wordIdx = 0;
-  const demoCap = document.getElementById('demo-caption');
-
-  function buildSentence(words) {
-    demoCap.innerHTML = '';
-    words.forEach(w => {
-      const sp = document.createElement('span');
-      sp.className = 'demo-word';
-      sp.textContent = w;
-      demoCap.appendChild(sp);
-    });
-  }
-
-  function advanceDemoWord() {
-    const sentence = demoSentences[sentIdx];
-    if (wordIdx === 0) buildSentence(sentence);
-    const words = demoCap.querySelectorAll('.demo-word');
-    words.forEach((w, i) => w.classList.toggle('lit', i < wordIdx + 1));
-    wordIdx++;
-    if (wordIdx >= sentence.length) {
-      wordIdx = 0;
-      sentIdx = (sentIdx + 1) % demoSentences.length;
-      setTimeout(advanceDemoWord, 1400);
-    } else {
-      setTimeout(advanceDemoWord, 320);
-    }
-  }
-  advanceDemoWord();
 
   // ── LOCALISED PRICING ──
 </script>
