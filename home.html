@@ -193,12 +193,17 @@
       overflow: hidden;
     }
 
-    .demo-hero-video {
-      display: block;
+    .demo-hero-stream {
+      position: absolute;
+      inset: 0;
+    }
+
+    .demo-hero-stream iframe {
       width: 100%;
       height: 100%;
-      object-fit: cover;
-      object-position: center;
+      border: 0;
+      display: block;
+      pointer-events: none;
     }
 
     /* ── HOW IT WORKS ── */
@@ -514,9 +519,14 @@
       <span style="margin-left:8px; font-size:11px; color:var(--muted); font-family:'Inter',sans-serif;">Cuemark by Keyweaver · After Effects 2022+</span>
     </div>
     <div class="caption-demo-screen">
-      <video class="demo-hero-video" autoplay muted loop playsinline preload="metadata" aria-label="Cuemark subtitle demo in After Effects">
-        <source src="https://github.com/Paddy2522/keyweaver-io/releases/download/v1.0.1/website-main-video.mp4" type="video/mp4" />
-      </video>
+      <div class="demo-hero-stream">
+        <iframe
+          src="https://iframe.videodelivery.net/149f0f5621f011060bdbe98844e2b91d?autoplay=true&muted=true&loop=true&controls=false&preload=true"
+          loading="eager"
+          allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
+          allowfullscreen
+          title="Cuemark subtitle demo in After Effects"></iframe>
+      </div>
     </div>
   </div>
 </section>
