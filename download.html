@@ -394,7 +394,7 @@
   <div class="hero">
     <div class="hero-eyebrow">
       <span class="version-dot"></span>
-      Version <span id="download-version">1.1.2</span> · Free to install
+      Version <span id="download-version">1.0.0</span> · Free to install
     </div>
     <h1>Download Cuemark</h1>
     <p>An After Effects plugin — install it once and it lives inside your panel. No browser required to use it.</p>
@@ -404,33 +404,14 @@
 
     <!-- OS TOGGLE -->
     <div class="os-toggle" role="group" aria-label="Operating system">
-      <button class="os-btn active" id="os-win" onclick="switchOS('win')">
-        <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M0 2.286L6.571 1.4v6.343H0zm7.429-.857L16 0v7.743H7.429zm0 8.143H16V16l-8.571-1.2zM0 8.457h6.571v6.257L0 13.8z"/></svg>
-        Windows
-      </button>
       <button class="os-btn" id="os-mac" onclick="switchOS('mac')">
         <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M11.182.008C11.148-.03 9.923.023 8.857 1.18c-1.066 1.156-.902 2.482-.878 2.516s1.52.087 2.475-1.258.762-3.158.728-3.43zM7.68 4.56c-.353 0-1.058.34-2.148 1.019-1.09.679-2.246 1.985-2.246 4.088 0 3.023 2.05 6.332 3.953 6.332.673 0 1.358-.253 2.07-.76.71-.507 1.056-.76 1.728-.76.672 0 1.078.267 1.656.76.578.494 1.128.76 1.8.76C16.177 16 18 12.437 18 9.667c0-1.956-.915-3.477-2.745-4.562-.955-.571-2.09-.735-2.745-.735-.57 0-1.283.268-2.14.803-.432.267-.764.44-.945.44s-.512-.173-.945-.44c-.857-.535-1.77-.613-1.8-.613z"/></svg>
         macOS
       </button>
-    </div>
-
-    <!-- WINDOWS DOWNLOAD -->
-    <div class="os-panel active" id="panel-win">
-      <div class="download-card download-card-primary">
-        <div class="download-card-info">
-          <span class="download-badge">Recommended for Windows</span>
-          <h3 id="win-zip-name">Cuemark-Install-win-v1.1.2.zip</h3>
-          <p>Windows 10 / 11 · After Effects 2022+ · ~48 MB download</p>
-        </div>
-        <a href="#" class="btn-download" id="win-download-btn" data-file="winZip">
-          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Download for Windows
-        </a>
-      </div>
-      <p class="install-hint">
-        After download: right-click the zip → <strong>Extract All</strong> → open the folder → double-click <strong>Install-Cuemark.cmd</strong>.
-        A command window runs briefly while Cuemark installs — then restart After Effects.
-      </p>
+      <button class="os-btn active" id="os-win" onclick="switchOS('win')">
+        <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M0 2.286L6.571 1.4v6.343H0zm7.429-.857L16 0v7.743H7.429zm0 8.143H16V16l-8.571-1.2zM0 8.457h6.571v6.257L0 13.8z"/></svg>
+        Windows
+      </button>
     </div>
 
     <!-- MAC DOWNLOAD -->
@@ -438,7 +419,7 @@
       <div class="download-card download-card-primary">
         <div class="download-card-info">
           <span class="download-badge">Recommended for macOS</span>
-          <h3 id="mac-zip-name">Cuemark-Install-mac-v1.1.2.zip</h3>
+          <h3 id="mac-zip-name">Cuemark-Install-mac-v1.0.0.zip</h3>
           <p>macOS 12+ · After Effects 2022+ · ~12 MB download</p>
         </div>
         <a href="#" class="btn-download" id="mac-download-btn" data-file="macZip">
@@ -450,6 +431,25 @@
         After extracting, double-click <strong>Install-Cuemark.command</strong>.
         If macOS blocks it, right-click → <strong>Open</strong> once.
         For video transcription, install <strong>ffmpeg</strong> (<code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent2);">brew install ffmpeg</code>) or export audio-only from your footage.
+      </p>
+    </div>
+
+    <!-- WINDOWS DOWNLOAD -->
+    <div class="os-panel active" id="panel-win">
+      <div class="download-card download-card-primary">
+        <div class="download-card-info">
+          <span class="download-badge">Recommended for Windows</span>
+          <h3 id="win-zip-name">Cuemark-Install-win-v1.0.0.zip</h3>
+          <p>Windows 10 / 11 · After Effects 2022+ · ~48 MB download</p>
+        </div>
+        <a href="#" class="btn-download" id="win-download-btn" data-file="winZip">
+          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download for Windows
+        </a>
+      </div>
+      <p class="install-hint">
+        After download: right-click the zip → <strong>Extract All</strong> → open the folder → double-click <strong>Install-Cuemark.cmd</strong>.
+        A command window runs briefly while Cuemark installs — then restart After Effects.
       </p>
     </div>
 
@@ -483,7 +483,7 @@
           <div class="step-number">1</div>
           <div class="step-body">
             <h3>Download and extract</h3>
-            <p>Download <strong id="win-step-zip-name">Cuemark-Install-win-v1.1.2.zip</strong>, then right-click it and choose <strong>Extract All</strong>. Open the extracted folder.</p>
+            <p>Download <strong id="win-step-zip-name">Cuemark-Install-win-v1.0.0.zip</strong>, then right-click it and choose <strong>Extract All</strong>. Open the extracted folder.</p>
           </div>
         </div>
 
@@ -740,7 +740,7 @@
 
   // Resolve download URLs (GitHub Releases — Vercel cannot host ~140 MB of installers)
   (async function loadDownloadUrls() {
-    let version = '1.1.2';
+    let version = '1.0.0';
     const fileNames = {
       winZip: '',
       macZip: ''
