@@ -253,14 +253,21 @@
     }
 
     .step-icon {
-      width: 40px; height: 40px;
+      width: 100%;
+      aspect-ratio: 16 / 9;
       background: var(--lift);
       border: 1px solid var(--edge);
       border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
       margin-bottom: 1.25rem;
     }
-    .step-icon svg { width: 20px; height: 20px; stroke: var(--accent2); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+    .step-icon img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+    }
 
     .step h3 {
       font-family: 'Syne', sans-serif;
@@ -542,7 +549,7 @@
       <div class="step">
         <span class="step-num">01</span>
         <div class="step-icon">
-          <svg viewBox="0 0 24 24"><path d="M15 10l4.553-2.169A1 1 0 0121 8.82v6.36a1 1 0 01-1.447.893L15 14M3 8a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/></svg>
+          <img src="/images/how-to/step-1.jpg" alt="" width="640" height="360" loading="lazy" />
         </div>
         <h3>Open your edit comp</h3>
         <p>Open the composition with your video or audio in After Effects. Cuemark reads layers in the active comp and shows credit cost before you transcribe.</p>
@@ -550,7 +557,7 @@
       <div class="step">
         <span class="step-num">02</span>
         <div class="step-icon">
-          <svg viewBox="0 0 24 24"><path d="M12 18.5A6.5 6.5 0 105.5 12M12 18.5V21m0-2.5H9.5m2.5 0H15"/><circle cx="12" cy="8" r="1" fill="currentColor" stroke="none"/><path d="M12 11v4"/></svg>
+          <img src="/images/how-to/step-2.jpg" alt="" width="640" height="360" loading="lazy" />
         </div>
         <h3>Generate Subtitles</h3>
         <p>One click sends audio to OpenAI Whisper. Word-level timestamps come back and are cached for free re-wraps and style changes.</p>
@@ -558,7 +565,7 @@
       <div class="step">
         <span class="step-num">03</span>
         <div class="step-icon">
-          <svg viewBox="0 0 24 24"><rect x="3" y="13" width="18" height="6" rx="2"/><path d="M3 9h18M7 5h4"/></svg>
+          <img src="/images/how-to/step-3.jpg" alt="" width="640" height="360" loading="lazy" />
         </div>
         <h3>Style in the panel</h3>
         <p>Native AE text layers land in your timeline — timed, editable, with presets and animations applied from the Cuemark panel.</p>
