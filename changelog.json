@@ -6,6 +6,26 @@
 
     {
 
+      "version": "1.0.2",
+
+      "date": "2026-06-19",
+
+      "panel": [
+
+        "Free plan now includes 5 starter credits (~5 minutes of transcription)",
+
+        "Mobile nav: smaller logo so Sign in / Download buttons stay readable",
+
+        "Download page copy cleanup",
+
+        "Homepage: Caption presets section title; Cloudflare Stream hero demo"
+
+      ]
+
+    },
+
+    {
+
       "version": "1.0.1",
 
       "date": "2026-06-19",
@@ -14,15 +34,9 @@
 
         "Fix highlight colour picker — RGB and hex editing no longer closes the dialog mid-edit",
 
-        "Hex paste in Style tab colour fields improved (beforeinput + paste handlers)"
+        "Hex paste in Style tab colour fields improved (beforeinput + paste handlers)",
 
-      ],
-
-      "website": [
-
-        "Home page hero demo now plays the Cuemark screen recording video",
-
-        "Download links updated to v1.0.1 Windows and macOS installers"
+        "Download installers updated to v1.0.1 (Windows and macOS)"
 
       ]
 
@@ -48,17 +62,9 @@
 
         "15-minute max clip length per generate; credit balance checked before transcribe",
 
-        "Account menu with in-panel update notice when a newer version is available"
+        "Account menu with in-panel update notice when a newer version is available",
 
-      ],
-
-      "website": [
-
-        "keyweaver.io — signup, account, pricing, help, and download pages",
-
-        "Windows and macOS zip installers via GitHub Releases",
-
-        "Free plan with 3 starter credits (~3 minutes of transcription)",
+        "Free plan with 5 starter credits (~5 minutes of transcription)",
 
         "Magic-link sign-in, self-serve account settings, and Stripe billing"
 

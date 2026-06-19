@@ -39,10 +39,7 @@
     if (isLatest) { html += '<span class="changelog-badge">Latest</span>'; }
     html += '</div>';
     if (release.panel && release.panel.length) {
-      html += '<h3 class="changelog-section-title">Plugin</h3>' + listHtml(release.panel);
-    }
-    if (release.website && release.website.length) {
-      html += '<h3 class="changelog-section-title">Website</h3>' + listHtml(release.website);
+      html += '<h3 class="changelog-section-title">What&apos;s new</h3>' + listHtml(release.panel);
     }
     html += '</article>';
     return html;

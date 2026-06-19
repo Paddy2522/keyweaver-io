@@ -84,12 +84,12 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Could not create account.' }, { status: 500 })
     }
 
-    // Initialise credits row (3 free generates = 3 credits)
+    // Initialise credits row (5 free generates = 5 credits)
     await supabase
       .from('generation_credits')
       .insert({
         user_id: userId,
-        credits_total: 3,
+        credits_total: 5,
         credits_used: 0,
       })
 
