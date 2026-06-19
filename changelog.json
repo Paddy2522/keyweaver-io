@@ -6,65 +6,35 @@
 
     {
 
-      "version": "1.0.2",
-
-      "date": "2026-06-19",
-
-      "panel": [
-
-        "Fix Impact Words preset — Scale expression no longer errors (textIndex is not valid on animator Scale)",
-
-        "Presets no longer force uppercase — transcript case is preserved; use Style tab aa / Aa / AA buttons",
-
-        "Download installers updated to v1.0.2 (Windows and macOS)"
-
-      ]
-
-    },
-
-    {
-
-      "version": "1.0.1",
-
-      "date": "2026-06-19",
-
-      "panel": [
-
-        "Fix highlight colour picker — RGB and hex editing no longer closes the dialog mid-edit",
-
-        "Hex paste in Style tab colour fields improved (beforeinput + paste handlers)",
-
-        "Download installers updated to v1.0.1 (Windows and macOS)"
-
-      ]
-
-    },
-
-    {
-
       "version": "1.0.0",
 
-      "date": "2026-06-18",
+      "date": "2026-06-19",
 
       "panel": [
 
-        "Cuemark by Keyweaver — AI subtitles as native After Effects text layers",
+        "First public release — Cuemark by Keyweaver for Adobe After Effects 2022+",
 
-        "10 presets and 13 animations with full Style, Text, and Presets controls",
+        "AI subtitles as native, editable text layers with speech-synced word timing",
 
-        "SRT, VTT, and CSV subtitle export from the Generate tab",
+        "Generate tab: transcribe from timeline footage or upload; SRT, VTT, and CSV export",
+
+        "10 caption presets and 13 animations with full Style, Text, and Presets controls",
+
+        "Impact Words — per-word highlight and single bounce; Style tab AA uppercase by default",
+
+        "Box Cascade — pill background with centred text as words drop in from above",
+
+        "Transcript preserves grammar and capitalisation; case changed via Style tab or presets",
 
         "Bundled ffmpeg on Windows — video transcription without the AE Render Queue",
 
         "Per-edit-comp subtitle sessions (Cuemark Subtitles precomp per comp)",
 
-        "15-minute max clip length per generate; credit balance checked before transcribe",
+        "15-minute max clip per generate; credits checked before transcribe",
 
-        "Account menu with in-panel update notice when a newer version is available",
+        "Account menu, in-panel update notice, magic-link sign-in, and Stripe billing",
 
-        "Free plan with 5 starter credits (~5 minutes of transcription)",
-
-        "Magic-link sign-in, self-serve account settings, and Stripe billing"
+        "Free plan with 5 starter credits (~5 minutes of transcription)"
 
       ]
 
