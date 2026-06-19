@@ -329,12 +329,29 @@
     .tier-monthly { color: var(--accent2); }
 
     /* ── PRICING ── */
+    #pricing .container {
+      text-align: center;
+    }
+
+    #pricing .section-sub {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
     .pricing-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 16px;
-      margin-top: 3rem;
-      max-width: 900px;
+      margin: 3rem auto 0;
+      max-width: 960px;
+      width: 100%;
+    }
+
+    @media (max-width: 900px) {
+      .pricing-grid {
+        grid-template-columns: 1fr;
+        max-width: 360px;
+      }
     }
 
     .pricing-card {
@@ -343,6 +360,7 @@
       border-radius: 12px;
       padding: 2rem 1.75rem;
       position: relative;
+      text-align: left;
     }
     .pricing-card.featured {
       border-color: var(--accent);
