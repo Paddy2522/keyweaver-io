@@ -12,13 +12,11 @@
 
       "panel": [
 
-        "Free plan now includes 5 starter credits (~5 minutes of transcription)",
+        "Fix Impact Words preset — Scale expression no longer errors (textIndex is not valid on animator Scale)",
 
-        "Mobile nav: smaller logo so Sign in / Download buttons stay readable",
+        "Presets no longer force uppercase — transcript case is preserved; use Style tab aa / Aa / AA buttons",
 
-        "Download page copy cleanup",
-
-        "Homepage: Caption presets section title; Cloudflare Stream hero demo"
+        "Download installers updated to v1.0.2 (Windows and macOS)"
 
       ]
 
