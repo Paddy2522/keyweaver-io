@@ -323,7 +323,7 @@
           <div class="step-num">3</div>
           <div class="step-body">
             <h4>Click Generate Subtitles</h4>
-            <p>On the Generate tab, click <strong>Generate Subtitles</strong>. A confirmation shows duration and credit cost (1 credit per started minute). Cuemark sends the audio to Whisper, then builds native text layers in your comp.</p>
+            <p>On the Generate tab, click <strong>Generate Subtitles</strong>. A confirmation shows duration and credit cost (1 credit per started minute). Cuemark transcribes the audio, then builds native text layers in your comp.</p>
           </div>
         </div>
         <div class="step">
@@ -362,13 +362,13 @@
       <p>With your edit comp active, click <strong>Generate Subtitles</strong>. Cuemark scans the comp for video and audio layers with files on disk. If there is one layer, it is selected automatically; if there are several, a picker asks which layer to transcribe. Duration and credit cost are shown in the confirmation before transcription starts.</p>
 
       <h3>Max words per line</h3>
-      <p>Use the dropdown to control line length. The default is <strong>Auto</strong> (Whisper decides wrapping). Pick a number to force shorter or longer lines. Change this and generate again to re-wrap the same transcript without spending credits.</p>
+      <p>Use the dropdown to control line length. The default is <strong>Auto</strong> (automatic line breaks). Pick a number to force shorter or longer lines. Change this and generate again to re-wrap the same transcript without spending credits.</p>
 
       <h3>Export subtitles (SRT / VTT / CSV)</h3>
       <p>After subtitles exist, the Generate tab shows <strong>Export subtitles</strong> with SRT, VTT, and CSV buttons. Exports use the text from your saved cues in the Text tab.</p>
 
       <h3>Re-generating</h3>
-      <p>If you generate again on the same footage, Cuemark uses the cached transcript — no credits are deducted for a second generate. Credits are only consumed when the audio is sent to Whisper for the first time.</p>
+      <p>If you generate again on the same footage, Cuemark uses the cached transcript — no credits are deducted for a second generate. Credits are only consumed when the audio is transcribed for the first time.</p>
 
       <div class="note note-warn">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
@@ -386,9 +386,9 @@
 
       <h3>Tips</h3>
       <ul>
-        <li>Whisper is highly accurate but occasionally mishears proper nouns, accents, or technical terms — the Text tab is the fastest way to fix these</li>
+        <li>Transcription is highly accurate but occasionally mishears proper nouns, accents, or technical terms — the Text tab is the fastest way to fix these</li>
         <li>Editing text does not consume credits</li>
-        <li>If you change the text case setting in the Style tab, it re-processes the original Whisper transcript — so editing in the Text tab first and then changing case is the correct order</li>
+        <li>If you change the text case setting in the Style tab, it re-processes the original transcript — so editing in the Text tab first and then changing case is the correct order</li>
       </ul>
     </div>
 
@@ -464,7 +464,7 @@
 
       <div class="note note-info">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-        <p>Spotlight, Highlighter, Impact, Karaoke, and Punch use word-level timestamps from Whisper. They require a generate made after word-timestamp support was added. If an older generate lacks word timestamps, re-generate the captions.</p>
+        <p>Spotlight, Highlighter, Impact, Karaoke, and Punch use word-level timestamps from transcription. They require a generate made after word-timestamp support was added. If an older generate lacks word timestamps, re-generate the captions.</p>
       </div>
     </div>
 
@@ -488,7 +488,7 @@
       <p>Check your internet connection. If you're on a corporate network, the firewall may be blocking outgoing requests to <code>keyweaver-backend.vercel.app</code>. Try on a different network or hotspot.</p>
 
       <h3>Transcription is inaccurate</h3>
-      <p>Whisper accuracy depends on audio quality. For best results: use clean audio with minimal background noise, ensure the speaker is close to the microphone, and avoid heavy reverb. Use the Text tab to correct any errors after generation.</p>
+      <p>Transcription accuracy depends on audio quality. For best results: use clean audio with minimal background noise, ensure the speaker is close to the microphone, and avoid heavy reverb. Use the Text tab to correct any errors after generation.</p>
 
       <h3>Captions are out of sync</h3>
       <p>Make sure the footage item in your AE project matches the file you intended to transcribe. If you've trimmed or sped up the footage in AE after generating, the timestamps will no longer match. Re-generate from the source file.</p>
@@ -509,7 +509,7 @@
           <span>Does Cuemark work with any language?</span>
           <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
-        <div class="faq-a">Whisper supports 57 languages. Language is auto-detected — you don't need to specify it. Quality varies by language; English, Spanish, French, German, Japanese, and Chinese have the highest accuracy.</div>
+        <div class="faq-a">Cuemark supports 57 languages. Language is auto-detected — you don't need to specify it. Quality varies by language; English, Spanish, French, German, Japanese, and Chinese have the highest accuracy.</div>
       </div>
 
       <div class="faq-item">
@@ -541,7 +541,7 @@
           <span>Does Cuemark work offline?</span>
           <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
-        <div class="faq-a">An internet connection is required to transcribe audio, as this is handled by the OpenAI Whisper API. Styling, editing text, and switching presets all work without a connection once captions have been generated.</div>
+        <div class="faq-a">An internet connection is required to transcribe audio — transcription runs in the cloud. Styling, editing text, and switching presets all work without a connection once captions have been generated.</div>
       </div>
 
       <div class="faq-item">
