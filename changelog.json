@@ -1,46 +1,22 @@
 {
-
   "product": "Cuemark",
-
   "releases": [
-
     {
-
       "version": "1.0.0",
-
       "date": "2026-06-19",
-
       "panel": [
-
         "First public release — Cuemark by Keyweaver for Adobe After Effects 2022+",
-
         "AI subtitles as native, editable text layers with speech-synced word timing",
-
-        "Generate tab: transcribe from timeline footage or upload; SRT, VTT, and CSV export",
-
-        "10 caption presets and 13 animations with full Style, Text, and Presets controls",
-
-        "Impact Words — per-word highlight and single bounce; Style tab AA uppercase by default",
-
+        "Generate tab: transcribe from timeline footage or upload; export SRT, VTT, and CSV",
+        "10 caption presets and 13 animations with Style, Text, and Presets controls",
+        "Impact Words — per-word highlight and single bounce",
         "Box Cascade — pill background with centred text as words drop in from above",
-
-        "Transcript preserves grammar and capitalisation; case changed via Style tab or presets",
-
-        "Bundled ffmpeg on Windows — video transcription without the AE Render Queue",
-
-        "Per-edit-comp subtitle sessions (Cuemark Subtitles precomp per comp)",
-
-        "15-minute max clip per generate; credits checked before transcribe",
-
-        "Account menu, in-panel update notice, magic-link sign-in, and Stripe billing",
-
+        "Style tab: fonts, colours, backgrounds, text case, and line breaks",
+        "Separate subtitle tracks for each edit comp in your project",
+        "Transcribe up to 15 minutes of footage per generate",
+        "Account menu, magic-link sign-in, and Stripe billing in the panel",
         "Free plan with 5 starter credits (~5 minutes of transcription)"
-
       ]
-
     }
-
   ]
-
 }
-
