@@ -258,7 +258,7 @@
       </div>
 
       <div class="form-footer-row">
-        <a href="/forgot-password" class="forgot-link">Sign-in link</a>
+        <a href="/forgot-password" class="forgot-link">Forgot password?</a>
       </div>
 
       <div class="cuemark-turnstile-wrap" id="login-turnstile-wrap">
@@ -321,6 +321,11 @@
   if (verifiedParam === '1') {
     document.addEventListener('DOMContentLoaded', () => {
       showAlert('Email confirmed. You can sign in now.', 'success');
+    });
+  }
+  if (new URLSearchParams(window.location.search).get('reset') === '1') {
+    document.addEventListener('DOMContentLoaded', () => {
+      showAlert('Password updated. Sign in with your new password.', 'success');
     });
   }
 

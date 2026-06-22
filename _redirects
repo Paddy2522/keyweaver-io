@@ -3,6 +3,7 @@
 /legal/privacy  /privacy.html  200
 /legal/cookies  /cookies.html  200
 /forgot-password /forgot-password.html 200
+/reset-password  /reset-password.html  200
 /about          /about.html    200
 /download       /download.html 200
 /login          /login.html    200
