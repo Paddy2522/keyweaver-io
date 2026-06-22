@@ -421,11 +421,14 @@
         <div class="success-icon">
           <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
         </div>
-        <h2 id="success-title">Account created</h2>
-        <p id="success-body">Your account is ready. Download Cuemark, install it, then <strong>sign in inside After Effects</strong> with the same email and password (web sign-in does not log the panel in automatically).</p>
-        <a href="/download" class="btn-submit" style="text-decoration:none; display:inline-flex;">
-          Download Cuemark
-          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v8M5 7l3 3 3-3M2 12h12"/></svg>
+        <h2 id="success-title">Check your email</h2>
+        <p id="success-body">We sent a confirmation link to <strong id="success-email"></strong>. Click it to activate your account and unlock your free credits.</p>
+        <p style="font-size:13px;color:var(--muted);line-height:1.6;margin:0 0 1rem;">Didn&apos;t get it? Check spam, or <button type="button" id="resend-verify-btn" style="background:none;border:none;padding:0;color:var(--accent2);font:inherit;cursor:pointer;text-decoration:underline;">resend the confirmation email</button>.</p>
+        <div class="cuemark-turnstile-wrap" id="signup-resend-turnstile-wrap">
+          <div id="signup-resend-turnstile"></div>
+        </div>
+        <a href="/login" class="btn-submit" style="text-decoration:none; display:inline-flex;">
+          Go to sign in
         </a>
       </div>
     </div>
@@ -520,6 +523,9 @@
     clearAlert();
     if (n === 2 && window.CuemarkTurnstile) {
       CuemarkTurnstile.prepare('signup-turnstile-wrap', 'signup-turnstile').catch(function () {});
+    }
+    if (n === 3 && window.CuemarkTurnstile) {
+      CuemarkTurnstile.prepare('signup-resend-turnstile-wrap', 'signup-resend-turnstile').catch(function () {});
     }
   }
 
@@ -638,7 +644,19 @@
         return;
       }
 
-      // Store token if returned immediately (free plan — no payment needed)
+      if (data.requires_email_confirmation) {
+        accountEmail = data.email || email;
+        document.getElementById('success-email').textContent = accountEmail;
+        if (data.plan === 'credits' || data.plan === 'monthly') {
+          document.getElementById('success-body').innerHTML =
+            'We sent a confirmation link to <strong>' + accountEmail + '</strong>. ' +
+            'Click it to activate your account, then you&apos;ll continue to secure checkout.';
+        }
+        goToStep(3);
+        return;
+      }
+
+      // Legacy: immediate token (should not happen after email-verify deploy)
       if (data.token) localStorage.setItem('cc_token', data.token);
 
       if (plan === 'credits' && data.checkout_url) {
@@ -667,6 +685,38 @@
       document.getElementById('step2-spinner').style.display = 'none';
       document.getElementById('step2-btn').disabled = false;
     }
+  });
+
+  document.getElementById('resend-verify-btn').addEventListener('click', async function () {
+    if (!accountEmail) {
+      showAlert('Enter your email on step 1 first.', 'error');
+      return;
+    }
+    const btn = document.getElementById('resend-verify-btn');
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+    try {
+      let turnstileToken = '';
+      if (window.CuemarkTurnstile) {
+        turnstileToken = await CuemarkTurnstile.requireToken('signup-resend-turnstile');
+      }
+      const res = await fetch(BACKEND + '/api/captio/resend-verification', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: accountEmail, turnstile_token: turnstileToken || undefined })
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        showAlert(data.error || 'Could not resend email. Try again shortly.', 'error');
+      } else {
+        showAlert('Confirmation email sent. Check your inbox.', 'success');
+      }
+    } catch {
+      showAlert('Could not reach the server. Please try again.', 'error');
+    }
+    btn.disabled = false;
+    btn.textContent = 'resend the confirmation email';
+    if (window.CuemarkTurnstile) CuemarkTurnstile.reset('signup-resend-turnstile');
   });
 </script>
   <script src="/js/help-widget.js" defer></script>

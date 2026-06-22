@@ -306,12 +306,21 @@
     invalid_link: 'That sign-in link is invalid. Request a new one or use your password.',
     link_used: 'That sign-in link was already used. Sign in with your password instead.',
     link_expired: 'That sign-in link has expired. Sign in with your password or reset it.',
+    invalid_verify: 'That confirmation link is invalid. Sign up again or request a new confirmation email.',
+    verify_used: 'That confirmation link was already used. Sign in with your password.',
+    verify_expired: 'That confirmation link has expired. Sign up again to get a new one.',
     server_error: 'Something went wrong verifying your link. Try signing in with your password.'
   };
   const errParam = new URLSearchParams(window.location.search).get('error');
+  const verifiedParam = new URLSearchParams(window.location.search).get('verified');
   if (errParam && loginErrors[errParam]) {
     document.addEventListener('DOMContentLoaded', () => {
       showAlert(loginErrors[errParam], 'error');
+    });
+  }
+  if (verifiedParam === '1') {
+    document.addEventListener('DOMContentLoaded', () => {
+      showAlert('Email confirmed. You can sign in now.', 'success');
     });
   }
 
@@ -382,7 +391,11 @@
       const data = await res.json();
 
       if (!res.ok) {
-        showAlert(data.error || 'Incorrect email or password.', 'error');
+        if (data.code === 'EMAIL_NOT_VERIFIED') {
+          showAlert((data.error || 'Please confirm your email first.') + ' Sign up again to resend the confirmation link.', 'error');
+        } else {
+          showAlert(data.error || 'Incorrect email or password.', 'error');
+        }
         if (window.CuemarkTurnstile) CuemarkTurnstile.reset('login-turnstile');
         setLoading(false);
         return;
