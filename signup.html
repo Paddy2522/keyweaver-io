@@ -423,7 +423,8 @@
         </div>
         <h2 id="success-title">Check your email</h2>
         <p id="success-body">We sent a confirmation link to <strong id="success-email"></strong>. Click it to activate your account and unlock your free credits.</p>
-        <p style="font-size:13px;color:var(--muted);line-height:1.6;margin:0 0 1rem;">Didn&apos;t get it? Check spam, or <button type="button" id="resend-verify-btn" style="background:none;border:none;padding:0;color:var(--accent2);font:inherit;cursor:pointer;text-decoration:underline;">resend the confirmation email</button>.</p>
+        <p style="font-size:13px;color:var(--muted);line-height:1.6;margin:0 0 0.75rem;">If you don&apos;t see it within a few minutes, check your <strong>junk or spam</strong> folder and mark the message as &ldquo;Not junk&rdquo; so future Cuemark emails reach your inbox.</p>
+        <p style="font-size:13px;color:var(--muted);line-height:1.6;margin:0 0 1rem;">Still nothing? <button type="button" id="resend-verify-btn" style="background:none;border:none;padding:0;color:var(--accent2);font:inherit;cursor:pointer;text-decoration:underline;">Resend the confirmation email</button>.</p>
         <div class="cuemark-turnstile-wrap" id="signup-resend-turnstile-wrap">
           <div id="signup-resend-turnstile"></div>
         </div>
@@ -709,7 +710,7 @@
       if (!res.ok) {
         showAlert(data.error || 'Could not resend email. Try again shortly.', 'error');
       } else {
-        showAlert('Confirmation email sent. Check your inbox.', 'success');
+        showAlert('Confirmation email sent. Check your inbox and junk or spam folder.', 'success');
       }
     } catch {
       showAlert('Could not reach the server. Please try again.', 'error');

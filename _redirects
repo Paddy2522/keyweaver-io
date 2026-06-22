@@ -11,3 +11,5 @@
 /pricing        /pricing.html  200
 /help           /help.html     200
 /changelog      /changelog.html 200
+/confirm-email  https://keyweaver-backend.vercel.app/api/captio/verify-email  302
+/sign-in        https://keyweaver-backend.vercel.app/api/captio/magic-link/verify  302
