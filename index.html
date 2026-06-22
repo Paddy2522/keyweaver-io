@@ -791,6 +791,7 @@
       if (!streamId) { return; }
       var src = hlsUrl(streamId);
       var hlsInstance = null;
+      var attached = false;
 
       function tryPlay() {
         var p = vid.play();
@@ -799,45 +800,39 @@
         }
       }
 
-      function start() {
-        if (vid.dataset.streamAttached === '1') { return; }
-        vid.dataset.streamAttached = '1';
+      function ensureAttached() {
+        if (attached) { return; }
+        attached = true;
 
         if (vid.canPlayType('application/vnd.apple.mpegurl')) {
           vid.src = src;
-          vid.addEventListener('loadedmetadata', tryPlay, { once: true });
+          vid.addEventListener('canplay', tryPlay, { once: true });
           return;
         }
 
         if (window.Hls && window.Hls.isSupported()) {
-          hlsInstance = new window.Hls({ maxMaxBufferLength: 30 });
+          hlsInstance = new window.Hls({ enableWorker: false, maxBufferLength: 30 });
           hlsInstance.loadSource(src);
           hlsInstance.attachMedia(vid);
           hlsInstance.on(window.Hls.Events.MANIFEST_PARSED, tryPlay);
         }
       }
 
-      function stop() {
-        if (hlsInstance) {
-          hlsInstance.destroy();
-          hlsInstance = null;
-        }
-        vid.pause();
-        vid.removeAttribute('src');
-        vid.load();
-        delete vid.dataset.streamAttached;
+      function playWhenVisible() {
+        ensureAttached();
+        tryPlay();
       }
 
       if ('IntersectionObserver' in window) {
         var observer = new IntersectionObserver(function (entries) {
           entries.forEach(function (entry) {
-            if (entry.isIntersecting) { start(); }
-            else { stop(); }
+            if (entry.isIntersecting) { playWhenVisible(); }
+            else { vid.pause(); }
           });
-        }, { rootMargin: '120px' });
+        }, { rootMargin: '80px', threshold: 0.2 });
         observer.observe(vid);
       } else {
-        start();
+        playWhenVisible();
       }
     }
 
@@ -877,7 +872,7 @@
         return (
           '<div class="style-card">' +
             '<div class="style-preview">' +
-              '<video class="style-preview-video" muted loop playsinline preload="none" ' +
+              '<video class="style-preview-video" autoplay muted loop playsinline preload="metadata" ' +
                 'poster="' + thumbUrl(item.id) + '" data-stream-id="' + item.id + '" ' +
                 'title="' + item.name + ' preview"></video>' +
             '</div>' +
