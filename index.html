@@ -301,22 +301,17 @@
 
     .style-preview {
       aspect-ratio: 16 / 9;
-      background: #07070D center/cover no-repeat;
+      background: #07070D;
       position: relative;
       overflow: hidden;
     }
 
-    .style-preview iframe {
-      position: absolute;
-      top: 50%;
-      left: 50%;
+    .style-preview-video {
+      display: block;
       width: 100%;
       height: 100%;
-      min-width: 100%;
-      min-height: 100%;
-      border: 0;
-      pointer-events: none;
-      transform: translate(-50%, -50%);
+      object-fit: contain;
+      background: #07070D;
     }
 
     .style-info {
@@ -763,6 +758,7 @@
   </ul>
 </footer>
 
+<script src="/js/hls.min.js"></script>
 <script>
   (function () {
     var params = new URLSearchParams(window.location.search);
@@ -782,11 +778,67 @@
 
   // ── CLOUDFLARE STREAM SHOWCASE ──
   (function () {
-    var STREAM = 'https://iframe.videodelivery.net/';
-    var STREAM_QS = '?autoplay=true&muted=true&loop=true&controls=false&preload=true';
-
     function thumbUrl(id) {
       return 'https://videodelivery.net/' + id + '/thumbnails/thumbnail.jpg';
+    }
+
+    function hlsUrl(id) {
+      return 'https://videodelivery.net/' + id + '/manifest/video.m3u8';
+    }
+
+    function attachStreamVideo(vid) {
+      var streamId = vid.getAttribute('data-stream-id');
+      if (!streamId) { return; }
+      var src = hlsUrl(streamId);
+      var hlsInstance = null;
+
+      function tryPlay() {
+        var p = vid.play();
+        if (p && typeof p.catch === 'function') {
+          p.catch(function () {});
+        }
+      }
+
+      function start() {
+        if (vid.dataset.streamAttached === '1') { return; }
+        vid.dataset.streamAttached = '1';
+
+        if (vid.canPlayType('application/vnd.apple.mpegurl')) {
+          vid.src = src;
+          vid.addEventListener('loadedmetadata', tryPlay, { once: true });
+          return;
+        }
+
+        if (window.Hls && window.Hls.isSupported()) {
+          hlsInstance = new window.Hls({ maxMaxBufferLength: 30 });
+          hlsInstance.loadSource(src);
+          hlsInstance.attachMedia(vid);
+          hlsInstance.on(window.Hls.Events.MANIFEST_PARSED, tryPlay);
+        }
+      }
+
+      function stop() {
+        if (hlsInstance) {
+          hlsInstance.destroy();
+          hlsInstance = null;
+        }
+        vid.pause();
+        vid.removeAttribute('src');
+        vid.load();
+        delete vid.dataset.streamAttached;
+      }
+
+      if ('IntersectionObserver' in window) {
+        var observer = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) { start(); }
+            else { stop(); }
+          });
+        }, { rootMargin: '120px' });
+        observer.observe(vid);
+      } else {
+        start();
+      }
     }
 
     var PRESETS = [
@@ -824,15 +876,17 @@
       grid.innerHTML = items.map(function (item) {
         return (
           '<div class="style-card">' +
-            '<div class="style-preview" style="background-image:url(' + thumbUrl(item.id) + ')">' +
-              '<iframe src="' + STREAM + item.id + STREAM_QS + '" loading="lazy" ' +
-                'allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture" ' +
-                'title="' + item.name + ' preview"></iframe>' +
+            '<div class="style-preview">' +
+              '<video class="style-preview-video" muted loop playsinline preload="none" ' +
+                'poster="' + thumbUrl(item.id) + '" data-stream-id="' + item.id + '" ' +
+                'title="' + item.name + ' preview"></video>' +
             '</div>' +
             '<div class="style-info"><div class="style-name">' + item.name + '</div></div>' +
           '</div>'
         );
       }).join('');
+
+      grid.querySelectorAll('video[data-stream-id]').forEach(attachStreamVideo);
     }
 
     renderStreamGrid('presets-grid', PRESETS);
