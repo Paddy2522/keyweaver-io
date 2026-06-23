@@ -370,6 +370,11 @@
   line-height: 1.5;
 }
 
+/* Reserve space so the fixed launcher does not cover footer links */
+body:has(.kw-help-launcher) footer {
+  padding-right: max(2rem, 7.5rem);
+}
+
 @media (max-width: 480px) {
   .kw-help-launcher-label {
     display: none;
@@ -386,5 +391,10 @@
     left: 1rem;
     width: auto;
     bottom: 5rem;
+  }
+
+  body:has(.kw-help-launcher) footer {
+    padding-right: 2rem;
+    padding-bottom: 4.75rem;
   }
 }
