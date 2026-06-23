@@ -372,7 +372,8 @@
 
 /* Reserve space so the fixed launcher does not cover footer links */
 body:has(.kw-help-launcher) footer {
-  padding-right: max(2rem, 7.5rem);
+  padding-right: max(2rem, 11rem);
+  padding-bottom: 0.5rem;
 }
 
 @media (max-width: 480px) {
@@ -395,6 +396,6 @@ body:has(.kw-help-launcher) footer {
 
   body:has(.kw-help-launcher) footer {
     padding-right: 2rem;
-    padding-bottom: 4.75rem;
+    padding-bottom: 5.25rem;
   }
 }
