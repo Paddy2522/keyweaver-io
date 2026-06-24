@@ -29,6 +29,7 @@ fbq('track', 'PageView');
   <noscript><img height="1" width="1" style="display:none" alt="" src="https://www.facebook.com/tr?id=27322169484089367&amp;ev=PageView&amp;noscript=1" /></noscript>
   <!-- End Facebook Pixel Code -->
   <script src="/js/meta-pixel-events.js" defer></script>
+  <script src="/js/google-ads-events.js" defer></script>
 
   <link rel="stylesheet" href="/css/nav-brand.css" />
   <link rel="stylesheet" href="/css/chrome.css" />
@@ -561,6 +562,9 @@ fbq('track', 'PageView');
             if (window.CuemarkPixel && data.plan) {
               CuemarkPixel.trackCheckoutSuccess(data.plan, sessionId);
             }
+            if (window.CuemarkGoogleAds && data.plan) {
+              CuemarkGoogleAds.trackPurchaseConversion(data.plan, sessionId);
+            }
             fulfilled = true;
             break;
           }
@@ -568,6 +572,9 @@ fbq('track', 'PageView');
           if (res.ok && data.reason === 'already_fulfilled') {
             if (window.CuemarkPixel && data.plan) {
               CuemarkPixel.trackCheckoutSuccess(data.plan, sessionId);
+            }
+            if (window.CuemarkGoogleAds && data.plan) {
+              CuemarkGoogleAds.trackPurchaseConversion(data.plan, sessionId);
             }
             fulfilled = true;
             break;
@@ -591,6 +598,9 @@ fbq('track', 'PageView');
         fulfilled = true;
         if (window.CuemarkPixel && syncResult.plan) {
           CuemarkPixel.trackCheckoutSuccess(syncResult.plan, sessionId || 'welcome');
+        }
+        if (window.CuemarkGoogleAds && syncResult.plan && sessionId) {
+          CuemarkGoogleAds.trackPurchaseConversion(syncResult.plan, sessionId);
         }
       }
     }
