@@ -4,6 +4,22 @@
   <meta charset="UTF-8" />
   <link rel="icon" href="/images/favicon.svg" type="image/svg+xml" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Facebook Pixel Code -->
+  <script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window,document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '27322169484089367');
+fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none" alt="" src="https://www.facebook.com/tr?id=27322169484089367&amp;ev=PageView&amp;noscript=1" /></noscript>
+  <!-- End Facebook Pixel Code -->
+
   <link rel="stylesheet" href="/css/nav-brand.css" />
   <link rel="stylesheet" href="/css/chrome.css" />
   <link rel="stylesheet" href="/css/help-widget.css" />
@@ -71,18 +87,18 @@
       <tr><td><code>cc_token</code></td><td>Website &amp; panel</td><td>Keeps you signed in to your Keyweaver account</td><td>Until logout or expiry</td></tr>
       <tr><td><code>cc_web_device_id</code></td><td>Website</td><td>Device fingerprint for session security on web login</td><td>Persistent</td></tr>
       <tr><td><code>captio_device_fp</code></td><td>Cuemark panel (After Effects)</td><td>Device fingerprint for panel login</td><td>Persistent</td></tr>
+      <tr><td>Meta Pixel (<code>_fbp</code>, <code>_fbc</code>, etc.)</td><td>Website</td><td>Measures ad performance and visits from Meta (Facebook/Instagram) campaigns</td><td>Varies (set by Meta)</td></tr>
     </tbody>
   </table>
 
   <h2>What we do not use</h2>
   <ul>
-    <li>Advertising or retargeting cookies</li>
-    <li>Third-party analytics trackers (Google Analytics, Meta Pixel, etc.)</li>
+    <li>Google Analytics or similar general analytics suites</li>
     <li>Social media embed trackers</li>
   </ul>
 
   <h2>Consent</h2>
-  <p>We only use strictly necessary storage for authentication and security. Under UK/EU rules, this does not require a consent banner. If we add optional analytics in future, we will update this policy and ask for consent first.</p>
+  <p>Strictly necessary storage (sign-in and security) does not require consent under UK/EU rules. Meta Pixel cookies used for advertising measurement may require consent depending on your location — we will add a consent mechanism if required as our marketing scales.</p>
 
   <h2>Managing storage</h2>
   <p>Sign out from the website or panel to clear your session token. You can also clear site data in your browser settings. Clearing storage will sign you out everywhere for that browser or panel instance.</p>
