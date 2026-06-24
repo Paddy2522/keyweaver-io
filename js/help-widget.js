@@ -272,6 +272,7 @@
         form.style.display = 'none';
         successEl.classList.add('is-visible');
         submitBtn.classList.remove('is-loading');
+        if (window.CuemarkPixel) { CuemarkPixel.trackContact(); }
         if (window.CuemarkTurnstile) CuemarkTurnstile.reset('kw-help-turnstile');
       })
       .catch(function (err) {

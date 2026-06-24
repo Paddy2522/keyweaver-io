@@ -19,6 +19,7 @@ fbq('track', 'PageView');
   </script>
   <noscript><img height="1" width="1" style="display:none" alt="" src="https://www.facebook.com/tr?id=27322169484089367&amp;ev=PageView&amp;noscript=1" /></noscript>
   <!-- End Facebook Pixel Code -->
+  <script src="/js/meta-pixel-events.js" defer></script>
 
   <link rel="stylesheet" href="/css/nav-brand.css" />
   <link rel="stylesheet" href="/css/chrome.css" />
@@ -514,10 +515,10 @@ fbq('track', 'PageView');
       const data = await res.json().catch(() => ({}));
       if (res.ok && data.monthly_applied) {
         showToast('Monthly subscription synced — credits updated.');
-        return true;
+        return { ok: true, plan: 'monthly' };
       }
     } catch {}
-    return false;
+    return { ok: false };
   }
 
   async function maybeFulfillCheckout(token) {
@@ -548,11 +549,17 @@ fbq('track', 'PageView');
 
           if (res.ok && data.fulfilled) {
             showToast('Subscription active — credits added.');
+            if (window.CuemarkPixel && data.plan) {
+              CuemarkPixel.trackCheckoutSuccess(data.plan, sessionId);
+            }
             fulfilled = true;
             break;
           }
 
           if (res.ok && data.reason === 'already_fulfilled') {
+            if (window.CuemarkPixel && data.plan) {
+              CuemarkPixel.trackCheckoutSuccess(data.plan, sessionId);
+            }
             fulfilled = true;
             break;
           }
@@ -570,7 +577,13 @@ fbq('track', 'PageView');
     }
 
     if (!fulfilled) {
-      fulfilled = await syncBilling(token);
+      const syncResult = await syncBilling(token);
+      if (syncResult && syncResult.ok) {
+        fulfilled = true;
+        if (window.CuemarkPixel && syncResult.plan) {
+          CuemarkPixel.trackCheckoutSuccess(syncResult.plan, sessionId || 'welcome');
+        }
+      }
     }
 
     if (sessionId || welcome) {
@@ -758,6 +771,7 @@ fbq('track', 'PageView');
       });
       const data = await res.json();
       if (res.ok && data.checkout_url) {
+        if (window.CuemarkPixel) { CuemarkPixel.trackInitiateCheckout('credits'); }
         window.location.href = data.checkout_url;
       } else {
         showToast(data.error || 'Could not start checkout.');
