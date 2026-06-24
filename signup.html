@@ -685,13 +685,23 @@ fbq('track', 'PageView');
       if (data.token) localStorage.setItem('cc_token', data.token);
 
       if (plan === 'credits' && data.checkout_url) {
-        if (window.CuemarkPixel) { CuemarkPixel.trackInitiateCheckout('credits'); }
-        window.location.href = data.checkout_url;
+        if (window.CuemarkPixel) {
+          CuemarkPixel.trackInitiateCheckout('credits', function () {
+            window.location.href = data.checkout_url;
+          });
+        } else {
+          window.location.href = data.checkout_url;
+        }
         return;
       }
       if (plan === 'monthly' && data.checkout_url) {
-        if (window.CuemarkPixel) { CuemarkPixel.trackInitiateCheckout('monthly'); }
-        window.location.href = data.checkout_url;
+        if (window.CuemarkPixel) {
+          CuemarkPixel.trackInitiateCheckout('monthly', function () {
+            window.location.href = data.checkout_url;
+          });
+        } else {
+          window.location.href = data.checkout_url;
+        }
         return;
       }
       if ((plan === 'credits' || plan === 'monthly') && !data.checkout_url) {

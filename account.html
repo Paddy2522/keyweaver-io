@@ -771,8 +771,13 @@ fbq('track', 'PageView');
       });
       const data = await res.json();
       if (res.ok && data.checkout_url) {
-        if (window.CuemarkPixel) { CuemarkPixel.trackInitiateCheckout('credits'); }
-        window.location.href = data.checkout_url;
+        if (window.CuemarkPixel) {
+          CuemarkPixel.trackInitiateCheckout('credits', function () {
+            window.location.href = data.checkout_url;
+          });
+        } else {
+          window.location.href = data.checkout_url;
+        }
       } else {
         showToast(data.error || 'Could not start checkout.');
       }

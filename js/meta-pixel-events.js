@@ -53,14 +53,30 @@
     return { value: row[key], currency: currency };
   }
 
-  function trackInitiateCheckout(plan) {
+  function trackInitiateCheckout(plan, onDone) {
     var v = planValue(plan);
-    track('InitiateCheckout', {
+    var params = {
       content_name: plan === 'monthly' ? 'Monthly subscription' : 'Credit pack',
       currency: v.currency,
       value: v.value,
       num_items: 1,
-    });
+    };
+    var done = false;
+    function finish() {
+      if (done) { return; }
+      done = true;
+      if (typeof onDone === 'function') { onDone(); }
+    }
+    if (typeof fbq !== 'function') {
+      finish();
+      return;
+    }
+    try {
+      global.setTimeout(finish, 800);
+      fbq('track', 'InitiateCheckout', params, { eventCallback: finish });
+    } catch (e) {
+      finish();
+    }
   }
 
   /** After Stripe checkout success (credit pack = Purchase, subscription = Subscribe). */
