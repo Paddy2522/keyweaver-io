@@ -1,0 +1,97 @@
+#cuemark-cookie-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10000;
+  padding: 1rem;
+  pointer-events: none;
+}
+
+#cuemark-cookie-banner[hidden] {
+  display: none !important;
+}
+
+.cuemark-cookie-inner {
+  pointer-events: auto;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1.25rem 1.5rem;
+  background: #13131A;
+  border: 1px solid #2A2A3D;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.5rem;
+}
+
+.cuemark-cookie-text {
+  flex: 1 1 280px;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #6B6B88;
+  margin: 0;
+}
+
+.cuemark-cookie-text a {
+  color: #7B8BFF;
+  text-decoration: underline;
+}
+
+.cuemark-cookie-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.cuemark-cookie-btn {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 0 1rem;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid #2A2A3D;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.cuemark-cookie-btn-accept {
+  background: #5B6BF8;
+  color: #fff;
+  border-color: #5B6BF8;
+}
+
+.cuemark-cookie-btn-accept:hover {
+  background: #7B8BFF;
+  border-color: #7B8BFF;
+}
+
+.cuemark-cookie-btn-reject {
+  background: transparent;
+  color: #E8E8F0;
+}
+
+.cuemark-cookie-btn-reject:hover {
+  background: #1C1C28;
+  border-color: #3A3A52;
+}
+
+.cuemark-cookie-settings-link {
+  font-size: 13px;
+  color: #6B6B88;
+  text-decoration: underline;
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-family: inherit;
+  padding: 0;
+}
+
+.cuemark-cookie-settings-link:hover {
+  color: #E8E8F0;
+}

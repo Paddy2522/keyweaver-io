@@ -18,6 +18,7 @@
   /** Credit pack purchase after Stripe return (/account?session_id=…). */
   function trackPurchaseConversion(plan, transactionId) {
     if (plan !== 'credits' || !transactionId) { return; }
+    if (global.CuemarkConsent && !global.CuemarkConsent.hasMarketingConsent()) { return; }
     if (typeof gtag !== 'function') { return; }
 
     var dedupeKey = 'cuemark_gads_purchase_' + String(transactionId);
