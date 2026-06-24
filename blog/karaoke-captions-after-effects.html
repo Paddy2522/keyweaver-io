@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" href="/images/favicon.svg" type="image/svg+xml" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18266783138"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','AW-18266783138');</script>
+  <title>How to Add Karaoke-Style Captions in After Effects (Word-by-Word)</title>
+  <meta name="description" content="Create karaoke-style captions in After Effects with word-by-word highlights. Step-by-step guide to spotlight, highlighter, and timed text animations for social video." />
+  <link rel="canonical" href="https://keyweaver.io/blog/karaoke-captions-after-effects" />
+  <meta property="og:title" content="How to Add Karaoke-Style Captions in After Effects" />
+  <meta property="og:description" content="Word-by-word karaoke captions in AE — manual keyframing vs AI word-level timing. Full workflow guide." />
+  <meta property="og:url" content="https://keyweaver.io/blog/karaoke-captions-after-effects" />
+  <meta property="og:type" content="article" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/blog.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Article",
+        "headline": "How to Add Karaoke-Style Captions in After Effects",
+        "datePublished": "2026-06-24",
+        "author": { "@type": "Organization", "name": "Keyweaver Ltd" },
+        "publisher": { "@type": "Organization", "name": "Keyweaver" }
+      },
+      {
+        "@type": "HowTo",
+        "name": "How to add karaoke-style captions in After Effects",
+        "step": [
+          { "@type": "HowToStep", "name": "Transcribe with word-level timing", "text": "Use an AI caption plugin or manual transcript with per-word timestamps." },
+          { "@type": "HowToStep", "name": "Apply a word highlight animation", "text": "Choose spotlight, highlighter, or karaoke preset that highlights the active word." },
+          { "@type": "HowToStep", "name": "Style fonts and colours", "text": "Set base text colour and highlight colour to match your brand." },
+          { "@type": "HowToStep", "name": "Apply to timeline", "text": "Generate native AE text layers with word timing baked in." }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          { "@type": "Question", "name": "How do you make karaoke subtitles in After Effects?", "acceptedAnswer": { "@type": "Answer", "text": "Karaoke subtitles require word-level timing: each word highlights as it is spoken. Use an AI caption tool with word timestamps and a highlight animation preset, or manually keyframe opacity or colour on separate text layers per word." } },
+          { "@type": "Question", "name": "What are karaoke captions?", "acceptedAnswer": { "@type": "Answer", "text": "Karaoke captions (or word-highlight captions) show the current spoken word in a different colour or style while the rest of the line stays muted. They are standard on TikTok, Instagram Reels, and YouTube Shorts." } },
+          { "@type": "Question", "name": "Can After Effects do word-by-word animation?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. After Effects supports per-character and per-word text animators. Caption plugins automate this by combining word-level transcription timing with preset highlight animations." } }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+<nav class="blog-nav" aria-label="Blog">
+  <a href="/" class="blog-nav-logo" aria-label="Cuemark by Keyweaver">
+    <img src="/images/cuemark-logo.svg" alt="" width="327" height="28" />
+  </a>
+  <a href="/download">Download free</a>
+</nav>
+
+<main class="blog-wrap">
+  <article class="blog-article">
+    <header>
+      <p class="blog-meta"><time datetime="2026-06-24">24 June 2026</time> · 7 min read · Karaoke captions</p>
+      <h1>How to Add Karaoke-Style Captions in After Effects</h1>
+      <p class="blog-lead">Karaoke-style captions highlight each word as it's spoken — the look viewers expect on TikTok, Reels, and Shorts. Here's how to build word-by-word subtitle animations in After Effects, manually or with AI.</p>
+    </header>
+
+    <nav class="blog-toc" aria-label="Table of contents">
+      <h2>On this page</h2>
+      <ol>
+        <li><a href="#what-are-karaoke-captions">What are karaoke captions?</a></li>
+        <li><a href="#manual-karaoke">Manual word-by-word method</a></li>
+        <li><a href="#text-animators">AE text animators approach</a></li>
+        <li><a href="#ai-workflow">AI workflow (recommended)</a></li>
+        <li><a href="#styles">Popular karaoke styles</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ol>
+    </nav>
+
+    <div class="blog-content">
+      <h2 id="what-are-karaoke-captions">What are karaoke-style captions?</h2>
+      <p><strong>Karaoke captions</strong> (also called word-highlight or bounce captions) display a full line of text but <em>emphasise the word currently being spoken</em> — usually with a colour change, scale pop, or background highlight.</p>
+      <p>Unlike static subtitles that show a whole sentence at once, karaoke captions:</p>
+      <ul>
+        <li>Increase retention on muted autoplay feeds</li>
+        <li>Guide the viewer through fast dialogue</li>
+        <li>Look native to short-form social platforms</li>
+      </ul>
+
+      <h2 id="manual-karaoke">Manual method: separate layers per word</h2>
+      <p>The pure AE approach splits every word onto its own text layer, then keyframes colour or opacity per word. Accurate but extremely time-consuming.</p>
+      <ol>
+        <li>Transcribe dialogue and note word timings (stopwatch against audio).</li>
+        <li>Create one text layer per word.</li>
+        <li>Set in/out points to match speech.</li>
+        <li>Keyframing: active word = brand colour; inactive = grey.</li>
+      </ol>
+      <p><strong>Time estimate:</strong> 2–4 hours for a 60-second clip. Not practical for client work at volume.</p>
+
+      <h2 id="text-animators">Using After Effects text animators</h2>
+      <p>AE's <strong>Range Selector</strong> and text animators can highlight characters when you have per-word timing data. You still need a source of word timestamps — either manual markup or imported JSON/SRT with word-level data.</p>
+      <p>This method suits experienced AE users who want custom expressions. Most editors prefer a plugin that handles timing automatically.</p>
+
+      <h2 id="ai-workflow">AI workflow: word-level transcription + highlight presets</h2>
+      <p>The practical approach for karaoke captions in 2026:</p>
+      <ol>
+        <li><strong>Transcribe with word timestamps</strong> — AI returns when each word starts and ends.</li>
+        <li><strong>Pick a highlight animation</strong> — spotlight, highlighter bar, or colour pop.</li>
+        <li><strong>Set colours</strong> — base text + active word highlight colour.</li>
+        <li><strong>Apply to timeline</strong> — plugin generates timed text layers in a subtitles precomp.</li>
+      </ol>
+      <p><a href="/download">Cuemark</a> includes spotlight, highlighter, impact, and cascade animations designed for word-level timing. Change highlight colour and font without re-transcribing.</p>
+
+      <h2 id="styles">Popular karaoke caption styles in AE</h2>
+      <table class="blog-table">
+        <thead>
+          <tr><th>Style</th><th>Look</th><th>Best for</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Spotlight</td><td>Active word scales up, rest muted</td><td>Talking-head Reels</td></tr>
+          <tr><td>Highlighter</td><td>Coloured bar behind active word</td><td>Tutorials, explainers</td></tr>
+          <tr><td>Impact</td><td>Bold pop on key words</td><td>High-energy clips</td></tr>
+          <tr><td>Colour highlight</td><td>Word changes to accent colour</td><td>Brand-safe corporate</td></tr>
+          <tr><td>Cascade</td><td>Words appear in sequence</td><td>Lyric-style content</td></tr>
+        </tbody>
+      </table>
+      <div class="blog-callout">
+        <p><strong>Pro tip:</strong> Use a pill or box background behind captions for readability on busy footage. Pair with a highlighter animation for maximum clarity on mobile.</p>
+      </div>
+    </div>
+
+    <section class="blog-faq" id="faq">
+      <h2>Frequently asked questions</h2>
+      <div class="blog-faq-item">
+        <h3>How do you make karaoke subtitles in After Effects?</h3>
+        <p>Karaoke subtitles require word-level timing: each word highlights as it is spoken. Use an AI caption tool with word timestamps and a highlight animation preset, or manually keyframe opacity or colour on separate text layers per word.</p>
+      </div>
+      <div class="blog-faq-item">
+        <h3>What are karaoke captions?</h3>
+        <p>Karaoke captions show the current spoken word in a different colour or style while the rest of the line stays muted. They are standard on TikTok, Instagram Reels, and YouTube Shorts.</p>
+      </div>
+      <div class="blog-faq-item">
+        <h3>Can After Effects do word-by-word animation?</h3>
+        <p>Yes. After Effects supports per-character and per-word text animators. Caption plugins automate this by combining word-level transcription timing with preset highlight animations.</p>
+      </div>
+    </section>
+
+    <aside class="blog-cta">
+      <h2>Word-by-word captions in one click</h2>
+      <p>Cuemark — karaoke, spotlight, and highlighter animations with AI word timing.</p>
+      <a href="/download" class="blog-cta-btn">Download Cuemark free</a>
+    </aside>
+
+    <p class="blog-disclaimer">Adobe and After Effects are trademarks of Adobe Inc.</p>
+  </article>
+</main>
+
+<footer class="blog-footer">
+  <p>© 2026 Keyweaver Ltd</p>
+  <p><a href="/legal/privacy">Privacy</a> · <a href="/legal/terms">Terms</a></p>
+</footer>
+</body>
+</html>

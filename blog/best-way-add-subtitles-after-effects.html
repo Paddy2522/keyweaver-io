@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" href="/images/favicon.svg" type="image/svg+xml" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18266783138"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','AW-18266783138');</script>
+  <title>Best Way to Add Subtitles to After Effects Projects (Compared)</title>
+  <meta name="description" content="Compare the best ways to add subtitles to After Effects: manual layers, SRT import, Premiere round-trip, and AI plugins. Pros, cons, and which method to choose." />
+  <link rel="canonical" href="https://keyweaver.io/blog/best-way-add-subtitles-after-effects" />
+  <meta property="og:title" content="Best Way to Add Subtitles to After Effects Projects" />
+  <meta property="og:description" content="Manual vs SRT vs Premiere vs AI plugin — which subtitle workflow is best for After Effects editors?" />
+  <meta property="og:url" content="https://keyweaver.io/blog/best-way-add-subtitles-after-effects" />
+  <meta property="og:type" content="article" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/blog.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Article",
+        "headline": "Best Way to Add Subtitles to After Effects Projects",
+        "datePublished": "2026-06-24",
+        "author": { "@type": "Organization", "name": "Keyweaver Ltd" },
+        "publisher": { "@type": "Organization", "name": "Keyweaver" }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          { "@type": "Question", "name": "What is the best way to add subtitles in After Effects?", "acceptedAnswer": { "@type": "Answer", "text": "For styled social and motion graphics work, an AI caption plugin inside After Effects is usually best — it combines automatic transcription with native text layers you can animate. For plain accessibility SRT delivery, import or export sidecar files." } },
+          { "@type": "Question", "name": "Should I add subtitles in Premiere or After Effects?", "acceptedAnswer": { "@type": "Answer", "text": "Use Premiere if your final edit and delivery are editorial. Use After Effects when captions need custom fonts, motion, backgrounds, or word-level animation — typical for Instagram, TikTok, and YouTube Shorts." } },
+          { "@type": "Question", "name": "Can you import subtitles into After Effects?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. SRT and VTT files can be imported via scripts or caption plugins. Imported subtitles provide timing but usually need restyling to match your motion design." } }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+<nav class="blog-nav" aria-label="Blog">
+  <a href="/" class="blog-nav-logo" aria-label="Cuemark by Keyweaver">
+    <img src="/images/cuemark-logo.svg" alt="" width="327" height="28" />
+  </a>
+  <a href="/download">Download free</a>
+</nav>
+
+<main class="blog-wrap">
+  <article class="blog-article">
+    <header>
+      <p class="blog-meta"><time datetime="2026-06-24">24 June 2026</time> · 8 min read</p>
+      <h1>Best Way to Add Subtitles to After Effects Projects</h1>
+      <p class="blog-lead">There is no single "best" subtitle workflow for every project — but there is a best method for <em>your</em> deliverable. This guide compares manual captions, SRT imports, Premiere round-trips, and AI plugins so you can pick the right approach.</p>
+    </header>
+
+    <nav class="blog-toc" aria-label="Table of contents">
+      <h2>On this page</h2>
+      <ol>
+        <li><a href="#comparison">Quick comparison</a></li>
+        <li><a href="#manual">Manual text layers</a></li>
+        <li><a href="#srt">SRT / VTT import</a></li>
+        <li><a href="#premiere">Premiere Pro round-trip</a></li>
+        <li><a href="#ai-plugin">AI plugin inside AE</a></li>
+        <li><a href="#which-to-choose">Which should you choose?</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ol>
+    </nav>
+
+    <div class="blog-content">
+      <h2 id="comparison">Quick comparison: subtitle methods in After Effects</h2>
+      <table class="blog-table">
+        <thead>
+          <tr><th>Method</th><th>Time</th><th>Style control</th><th>Word-level timing</th><th>Cost</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Manual text layers</td><td>Hours</td><td>Full</td><td>Manual only</td><td>Free</td></tr>
+          <tr><td>SRT import</td><td>30–60 min</td><td>Medium</td><td>Line-level</td><td>Varies</td></tr>
+          <tr><td>Premiere → AE</td><td>45–90 min</td><td>Medium</td><td>Line-level</td><td>Creative Cloud</td></tr>
+          <tr><td>AI plugin in AE</td><td>5–15 min</td><td>Full</td><td>Yes</td><td>Per-minute credits</td></tr>
+        </tbody>
+      </table>
+
+      <h2 id="manual">1. Manual text layers</h2>
+      <p>Type each line, trim to audio, style individually. Zero extra cost, maximum tedium.</p>
+      <p><strong>Choose this when:</strong> you have under 30 seconds of dialogue or need pixel-perfect control on three words.<br />
+      <strong>Skip when:</strong> you're captioning interviews, podcasts, or anything over a minute.</p>
+
+      <h2 id="srt">2. SRT / VTT import</h2>
+      <p>Transcribe elsewhere, import timed text. Good for accessibility deliverables; weak for motion-designed social captions.</p>
+      <p><strong>Choose this when:</strong> you already have an SRT and only need basic on-screen text.<br />
+      <strong>Skip when:</strong> you need karaoke highlights, brand fonts, or animated backgrounds.</p>
+
+      <h2 id="premiere">3. Premiere Pro speech-to-text → After Effects</h2>
+      <p>Premiere's auto-transcribe is solid for editorial. Export captions, import to AE, restyle.</p>
+      <p><strong>Choose this when:</strong> your master timeline is in Premiere and AE is for a short motion section.<br />
+      <strong>Skip when:</strong> the entire project lives in After Effects — the round-trip adds friction.</p>
+
+      <h2 id="ai-plugin">4. AI caption plugin inside After Effects</h2>
+      <p>Tools like <a href="/download">Cuemark</a> combine transcription and styling in one AE panel:</p>
+      <ul>
+        <li>One-click transcription from comp audio</li>
+        <li>10+ caption presets with editable fonts and colours</li>
+        <li>Word-by-word animation (spotlight, karaoke, cascade)</li>
+        <li>Cached transcript — re-style without re-transcribing</li>
+        <li>Export SRT, VTT, CSV when needed</li>
+      </ul>
+      <p><strong>Choose this when:</strong> you deliver stylised social video, explainers, or branded reels from After Effects.<br />
+      <strong>Skip when:</strong> you only need a plain SRT file with no on-screen design.</p>
+
+      <h2 id="which-to-choose">Which subtitle method should you choose?</h2>
+      <p>Use this decision tree:</p>
+      <ul>
+        <li><strong>Short clip, few words?</strong> → Manual layers</li>
+        <li><strong>Already have SRT, plain text OK?</strong> → Import SRT</li>
+        <li><strong>Edit in Premiere, motion section in AE?</strong> → Premiere transcribe → import</li>
+        <li><strong>Full AE workflow, styled social captions?</strong> → AI plugin in AE</li>
+      </ul>
+      <div class="blog-callout">
+        <p>For most motion designers posting to Instagram, TikTok, or YouTube Shorts, <strong>an in-AE AI plugin is the best balance of speed and creative control</strong>.</p>
+      </div>
+    </div>
+
+    <section class="blog-faq" id="faq">
+      <h2>Frequently asked questions</h2>
+      <div class="blog-faq-item">
+        <h3>What is the best way to add subtitles in After Effects?</h3>
+        <p>For styled social and motion graphics work, an AI caption plugin inside After Effects is usually best — it combines automatic transcription with native text layers you can animate. For plain accessibility SRT delivery, import or export sidecar files.</p>
+      </div>
+      <div class="blog-faq-item">
+        <h3>Should I add subtitles in Premiere or After Effects?</h3>
+        <p>Use Premiere if your final edit and delivery are editorial. Use After Effects when captions need custom fonts, motion, backgrounds, or word-level animation.</p>
+      </div>
+      <div class="blog-faq-item">
+        <h3>Can you import subtitles into After Effects?</h3>
+        <p>Yes. SRT and VTT files can be imported via scripts or caption plugins. Imported subtitles provide timing but usually need restyling to match your motion design.</p>
+      </div>
+    </section>
+
+    <aside class="blog-cta">
+      <h2>Add subtitles without leaving AE</h2>
+      <p>Cuemark — AI transcription, styling, and sync in one panel. Free to start.</p>
+      <a href="/download" class="blog-cta-btn">Download Cuemark free</a>
+    </aside>
+
+    <p class="blog-disclaimer">Adobe and After Effects are trademarks of Adobe Inc.</p>
+  </article>
+</main>
+
+<footer class="blog-footer">
+  <p>© 2026 Keyweaver Ltd</p>
+  <p><a href="/legal/privacy">Privacy</a> · <a href="/legal/terms">Terms</a></p>
+</footer>
+</body>
+</html>

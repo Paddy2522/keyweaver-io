@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" href="/images/favicon.svg" type="image/svg+xml" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18266783138"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','AW-18266783138');</script>
+  <title>How to Export SRT Captions from After Effects (SRT, VTT, CSV)</title>
+  <meta name="description" content="Export SRT, VTT, and CSV captions from After Effects for YouTube, Vimeo, and accessibility. Step-by-step guide plus how to sync subtitles to audio in AE." />
+  <link rel="canonical" href="https://keyweaver.io/blog/export-srt-captions-after-effects" />
+  <meta property="og:title" content="How to Export SRT Captions from After Effects" />
+  <meta property="og:description" content="Export subtitle files from After Effects — SRT, VTT, CSV workflows and how to keep captions synced to audio." />
+  <meta property="og:url" content="https://keyweaver.io/blog/export-srt-captions-after-effects" />
+  <meta property="og:type" content="article" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/blog.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Article",
+        "headline": "How to Export SRT Captions from After Effects",
+        "datePublished": "2026-06-24",
+        "author": { "@type": "Organization", "name": "Keyweaver Ltd" },
+        "publisher": { "@type": "Organization", "name": "Keyweaver" }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          { "@type": "Question", "name": "Can After Effects export SRT files?", "acceptedAnswer": { "@type": "Answer", "text": "After Effects does not export SRT natively. Use a caption plugin such as Cuemark to export SRT, VTT, or CSV from timed text layers, or copy timing from subtitle scripts." } },
+          { "@type": "Question", "name": "What is the difference between SRT and VTT?", "acceptedAnswer": { "@type": "Answer", "text": "SRT (SubRip) is the most widely supported subtitle format for YouTube and players. VTT (WebVTT) is the web standard with similar timing but slightly different syntax. Both carry timed text without styling." } },
+          { "@type": "Question", "name": "How do I sync subtitles to audio in After Effects?", "acceptedAnswer": { "@type": "Answer", "text": "Sync subtitles by trimming text layer in/out points to dialogue, using word-level AI transcription for automatic timing, or nudging layers while scrubbing audio with the J-K-L keys." } },
+          { "@type": "Question", "name": "Does YouTube accept SRT from After Effects?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. YouTube accepts SRT uploads for closed captions. Export SRT from your AE caption workflow and upload via YouTube Studio → Subtitles." } }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+<nav class="blog-nav" aria-label="Blog">
+  <a href="/" class="blog-nav-logo" aria-label="Cuemark by Keyweaver">
+    <img src="/images/cuemark-logo.svg" alt="" width="327" height="28" />
+  </a>
+  <a href="/download">Download free</a>
+</nav>
+
+<main class="blog-wrap">
+  <article class="blog-article">
+    <header>
+      <p class="blog-meta"><time datetime="2026-06-24">24 June 2026</time> · 6 min read · SRT export</p>
+      <h1>How to Export SRT Captions from After Effects</h1>
+      <p class="blog-lead">After Effects excels at styled on-screen captions — but clients and platforms often need <strong>SRT</strong>, <strong>VTT</strong>, or <strong>CSV</strong> sidecar files too. Here's how to export subtitle files from AE and keep timing locked to your audio.</p>
+    </header>
+
+    <nav class="blog-toc" aria-label="Table of contents">
+      <h2>On this page</h2>
+      <ol>
+        <li><a href="#native-export">Does AE export SRT natively?</a></li>
+        <li><a href="#formats">SRT vs VTT vs CSV</a></li>
+        <li><a href="#export-workflow">Export workflow</a></li>
+        <li><a href="#sync-audio">Sync subtitles to audio</a></li>
+        <li><a href="#youtube">Upload SRT to YouTube</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ol>
+    </nav>
+
+    <div class="blog-content">
+      <h2 id="native-export">Does After Effects export SRT natively?</h2>
+      <p><strong>No.</strong> Adobe After Effects has no built-in <em>File → Export → SRT</em> option. Caption timing lives on text layers — to get a subtitle file you need a script or caption plugin that reads layer in/out points and writes standard formats.</p>
+      <p>Most professional AE caption workflows use a plugin that both <em>creates</em> and <em>exports</em> timed subtitles from the same transcript data.</p>
+
+      <h2 id="formats">SRT vs VTT vs CSV — which format?</h2>
+      <table class="blog-table">
+        <thead>
+          <tr><th>Format</th><th>Use case</th><th>Styling</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>SRT</strong></td><td>YouTube, Vimeo, most players</td><td>None (plain text)</td></tr>
+          <tr><td><strong>VTT</strong></td><td>Web players, HTML5 video</td><td>Basic web styling</td></tr>
+          <tr><td><strong>CSV</strong></td><td>Spreadsheet review, localization handoff</td><td>None</td></tr>
+        </tbody>
+      </table>
+      <p>For social delivery, you usually <strong>render styled captions into the video</strong> from AE. SRT is for accessibility, YouTube closed captions, and archive.</p>
+
+      <h2 id="export-workflow">How to export SRT from After Effects</h2>
+      <h3>Using a caption plugin (recommended)</h3>
+      <ol>
+        <li>Generate or import captions in your AE project.</li>
+        <li>Review timing in the Text tab.</li>
+        <li>Choose <strong>Export → SRT</strong> (or VTT / CSV) from the plugin panel.</li>
+        <li>Save the file alongside your project.</li>
+      </ol>
+      <p><a href="/download">Cuemark</a> exports SRT, VTT, and CSV from the same transcript used for on-screen text layers — so your sidecar file matches what viewers see.</p>
+
+      <h3>Manual / script route</h3>
+      <p>If you built captions as timed text layers manually, community scripts can dump layer markers to SRT. This works but breaks down when you have word-level karaoke layers instead of line-level subs.</p>
+
+      <h2 id="sync-audio">How to sync subtitles to audio in After Effects</h2>
+      <p>Export is only useful if timing is correct. Three ways to sync:</p>
+      <ol>
+        <li><strong>AI transcription</strong> — word-level timestamps from cloud speech-to-text (fastest).</li>
+        <li><strong>Manual scrub</strong> — play audio, pause at each phrase, trim layer boundaries (J-K-L keys).</li>
+        <li><strong>Marker pass</strong> — add timeline markers at phrase starts, align text layers to markers.</li>
+      </ol>
+      <p>If you change the edit after captioning, re-sync or regenerate — cached transcripts in tools like Cuemark let you re-apply without a new transcription charge when only the cut changed slightly.</p>
+
+      <h2 id="youtube">Upload SRT to YouTube</h2>
+      <ol>
+        <li>Export SRT from your AE caption workflow.</li>
+        <li>Open <strong>YouTube Studio → Content → your video → Subtitles</strong>.</li>
+        <li>Click <strong>Upload file</strong> and select your .srt.</li>
+        <li>Review auto-sync in the subtitle editor.</li>
+      </ol>
+      <div class="blog-callout">
+        <p><strong>Note:</strong> YouTube SRT does not include your AE fonts, colours, or animations — only timed plain text. Keep your styled render for social; use SRT for accessibility and search.</p>
+      </div>
+    </div>
+
+    <section class="blog-faq" id="faq">
+      <h2>Frequently asked questions</h2>
+      <div class="blog-faq-item">
+        <h3>Can After Effects export SRT files?</h3>
+        <p>After Effects does not export SRT natively. Use a caption plugin such as Cuemark to export SRT, VTT, or CSV from timed text layers.</p>
+      </div>
+      <div class="blog-faq-item">
+        <h3>What is the difference between SRT and VTT?</h3>
+        <p>SRT (SubRip) is the most widely supported subtitle format for YouTube and players. VTT (WebVTT) is the web standard with similar timing but slightly different syntax.</p>
+      </div>
+      <div class="blog-faq-item">
+        <h3>How do I sync subtitles to audio in After Effects?</h3>
+        <p>Sync subtitles by trimming text layer in/out points to dialogue, using word-level AI transcription for automatic timing, or nudging layers while scrubbing audio.</p>
+      </div>
+      <div class="blog-faq-item">
+        <h3>Does YouTube accept SRT from After Effects?</h3>
+        <p>Yes. YouTube accepts SRT uploads for closed captions. Export SRT from your AE caption workflow and upload via YouTube Studio.</p>
+      </div>
+    </section>
+
+    <aside class="blog-cta">
+      <h2>Caption, style, and export in one panel</h2>
+      <p>Cuemark — SRT, VTT, and CSV export plus native AE text layers.</p>
+      <a href="/download" class="blog-cta-btn">Download Cuemark free</a>
+    </aside>
+
+    <p class="blog-disclaimer">Adobe and After Effects are trademarks of Adobe Inc.</p>
+  </article>
+</main>
+
+<footer class="blog-footer">
+  <p>© 2026 Keyweaver Ltd</p>
+  <p><a href="/legal/privacy">Privacy</a> · <a href="/legal/terms">Terms</a></p>
+</footer>
+</body>
+</html>

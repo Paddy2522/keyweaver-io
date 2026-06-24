@@ -1,0 +1,251 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink: #0A0A0F;
+  --surface: #13131A;
+  --lift: #1C1C28;
+  --edge: #2A2A3D;
+  --accent: #5B6BF8;
+  --accent2: #7B8BFF;
+  --text: #E8E8F0;
+  --muted: #6B6B88;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--ink);
+  color: var(--text);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+.blog-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  height: 56px;
+  border-bottom: 1px solid var(--edge);
+  position: sticky;
+  top: 0;
+  background: rgba(10, 10, 15, 0.92);
+  backdrop-filter: blur(12px);
+  z-index: 100;
+}
+
+.blog-nav a { text-decoration: none; color: var(--muted); font-size: 14px; }
+.blog-nav a:hover { color: var(--text); }
+.blog-nav-logo { display: flex; align-items: center; }
+
+.blog-wrap {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 3rem 2rem 5rem;
+}
+
+.blog-meta {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 1rem;
+}
+
+.blog-meta time { color: var(--accent2); }
+
+.blog-article h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(1.85rem, 4vw, 2.5rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+}
+
+.blog-lead {
+  font-size: 1.125rem;
+  color: var(--muted);
+  line-height: 1.75;
+  margin-bottom: 2rem;
+}
+
+.blog-toc {
+  background: var(--surface);
+  border: 1px solid var(--edge);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.blog-toc h2 {
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.blog-toc ol {
+  padding-left: 1.25rem;
+  margin: 0;
+}
+
+.blog-toc li { margin-bottom: 0.35rem; }
+.blog-toc a { color: var(--accent2); text-decoration: none; font-size: 14px; }
+.blog-toc a:hover { text-decoration: underline; }
+
+.blog-content h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin: 2.5rem 0 0.75rem;
+  scroll-margin-top: 5rem;
+}
+
+.blog-content h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 1.75rem 0 0.5rem;
+  color: var(--text);
+}
+
+.blog-content p {
+  color: var(--muted);
+  font-size: 15px;
+  margin-bottom: 1rem;
+}
+
+.blog-content ul,
+.blog-content ol {
+  color: var(--muted);
+  font-size: 15px;
+  margin: 0 0 1rem 1.25rem;
+}
+
+.blog-content li { margin-bottom: 0.4rem; }
+
+.blog-content a { color: var(--accent2); }
+
+.blog-content strong { color: var(--text); font-weight: 600; }
+
+.blog-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.25rem 0 1.5rem;
+  font-size: 14px;
+}
+
+.blog-table th,
+.blog-table td {
+  border: 1px solid var(--edge);
+  padding: 10px 12px;
+  text-align: left;
+}
+
+.blog-table th {
+  background: var(--lift);
+  color: var(--text);
+  font-weight: 600;
+}
+
+.blog-table td { color: var(--muted); }
+
+.blog-callout {
+  background: rgba(91, 107, 248, 0.08);
+  border: 1px solid rgba(91, 107, 248, 0.25);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.blog-callout p:last-child { margin-bottom: 0; }
+
+.blog-faq {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--edge);
+}
+
+.blog-faq > h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1.25rem;
+}
+
+.blog-faq-item {
+  border: 1px solid var(--edge);
+  border-radius: 10px;
+  margin-bottom: 0.75rem;
+  overflow: hidden;
+}
+
+.blog-faq-item h3 {
+  font-size: 15px;
+  font-weight: 600;
+  padding: 1rem 1.25rem;
+  background: var(--surface);
+  margin: 0;
+}
+
+.blog-faq-item p {
+  padding: 0 1.25rem 1rem;
+  margin: 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.blog-cta {
+  margin-top: 2.5rem;
+  padding: 1.5rem;
+  background: var(--lift);
+  border: 1px solid var(--edge);
+  border-radius: 12px;
+  text-align: center;
+}
+
+.blog-cta h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.15rem;
+  margin-bottom: 0.5rem;
+}
+
+.blog-cta p {
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 1rem;
+}
+
+.blog-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1.25rem;
+  height: 40px;
+  border-radius: 8px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.blog-cta-btn:hover { background: var(--accent2); }
+
+.blog-footer {
+  border-top: 1px solid var(--edge);
+  padding: 2rem;
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.blog-footer a { color: var(--muted); margin: 0 0.4rem; }
+
+.blog-disclaimer {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 2rem;
+  line-height: 1.6;
+}
