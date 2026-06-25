@@ -739,6 +739,31 @@
     el.parentElement.classList.toggle('open');
   }
 
+  function trackCuemarkDownloadClick(key, href) {
+    const payload = JSON.stringify({
+      event_name: 'download_click',
+      source: 'website',
+      asset: key,
+      href: href,
+      page: window.location.href,
+      referrer: document.referrer || '',
+      os: key === 'winZip' ? 'windows' : 'macos'
+    });
+    const endpoint = 'https://keyweaver-backend.vercel.app/api/captio/analytics';
+    try {
+      if (navigator.sendBeacon) {
+        navigator.sendBeacon(endpoint, new Blob([payload], { type: 'application/json' }));
+      } else {
+        fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: payload,
+          keepalive: true
+        }).catch(() => {});
+      }
+    } catch (_) {}
+  }
+
   // Resolve download URLs (GitHub Releases — Vercel cannot host ~140 MB of installers)
   (async function loadDownloadUrls() {
     let version = '1.0.0';
@@ -768,6 +793,10 @@
         const key = el.getAttribute('data-file');
         const url = (manifest.files && manifest.files[key]) || (prefix + fileNames[key]);
         el.href = url;
+        if (!el.dataset.analyticsBound) {
+          el.dataset.analyticsBound = '1';
+          el.addEventListener('click', () => trackCuemarkDownloadClick(key, el.href));
+        }
         if (key === 'winZip' && el.id === 'win-download-btn') {
           el.setAttribute('title', 'Extract zip, then run Install-Cuemark.cmd');
         }
