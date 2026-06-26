@@ -151,6 +151,7 @@
     }
     .btn-download:hover { background: var(--accent2); }
     .btn-download svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .btn-download.is-loading { opacity: 0.6; cursor: progress; pointer-events: none; }
 
     /* REQUIREMENTS */
     .reqs {
@@ -397,7 +398,7 @@
   <div class="hero">
     <div class="hero-eyebrow">
       <span class="version-dot"></span>
-      Version <span id="download-version">1.0.0</span> · Free to install
+      Version <span id="download-version">1.0.1</span> · Free to install
     </div>
     <h1>Download Cuemark</h1>
     <p>An After Effects plugin — install it once and it lives inside your panel. Try 5 free credits with no account needed.</p>
@@ -419,12 +420,12 @@
       <div class="download-card download-card-primary">
         <div class="download-card-info">
           <span class="download-badge">Recommended for macOS</span>
-          <h3 id="mac-zip-name">Cuemark-Install-mac-v1.0.0.zip</h3>
+          <h3 id="mac-zip-name">Cuemark-Install-mac-v1.0.1.zip</h3>
           <p>macOS 12+ · After Effects 2022+ · ~12 MB download</p>
         </div>
-        <a href="#" class="btn-download" id="mac-download-btn" data-file="macZip">
+        <a href="#" class="btn-download is-loading" id="mac-download-btn" data-file="macZip" aria-disabled="true">
           <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Download for macOS
+          <span class="btn-download-label">Preparing download…</span>
         </a>
       </div>
       <p class="install-hint">
@@ -439,12 +440,12 @@
       <div class="download-card download-card-primary">
         <div class="download-card-info">
           <span class="download-badge">Recommended for Windows</span>
-          <h3 id="win-zip-name">Cuemark-Install-win-v1.0.0.zip</h3>
+          <h3 id="win-zip-name">Cuemark-Install-win-v1.0.1.zip</h3>
           <p>Windows 10 / 11 · After Effects 2022+ · ~48 MB download</p>
         </div>
-        <a href="#" class="btn-download" id="win-download-btn" data-file="winZip">
+        <a href="#" class="btn-download is-loading" id="win-download-btn" data-file="winZip" aria-disabled="true">
           <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Download for Windows
+          <span class="btn-download-label">Preparing download…</span>
         </a>
       </div>
       <p class="install-hint">
@@ -483,7 +484,7 @@
           <div class="step-number">1</div>
           <div class="step-body">
             <h3>Download and extract</h3>
-            <p>Download <strong id="win-step-zip-name">Cuemark-Install-win-v1.0.0.zip</strong>, then right-click it and choose <strong>Extract All</strong>. Open the extracted folder.</p>
+            <p>Download <strong id="win-step-zip-name">Cuemark-Install-win-v1.0.1.zip</strong>, then right-click it and choose <strong>Extract All</strong>. Open the extracted folder.</p>
           </div>
         </div>
 
@@ -739,7 +740,11 @@
     el.parentElement.classList.toggle('open');
   }
 
+  var DOWNLOAD_LABELS = { winZip: 'Download for Windows', macZip: 'Download for macOS' };
+
   function trackCuemarkDownloadClick(key, href) {
+    var os = key === 'winZip' ? 'windows' : 'macos';
+    // First-party signal (consent-independent) — stored in Supabase + admin email.
     const payload = JSON.stringify({
       event_name: 'download_click',
       source: 'website',
@@ -747,7 +752,7 @@
       href: href,
       page: window.location.href,
       referrer: document.referrer || '',
-      os: key === 'winZip' ? 'windows' : 'macos'
+      os: os
     });
     const endpoint = 'https://keyweaver-backend.vercel.app/api/captio/analytics';
     // fetch+keepalive survives navigation and handles cross-origin CORS reliably (sendBeacon often drops JSON beacons).
@@ -759,6 +764,12 @@
       body: payload,
       keepalive: true
     }).catch(function () {});
+    // Meta conversion signal so ad campaigns can optimize for the actual download action.
+    try {
+      if (typeof fbq === 'function') {
+        fbq('trackCustom', 'PluginDownload', { os: os, asset: key, content_name: 'Cuemark installer' });
+      }
+    } catch (e) {}
   }
 
   function bindDownloadAnalytics(el, key) {
@@ -766,16 +777,27 @@
     el.dataset.analyticsBound = '1';
     el.addEventListener('click', function (e) {
       var href = el.href;
-      if (!href || href === '#' || href.indexOf('javascript:') === 0) return;
+      if (!href || href === '#' || href.indexOf('javascript:') === 0) {
+        e.preventDefault();
+        return;
+      }
       e.preventDefault();
       trackCuemarkDownloadClick(key, href);
       window.location.href = href;
     });
   }
 
+  function enableDownloadButton(el, key) {
+    el.classList.remove('is-loading');
+    el.removeAttribute('aria-disabled');
+    var label = el.querySelector('.btn-download-label');
+    if (label && DOWNLOAD_LABELS[key]) { label.textContent = DOWNLOAD_LABELS[key]; }
+  }
+
   // Resolve download URLs (GitHub Releases — Vercel cannot host ~140 MB of installers)
   (async function loadDownloadUrls() {
-    let version = '1.0.0';
+    var GITHUB_RELEASE_BASE = 'https://github.com/Paddy2522/keyweaver-io/releases/download/v';
+    let version = '1.0.1';
     const fileNames = {
       winZip: '',
       macZip: ''
@@ -797,12 +819,17 @@
 
     function applyUrls(manifest) {
       if (manifest.version) setVersion(manifest.version);
-      const prefix = manifest.fallbackPrefix || '/downloads/';
+      // Fall back to the GitHub release asset (not /downloads/, which is not deployed).
+      const githubFallback = {
+        winZip: GITHUB_RELEASE_BASE + version + '/' + fileNames.winZip,
+        macZip: GITHUB_RELEASE_BASE + version + '/' + fileNames.macZip
+      };
       document.querySelectorAll('[data-file]').forEach(el => {
         const key = el.getAttribute('data-file');
-        const url = (manifest.files && manifest.files[key]) || (prefix + fileNames[key]);
+        const url = (manifest.files && manifest.files[key]) || githubFallback[key];
         el.href = url;
         bindDownloadAnalytics(el, key);
+        enableDownloadButton(el, key);
         if (key === 'winZip' && el.id === 'win-download-btn') {
           el.setAttribute('title', 'Extract zip, then run Install-Cuemark.cmd');
         }
@@ -814,11 +841,11 @@
       if (res.ok) applyUrls(await res.json());
       else {
         setVersion(version);
-        applyUrls({ fallbackPrefix: '/downloads/', files: {} });
+        applyUrls({ files: {} });
       }
     } catch {
       setVersion(version);
-      applyUrls({ fallbackPrefix: '/downloads/', files: {} });
+      applyUrls({ files: {} });
     }
   })();
 </script>
