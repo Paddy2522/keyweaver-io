@@ -1,5 +1,7 @@
 /**
- * Cuemark — cookie consent (UK/EU). Marketing tags load only after opt-in.
+ * Cuemark — cookie consent (UK/EU).
+ * Meta basic PageView loads for ad measurement; richer conversion tags and
+ * Google Ads load only after opt-in.
  */
 (function (global) {
   'use strict';
@@ -8,6 +10,7 @@
   var GOOGLE_ADS_ID = 'AW-18266783138';
   var META_PIXEL_ID = '27322169484089367';
   var marketingLoaded = false;
+  var metaPageViewLoaded = false;
   var bannerEl = null;
 
   function getConsent() {
@@ -52,7 +55,7 @@
     gtag('config', GOOGLE_ADS_ID);
   }
 
-  function loadMetaPixel() {
+  function ensureMetaPixelBase() {
     if (global.fbq) { return; }
     var n, t, s;
     !function (f, b, e, v) {
@@ -72,6 +75,13 @@
       s.parentNode.insertBefore(t, s);
     }(global, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
     fbq('init', META_PIXEL_ID);
+  }
+
+  function loadMetaPageView() {
+    if (metaPageViewLoaded) { return; }
+    metaPageViewLoaded = true;
+    ensureMetaPixelBase();
+    if (typeof fbq !== 'function') { return; }
     fbq('track', 'PageView');
   }
 
@@ -79,7 +89,7 @@
     if (marketingLoaded) { return; }
     marketingLoaded = true;
     loadGoogleAds();
-    loadMetaPixel();
+    loadMetaPageView();
     loadScript('/js/meta-pixel-events.js', true);
   }
 
@@ -111,7 +121,7 @@
     bannerEl.innerHTML =
       '<div class="cuemark-cookie-inner">' +
         '<p class="cuemark-cookie-text">' +
-          'We use strictly necessary storage to keep you signed in. With your permission, we also use cookies for Meta and Google ad measurement. ' +
+          'We use strictly necessary storage to keep you signed in. We use Meta for basic ad measurement, and with your permission we also use Google and richer conversion tags. ' +
           '<a href="/legal/cookies">Cookie Policy</a> · <a href="/legal/privacy">Privacy Policy</a>.' +
         '</p>' +
         '<div class="cuemark-cookie-actions">' +
@@ -146,6 +156,7 @@
   }
 
   function init() {
+    loadMetaPageView();
     var consent = getConsent();
     if (consent && consent.marketing) {
       loadMarketingTags();
