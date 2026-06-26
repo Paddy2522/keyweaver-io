@@ -46,7 +46,8 @@
   }
 
   async function fetchChangelog() {
-    var res = await fetch('/changelog.json');
+    // Cache-bust so edge/browser caches don't serve a stale changelog after a release.
+    var res = await fetch('/changelog.json?cb=' + Date.now(), { cache: 'no-store' });
     if (!res.ok) { throw new Error('Could not load changelog'); }
     return res.json();
   }
