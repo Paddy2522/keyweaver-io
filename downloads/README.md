@@ -1,6 +1,6 @@
 # Cuemark installer downloads
 
-Installer zips total **~60 MB** (Windows ~48 MB with bundled ffmpeg, macOS ~12 MB). They are too large to ship inside the Cloudflare Workers static deploy, which is why `/downloads/*.zip` on keyweaver.io would 404 if committed to the site repo.
+Installer zips total **~90–100 MB** (Windows ~48 MB, macOS ~45 MB with bundled ffmpeg). They are too large to ship inside the Cloudflare Workers static deploy, which is why `/downloads/*.zip` on keyweaver.io would 404 if committed to the site repo.
 
 ## How downloads work
 
