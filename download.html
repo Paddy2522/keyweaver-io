@@ -454,6 +454,15 @@
       </p>
     </div>
 
+    <noscript>
+      <p class="install-hint" style="text-align:center;">
+        JavaScript is disabled. Download directly:
+        <a href="https://github.com/Paddy2522/keyweaver-io/releases/download/v1.0.1/Cuemark-Install-win-v1.0.1.zip">Windows</a>
+        ·
+        <a href="https://github.com/Paddy2522/keyweaver-io/releases/download/v1.0.1/Cuemark-Install-mac-v1.0.1.zip">macOS</a>
+      </p>
+    </noscript>
+
     <div class="reqs">
       <span class="req">
         <svg viewBox="0 0 14 14"><circle cx="7" cy="7" r="5.5"/><polyline points="4.5 7 6.5 9 9.5 5"/></svg>
@@ -837,7 +846,7 @@
     }
 
     try {
-      const res = await fetch('/downloads.json');
+      const res = await fetch('/downloads.json?cb=' + Date.now(), { cache: 'no-store' });
       if (res.ok) applyUrls(await res.json());
       else {
         setVersion(version);
