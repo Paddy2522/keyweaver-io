@@ -251,6 +251,61 @@
     }
     .empty-state p { font-size: 14px; color: var(--muted); margin-bottom: 1rem; }
 
+    /* ADMIN ANALYTICS */
+    #admin-analytics { display: none; margin-bottom: 2.5rem; }
+    #admin-analytics.visible { display: block; }
+    .admin-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 10px; border-radius: 6px; margin-bottom: 0.75rem;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+      background: rgba(91,107,248,0.12); color: var(--accent2); border: 1px solid rgba(91,107,248,0.25);
+    }
+    .admin-updated { font-size: 12px; color: var(--muted); margin-bottom: 1.25rem; }
+    .admin-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px; margin-bottom: 1.25rem;
+    }
+    .admin-stat {
+      background: var(--surface); border: 1px solid var(--edge);
+      border-radius: 10px; padding: 14px 16px;
+    }
+    .admin-stat-value {
+      font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 700;
+      color: var(--text); line-height: 1.1; margin-bottom: 4px;
+    }
+    .admin-stat-label { font-size: 11px; color: var(--muted); line-height: 1.4; }
+    .admin-subgrid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px; margin-bottom: 1.25rem;
+    }
+    .admin-mini-chart {
+      background: var(--surface); border: 1px solid var(--edge);
+      border-radius: 12px; padding: 1rem 1.25rem;
+    }
+    .admin-mini-chart h3 {
+      font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 700;
+      color: var(--text); margin-bottom: 0.75rem;
+    }
+    .admin-bars { display: flex; align-items: flex-end; gap: 4px; height: 72px; }
+    .admin-bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 0; }
+    .admin-bar {
+      width: 100%; max-width: 28px; min-height: 2px;
+      background: var(--accent); border-radius: 3px 3px 0 0;
+    }
+    .admin-bar.panel { background: var(--success); }
+    .admin-bar-label { font-size: 9px; color: var(--muted); }
+    .admin-table .history-row { grid-template-columns: 1.2fr 0.8fr 0.8fr auto; }
+    .admin-muted { color: var(--muted); font-size: 12px; }
+    .admin-funnel {
+      display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 1.25rem;
+    }
+    .admin-funnel-pill {
+      background: var(--surface); border: 1px solid var(--edge);
+      border-radius: 999px; padding: 8px 14px; font-size: 13px; color: var(--text);
+    }
+    .admin-funnel-pill strong { color: var(--accent2); }
+
     /* ACCOUNT DETAILS */
     .details-list { background: var(--surface); border: 1px solid var(--edge); border-radius: 12px; overflow: hidden; }
     .detail-row {
@@ -432,6 +487,27 @@
           <span class="detail-label">Plugin version</span>
           <span class="detail-value">Download to check</span>
         </div>
+      </div>
+    </div>
+
+    <!-- ADMIN ANALYTICS (contact@keyweaver.io only — loaded via API) -->
+    <div id="admin-analytics">
+      <div class="section-header">
+        <h2 class="section-title">Cuemark analytics</h2>
+        <button class="detail-action" type="button" onclick="loadAdminAnalytics(true)">Refresh</button>
+      </div>
+      <div class="admin-badge">Admin view</div>
+      <p class="admin-updated" id="admin-updated">Loading analytics…</p>
+      <div class="admin-stats-grid" id="admin-stats-grid"></div>
+      <div class="admin-funnel" id="admin-funnel"></div>
+      <div class="admin-subgrid" id="admin-charts"></div>
+      <div class="section" style="margin-top:0.5rem;">
+        <div class="section-header"><h2 class="section-title">Recent signups</h2></div>
+        <div class="history-table admin-table" id="admin-signups-table"></div>
+      </div>
+      <div class="section">
+        <div class="section-header"><h2 class="section-title">Recent funnel events</h2></div>
+        <div class="history-table admin-table" id="admin-events-table"></div>
       </div>
     </div>
 
@@ -623,10 +699,119 @@
       renderDashboard(data);
       document.getElementById('loading').style.display = 'none';
       document.getElementById('dashboard').style.display = 'block';
+      loadAdminAnalytics(false);
 
     } catch (err) {
       showLoadError('Network error — check your connection and try again.');
     }
+  }
+
+  function formatShortDate(iso) {
+    if (!iso) return '—';
+    return new Date(iso).toLocaleString('en-GB', {
+      day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'
+    });
+  }
+
+  function formatDayLabel(dateStr) {
+    const d = new Date(dateStr + 'T12:00:00Z');
+    return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+  }
+
+  function renderMiniChart(title, series, barClass) {
+    const max = Math.max(1, ...series.map((p) => p.count));
+    const bars = series.map((p) => {
+      const h = Math.max(2, Math.round((p.count / max) * 64));
+      return '<div class="admin-bar-col"><div class="admin-bar ' + (barClass || '') + '" style="height:' + h + 'px" title="' + p.count + '"></div><span class="admin-bar-label">' + formatDayLabel(p.date) + '</span></div>';
+    }).join('');
+    return '<div class="admin-mini-chart"><h3>' + title + '</h3><div class="admin-bars">' + bars + '</div></div>';
+  }
+
+  function renderAdminAnalytics(data) {
+    const p7 = data.periods?.['7d'] || {};
+    const p30 = data.periods?.['30d'] || {};
+    const acct = data.accounts || {};
+    const funnel30 = data.funnel?.download_to_panel_pct_30d;
+
+    document.getElementById('admin-updated').textContent =
+      'Updated ' + formatShortDate(data.generated_at) + ' · unique visitors = distinct IPs on tracked events';
+
+    document.getElementById('admin-stats-grid').innerHTML = [
+      { v: acct.total, l: 'Total accounts' },
+      { v: acct.verified, l: 'Verified (credits granted)' },
+      { v: acct.pending_verification, l: 'Awaiting email verify' },
+      { v: acct.last_7d, l: 'Signups (7d)' },
+      { v: acct.last_30d, l: 'Signups (30d)' },
+      { v: acct.monthly_subscribers, l: 'Monthly subscribers' },
+      { v: p7.download_click, l: 'Download clicks (7d)' },
+      { v: p7.panel_open, l: 'Panel opens (7d)' },
+      { v: p7.unique_visitors, l: 'Unique visitors (7d)' },
+      { v: p30.download_click, l: 'Download clicks (30d)' },
+      { v: p30.panel_open, l: 'Panel opens (30d)' },
+      { v: data.marketing?.active_opt_ins ?? 0, l: 'Marketing opt-ins' },
+      { v: data.guests?.total ?? 0, l: 'Guest trials' },
+      { v: data.usage?.generates_last_30d ?? 0, l: 'Generates (30d)' },
+      { v: data.devices?.total ?? 0, l: 'Plugin devices' },
+    ].map((s) => '<div class="admin-stat"><div class="admin-stat-value">' + s.v + '</div><div class="admin-stat-label">' + s.l + '</div></div>').join('');
+
+    const funnelEl = document.getElementById('admin-funnel');
+    funnelEl.innerHTML = [
+      '<span class="admin-funnel-pill">30d downloads: <strong>' + (p30.download_click || 0) + '</strong></span>',
+      '<span class="admin-funnel-pill">30d panel opens: <strong>' + (p30.panel_open || 0) + '</strong></span>',
+      '<span class="admin-funnel-pill">Download → panel (30d): <strong>' + (funnel30 == null ? '—' : funnel30 + '%') + '</strong></span>',
+      '<span class="admin-funnel-pill">All-time download → panel: <strong>' + (data.funnel?.download_to_panel_pct == null ? '—' : data.funnel.download_to_panel_pct + '%') + '</strong></span>',
+    ].join('');
+
+    document.getElementById('admin-charts').innerHTML = [
+      renderMiniChart('Signups (14d)', data.daily?.signups || [], ''),
+      renderMiniChart('Download clicks (14d)', data.daily?.download_clicks || [], ''),
+      renderMiniChart('Panel opens (14d)', data.daily?.panel_opens || [], 'panel'),
+    ].join('');
+
+    const signups = data.recent?.signups || [];
+    const signupRows = signups.length
+      ? signups.map((s) => '<div class="history-row"><div><div class="history-file">' + escapeHtml(s.email) + '</div><div class="history-date">' + formatShortDate(s.created_at) + '</div></div><span class="admin-muted">' + escapeHtml(s.tier || 'spark') + '</span><span></span><span></span></div>').join('')
+      : '<div class="empty-state"><p>No signups yet.</p></div>';
+    document.getElementById('admin-signups-table').innerHTML =
+      '<div class="history-row header"><span>Email</span><span>Tier</span><span></span><span></span></div><div id="admin-signup-rows">' + signupRows + '</div>';
+
+    const events = data.recent?.events || [];
+    const eventRows = events.length
+      ? events.map((e) => {
+          const meta = [e.os, e.source, e.panel_version].filter(Boolean).join(' · ');
+          const ref = e.referrer ? truncate(e.referrer, 48) : '—';
+          return '<div class="history-row"><div><div class="history-file">' + escapeHtml(e.event_name) + '</div><div class="history-date">' + formatShortDate(e.created_at) + (meta ? ' · ' + escapeHtml(meta) : '') + '</div></div><span class="admin-muted">' + escapeHtml(ref) + '</span><span></span><span></span></div>';
+        }).join('')
+      : '<div class="empty-state"><p>No tracked events yet.</p></div>';
+    document.getElementById('admin-events-table').innerHTML =
+      '<div class="history-row header"><span>Event</span><span>Referrer</span><span></span><span></span></div><div id="admin-event-rows">' + eventRows + '</div>';
+
+    document.getElementById('admin-analytics').classList.add('visible');
+  }
+
+  function escapeHtml(str) {
+    return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  function truncate(str, max) {
+    const s = String(str || '');
+    return s.length <= max ? s : s.slice(0, max - 1) + '…';
+  }
+
+  async function loadAdminAnalytics(showToastOnRefresh) {
+    const token = localStorage.getItem('cc_token');
+    if (!token) return;
+
+    try {
+      const res = await fetch(BACKEND + '/api/captio/account/analytics', {
+        headers: { 'Authorization': 'Bearer ' + token }
+      });
+      if (res.status === 404) return;
+      if (!res.ok) return;
+      const data = await res.json();
+      renderAdminAnalytics(data);
+      if (showToastOnRefresh) showToast('Analytics refreshed.');
+    } catch {}
   }
 
   function renderDashboard(data) {
