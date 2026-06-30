@@ -286,15 +286,16 @@
     <!-- INSTALL -->
     <div class="help-section" id="install">
       <h2>Installation</h2>
-      <p>Cuemark is a CEP panel for Adobe After Effects. Download the <a href="/download">zip for your platform</a>, extract it, open <strong>README.txt</strong>, and copy <strong>com.captioncraft.panel</strong> into your Adobe CEP extensions folder. The panel appears under <strong>Window → Extensions</strong> after you restart AE.</p>
-      <p>Full step-by-step instructions are on the <a href="/download">download page</a> and inside the zip.</p>
+      <p>Cuemark is a CEP panel for Adobe After Effects. Download the <a href="/download">zip for your platform</a>, extract it, and run <strong>Install-Cuemark.cmd</strong> (Windows) or <strong>Install-Cuemark.command</strong> (macOS). Manual steps are in <strong>README.txt</strong> inside the zip. The panel appears under <strong>Window → Extensions</strong> after you restart AE.</p>
+      <p>Full step-by-step instructions are on the <a href="/download">download page</a>.</p>
 
       <h3>Windows</h3>
-      <p>Copy the panel folder to <code>%AppData%\Adobe\CEP\extensions\</code>, then double-click <strong>Enable-Cuemark-CEP.reg</strong> once (included in the zip). This enables third-party CEP panels for your user account only — no admin rights required.</p>
+      <p>Extract the zip, double-click <strong>Install-Cuemark.cmd</strong>, and click <strong>Run</strong> if Windows says the publisher could not be verified. The installer copies files to your user AppData folder only — no admin rights required.</p>
+      <p>Prefer not to run a script? Copy <strong>com.captioncraft.panel</strong> to <code>%AppData%\Adobe\CEP\extensions\</code> and double-click <strong>Enable-Cuemark-CEP.reg</strong> once (both included in the zip).</p>
 
       <h3>macOS</h3>
-      <p>Copy the panel folder to <code>~/Library/Application Support/Adobe/CEP/extensions/</code>, then run this once in Terminal:</p>
-      <p><code>defaults write com.adobe.CSXS.12 PlayerDebugMode 1</code></p>
+      <p>Extract the zip and double-click <strong>Install-Cuemark.command</strong>. If macOS blocks it, right-click → <strong>Open</strong> → <strong>Open</strong> once.</p>
+      <p>Manual fallback: copy the panel folder to <code>~/Library/Application Support/Adobe/CEP/extensions/</code> and run <code>defaults write com.adobe.CSXS.12 PlayerDebugMode 1</code> in Terminal (see README.txt).</p>
       <p>The Mac installer includes ffmpeg for video transcription — no Homebrew or extra setup needed. If video generate still fails, re-download from the <a href="/download">download page</a> and run the installer again.</p>
       <div class="note note-warn">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
@@ -475,7 +476,7 @@
       <h2>Troubleshooting</h2>
 
       <h3>Panel doesn't appear in Window → Extensions</h3>
-      <p>Re-copy the panel per <strong>README.txt</strong> in the zip, confirm <strong>PlayerDebugMode</strong> is set (Windows: run <strong>Enable-Cuemark-CEP.reg</strong> again; Mac: run the <code>defaults write</code> line), then fully quit and relaunch After Effects.</p>
+      <p>Re-run <strong>Install-Cuemark.cmd</strong> or <strong>Install-Cuemark.command</strong> from a fresh zip extract, then fully quit and relaunch After Effects. See <strong>README.txt</strong> for manual steps.</p>
 
       <h3>Video generate fails on Mac</h3>
       <p>Re-download Cuemark from the <a href="/download">download page</a> and replace the <strong>com.captioncraft.panel</strong> folder — ffmpeg is bundled for video transcription. If it still fails, install ffmpeg with Homebrew (<code>brew install ffmpeg</code>) or generate from an audio-only file (MP3/WAV).</p>
@@ -548,7 +549,7 @@
           <span>Will Cuemark keep getting updates?</span>
           <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
-        <div class="faq-a">Yes. Cuemark is actively developed. To update, download the latest zip from the <a href="/download">download page</a>, replace the <strong>com.captioncraft.panel</strong> folder, and fully quit and reopen After Effects. You do not need to run the .reg file again on Windows.</div>
+        <div class="faq-a">Yes. Cuemark is actively developed. To update, download the latest zip from the <a href="/download">download page</a>, run the installer again, then fully quit and reopen After Effects.</div>
       </div>
 
     </div>

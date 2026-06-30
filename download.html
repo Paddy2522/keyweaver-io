@@ -450,9 +450,13 @@
         </a>
       </div>
       <p class="install-hint">
-        Extract the zip, open <strong>README.txt</strong>, and copy the <strong>com.captioncraft.panel</strong> folder into your Adobe extensions folder.
-        No installer program to run — just copy files.
+        Extract the zip, double-click <strong>Install-Cuemark.command</strong>, then restart After Effects.
+        If macOS blocks it, right-click → <strong>Open</strong> once. Manual steps are in <strong>README.txt</strong>.
       </p>
+      <div class="security-notice">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <p><strong>First time on Mac?</strong> Right-click <strong>Install-Cuemark.command</strong> → <strong>Open</strong> → <strong>Open</strong>. No admin password needed.</p>
+      </div>
     </div>
 
     <!-- WINDOWS DOWNLOAD -->
@@ -461,7 +465,7 @@
         <div class="download-card-info">
           <span class="download-badge">Recommended for Windows</span>
           <h3 id="win-zip-name">Cuemark-Install-win-v1.0.1.zip</h3>
-          <p>Windows 10 / 11 · After Effects 2022+ · panel folder + README · video transcription included</p>
+          <p>Windows 10 / 11 · After Effects 2022+ · automated installer in zip · video transcription included</p>
         </div>
         <a href="#" class="btn-download is-loading" id="win-download-btn" data-file="winZip" aria-disabled="true">
           <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -469,9 +473,13 @@
         </a>
       </div>
       <p class="install-hint">
-        Extract the zip, open <strong>README.txt</strong>, copy <strong>com.captioncraft.panel</strong> to your extensions folder,
-        then double-click <strong>Enable-Cuemark-CEP.reg</strong> once. Restart After Effects.
+        Extract the zip, double-click <strong>Install-Cuemark.cmd</strong>, click <strong>Run</strong> if Windows asks, then restart After Effects.
+        Manual copy steps are in <strong>README.txt</strong> if you prefer not to run the installer.
       </p>
+      <div class="security-notice">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <p><strong>Windows may say "publisher could not be verified."</strong> That is normal before code signing. Click <strong>Run</strong>. Cuemark only installs to your user folder — no admin rights.</p>
+      </div>
     </div>
 
     <noscript>
@@ -520,22 +528,17 @@
         <div class="install-step">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h3>Copy the panel folder</h3>
-            <p>Open <strong>README.txt</strong> and follow step 1: copy <strong>com.captioncraft.panel</strong> into:</p>
-            <p style="margin-top:0.5rem; font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent2);">%AppData%\Adobe\CEP\extensions\</p>
+            <h3>Run Install-Cuemark.cmd</h3>
+            <p>Double-click <strong>Install-Cuemark.cmd</strong>. It copies Cuemark into your extensions folder and configures After Effects automatically.</p>
+            <div class="step-note">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <p>If Windows shows <strong>publisher could not be verified</strong>, click <strong>Run</strong>. Prefer not to run a script? Use the manual steps in <strong>README.txt</strong> instead.</p>
+            </div>
           </div>
         </div>
 
         <div class="install-step">
           <div class="step-number">3</div>
-          <div class="step-body">
-            <h3>Enable third-party panels (one time)</h3>
-            <p>Double-click <strong>Enable-Cuemark-CEP.reg</strong> in the extracted folder and confirm. This is a standard Windows registry file — only changes your user account.</p>
-          </div>
-        </div>
-
-        <div class="install-step">
-          <div class="step-number">4</div>
           <div class="step-body">
             <h3>Restart After Effects</h3>
             <p>Fully quit After Effects if it was open, then launch it again. Extensions only load on startup.</p>
@@ -543,7 +546,7 @@
         </div>
 
         <div class="install-step">
-          <div class="step-number">5</div>
+          <div class="step-number">4</div>
           <div class="step-body">
             <h3>Open Cuemark</h3>
             <p>Go to:</p>
@@ -581,23 +584,17 @@
         <div class="install-step">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h3>Copy the panel folder</h3>
-            <p>Copy <strong>com.captioncraft.panel</strong> into:</p>
-            <p style="margin-top:0.5rem; font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent2);">~/Library/Application Support/Adobe/CEP/extensions/</p>
+            <h3>Run Install-Cuemark.command</h3>
+            <p>Double-click <strong>Install-Cuemark.command</strong>. It copies Cuemark into your CEP extensions folder and enables third-party panels.</p>
+            <div class="step-note">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <p>If macOS blocks the installer, right-click <strong>Install-Cuemark.command</strong> → <strong>Open</strong> once. Manual steps are in <strong>README.txt</strong>.</p>
+            </div>
           </div>
         </div>
 
         <div class="install-step">
           <div class="step-number">3</div>
-          <div class="step-body">
-            <h3>Enable third-party panels (one time)</h3>
-            <p>Paste this in Terminal (README.txt has the full line):</p>
-            <p style="margin-top:0.5rem; font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent2);">defaults write com.adobe.CSXS.12 PlayerDebugMode 1</p>
-          </div>
-        </div>
-
-        <div class="install-step">
-          <div class="step-number">4</div>
           <div class="step-body">
             <h3>Restart After Effects</h3>
             <p>Fully quit After Effects if it was open, then launch it again.</p>
@@ -605,7 +602,7 @@
         </div>
 
         <div class="install-step">
-          <div class="step-number">5</div>
+          <div class="step-number">4</div>
           <div class="step-body">
             <h3>Open Cuemark</h3>
             <p>Go to:</p>
@@ -686,7 +683,7 @@
           <span>Windows blocked the installer or showed a security warning</span>
           <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
-        <div class="faq-a">Extract the zip fully and follow <strong>README.txt</strong>. Copy <strong>com.captioncraft.panel</strong> into your extensions folder, then on Windows double-click <strong>Enable-Cuemark-CEP.reg</strong> once. No installer program is required.</div>
+        <div class="faq-a">Extract the zip fully, then run <strong>Install-Cuemark.cmd</strong> from the extracted folder (not from inside the zip). If Windows warns about the publisher, click <strong>Run</strong>. Or follow the manual steps in <strong>README.txt</strong>.</div>
       </div>
 
       <div class="faq-item">
@@ -731,10 +728,10 @@
 
       <div class="faq-item">
         <div class="faq-q" onclick="toggleFaq(this)">
-          <span>macOS — panel does not appear</span>
+          <span>macOS blocked the installer</span>
           <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
-        <div class="faq-a">Follow <strong>README.txt</strong> in the extracted zip. Copy <strong>com.captioncraft.panel</strong> to <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent2);">~/Library/Application Support/Adobe/CEP/extensions/</code>, run the <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent2);">defaults write</code> line once, then fully quit and reopen After Effects.</div>
+        <div class="faq-a">Extract the zip fully first. Right-click <strong>Install-Cuemark.command</strong> → <strong>Open</strong> → <strong>Open</strong> (not double-click the first time). Or use the manual copy steps in <strong>README.txt</strong>.</div>
       </div>
 
       <div class="faq-item">
@@ -887,7 +884,7 @@
           enableDownloadButton(el, key);
         }
         if (key === 'winZip' && el.id === 'win-download-btn') {
-          el.setAttribute('title', 'Extract zip, copy folder per README.txt');
+          el.setAttribute('title', 'Extract zip, then run Install-Cuemark.cmd');
         }
       });
     }
