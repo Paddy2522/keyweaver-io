@@ -140,6 +140,27 @@
       margin-top: 1.25rem; font-size: 13px; color: var(--muted); line-height: 1.6;
       max-width: 520px; margin-left: auto; margin-right: auto;
     }
+    .install-hint a { color: var(--accent2); text-decoration: none; }
+    .install-hint a:hover { text-decoration: underline; }
+
+    .download-alt {
+      margin-top: 0.75rem; font-size: 12px; color: var(--muted);
+    }
+    .download-alt a { color: var(--accent2); text-decoration: none; }
+    .download-alt a:hover { text-decoration: underline; }
+
+    .security-notice {
+      display: flex; gap: 10px; align-items: flex-start;
+      max-width: 560px; margin: 1.5rem auto 0; padding: 12px 14px;
+      background: rgba(245, 166, 35, 0.08); border: 1px solid rgba(245, 166, 35, 0.28);
+      border-radius: 10px; text-align: left;
+    }
+    .security-notice svg {
+      width: 18px; height: 18px; stroke: var(--warning); fill: none;
+      stroke-width: 2; stroke-linecap: round; flex-shrink: 0; margin-top: 2px;
+    }
+    .security-notice p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+    .security-notice strong { color: var(--text); font-weight: 500; }
 
     .btn-download {
       display: inline-flex; align-items: center; gap: 8px;
@@ -429,10 +450,14 @@
         </a>
       </div>
       <p class="install-hint">
-        After extracting, double-click <strong>Install-Cuemark.command</strong>.
-        If macOS blocks it, right-click → <strong>Open</strong> once.
+        Extract the zip fully, then double-click <strong>Install-Cuemark.command</strong>.
+        Read <strong>INSTALL-README.txt</strong> in the folder if macOS blocks the installer.
         Cuemark includes ffmpeg for video transcription — no extra setup needed.
       </p>
+      <div class="security-notice" id="mac-security-notice">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <p><strong>macOS may block the installer</strong> on first open. Right-click <strong>Install-Cuemark.command</strong> → <strong>Open</strong> → <strong>Open</strong> once. No administrator password is required.</p>
+      </div>
     </div>
 
     <!-- WINDOWS DOWNLOAD -->
@@ -440,24 +465,35 @@
       <div class="download-card download-card-primary">
         <div class="download-card-info">
           <span class="download-badge">Recommended for Windows</span>
-          <h3 id="win-zip-name">Cuemark-Install-win-v1.0.1.zip</h3>
-          <p>Windows 10 / 11 · After Effects 2022+ · ~48 MB download · video transcription included</p>
+          <h3 id="win-exe-name">Cuemark-Setup-1.0.1.exe</h3>
+          <p>Windows 10 / 11 · After Effects 2022+ · setup wizard · no zip extraction · video transcription included</p>
         </div>
-        <a href="#" class="btn-download is-loading" id="win-download-btn" data-file="winZip" aria-disabled="true">
+        <a href="#" class="btn-download is-loading" id="win-download-btn" data-file="winExe" aria-disabled="true">
           <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           <span class="btn-download-label">Preparing download…</span>
         </a>
       </div>
       <p class="install-hint">
-        After download: right-click the zip → <strong>Extract All</strong> → open the folder → double-click <strong>Install-Cuemark.cmd</strong>.
-        A command window runs briefly while Cuemark installs — then restart After Effects.
+        Double-click the downloaded installer and follow the steps. When finished, fully quit and reopen After Effects, then open
+        <strong>Window → Extensions → Cuemark by Keyweaver</strong>.
       </p>
+      <p class="download-alt" id="win-zip-alt">
+        Prefer a zip?
+        <a href="#" id="win-zip-link" data-file="winZip">Download <span id="win-zip-name-inline">Cuemark-Install-win-v1.0.1.zip</span></a>
+        — extract fully, then run <strong>Install-Cuemark.cmd</strong>.
+      </p>
+      <div class="security-notice" id="win-security-notice">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <p><strong>Windows may show a security prompt</strong> because Cuemark is not code-signed yet. Click <strong>Run</strong> on script warnings, or <strong>More info → Run anyway</strong> on SmartScreen. The installer only copies files to your user folder — no admin rights required.</p>
+      </div>
     </div>
 
     <noscript>
       <p class="install-hint" style="text-align:center;">
         JavaScript is disabled. Download directly:
-        <a href="https://github.com/Paddy2522/keyweaver-io/releases/download/v1.0.1/Cuemark-Install-win-v1.0.1.zip">Windows</a>
+        <a href="https://github.com/Paddy2522/keyweaver-io/releases/download/v1.0.1/Cuemark-Setup-1.0.1.exe">Windows installer</a>
+        ·
+        <a href="https://github.com/Paddy2522/keyweaver-io/releases/download/v1.0.1/Cuemark-Install-win-v1.0.1.zip">Windows zip</a>
         ·
         <a href="https://github.com/Paddy2522/keyweaver-io/releases/download/v1.0.1/Cuemark-Install-mac-v1.0.1.zip">macOS</a>
       </p>
@@ -492,16 +528,21 @@
         <div class="install-step">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h3>Download and extract</h3>
-            <p>Download <strong id="win-step-zip-name">Cuemark-Install-win-v1.0.1.zip</strong>, then right-click it and choose <strong>Extract All</strong>. Open the extracted folder.</p>
+            <h3>Download the installer</h3>
+            <p>Click <strong>Download for Windows</strong> to get <strong id="win-step-exe-name">Cuemark-Setup-1.0.1.exe</strong>. This is the easiest option — no zip extraction needed.</p>
+            <p style="margin-top:0.5rem;">Alternatively, use the zip link below the button and run <strong>Install-Cuemark.cmd</strong> after extracting.</p>
+            <div class="step-note">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <p>If Windows shows a security warning, click <strong>Run</strong> or <strong>More info → Run anyway</strong>. Cuemark installs to your user folder only.</p>
+            </div>
           </div>
         </div>
 
         <div class="install-step">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h3>Run Install-Cuemark.cmd</h3>
-            <p>Double-click <strong>Install-Cuemark.cmd</strong>. It copies Cuemark into your Adobe extensions folder and configures After Effects — no Registry Editor needed. A command window will open briefly while it installs.</p>
+            <h3>Run the installer</h3>
+            <p>Double-click the downloaded file and follow the setup wizard. It copies Cuemark into your Adobe extensions folder and configures After Effects automatically.</p>
           </div>
         </div>
 
@@ -544,8 +585,8 @@
         <div class="install-step">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h3>Run the installer</h3>
-            <p>Download the zip, extract it, and double-click <strong>Install-Cuemark.command</strong>. It copies Cuemark into your CEP extensions folder and enables third-party panels in After Effects — no Terminal commands needed.</p>
+            <h3>Download and extract</h3>
+            <p>Download <strong id="mac-step-zip-name">Cuemark-Install-mac-v1.0.1.zip</strong>, extract it fully, and open the folder. Read <strong>INSTALL-README.txt</strong> if you need help.</p>
             <div class="step-note">
               <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
               <p>If macOS says the installer is from an unidentified developer, right-click <strong>Install-Cuemark.command</strong> → <strong>Open</strong> once.</p>
@@ -556,13 +597,21 @@
         <div class="install-step">
           <div class="step-number">2</div>
           <div class="step-body">
+            <h3>Run Install-Cuemark.command</h3>
+            <p>Double-click <strong>Install-Cuemark.command</strong>. It copies Cuemark into your CEP extensions folder and enables third-party panels in After Effects.</p>
+          </div>
+        </div>
+
+        <div class="install-step">
+          <div class="step-number">3</div>
+          <div class="step-body">
             <h3>Restart After Effects</h3>
             <p>Fully quit After Effects if it was open, then launch it again.</p>
           </div>
         </div>
 
         <div class="install-step">
-          <div class="step-number">3</div>
+          <div class="step-number">4</div>
           <div class="step-body">
             <h3>Open Cuemark</h3>
             <p>Go to:</p>
@@ -643,7 +692,7 @@
           <span>Windows blocked the installer or showed a security warning</span>
           <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
-        <div class="faq-a">Extract the zip fully, then run <strong>Install-Cuemark.cmd</strong> from the extracted folder (not from inside the zip). If Windows warns about the script, click <strong>More info</strong> → <strong>Run anyway</strong>.</div>
+        <div class="faq-a">Download <strong>Cuemark-Setup</strong> from this page (recommended) or extract the zip and run <strong>Install-Cuemark.cmd</strong>. If Windows warns about the publisher, click <strong>Run</strong> on script dialogs or <strong>More info → Run anyway</strong> on SmartScreen. The installer only copies files to your user AppData folder.</div>
       </div>
 
       <div class="faq-item">
@@ -749,7 +798,11 @@
     el.parentElement.classList.toggle('open');
   }
 
-  var DOWNLOAD_LABELS = { winZip: 'Download for Windows', macZip: 'Download for macOS' };
+  var DOWNLOAD_LABELS = {
+    winExe: 'Download for Windows',
+    winZip: 'Download zip for Windows',
+    macZip: 'Download for macOS'
+  };
 
   function trackCuemarkDownloadClick(key, href) {
     var os = key === 'winZip' ? 'windows' : 'macos';
@@ -808,41 +861,54 @@
     var GITHUB_RELEASE_BASE = 'https://github.com/Paddy2522/keyweaver-io/releases/download/v';
     let version = '1.0.1';
     const fileNames = {
+      winExe: '',
       winZip: '',
       macZip: ''
     };
 
     function setVersion(v) {
       version = v || version;
+      fileNames.winExe = 'Cuemark-Setup-' + version + '.exe';
       fileNames.winZip = 'Cuemark-Install-win-v' + version + '.zip';
       fileNames.macZip = 'Cuemark-Install-mac-v' + version + '.zip';
       const verEl = document.getElementById('download-version');
       if (verEl) verEl.textContent = version;
-      const winName = document.getElementById('win-zip-name');
+      const winExeName = document.getElementById('win-exe-name');
       const macName = document.getElementById('mac-zip-name');
-      const winStepName = document.getElementById('win-step-zip-name');
-      if (winName) winName.textContent = fileNames.winZip;
+      const winStepExe = document.getElementById('win-step-exe-name');
+      const macStepName = document.getElementById('mac-step-zip-name');
+      const winZipInline = document.getElementById('win-zip-name-inline');
+      if (winExeName) winExeName.textContent = fileNames.winExe;
       if (macName) macName.textContent = fileNames.macZip;
-      if (winStepName) winStepName.textContent = fileNames.winZip;
+      if (winStepExe) winStepExe.textContent = fileNames.winExe;
+      if (macStepName) macStepName.textContent = fileNames.macZip;
+      if (winZipInline) winZipInline.textContent = fileNames.winZip;
     }
 
     function applyUrls(manifest) {
       if (manifest.version) setVersion(manifest.version);
-      // Fall back to the GitHub release asset (not /downloads/, which is not deployed).
       const githubFallback = {
+        winExe: GITHUB_RELEASE_BASE + version + '/' + fileNames.winExe,
         winZip: GITHUB_RELEASE_BASE + version + '/' + fileNames.winZip,
         macZip: GITHUB_RELEASE_BASE + version + '/' + fileNames.macZip
       };
       document.querySelectorAll('[data-file]').forEach(el => {
         const key = el.getAttribute('data-file');
         const url = (manifest.files && manifest.files[key]) || githubFallback[key];
+        if (!url) { return; }
         el.href = url;
         bindDownloadAnalytics(el, key);
-        enableDownloadButton(el, key);
-        if (key === 'winZip' && el.id === 'win-download-btn') {
-          el.setAttribute('title', 'Extract zip, then run Install-Cuemark.cmd');
+        if (el.classList.contains('btn-download')) {
+          enableDownloadButton(el, key);
+        }
+        if (key === 'winExe' && el.id === 'win-download-btn') {
+          el.setAttribute('title', 'Run the setup wizard, then restart After Effects');
         }
       });
+      const winZipAlt = document.getElementById('win-zip-alt');
+      if (winZipAlt && !(manifest.files && manifest.files.winExe) && !githubFallback.winExe) {
+        winZipAlt.style.display = 'none';
+      }
     }
 
     try {
