@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" href="/images/favicon.svg" type="image/svg+xml" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/css/cookie-consent.css" />
+  <script src="/js/cookie-consent.js"></script>
+  <title>Superconductor by Keyweaver - AI Video Generation for After Effects</title>
+  <meta name="description" content="Superconductor by Keyweaver is an upcoming After Effects plugin for generating AI b-roll, backgrounds, motion plates, and social cutaways directly into your comp." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --ink: #08080D;
+      --surface: #13131A;
+      --lift: #1C1C28;
+      --edge: #2A2A3D;
+      --accent: #5B6BF8;
+      --accent2: #7B8BFF;
+      --text: #E8E8F0;
+      --muted: #6B6B88;
+    }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background:
+        radial-gradient(circle at 15% 10%, rgba(91, 107, 248, 0.18), transparent 32rem),
+        radial-gradient(circle at 85% 20%, rgba(123, 139, 255, 0.12), transparent 28rem),
+        var(--ink);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+    }
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem; height: 56px;
+      border-bottom: 1px solid var(--edge);
+      background: rgba(8, 8, 13, 0.88);
+      backdrop-filter: blur(12px);
+      position: sticky; top: 0; z-index: 50;
+    }
+    .brand { font-family: 'Syne', sans-serif; color: var(--text); text-decoration: none; font-weight: 800; letter-spacing: -0.03em; }
+    .nav-back { color: var(--muted); text-decoration: none; font-size: 14px; }
+    .nav-back:hover { color: var(--text); }
+    .page { max-width: 1000px; margin: 0 auto; padding: 5.5rem 2rem 6rem; }
+    .eyebrow { color: var(--accent2); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; margin-bottom: 1.1rem; }
+    h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2.4rem, 7vw, 5.25rem);
+      line-height: 0.98;
+      letter-spacing: -0.055em;
+      max-width: 820px;
+    }
+    .lead { max-width: 640px; color: var(--muted); font-size: 1.1rem; line-height: 1.75; margin-top: 1.4rem; }
+    .status {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      margin-top: 1.5rem; padding: 0.5rem 0.75rem;
+      border: 1px solid rgba(91, 107, 248, 0.35);
+      border-radius: 999px;
+      background: rgba(91, 107, 248, 0.1);
+      color: var(--accent2);
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 1px;
+      border: 1px solid var(--edge);
+      background: var(--edge);
+      border-radius: 14px;
+      overflow: hidden;
+      margin-top: 4rem;
+    }
+    .card { background: var(--surface); padding: 1.6rem; min-height: 180px; }
+    .card h2 { font-family: 'Syne', sans-serif; font-size: 1.05rem; margin-bottom: 0.6rem; }
+    .card p { color: var(--muted); font-size: 14px; line-height: 1.65; }
+    .policy {
+      margin-top: 3rem;
+      background: rgba(19, 19, 26, 0.72);
+      border: 1px solid var(--edge);
+      border-radius: 14px;
+      padding: 1.5rem;
+      max-width: 760px;
+    }
+    .policy h2 { font-family: 'Syne', sans-serif; font-size: 1.2rem; margin-bottom: 0.8rem; }
+    .policy ul { color: var(--muted); padding-left: 1.2rem; line-height: 1.75; font-size: 14px; }
+    footer { border-top: 1px solid var(--edge); padding: 2rem; text-align: center; color: var(--muted); font-size: 13px; }
+    footer a { color: var(--muted); }
+  </style>
+</head>
+<body>
+<nav>
+  <a class="brand" href="/">Keyweaver</a>
+  <a class="nav-back" href="/">Back to Cuemark</a>
+</nav>
+
+<main class="page">
+  <p class="eyebrow">Private product scaffold</p>
+  <h1>Superconductor turns prompts into AE-ready video clips.</h1>
+  <p class="lead">Generate short b-roll, abstract backgrounds, visual cutaways, product backdrops, and motion plates from inside After Effects, then import the result directly into your active composition.</p>
+  <div class="status">Provider research in progress · Not publicly available yet</div>
+
+  <section class="grid" aria-label="Superconductor MVP features">
+    <div class="card">
+      <h2>Prompt to video</h2>
+      <p>Describe the clip you need, choose a style, and generate a short AI video asset ready for your timeline.</p>
+    </div>
+    <div class="card">
+      <h2>Made for AE comps</h2>
+      <p>Aspect ratios include active comp, 16:9, 9:16, and 1:1 so generated clips match the project context.</p>
+    </div>
+    <div class="card">
+      <h2>Shared credits</h2>
+      <p>Superconductor will use the same Keyweaver login, billing, and credits system as Cuemark.</p>
+    </div>
+    <div class="card">
+      <h2>Creative guardrails</h2>
+      <p>Built-in prompt safety blocks copyrighted characters, brand logos, public figure impersonation, and unsafe content.</p>
+    </div>
+  </section>
+
+  <section class="policy">
+    <h2>MVP guardrails</h2>
+    <ul>
+      <li>Short 3-5 second generations only while provider pricing is validated.</li>
+      <li>No public figures, deepfakes, copyrighted characters, trademarked logos, or political persuasion prompts.</li>
+      <li>Provider terms, commercial usage rights, and prompt retention must be approved before beta.</li>
+    </ul>
+  </section>
+</main>
+
+<footer>
+  <p>© 2026 Keyweaver Ltd · <a href="/legal/privacy">Privacy</a> · <a href="/legal/terms">Terms</a></p>
+</footer>
+</body>
+</html>

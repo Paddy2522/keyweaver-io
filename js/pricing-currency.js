@@ -39,7 +39,7 @@
   }
 
   function detectDisplayCurrency() {
-    // Timezone reflects where the user actually is — prefer over browser language
+    // Timezone reflects where the user actually is - prefer over browser language
     // (many UK machines still report en-US in navigator.languages).
     const tzCurrency = currencyFromTimezone(getTimezone());
     if (tzCurrency) return tzCurrency;

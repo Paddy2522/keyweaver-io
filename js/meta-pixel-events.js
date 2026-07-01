@@ -1,5 +1,5 @@
 /**
- * Cuemark — Meta Pixel standard events (PageView is in the base snippet on each page).
+ * Cuemark - Meta Pixel standard events (PageView is in the base snippet on each page).
  * @see https://www.facebook.com/business/help/402791146561655
  */
 (function (global) {

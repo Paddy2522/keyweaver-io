@@ -1,5 +1,5 @@
 /**
- * Cuemark — Google Ads conversion events (gtag base tag is in each page head).
+ * Cuemark - Google Ads conversion events (gtag base tag is in each page head).
  */
 (function (global) {
   'use strict';

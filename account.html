@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="/css/nav-brand.css" />
   <link rel="stylesheet" href="/css/chrome.css" />
   <link rel="stylesheet" href="/css/help-widget.css" />
-  <title>Account — Cuemark by Keyweaver</title>
+  <title>Account - Cuemark by Keyweaver</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -394,7 +394,7 @@
   <!-- DASHBOARD -->
   <div id="load-error">
     <h2>Could not load your account</h2>
-    <p id="load-error-msg">The server did not respond. Your sign-in may still be valid — try again in a moment.</p>
+    <p id="load-error-msg">The server did not respond. Your sign-in may still be valid - try again in a moment.</p>
     <button class="btn-sm btn-primary-sm" type="button" onclick="loadAccount()">Try again</button>
     <a href="/login" class="btn-sm btn-ghost-sm" style="margin-left:8px;">Sign in again</a>
   </div>
@@ -411,7 +411,7 @@
       <!-- CREDITS -->
       <div class="card">
         <div class="card-label">Keyweaver Credits</div>
-        <div class="credits-number" id="credits-num">—</div>
+        <div class="credits-number" id="credits-num">-</div>
         <div class="credits-sub" id="credits-sub">credits remaining</div>
         <div class="credits-bar-wrap">
           <div class="credits-bar" id="credits-bar" style="width:0%"></div>
@@ -468,7 +468,7 @@
         <div class="detail-row">
           <span class="detail-label">Email</span>
           <div style="display:flex; align-items:center; gap:12px;">
-            <span class="detail-value" id="detail-email">—</span>
+            <span class="detail-value" id="detail-email">-</span>
             <button class="detail-action" onclick="changeEmail()">Change</button>
           </div>
         </div>
@@ -481,7 +481,7 @@
         </div>
         <div class="detail-row">
           <span class="detail-label">Member since</span>
-          <span class="detail-value" id="detail-since">—</span>
+          <span class="detail-value" id="detail-since">-</span>
         </div>
         <div class="detail-row">
           <span class="detail-label">Plugin version</span>
@@ -490,7 +490,7 @@
       </div>
     </div>
 
-    <!-- ADMIN ANALYTICS (contact@keyweaver.io only — loaded via API) -->
+    <!-- ADMIN ANALYTICS (contact@keyweaver.io only - loaded via API) -->
     <div id="admin-analytics">
       <div class="section-header">
         <h2 class="section-title">Cuemark analytics</h2>
@@ -578,7 +578,7 @@
       });
       const data = await res.json().catch(() => ({}));
       if (res.ok && data.monthly_applied) {
-        showToast('Monthly subscription synced — credits updated.');
+        showToast('Monthly subscription synced - credits updated.');
         return { ok: true, plan: 'monthly' };
       }
     } catch {}
@@ -612,7 +612,7 @@
           const data = await res.json().catch(() => ({}));
 
           if (res.ok && data.fulfilled) {
-            showToast('Subscription active — credits added.');
+            showToast('Subscription active - credits added.');
             if (window.CuemarkPixel && data.plan) {
               CuemarkPixel.trackCheckoutSuccess(data.plan, sessionId);
             }
@@ -640,7 +640,7 @@
           }
         } catch {
           if (attempt === 3) {
-            showToast('Could not reach server — trying sync…');
+            showToast('Could not reach server - trying sync…');
           }
         }
       }
@@ -702,12 +702,12 @@
       loadAdminAnalytics(false);
 
     } catch (err) {
-      showLoadError('Network error — check your connection and try again.');
+      showLoadError('Network error - check your connection and try again.');
     }
   }
 
   function formatShortDate(iso) {
-    if (!iso) return '—';
+    if (!iso) return '-';
     return new Date(iso).toLocaleString('en-GB', {
       day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'
     });
@@ -758,8 +758,8 @@
     funnelEl.innerHTML = [
       '<span class="admin-funnel-pill">30d downloads: <strong>' + (p30.download_click || 0) + '</strong></span>',
       '<span class="admin-funnel-pill">30d panel opens: <strong>' + (p30.panel_open || 0) + '</strong></span>',
-      '<span class="admin-funnel-pill">Download → panel (30d): <strong>' + (funnel30 == null ? '—' : funnel30 + '%') + '</strong></span>',
-      '<span class="admin-funnel-pill">All-time download → panel: <strong>' + (data.funnel?.download_to_panel_pct == null ? '—' : data.funnel.download_to_panel_pct + '%') + '</strong></span>',
+      '<span class="admin-funnel-pill">Download → panel (30d): <strong>' + (funnel30 == null ? '-' : funnel30 + '%') + '</strong></span>',
+      '<span class="admin-funnel-pill">All-time download → panel: <strong>' + (data.funnel?.download_to_panel_pct == null ? '-' : data.funnel.download_to_panel_pct + '%') + '</strong></span>',
     ].join('');
 
     document.getElementById('admin-charts').innerHTML = [
@@ -779,7 +779,7 @@
     const eventRows = events.length
       ? events.map((e) => {
           const meta = [e.os, e.source, e.panel_version].filter(Boolean).join(' · ');
-          const ref = e.referrer ? truncate(e.referrer, 48) : '—';
+          const ref = e.referrer ? truncate(e.referrer, 48) : '-';
           return '<div class="history-row"><div><div class="history-file">' + escapeHtml(e.event_name) + '</div><div class="history-date">' + formatShortDate(e.created_at) + (meta ? ' · ' + escapeHtml(meta) : '') + '</div></div><span class="admin-muted">' + escapeHtml(ref) + '</span><span></span><span></span></div>';
         }).join('')
       : '<div class="empty-state"><p>No tracked events yet.</p></div>';
@@ -827,9 +827,9 @@
     const subEnds = sub?.ends_at
       ? new Date(sub.ends_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
       : null;
-    const email = data?.email ?? '—';
+    const email = data?.email ?? '-';
     const jobs = data?.recent_jobs ?? [];
-    const since = data?.created_at ? new Date(data.created_at).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' }) : '—';
+    const since = data?.created_at ? new Date(data.created_at).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' }) : '-';
 
     // Nav email
     document.getElementById('nav-email').textContent = email;
@@ -880,7 +880,7 @@
     if (isMonthly) {
       if (isCanceling) {
         actionsEl.innerHTML = `
-          <p class="plan-cancel-note">Subscription cancelled${subEnds ? ' — access until <strong>' + subEnds + '</strong>' : ''}. Your remaining credits stay on your account.</p>
+          <p class="plan-cancel-note">Subscription cancelled${subEnds ? ' - access until <strong>' + subEnds + '</strong>' : ''}. Your remaining credits stay on your account.</p>
           <button class="btn-manage btn-manage-secondary" onclick="manageSubscription()">View billing in Stripe</button>
         `;
       } else {

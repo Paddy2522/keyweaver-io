@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="/css/nav-brand.css" />
   <link rel="stylesheet" href="/css/chrome.css" />
   <link rel="stylesheet" href="/css/help-widget.css" />
-  <title>Download Cuemark — Cuemark by Keyweaver</title>
+  <title>Download Cuemark - Cuemark by Keyweaver</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -422,7 +422,7 @@
       Version <span id="download-version">1.0.1</span> · Free to install
     </div>
     <h1>Download Cuemark</h1>
-    <p>An After Effects plugin — install it once and it lives inside your panel. Try 5 free credits with no account needed.</p>
+    <p>An After Effects plugin - install it once and it lives inside your panel. Try 5 free credits with no account needed.</p>
 
     <!-- OS TOGGLE -->
     <div class="os-toggle" role="group" aria-label="Operating system">
@@ -464,21 +464,29 @@
       <div class="download-card download-card-primary">
         <div class="download-card-info">
           <span class="download-badge">Recommended for Windows</span>
-          <h3 id="win-zip-name">Cuemark-Install-win-v1.0.1.zip</h3>
-          <p>Windows 10 / 11 · After Effects 2022+ · automated installer in zip · video transcription included</p>
+          <h3 id="win-primary-name">Cuemark-Install-win-v1.0.1.zip</h3>
+          <p id="win-primary-desc">Windows 10 / 11 · After Effects 2022+ · automated installer in zip · video transcription included</p>
         </div>
         <a href="#" class="btn-download is-loading" id="win-download-btn" data-file="winZip" aria-disabled="true">
           <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           <span class="btn-download-label">Preparing download…</span>
         </a>
       </div>
-      <p class="install-hint">
+      <p class="download-alt" id="win-zip-alt" hidden>Prefer a zip? <a href="#" id="win-zip-alt-link" data-file="winZip">Download Cuemark-Install-win-v1.0.1.zip</a></p>
+      <p class="install-hint" id="win-install-hint-zip">
         Extract the zip, double-click <strong>Install-Cuemark.cmd</strong>, click <strong>Run</strong> if Windows asks, then restart After Effects.
         Manual copy steps are in <strong>README.txt</strong> if you prefer not to run the installer.
       </p>
-      <div class="security-notice">
+      <p class="install-hint" id="win-install-hint-exe" hidden>
+        Run <strong>Cuemark-Setup</strong>, follow the prompts, then restart After Effects. Signed by <strong>Keyweaver Ltd</strong>.
+      </p>
+      <div class="security-notice" id="win-security-notice">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        <p><strong>Windows may say "publisher could not be verified."</strong> That is normal before code signing. Click <strong>Run</strong>. Cuemark only installs to your user folder — no admin rights.</p>
+        <p><strong>Windows may say "publisher could not be verified."</strong> That is normal before code signing. Click <strong>Run</strong>. Cuemark only installs to your user folder - no admin rights.</p>
+      </div>
+      <div class="security-notice" id="win-signed-notice" hidden>
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/></svg>
+        <p><strong>Signed installer.</strong> Windows should show <strong>Keyweaver Ltd</strong> as publisher. SmartScreen may still ask once on first download - choose <strong>Keep</strong> or <strong>Run anyway</strong> if needed.</p>
       </div>
     </div>
 
@@ -515,7 +523,7 @@
       <p class="section-label">Installation guide</p>
       <h2 class="section-title">Installing on Windows</h2>
 
-      <div class="install-steps">
+      <div class="install-steps" id="win-guide-zip">
 
         <div class="install-step">
           <div class="step-number">1</div>
@@ -553,14 +561,55 @@
             <p style="margin-top:0.5rem; font-weight:500; color:var(--text);">Window → Extensions → Cuemark by Keyweaver</p>
             <div class="step-success">
               <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-              <p>Start generating right away — 5 trial credits, no sign-in. Sign up free for 5 more, or buy credits and go monthly later.</p>
+              <p>Start generating right away - 5 trial credits, no sign-in. Sign up free for 5 more, or buy credits and go monthly later.</p>
             </div>
           </div>
         </div>
 
       </div>
 
-      <details style="margin-top:2rem; font-size:13px; color:var(--muted);">
+      <div class="install-steps" id="win-guide-exe" hidden>
+
+        <div class="install-step">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h3>Download the installer</h3>
+            <p>Download <strong id="win-step-exe-name">Cuemark-Setup-1.0.1.exe</strong> from the button above.</p>
+          </div>
+        </div>
+
+        <div class="install-step">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h3>Run Cuemark Setup</h3>
+            <p>Double-click the installer and follow the prompts. Cuemark installs to your user extensions folder - no admin password required.</p>
+          </div>
+        </div>
+
+        <div class="install-step">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h3>Restart After Effects</h3>
+            <p>Fully quit After Effects if it was open, then launch it again. Extensions only load on startup.</p>
+          </div>
+        </div>
+
+        <div class="install-step">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h3>Open Cuemark</h3>
+            <p>Go to:</p>
+            <p style="margin-top:0.5rem; font-weight:500; color:var(--text);">Window → Extensions → Cuemark by Keyweaver</p>
+            <div class="step-success">
+              <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              <p>Start generating right away - 5 trial credits, no sign-in. Sign up free for 5 more, or buy credits and go monthly later.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <details style="margin-top:2rem; font-size:13px; color:var(--muted);" id="win-guide-manual">
         <summary style="cursor:pointer; color:var(--text); font-weight:500;">Manual install (advanced)</summary>
         <p style="margin-top:0.75rem;">Copy <code style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent2);">com.captioncraft.panel</code> to <code style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent2);">%AppData%\Adobe\CEP\extensions\</code> and set <code style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent2);">PlayerDebugMode</code> to <code style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent2);">1</code> under <code style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent2);">HKCU\Software\Adobe\CSXS.12</code>. The installer does this automatically.</p>
       </details>
@@ -609,7 +658,7 @@
             <p style="margin-top:0.5rem; font-weight:500; color:var(--text);">Window → Extensions → Cuemark by Keyweaver</p>
             <div class="step-success">
               <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-              <p>Start generating right away — 5 trial credits, no sign-in. Sign up free for 5 more, or buy credits and go monthly later.</p>
+              <p>Start generating right away - 5 trial credits, no sign-in. Sign up free for 5 more, or buy credits and go monthly later.</p>
             </div>
           </div>
         </div>
@@ -691,7 +740,7 @@
           <span>The panel doesn't appear in Window → Extensions</span>
           <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
-        <div class="faq-a">Run the Cuemark installer again, then fully quit and relaunch After Effects. Restarting AE is required — it doesn't hot-reload extensions. If you installed manually, check the folder is named exactly <code style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent2);">com.captioncraft.panel</code> with no extra nesting.</div>
+        <div class="faq-a">Run the Cuemark installer again, then fully quit and relaunch After Effects. Restarting AE is required - it doesn't hot-reload extensions. If you installed manually, check the folder is named exactly <code style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent2);">com.captioncraft.panel</code> with no extra nesting.</div>
       </div>
 
       <div class="faq-item">
@@ -699,7 +748,7 @@
           <span>I see a blank white panel</span>
           <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
-        <div class="faq-a">Re-run the Cuemark installer and restart AE. If the panel still shows blank, right-click inside it and choose Inspect — check the console for errors.</div>
+        <div class="faq-a">Re-run the Cuemark installer and restart AE. If the panel still shows blank, right-click inside it and choose Inspect - check the console for errors.</div>
       </div>
 
       <div class="faq-item">
@@ -789,11 +838,15 @@
     el.parentElement.classList.toggle('open');
   }
 
-  var DOWNLOAD_LABELS = { winZip: 'Download for Windows', macZip: 'Download for macOS' };
+  var DOWNLOAD_LABELS = {
+    winExe: 'Download installer for Windows',
+    winZip: 'Download for Windows',
+    macZip: 'Download for macOS'
+  };
 
   function trackCuemarkDownloadClick(key, href) {
-    var os = key === 'winZip' ? 'windows' : 'macos';
-    // First-party signal (consent-independent) — stored in Supabase + admin email.
+    var os = (key === 'winZip' || key === 'winExe') ? 'windows' : 'macos';
+    // First-party signal (consent-independent) - stored in Supabase + admin email.
     const payload = JSON.stringify({
       event_name: 'download_click',
       source: 'website',
@@ -843,34 +896,85 @@
     if (label && DOWNLOAD_LABELS[key]) { label.textContent = DOWNLOAD_LABELS[key]; }
   }
 
-  // Resolve download URLs (GitHub Releases — Vercel cannot host ~140 MB of installers)
+  // Resolve download URLs (GitHub Releases - Vercel cannot host ~140 MB of installers)
   (async function loadDownloadUrls() {
     var GITHUB_RELEASE_BASE = 'https://github.com/Paddy2522/keyweaver-io/releases/download/v';
     let version = '1.0.1';
     const fileNames = {
+      winExe: '',
       winZip: '',
       macZip: ''
     };
 
     function setVersion(v) {
       version = v || version;
+      fileNames.winExe = 'Cuemark-Setup-' + version + '.exe';
       fileNames.winZip = 'Cuemark-Install-win-v' + version + '.zip';
       fileNames.macZip = 'Cuemark-Install-mac-v' + version + '.zip';
       const verEl = document.getElementById('download-version');
       if (verEl) verEl.textContent = version;
-      const winName = document.getElementById('win-zip-name');
+      const winPrimary = document.getElementById('win-primary-name');
       const macName = document.getElementById('mac-zip-name');
-      const winStepName = document.getElementById('win-step-zip-name');
+      const winStepZip = document.getElementById('win-step-zip-name');
+      const winStepExe = document.getElementById('win-step-exe-name');
       const macStepName = document.getElementById('mac-step-zip-name');
-      if (winName) winName.textContent = fileNames.winZip;
+      const winZipAltLink = document.getElementById('win-zip-alt-link');
+      if (winPrimary && !document.body.dataset.winExePrimary) {
+        winPrimary.textContent = fileNames.winZip;
+      }
       if (macName) macName.textContent = fileNames.macZip;
-      if (winStepName) winStepName.textContent = fileNames.winZip;
+      if (winStepZip) winStepZip.textContent = fileNames.winZip;
+      if (winStepExe) winStepExe.textContent = fileNames.winExe;
       if (macStepName) macStepName.textContent = fileNames.macZip;
+      if (winZipAltLink) winZipAltLink.textContent = fileNames.winZip;
+    }
+
+    function setWindowsExePrimary(enabled) {
+      document.body.dataset.winExePrimary = enabled ? '1' : '';
+      const winBtn = document.getElementById('win-download-btn');
+      const winPrimary = document.getElementById('win-primary-name');
+      const winDesc = document.getElementById('win-primary-desc');
+      const zipAlt = document.getElementById('win-zip-alt');
+      const hintZip = document.getElementById('win-install-hint-zip');
+      const hintExe = document.getElementById('win-install-hint-exe');
+      const noticeUnsigned = document.getElementById('win-security-notice');
+      const noticeSigned = document.getElementById('win-signed-notice');
+      const guideZip = document.getElementById('win-guide-zip');
+      const guideExe = document.getElementById('win-guide-exe');
+      if (!winBtn) return;
+      if (enabled) {
+        winBtn.setAttribute('data-file', 'winExe');
+        winBtn.setAttribute('title', 'Run Cuemark-Setup installer');
+        if (winPrimary) winPrimary.textContent = fileNames.winExe;
+        if (winDesc) winDesc.textContent = 'Windows 10 / 11 · After Effects 2022+ · signed installer · video transcription included';
+        if (zipAlt) zipAlt.hidden = false;
+        if (hintZip) hintZip.hidden = true;
+        if (hintExe) hintExe.hidden = false;
+        if (noticeUnsigned) noticeUnsigned.hidden = true;
+        if (noticeSigned) noticeSigned.hidden = false;
+        if (guideZip) guideZip.hidden = true;
+        if (guideExe) guideExe.hidden = false;
+      } else {
+        winBtn.setAttribute('data-file', 'winZip');
+        winBtn.setAttribute('title', 'Extract zip, then run Install-Cuemark.cmd');
+        if (winPrimary) winPrimary.textContent = fileNames.winZip;
+        if (winDesc) winDesc.textContent = 'Windows 10 / 11 · After Effects 2022+ · automated installer in zip · video transcription included';
+        if (zipAlt) zipAlt.hidden = true;
+        if (hintZip) hintZip.hidden = false;
+        if (hintExe) hintExe.hidden = true;
+        if (noticeUnsigned) noticeUnsigned.hidden = false;
+        if (noticeSigned) noticeSigned.hidden = true;
+        if (guideZip) guideZip.hidden = false;
+        if (guideExe) guideExe.hidden = true;
+      }
     }
 
     function applyUrls(manifest) {
       if (manifest.version) setVersion(manifest.version);
+      const hasWinExe = !!(manifest.files && manifest.files.winExe);
+      setWindowsExePrimary(hasWinExe);
       const githubFallback = {
+        winExe: GITHUB_RELEASE_BASE + version + '/' + fileNames.winExe,
         winZip: GITHUB_RELEASE_BASE + version + '/' + fileNames.winZip,
         macZip: GITHUB_RELEASE_BASE + version + '/' + fileNames.macZip
       };
@@ -882,9 +986,6 @@
         bindDownloadAnalytics(el, key);
         if (el.classList.contains('btn-download')) {
           enableDownloadButton(el, key);
-        }
-        if (key === 'winZip' && el.id === 'win-download-btn') {
-          el.setAttribute('title', 'Extract zip, then run Install-Cuemark.cmd');
         }
       });
     }

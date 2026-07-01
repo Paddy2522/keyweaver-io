@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="/css/nav-brand.css" />
   <link rel="stylesheet" href="/css/chrome.css" />
   <link rel="stylesheet" href="/css/help-widget.css" />
-  <title>Sign up — Cuemark by Keyweaver</title>
+  <title>Sign up - Cuemark by Keyweaver</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -435,7 +435,7 @@
           Go to sign in
         </a>
         <p style="font-size:13px;color:var(--muted);line-height:1.6;margin:1rem 0 0;">
-          Haven&apos;t installed Cuemark yet? <a href="/download">Download the plugin</a> while you wait — then open it in After Effects via <strong>Window &rarr; Extensions</strong> and log in there.
+          Haven&apos;t installed Cuemark yet? <a href="/download">Download the plugin</a> while you wait - then open it in After Effects via <strong>Window &rarr; Extensions</strong> and log in there.
         </p>
       </div>
     </div>
@@ -695,14 +695,14 @@
       }
       if ((plan === 'credits' || plan === 'monthly') && !data.checkout_url) {
         if (data.token) localStorage.setItem('cc_token', data.token);
-        showAlert(data.error || 'Payment setup failed — no checkout URL returned. Sign in and try again from Pricing, or contact hello@keyweaver.io.', 'error');
+        showAlert(data.error || 'Payment setup failed - no checkout URL returned. Sign in and try again from Pricing, or contact hello@keyweaver.io.', 'error');
         document.getElementById('step2-label').textContent = 'Create account';
         document.getElementById('step2-spinner').style.display = 'none';
         document.getElementById('step2-btn').disabled = false;
         return;
       }
 
-      // Free plan — show success
+      // Free plan - show success
       if (window.CuemarkPixel) {
         CuemarkPixel.trackCompleteRegistration('free');
         CuemarkPixel.trackStartTrial();

@@ -1,5 +1,5 @@
 /**
- * Cuemark — cookie consent (UK/EU).
+ * Cuemark - cookie consent (UK/EU).
  * Meta basic PageView loads for ad measurement; richer conversion tags and
  * Google Ads load only after opt-in.
  */
