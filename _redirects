@@ -12,6 +12,8 @@
 /pricing        /pricing.html  200
 /help           /help.html     200
 /changelog      /changelog.html 200
+/superconductor /superconductor.html 200
+/superconductor-downloads.json /superconductor-downloads.json 200
 /blog/how-to-create-captions-in-after-effects  /blog/how-to-create-captions-in-after-effects.html  200
 /blog/automatic-subtitles-after-effects  /blog/automatic-subtitles-after-effects.html  200
 /blog/best-way-add-subtitles-after-effects  /blog/best-way-add-subtitles-after-effects.html  200
@@ -21,3 +23,6 @@
 /sign-in        https://keyweaver-backend.vercel.app/api/captio/magic-link/verify  302
 /sitemap.xml    /sitemap.xml    200
 /robots.txt     /robots.txt     200
+/downloads/Cuemark-Setup-1.0.1.exe https://github.com/Paddy2522/keyweaver-io/releases/download/v1.0.1/Cuemark-Setup-1.0.1.exe 302
+/downloads/Cuemark-Install-win-v1.0.1.zip https://github.com/Paddy2522/keyweaver-io/releases/download/v1.0.1/Cuemark-Install-win-v1.0.1.zip 302
+/downloads/Cuemark-Install-mac-v1.0.1.zip https://github.com/Paddy2522/keyweaver-io/releases/download/v1.0.1/Cuemark-Install-mac-v1.0.1.zip 302

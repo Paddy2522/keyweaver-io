@@ -2,9 +2,9 @@
   "version": "1.0.1",
   "releasePage": "https://github.com/Paddy2522/keyweaver-io/releases/tag/v1.0.1",
   "files": {
-    "winExe": "https://github.com/Paddy2522/keyweaver-io/releases/download/v1.0.1/Cuemark-Setup-1.0.1.exe",
-    "winZip": "https://github.com/Paddy2522/keyweaver-io/releases/download/v1.0.1/Cuemark-Install-win-v1.0.1.zip",
-    "macZip": "https://github.com/Paddy2522/keyweaver-io/releases/download/v1.0.1/Cuemark-Install-mac-v1.0.1.zip"
+    "winExe": "https://keyweaver.io/downloads/Cuemark-Setup-1.0.1.exe",
+    "winZip": "https://keyweaver.io/downloads/Cuemark-Install-win-v1.0.1.zip",
+    "macZip": "https://keyweaver.io/downloads/Cuemark-Install-mac-v1.0.1.zip"
   },
   "fallbackPrefix": "/downloads/"
 }

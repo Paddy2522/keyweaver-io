@@ -4,11 +4,11 @@ Installer packages total **~150 MB** (Windows exe ~40 MB, Windows zip ~48 MB, ma
 
 ## How downloads work
 
-1. **Website** (`download.html`) loads `/downloads.json`, which points at **GitHub Releases** URLs.
-2. **Primary Windows download:** signed `Cuemark-Setup-<version>.exe` (Keyweaver Ltd).
-3. **Fallback:** zip + `Install-Cuemark.cmd` (Windows) or `Install-Cuemark.command` (macOS) — no SmartScreen on the zip itself.
-4. **Cloudflare** ignores binaries via `.assetsignore` so deploys stay small and reliable.
-5. **GitHub Releases** hosts the files (CDN-backed, anonymous download on the public repo).
+1. **Website** (`download.html`) loads `/downloads.json`, which lists **keyweaver.io** download URLs.
+2. **Cloudflare redirects** (`_redirects`) map `/downloads/*` to **GitHub Releases** (binaries are not in the site deploy).
+3. **Primary Windows download:** signed `Cuemark-Setup-<version>.exe` (Keyweaver Ltd).
+4. **Fallback:** zip + `Install-Cuemark.cmd` (Windows) or `Install-Cuemark.command` (macOS).
+5. **GitHub Releases** hosts the actual files (CDN-backed). `publish-cuemark-github-release.ps1` syncs `downloads.json` and `_redirects` after upload.
 
 ## Publish a new version
 
@@ -25,7 +25,7 @@ Or build once and publish existing artifacts:
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts\publish-cuemark-github-release.ps1 -SkipBuild -IncludeSignedExe
 ```
 
-Then update `downloads.json` (`version`, tag, file URLs) if the version changed. Push the website repo so Cloudflare redeploys.
+Then push the website repo so Cloudflare redeploys (`downloads.json` + `_redirects` are updated automatically by the publish script).
 
 ## Current release (v1.0.1)
 

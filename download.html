@@ -563,9 +563,9 @@
     <noscript>
       <p class="install-hint" style="text-align:center;">
         JavaScript is disabled. Download directly:
-        <a href="https://github.com/Paddy2522/keyweaver-io/releases/download/v1.0.1/Cuemark-Setup-1.0.1.exe">Windows installer</a>
+        <a href="https://keyweaver.io/downloads/Cuemark-Setup-1.0.1.exe">Windows installer</a>
         ·
-        <a href="https://github.com/Paddy2522/keyweaver-io/releases/download/v1.0.1/Cuemark-Install-mac-v1.0.1.zip">macOS</a>
+        <a href="https://keyweaver.io/downloads/Cuemark-Install-mac-v1.0.1.zip">macOS</a>
       </p>
     </noscript>
 
@@ -967,7 +967,7 @@
 
   // Resolve download URLs (GitHub Releases - Vercel cannot host ~140 MB of installers)
   (async function loadDownloadUrls() {
-    var GITHUB_RELEASE_BASE = 'https://github.com/Paddy2522/keyweaver-io/releases/download/v';
+    var SITE_DOWNLOAD_BASE = 'https://keyweaver.io/downloads/';
     let version = '1.0.1';
     const fileNames = {
       winExe: '',
@@ -1066,14 +1066,14 @@
       if (manifest.version) setVersion(manifest.version);
       const hasWinExe = !!(manifest.files && manifest.files.winExe);
       setWindowsExePrimary(hasWinExe);
-      const githubFallback = {
-        winExe: GITHUB_RELEASE_BASE + version + '/' + fileNames.winExe,
-        winZip: GITHUB_RELEASE_BASE + version + '/' + fileNames.winZip,
-        macZip: GITHUB_RELEASE_BASE + version + '/' + fileNames.macZip
+      const siteFallback = {
+        winExe: SITE_DOWNLOAD_BASE + fileNames.winExe,
+        winZip: SITE_DOWNLOAD_BASE + fileNames.winZip,
+        macZip: SITE_DOWNLOAD_BASE + fileNames.macZip
       };
       document.querySelectorAll('[data-file]').forEach(el => {
         const key = el.getAttribute('data-file');
-        const url = (manifest.files && manifest.files[key]) || githubFallback[key];
+        const url = (manifest.files && manifest.files[key]) || siteFallback[key];
         if (!url) { return; }
         el.href = url;
         bindDownloadAnalytics(el, key);
