@@ -30,12 +30,23 @@ Push the website repo so Cloudflare redeploys.
 
 ## Publish Keyweaver Installer bootstrap (rare)
 
-Only when Manager or bootstrap code changes:
+Only when the bootstrap itself changes (Inno wizard, install path, Manager `.exe` host stub):
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts\build-keyweaver-installer.ps1 -Sign
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts\publish-keyweaver-installer-github-release.ps1 -SkipBuild
 ```
+
+## Publish Manager runtime (common)
+
+Manager UI and install logic — **does not** replace `Keyweaver-Setup.exe`:
+
+```powershell
+# Bump installer/manager/VERSION first
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts\publish-keyweaver-manager-runtime.ps1
+```
+
+Push `Captio/Website`. Manager self-updates on next launch.
 
 ## Current release
 

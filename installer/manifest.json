@@ -3,6 +3,14 @@
     "bootstrapMinVersion":  "1.0.0",
     "publisher":  "Keyweaver Ltd",
     "catalogUrl":  "https://keyweaver.io/installer/manifest.json",
+    "manager":  {
+                    "version":  "1.0.2",
+                    "baseUrl":  "https://keyweaver.io/installer/manager/",
+                    "files":  {
+                                  "Keyweaver-Manager.ps1":  "7fa2ec10eeb6192ce0da45a422a03e87fe780b781c3a3ccb9dc54b02c6e0343a",
+                                  "Keyweaver-InstallLib.ps1":  "b0af522d2e4dc1eca9860dd4f4aca4c8a6e39748a98afd876780fd8cf5543356"
+                              }
+                },
     "products":  [
                      {
                          "id":  "cuemark",
