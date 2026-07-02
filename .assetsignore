@@ -6,3 +6,5 @@ app/
 .env*
 .vercelignore
 vercel.json
+worker.js
+wrangler.toml
