@@ -22,7 +22,8 @@ foreach ($name in $runtimeFiles) {
   }
   $wc = New-Object System.Net.WebClient
   $wc.Headers.Add('User-Agent', 'Keyweaver-Manager/1.0')
-  $wc.DownloadFile($baseUrl + $name, $tmp)
+  $url = $baseUrl + $name + '?cb=' + [guid]::NewGuid().ToString('N')
+  $wc.DownloadFile($url, $tmp)
   if (Test-Path -LiteralPath $dest) { Remove-Item -LiteralPath $dest -Force }
   Move-Item -LiteralPath $tmp -Destination $dest
 }
