@@ -30,12 +30,7 @@ public static class KwPackageDownloader
         string label,
         long expectedBytes)
     {
-        // Never use WebClient TotalBytesToReceive — GitHub/CDN often reports ~10x the real zip size.
-        long knownTotal = expectedBytes > 0 ? expectedBytes : 0;
-        long displayTotalMb = knownTotal > 0
-            ? Math.Max(1, (long)Math.Round(knownTotal / 1048576.0, 0))
-            : 0;
-
+        // Never use WebClient byte counts for UI — GitHub/CDN reports inflated BytesReceived and TotalBytesToReceive.
         using (var wc = new WebClient())
         {
             wc.Headers.Add("User-Agent", "Keyweaver-Manager/1.0");
@@ -46,25 +41,10 @@ public static class KwPackageDownloader
             {
                 if (worker == null) return;
                 int span = percentMax - percentMin;
-                int pct;
-                if (knownTotal > 0)
-                    pct = percentMin + (int)(span * (e.BytesReceived / (double)knownTotal));
-                else
-                    pct = percentMin + (int)(span * (e.ProgressPercentage / 100.0));
+                int pct = percentMin + (int)(span * (e.ProgressPercentage / 100.0));
                 if (pct > percentMax) pct = percentMax;
                 if (pct < percentMin) pct = percentMin;
-
-                string msg;
-                if (knownTotal > 0)
-                {
-                    double recv = e.BytesReceived / 1048576.0;
-                    msg = string.Format("Downloading {0}... {1}% ({2:0.1} of {3} MB)", label, pct, recv, displayTotalMb);
-                }
-                else
-                {
-                    msg = string.Format("Downloading {0}... {1}%", label, pct);
-                }
-
+                string msg = string.Format("Downloading {0}... {1}%", label, pct);
                 var state = new Hashtable();
                 state["Status"] = msg;
                 state["Percent"] = pct;
