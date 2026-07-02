@@ -96,6 +96,19 @@ function Get-FileSha256Hex {
   return $hash.Hash.ToLowerInvariant()
 }
 
+function Get-DownloadStatusText {
+  param(
+    [string]$Label,
+    [int]$Percent,
+    [long]$ExpectedBytes = 0
+  )
+  if ($ExpectedBytes -gt 0) {
+    $totalMb = [int][Math]::Max(1, [Math]::Round($ExpectedBytes / 1048576.0, 0))
+    return ('Downloading ' + $Label + '... ' + $Percent + '% out of ' + $totalMb + ' MB')
+  }
+  return ('Downloading ' + $Label + '... ' + $Percent + '%')
+}
+
 function Download-PackageWithProgress {
   param(
     [string]$Url,
@@ -112,7 +125,7 @@ function Download-PackageWithProgress {
     Remove-Item -LiteralPath $Destination -Force
   }
 
-  Send-InstallWorkerProgress -Worker $ProgressWorker -Status ('Downloading ' + $Label + '...') -Percent $PercentMin
+  Send-InstallWorkerProgress -Worker $ProgressWorker -Status (Get-DownloadStatusText -Label $Label -Percent $PercentMin -ExpectedBytes $ExpectedBytes) -Percent $PercentMin
 
   $request = [System.Net.HttpWebRequest]::Create($Url)
   $request.UserAgent = 'Keyweaver-Manager/1.0'
@@ -146,7 +159,7 @@ function Download-PackageWithProgress {
         if ($pct -lt $lastPct) { $pct = $lastPct }
         if ($pct -gt $lastPct) {
           $lastPct = $pct
-          Send-InstallWorkerProgress -Worker $ProgressWorker -Status ('Downloading ' + $Label + '... ' + $pct + '%') -Percent $pct
+          Send-InstallWorkerProgress -Worker $ProgressWorker -Status (Get-DownloadStatusText -Label $Label -Percent $pct -ExpectedBytes $ExpectedBytes) -Percent $pct
         }
       }
     }
@@ -156,7 +169,7 @@ function Download-PackageWithProgress {
     if ($response) { $response.Dispose() }
   }
 
-  Send-InstallWorkerProgress -Worker $ProgressWorker -Status ('Downloading ' + $Label + '... ' + $PercentMax + '%') -Percent $PercentMax
+  Send-InstallWorkerProgress -Worker $ProgressWorker -Status (Get-DownloadStatusText -Label $Label -Percent $PercentMax -ExpectedBytes $ExpectedBytes) -Percent $PercentMax
 }
 
 function Expand-PackageZip {
