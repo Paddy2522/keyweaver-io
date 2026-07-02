@@ -1025,19 +1025,6 @@ function Show-ManagerFatalError {
 }
 
 Ensure-Directory $script:StateRoot
-try {
-  try {
-    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-  } catch {}
-  if (Update-ManagerRuntimeIfNeeded) {
-    $exe = Join-Path $script:ManagerRoot 'Keyweaver-Manager.exe'
-    if (Test-Path -LiteralPath $exe) {
-      Start-Process -FilePath $exe
-      exit 0
-    }
-  }
-} catch {}
-
 Import-ManagerInstallLib
 try {
   $ui = Initialize-KeyweaverManagerUi
