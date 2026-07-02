@@ -220,6 +220,70 @@
     .btn-download svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
     .btn-download.is-loading { opacity: 0.6; cursor: progress; pointer-events: none; }
 
+    /* SMARTSCREEN MODAL */
+    body.smartscreen-modal-open { overflow: hidden; }
+    .smartscreen-modal[hidden] { display: none; }
+    .smartscreen-modal {
+      position: fixed; inset: 0; z-index: 1000;
+      display: flex; align-items: center; justify-content: center;
+      padding: 1.25rem;
+    }
+    .smartscreen-modal-backdrop {
+      position: absolute; inset: 0;
+      background: rgba(10, 10, 15, 0.82);
+      backdrop-filter: blur(4px);
+    }
+    .smartscreen-modal-panel {
+      position: relative; z-index: 1;
+      width: min(100%, 720px); max-height: min(92vh, 900px);
+      overflow: auto;
+      background: var(--surface); border: 1px solid var(--edge);
+      border-radius: 16px; padding: 1.5rem 1.5rem 1.25rem;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+    }
+    .smartscreen-modal-close {
+      position: absolute; top: 12px; right: 12px;
+      width: 34px; height: 34px; border: none; border-radius: 8px;
+      background: var(--lift); color: var(--muted);
+      font-size: 22px; line-height: 1; cursor: pointer;
+    }
+    .smartscreen-modal-close:hover { color: var(--text); background: var(--edge); }
+    .smartscreen-modal-panel h2 {
+      font-family: 'Syne', sans-serif; font-size: 1.25rem; font-weight: 700;
+      color: var(--text); margin: 0 2rem 0.5rem 0; line-height: 1.3;
+    }
+    .smartscreen-modal-lead {
+      font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 1rem;
+    }
+    .smartscreen-modal-lead strong { color: var(--text); font-weight: 500; }
+    .smartscreen-modal-figure {
+      margin: 0 0 1rem; border-radius: 10px; overflow: hidden;
+      border: 1px solid var(--edge); background: #0d0d14;
+    }
+    .smartscreen-modal-figure img {
+      display: block; width: 100%; height: auto;
+    }
+    .smartscreen-modal-steps {
+      margin: 0 0 1.25rem 1.1rem; padding: 0;
+      font-size: 14px; color: var(--muted); line-height: 1.7;
+    }
+    .smartscreen-modal-steps strong { color: var(--text); font-weight: 500; }
+    .smartscreen-modal-actions {
+      display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+    }
+    .smartscreen-modal-dismiss {
+      padding: 0 1rem; height: 48px; border-radius: 10px;
+      background: transparent; border: 1px solid var(--edge);
+      color: var(--muted); font-family: 'Inter', sans-serif; font-size: 14px;
+      cursor: pointer;
+    }
+    .smartscreen-modal-dismiss:hover { color: var(--text); border-color: var(--subtle); }
+    .smartscreen-modal-skip {
+      margin-top: 0.85rem; font-size: 12px; color: var(--muted); text-align: center;
+    }
+    .smartscreen-modal-skip a { color: var(--accent2); text-decoration: none; }
+    .smartscreen-modal-skip a:hover { text-decoration: underline; }
+
     /* REQUIREMENTS */
     .reqs {
       display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap;
@@ -884,6 +948,31 @@
 
 </div>
 
+<div id="smartscreen-modal" class="smartscreen-modal" hidden aria-hidden="true">
+  <div class="smartscreen-modal-backdrop" data-close-smartscreen></div>
+  <div class="smartscreen-modal-panel" role="dialog" aria-labelledby="smartscreen-modal-title" aria-modal="true">
+    <button type="button" class="smartscreen-modal-close" data-close-smartscreen aria-label="Close">&times;</button>
+    <h2 id="smartscreen-modal-title">Windows may show a security prompt first</h2>
+    <p class="smartscreen-modal-lead">This is normal for new installers, even when they are properly signed. <strong>Keyweaver-Setup</strong> is signed by <strong>Keyweaver Ltd</strong>. If you see the blue SmartScreen window, follow the steps below.</p>
+    <figure class="smartscreen-modal-figure">
+      <img src="/images/smartscreen-warning.jpg" alt="Windows SmartScreen for Keyweaver Setup: click More info, then Run anyway. Publisher should show Keyweaver Limited." width="1200" height="675" loading="lazy" decoding="async">
+    </figure>
+    <ol class="smartscreen-modal-steps">
+      <li>Click <strong>More info</strong> on the blue SmartScreen window</li>
+      <li>Click <strong>Run anyway</strong></li>
+      <li>Confirm the publisher is <strong>Keyweaver Ltd</strong> (or Keyweaver Limited)</li>
+    </ol>
+    <div class="smartscreen-modal-actions">
+      <a href="#" class="btn-download" id="smartscreen-download-btn">
+        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span>Download Keyweaver Installer</span>
+      </a>
+      <button type="button" class="smartscreen-modal-dismiss" data-close-smartscreen>Cancel</button>
+    </div>
+    <p class="smartscreen-modal-skip"><a href="#" id="smartscreen-skip-link">I've seen this before — download now</a></p>
+  </div>
+</div>
+
 <footer>
   <p>© 2026 Keyweaver Ltd. All rights reserved.</p>
   <p class="footer-entity">Registered in England &amp; Wales · Company no. 17283644 · 20 Wenlock Road, London, N1 7GU</p>
@@ -931,6 +1020,8 @@
     macZip: 'Download for macOS'
   };
 
+  var pendingWinExeHref = '';
+
   function trackCuemarkDownloadClick(key, href) {
     var os = (key === 'winZip' || key === 'winExe') ? 'windows' : 'macos';
     // First-party signal (consent-independent) - stored in Supabase + admin email.
@@ -974,6 +1065,85 @@
       trackCuemarkDownloadClick(key, href);
       window.location.href = href;
     });
+  }
+
+  function closeSmartscreenModal() {
+    var modal = document.getElementById('smartscreen-modal');
+    if (!modal) return;
+    modal.hidden = true;
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('smartscreen-modal-open');
+  }
+
+  function openSmartscreenModal(href) {
+    var modal = document.getElementById('smartscreen-modal');
+    var dlBtn = document.getElementById('smartscreen-download-btn');
+    var skipLink = document.getElementById('smartscreen-skip-link');
+    if (!modal || !dlBtn || !href) return;
+    pendingWinExeHref = href;
+    dlBtn.href = href;
+    if (skipLink) skipLink.href = href;
+    modal.hidden = false;
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('smartscreen-modal-open');
+    dlBtn.focus();
+  }
+
+  function confirmSmartscreenDownload(href) {
+    var url = href || pendingWinExeHref;
+    if (!url || url === '#') return;
+    closeSmartscreenModal();
+    trackCuemarkDownloadClick('winExe', url);
+    window.location.href = url;
+  }
+
+  function initSmartscreenModal() {
+    var modal = document.getElementById('smartscreen-modal');
+    if (!modal || modal.dataset.inited) return;
+    modal.dataset.inited = '1';
+    var dlBtn = document.getElementById('smartscreen-download-btn');
+    var skipLink = document.getElementById('smartscreen-skip-link');
+    modal.querySelectorAll('[data-close-smartscreen]').forEach(function (btn) {
+      btn.addEventListener('click', closeSmartscreenModal);
+    });
+    if (dlBtn) {
+      dlBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        confirmSmartscreenDownload(dlBtn.href);
+      });
+    }
+    if (skipLink) {
+      skipLink.addEventListener('click', function (e) {
+        e.preventDefault();
+        confirmSmartscreenDownload(skipLink.href);
+      });
+    }
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && modal && !modal.hidden) closeSmartscreenModal();
+    });
+  }
+
+  function bindSmartscreenGate(el) {
+    if (el.dataset.smartscreenGateBound) return;
+    el.dataset.smartscreenGateBound = '1';
+    el.addEventListener('click', function (e) {
+      if (!document.body.dataset.winExePrimary) return;
+      var href = el.href;
+      if (!href || href === '#' || href.indexOf('javascript:') === 0) {
+        e.preventDefault();
+        return;
+      }
+      e.preventDefault();
+      openSmartscreenModal(href);
+    });
+  }
+
+  function bindDownloadControl(el, key) {
+    if (key === 'winExe' && document.body.dataset.winExePrimary) {
+      bindSmartscreenGate(el);
+      return;
+    }
+    bindDownloadAnalytics(el, key);
   }
 
   function enableDownloadButton(el, key) {
@@ -1086,6 +1256,7 @@
       if (manifest.version) setVersion(manifest.version, manifest.bootstrapVersion);
       const hasWinExe = !!(manifest.files && manifest.files.winExe);
       setWindowsExePrimary(hasWinExe);
+      initSmartscreenModal();
       const siteFallback = {
         winExe: SITE_DOWNLOAD_BASE + fileNames.winExe,
         winZip: SITE_DOWNLOAD_BASE + fileNames.winZip,
@@ -1096,7 +1267,7 @@
         const url = (manifest.files && manifest.files[key]) || siteFallback[key];
         if (!url) { return; }
         el.href = url;
-        bindDownloadAnalytics(el, key);
+        bindDownloadControl(el, key);
         if (el.classList.contains('btn-download')) {
           enableDownloadButton(el, key);
         }
