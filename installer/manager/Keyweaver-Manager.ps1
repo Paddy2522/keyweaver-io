@@ -44,6 +44,10 @@ $script:IsBusy = $false
 $script:KwInstallBgWorker = $null
 
 $installLibPath = Join-Path $script:ManagerRoot 'Keyweaver-InstallLib.ps1'
+if (-not (Test-Path -LiteralPath $installLibPath)) {
+  throw "Install library not found: $installLibPath"
+}
+. $installLibPath
 
 Add-Type -AssemblyName PresentationFramework
 Add-Type -AssemblyName PresentationCore
@@ -293,13 +297,6 @@ function Update-ManagerRuntimeIfNeeded {
   return $true
 }
 
-function Import-ManagerInstallLib {
-  if (-not (Test-Path -LiteralPath $installLibPath)) {
-    throw "Install library not found: $installLibPath"
-  }
-  . $installLibPath
-}
-
 function Invoke-Ui {
   param(
     [scriptblock]$Action,
@@ -411,7 +408,17 @@ function Get-PlatformPackage {
 
 function Get-PlatformDownloadSizeLabel {
   param($Product)
-  $bytes = Get-PackageExpectedBytes -Product $Product
+  $plat = Get-PlatformPackage $Product
+  $bytes = [int64]0
+  if ($plat -and $null -ne $plat.sizeBytes) {
+    try {
+      $n = [int64]$plat.sizeBytes
+      if ($n -gt 1000000) { $bytes = $n }
+    } catch {}
+  }
+  if (-not $bytes -and $Product -and [string]$Product.id -eq 'cuemark') {
+    $bytes = [int64]50034417
+  }
   if (-not $bytes) { return $null }
   $mb = [int][Math]::Round([double]$bytes / 1048576.0, 0)
   if ($mb -lt 1) { $mb = 1 }
@@ -1025,7 +1032,6 @@ function Show-ManagerFatalError {
 }
 
 Ensure-Directory $script:StateRoot
-Import-ManagerInstallLib
 try {
   $ui = Initialize-KeyweaverManagerUi
   Hide-ConsoleWindow
