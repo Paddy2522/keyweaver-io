@@ -6,64 +6,9 @@ try {
   [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 } catch {}
 
-# Static zip sizes (bytes) — used for progress UI when manifest omits sizeBytes. Keep in sync with release zips.
+# Static zip sizes (bytes) for progress ratio when manifest omits sizeBytes. Keep in sync with release zips.
 $script:KnownPackageSizes = @{
   cuemark = [int64]50034417
-}
-
-if (-not ([System.Management.Automation.PSTypeName]'KwPackageDownloader').Type) {
-  Add-Type @'
-using System;
-using System.Collections;
-using System.ComponentModel;
-using System.Net;
-using System.Threading;
-
-public static class KwPackageDownloader
-{
-    public static void Download(
-        string url,
-        string destination,
-        BackgroundWorker worker,
-        int percentMin,
-        int percentMax,
-        string label,
-        long expectedBytes)
-    {
-        // Never use WebClient byte counts for UI — GitHub/CDN reports inflated BytesReceived and TotalBytesToReceive.
-        using (var wc = new WebClient())
-        {
-            wc.Headers.Add("User-Agent", "Keyweaver-Manager/1.0");
-            var done = new ManualResetEvent(false);
-            Exception error = null;
-
-            wc.DownloadProgressChanged += (s, e) =>
-            {
-                if (worker == null) return;
-                int span = percentMax - percentMin;
-                int pct = percentMin + (int)(span * (e.ProgressPercentage / 100.0));
-                if (pct > percentMax) pct = percentMax;
-                if (pct < percentMin) pct = percentMin;
-                string msg = string.Format("Downloading {0}... {1}%", label, pct);
-                var state = new Hashtable();
-                state["Status"] = msg;
-                state["Percent"] = pct;
-                worker.ReportProgress(pct, state);
-            };
-
-            wc.DownloadFileCompleted += (s, e) =>
-            {
-                if (e.Error != null) error = e.Error;
-                done.Set();
-            };
-
-            wc.DownloadFileAsync(new Uri(url), destination);
-            done.WaitOne();
-            if (error != null) throw error;
-        }
-    }
-}
-'@
 }
 
 function Ensure-Directory {
@@ -159,7 +104,7 @@ function Download-PackageWithProgress {
     $ProgressWorker,
     [long]$ExpectedBytes = 0,
     [int]$PercentMin = 5,
-    [int]$PercentMax = 70
+    [int]$PercentMax = 72
   )
 
   Ensure-Directory (Split-Path -Parent $Destination)
@@ -168,7 +113,50 @@ function Download-PackageWithProgress {
   }
 
   Send-InstallWorkerProgress -Worker $ProgressWorker -Status ('Downloading ' + $Label + '...') -Percent $PercentMin
-  [KwPackageDownloader]::Download($Url, $Destination, $ProgressWorker, $PercentMin, $PercentMax, $Label, $ExpectedBytes)
+
+  $request = [System.Net.HttpWebRequest]::Create($Url)
+  $request.UserAgent = 'Keyweaver-Manager/1.0'
+  $request.AllowAutoRedirect = $true
+  $request.Timeout = 30 * 60 * 1000
+  $response = $request.GetResponse()
+  $stream = $response.GetResponseStream()
+  $fileStream = [System.IO.File]::Create($Destination)
+  $buffer = New-Object byte[] 81920
+  $received = [int64]0
+  $span = $PercentMax - $PercentMin
+  $lastPct = $PercentMin
+
+  try {
+    while ($true) {
+      $read = $stream.Read($buffer, 0, $buffer.Length)
+      if ($read -le 0) { break }
+      $fileStream.Write($buffer, 0, $read)
+      $received += $read
+
+      $ratio = 0.0
+      if ($ExpectedBytes -gt 0) {
+        $ratio = [Math]::Min(1.0, $received / [double]$ExpectedBytes)
+      } elseif ($response.ContentLength -gt 0) {
+        $ratio = [Math]::Min(1.0, $received / [double]$response.ContentLength)
+      }
+
+      if ($ratio -gt 0) {
+        $pct = $PercentMin + [int]($span * $ratio)
+        if ($pct -gt $PercentMax) { $pct = $PercentMax }
+        if ($pct -lt $lastPct) { $pct = $lastPct }
+        if ($pct -gt $lastPct) {
+          $lastPct = $pct
+          Send-InstallWorkerProgress -Worker $ProgressWorker -Status ('Downloading ' + $Label + '... ' + $pct + '%') -Percent $pct
+        }
+      }
+    }
+  } finally {
+    if ($fileStream) { $fileStream.Dispose() }
+    if ($stream) { $stream.Dispose() }
+    if ($response) { $response.Dispose() }
+  }
+
+  Send-InstallWorkerProgress -Worker $ProgressWorker -Status ('Downloading ' + $Label + '... ' + $PercentMax + '%') -Percent $PercentMax
 }
 
 function Expand-PackageZip {

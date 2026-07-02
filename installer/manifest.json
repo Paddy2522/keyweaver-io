@@ -4,11 +4,11 @@
     "publisher":  "Keyweaver Ltd",
     "catalogUrl":  "https://keyweaver.io/installer/manifest.json",
     "manager":  {
-                    "version":  "1.0.3",
+                    "version":  "1.0.4",
                     "baseUrl":  "https://keyweaver.io/installer/manager/",
                     "files":  {
                                   "Keyweaver-Manager.ps1":  "7fa2ec10eeb6192ce0da45a422a03e87fe780b781c3a3ccb9dc54b02c6e0343a",
-                                  "Keyweaver-InstallLib.ps1":  "d61f313e6a97109013250d31f77d41d3ca35c694e3b3f0c0d53dcda9ea437504"
+                                  "Keyweaver-InstallLib.ps1":  "5cd0506f6c59ef9e0bfcf1f295e001e63553aa476d31a97fd4a11f6c0b46b128"
                               }
                 },
     "products":  [
