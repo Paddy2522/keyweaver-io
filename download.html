@@ -183,8 +183,8 @@
     }
 
     .win-quick-steps {
-      display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px;
-      max-width: 560px; margin: 1.5rem auto 0; text-align: left;
+      display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px;
+      max-width: 720px; margin: 1.5rem auto 0; text-align: left;
     }
     .win-quick-step {
       background: var(--lift); border: 1px solid var(--edge); border-radius: 10px;
@@ -523,14 +523,18 @@
       <div class="win-quick-steps" id="win-quick-steps" hidden>
         <div class="win-quick-step">
           <div class="win-quick-step-num">1</div>
-          <p><strong>Download</strong> the installer</p>
+          <p><strong>Download</strong> Keyweaver Installer (~2 MB)</p>
         </div>
         <div class="win-quick-step">
           <div class="win-quick-step-num">2</div>
-          <p><strong>Run it</strong> - if Windows says "protected your PC", click <strong>More info</strong> → <strong>Run anyway</strong> (publisher: Keyweaver Ltd)</p>
+          <p><strong>Run setup</strong> - signed by Keyweaver Ltd. SmartScreen? <strong>More info</strong> → <strong>Run anyway</strong></p>
         </div>
         <div class="win-quick-step">
           <div class="win-quick-step-num">3</div>
+          <p><strong>Open Keyweaver Manager</strong> and click <strong>Install</strong> on Cuemark (~48 MB)</p>
+        </div>
+        <div class="win-quick-step">
+          <div class="win-quick-step-num">4</div>
           <p><strong>Reopen AE</strong> → Window → Extensions → Cuemark</p>
         </div>
       </div>
@@ -548,7 +552,7 @@
         Manual copy steps are in <strong>README.txt</strong> if you prefer not to run the installer.
       </p>
       <p class="install-hint" id="win-install-hint-exe" hidden>
-        Double-click the installer. If Windows SmartScreen appears, click <strong>More info</strong> → <strong>Run anyway</strong> - the app is signed by Keyweaver Ltd. Then click through the prompts and reopen After Effects.
+        Run <strong>Keyweaver-Setup</strong> to install Keyweaver Manager. Open Manager from the Start Menu, click <strong>Install</strong> on Cuemark, then fully quit and reopen After Effects.
       </p>
       <div class="security-notice" id="win-security-notice">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
@@ -556,14 +560,14 @@
       </div>
       <div class="security-notice security-notice-trust" id="win-signed-notice" hidden>
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/></svg>
-        <p><strong>One extra click on first run.</strong> Windows may show "Windows protected your PC" for any new installer - even signed ones. Click <strong>More info</strong> → <strong>Run anyway</strong>. Confirm the publisher is <strong>Keyweaver Ltd</strong>, then the setup wizard opens. This prompt goes away as more people install safely.</p>
+        <p><strong>One extra click on first run.</strong> Windows may show "Windows protected your PC" for any new installer - even signed ones. Click <strong>More info</strong> → <strong>Run anyway</strong>. Confirm the publisher is <strong>Keyweaver Ltd</strong>, then Keyweaver Manager opens. Install Cuemark from the catalog inside Manager.</p>
       </div>
     </div>
 
     <noscript>
       <p class="install-hint" style="text-align:center;">
         JavaScript is disabled. Download directly:
-        <a href="https://keyweaver.io/downloads/Cuemark-Setup-1.0.1.exe">Windows installer</a>
+        <a href="https://keyweaver.io/downloads/Keyweaver-Setup-1.0.0.exe">Windows installer (Keyweaver Manager)</a>
         ·
         <a href="https://keyweaver.io/downloads/Cuemark-Install-mac-v1.0.1.zip">macOS</a>
       </p>
@@ -592,16 +596,16 @@
     <div class="os-panel active" id="guide-win">
       <div id="win-guide-exe-simple" hidden>
         <p class="section-label">That's it</p>
-        <h2 class="section-title">Three steps, then you're captioning</h2>
-        <p style="color:var(--muted); font-size:14px; max-width:520px; margin-bottom:1.5rem;">The installer handles file copy and After Effects setup for you. No command lines, no manual folders.</p>
+        <h2 class="section-title">Four steps, then you're captioning</h2>
+        <p style="color:var(--muted); font-size:14px; max-width:560px; margin-bottom:1.5rem;">Keyweaver Installer sets up Keyweaver Manager on your PC. Manager downloads and installs Cuemark for you - no command lines, no manual folders.</p>
       </div>
 
       <div class="install-steps" id="win-guide-exe" hidden>
         <div class="install-step">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h3>Run the installer</h3>
-            <p>Double-click <strong id="win-step-exe-name">Cuemark-Setup-1.0.1.exe</strong> and click through the prompts. No admin password.</p>
+            <h3>Run Keyweaver Installer</h3>
+            <p>Double-click <strong id="win-step-exe-name">Keyweaver-Setup-1.0.0.exe</strong> and click through the prompts. No admin password.</p>
             <div class="step-note">
               <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
               <p>If you see <strong>Windows protected your PC</strong>, click <strong>More info</strong> → <strong>Run anyway</strong>. Check the publisher is <strong>Keyweaver Ltd</strong> - that means you have the real installer.</p>
@@ -611,12 +615,26 @@
         <div class="install-step">
           <div class="step-number">2</div>
           <div class="step-body">
+            <h3>Open Keyweaver Manager</h3>
+            <p>After setup, open <strong>Keyweaver Manager</strong> from the Start Menu (or the desktop shortcut). Manager shows Cuemark in your product catalog.</p>
+          </div>
+        </div>
+        <div class="install-step">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h3>Install Cuemark</h3>
+            <p>Click <strong>Install</strong> on the Cuemark card. Manager downloads the package (~48 MB) and installs the panel to your user AppData folder.</p>
+          </div>
+        </div>
+        <div class="install-step">
+          <div class="step-number">4</div>
+          <div class="step-body">
             <h3>Reopen After Effects</h3>
             <p>Fully quit AE if it was open, then launch it again. Extensions only load on startup.</p>
           </div>
         </div>
         <div class="install-step">
-          <div class="step-number">3</div>
+          <div class="step-number">5</div>
           <div class="step-body">
             <h3>Open Cuemark</h3>
             <p style="font-weight:500; color:var(--text);">Window → Extensions → Cuemark by Keyweaver</p>
@@ -908,8 +926,8 @@
   }
 
   var DOWNLOAD_LABELS = {
-    winExe: 'Download installer for Windows',
-    winZip: 'Download for Windows',
+    winExe: 'Download Keyweaver Installer',
+    winZip: 'Download zip for Windows',
     macZip: 'Download for macOS'
   };
 
@@ -938,7 +956,7 @@
     // Meta conversion signal so ad campaigns can optimize for the actual download action.
     try {
       if (typeof fbq === 'function') {
-        fbq('trackCustom', 'PluginDownload', { os: os, asset: key, content_name: 'Cuemark installer' });
+        fbq('trackCustom', 'PluginDownload', { os: os, asset: key, content_name: 'Keyweaver Installer' });
       }
     } catch (e) {}
   }
@@ -969,15 +987,17 @@
   (async function loadDownloadUrls() {
     var SITE_DOWNLOAD_BASE = 'https://keyweaver.io/downloads/';
     let version = '1.0.1';
+    let bootstrapVersion = '1.0.0';
     const fileNames = {
       winExe: '',
       winZip: '',
       macZip: ''
     };
 
-    function setVersion(v) {
+    function setVersion(v, bootstrap) {
       version = v || version;
-      fileNames.winExe = 'Cuemark-Setup-' + version + '.exe';
+      if (bootstrap) bootstrapVersion = bootstrap;
+      fileNames.winExe = 'Keyweaver-Setup-' + bootstrapVersion + '.exe';
       fileNames.winZip = 'Cuemark-Install-win-v' + version + '.zip';
       fileNames.macZip = 'Cuemark-Install-mac-v' + version + '.zip';
       const verEl = document.getElementById('download-version');
@@ -1020,10 +1040,10 @@
       if (!winBtn) return;
       if (enabled) {
         winBtn.setAttribute('data-file', 'winExe');
-        winBtn.setAttribute('title', 'Download official Cuemark installer for Windows');
+        winBtn.setAttribute('title', 'Download Keyweaver Installer for Windows');
         if (winBadge) winBadge.textContent = 'Signed · Keyweaver Ltd';
-        if (winPrimary) winPrimary.textContent = 'Cuemark for Windows';
-        if (winDesc) winDesc.textContent = 'Official installer · After Effects 2022+ · about 1 minute';
+        if (winPrimary) winPrimary.textContent = 'Keyweaver Installer for Windows';
+        if (winDesc) winDesc.textContent = 'Installs Keyweaver Manager · then install Cuemark from the catalog · ~2 MB download';
         if (winFilename) {
           winFilename.textContent = fileNames.winExe;
           winFilename.hidden = false;
@@ -1039,7 +1059,7 @@
         if (guideExe) guideExe.hidden = false;
         if (guideFull) guideFull.hidden = true;
         if (guideExeSimple) guideExeSimple.hidden = false;
-        if (heroSubtitle) heroSubtitle.textContent = 'Install in about a minute. Signed by Keyweaver Ltd. Try 5 free credits - no account needed.';
+        if (heroSubtitle) heroSubtitle.textContent = 'Download Keyweaver Installer, install Cuemark from Manager. Signed by Keyweaver Ltd. Try 5 free credits - no account needed.';
       } else {
         winBtn.setAttribute('data-file', 'winZip');
         winBtn.setAttribute('title', 'Extract zip, then run Install-Cuemark.cmd');
@@ -1063,7 +1083,7 @@
     }
 
     function applyUrls(manifest) {
-      if (manifest.version) setVersion(manifest.version);
+      if (manifest.version) setVersion(manifest.version, manifest.bootstrapVersion);
       const hasWinExe = !!(manifest.files && manifest.files.winExe);
       setWindowsExePrimary(hasWinExe);
       const siteFallback = {
@@ -1087,11 +1107,11 @@
       const res = await fetch('/downloads.json?cb=' + Date.now(), { cache: 'no-store' });
       if (res.ok) applyUrls(await res.json());
       else {
-        setVersion(version);
+        setVersion(version, bootstrapVersion);
         applyUrls({ files: {} });
       }
     } catch {
-      setVersion(version);
+      setVersion(version, bootstrapVersion);
       applyUrls({ files: {} });
     }
   })();

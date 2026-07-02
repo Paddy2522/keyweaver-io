@@ -1,0 +1,39 @@
+{
+    "manifestVersion":  1,
+    "bootstrapMinVersion":  "1.0.0",
+    "publisher":  "Keyweaver Ltd",
+    "catalogUrl":  "https://keyweaver.io/installer/manifest.json",
+    "products":  [
+                     {
+                         "id":  "cuemark",
+                         "displayName":  "Cuemark by Keyweaver",
+                         "description":  "AI subtitles and captions inside Adobe After Effects.",
+                         "panelId":  "com.captioncraft.panel",
+                         "version":  "1.0.1",
+                         "platforms":  {
+                                           "win":  {
+                                                       "packageUrl":  "https://keyweaver.io/downloads/Cuemark-Install-win-v1.0.1.zip",
+                                                       "sha256":  "28b540deddc1f7606e6f377fce78f4cd3999ab5615e828b63f778949f3a64bb8",
+                                                       "sizeBytes":  50034417,
+                                                       "installScript":  "cuemark-install-windows.ps1"
+                                                   },
+                                           "mac":  {
+                                                       "packageUrl":  "https://keyweaver.io/downloads/Cuemark-Install-mac-v1.0.1.zip",
+                                                       "sha256":  "9b9e03bc661c2b565b0dcd5e6cd4eefe5ffd16752eb9ef85159d607e83c8f180",
+                                                       "installScript":  "cuemark-install-macos.sh"
+                                                   }
+                                       },
+                         "helpUrl":  "https://keyweaver.io/help",
+                         "menuPath":  "Window -\u003e Extensions -\u003e Cuemark by Keyweaver"
+                     }
+                 ],
+    "promotions":  [
+                       {
+                           "id":  "superconductor-teaser",
+                           "title":  "Superconductor - AI video for After Effects",
+                           "body":  "Generate short b-roll and motion plates inside AE. Coming to Keyweaver Manager when ready.",
+                           "ctaUrl":  "https://keyweaver.io/superconductor",
+                           "ctaLabel":  "Learn more"
+                       }
+                   ]
+}

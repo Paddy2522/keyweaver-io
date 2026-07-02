@@ -286,12 +286,16 @@
     <!-- INSTALL -->
     <div class="help-section" id="install">
       <h2>Installation</h2>
-      <p>Cuemark is a CEP panel for Adobe After Effects. Download the <a href="/download">zip for your platform</a>, extract it, and run <strong>Install-Cuemark.cmd</strong> (Windows) or <strong>Install-Cuemark.command</strong> (macOS). Manual steps are in <strong>README.txt</strong> inside the zip. The panel appears under <strong>Window → Extensions</strong> after you restart AE.</p>
+      <p>Cuemark is a CEP panel for Adobe After Effects. The panel appears under <strong>Window → Extensions</strong> after you install it and fully restart AE.</p>
       <p>Full step-by-step instructions are on the <a href="/download">download page</a>.</p>
 
-      <h3>Windows</h3>
-      <p>Extract the zip, double-click <strong>Install-Cuemark.cmd</strong>, and click <strong>Run</strong> if Windows says the publisher could not be verified. The installer copies files to your user AppData folder only - no admin rights required.</p>
-      <p>Prefer not to run a script? Copy <strong>com.captioncraft.panel</strong> to <code>%AppData%\Adobe\CEP\extensions\</code> and double-click <strong>Enable-Cuemark-CEP.reg</strong> once (both included in the zip).</p>
+      <h3>Windows (recommended)</h3>
+      <p>Download <strong>Keyweaver Installer</strong> from the <a href="/download">download page</a> and run <strong>Keyweaver-Setup.exe</strong>. It installs <strong>Keyweaver Manager</strong> on your PC (signed by Keyweaver Ltd). Open Manager from the Start Menu, click <strong>Install</strong> on Cuemark, then fully quit and reopen After Effects.</p>
+      <p>If Windows shows SmartScreen, click <strong>More info</strong> → <strong>Run anyway</strong> and confirm the publisher is <strong>Keyweaver Ltd</strong>. No admin password is required.</p>
+
+      <h3>Windows (zip fallback)</h3>
+      <p>Prefer not to run an .exe? Download the zip from the <a href="/download">download page</a>, extract it, and double-click <strong>Install-Cuemark.cmd</strong>. Click <strong>Run</strong> if Windows says the publisher could not be verified. The installer copies files to your user AppData folder only.</p>
+      <p>Manual fallback: copy <strong>com.captioncraft.panel</strong> to <code>%AppData%\Adobe\CEP\extensions\</code> and double-click <strong>Enable-Cuemark-CEP.reg</strong> once (both included in the zip).</p>
 
       <h3>macOS</h3>
       <p>Extract the zip and double-click <strong>Install-Cuemark.command</strong>. If macOS blocks it, right-click → <strong>Open</strong> → <strong>Open</strong> once.</p>
@@ -549,7 +553,7 @@
           <span>Will Cuemark keep getting updates?</span>
           <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
-        <div class="faq-a">Yes. Cuemark is actively developed. To update, download the latest zip from the <a href="/download">download page</a>, run the installer again, then fully quit and reopen After Effects.</div>
+        <div class="faq-a">Yes. Cuemark is actively developed. On Windows, open <strong>Keyweaver Manager</strong> and click <strong>Install</strong> on Cuemark to get the latest version. On macOS, download the latest zip from the <a href="/download">download page</a> and run the installer again. Fully quit and reopen After Effects after updating.</div>
       </div>
 
     </div>
