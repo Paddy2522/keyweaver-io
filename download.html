@@ -1035,8 +1035,8 @@
       os: os
     });
     const endpoint = 'https://keyweaver-backend.vercel.app/api/captio/analytics';
-    // fetch+keepalive survives navigation and handles cross-origin CORS reliably (sendBeacon often drops JSON beacons).
-    fetch(endpoint, {
+    // Finish the request before starting the file download (keepalive alone is not reliable here).
+    const request = fetch(endpoint, {
       method: 'POST',
       mode: 'cors',
       credentials: 'omit',
@@ -1050,6 +1050,27 @@
         fbq('trackCustom', 'PluginDownload', { os: os, asset: key, content_name: 'Keyweaver Installer' });
       }
     } catch (e) {}
+    return request;
+  }
+
+  function startFileDownload(url) {
+    if (!url || url === '#') return;
+    var link = document.createElement('a');
+    link.href = url;
+    link.rel = 'noopener';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  }
+
+  function runDownloadWithTracking(key, href) {
+    var tracked = trackCuemarkDownloadClick(key, href);
+    var begin = function () { startFileDownload(href); };
+    if (tracked && typeof tracked.finally === 'function') {
+      tracked.finally(begin);
+      return;
+    }
+    setTimeout(begin, 200);
   }
 
   function bindDownloadAnalytics(el, key) {
@@ -1062,8 +1083,7 @@
         return;
       }
       e.preventDefault();
-      trackCuemarkDownloadClick(key, href);
-      window.location.href = href;
+      runDownloadWithTracking(key, href);
     });
   }
 
@@ -1093,8 +1113,7 @@
     var url = href || pendingWinExeHref;
     if (!url || url === '#') return;
     closeSmartscreenModal();
-    trackCuemarkDownloadClick('winExe', url);
-    window.location.href = url;
+    runDownloadWithTracking('winExe', url);
   }
 
   function initSmartscreenModal() {
