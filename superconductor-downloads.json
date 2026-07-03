@@ -1,0 +1,12 @@
+{
+  "product": "superconductor",
+  "name": "Superconductor by Keyweaver",
+  "status": "provider-research",
+  "version": null,
+  "releasePage": null,
+  "files": {
+    "macZip": null,
+    "winZip": null
+  },
+  "notes": "Superconductor is not publicly available yet. This file is intentionally separate from downloads.json so Cuemark remains backwards-compatible."
+}
