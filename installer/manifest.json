@@ -24,13 +24,13 @@
                          "platforms":  {
                                            "win":  {
                                                        "packageUrl":  "https://keyweaver.io/downloads/Cuemark-Install-win-v1.0.1.zip",
-                                                       "sha256":  "28b540deddc1f7606e6f377fce78f4cd3999ab5615e828b63f778949f3a64bb8",
-                                                       "sizeBytes":  50034417,
+                                                       "sha256":  "db207320d17f03d7bc3ceb15b7710ace91ea6a2aeeb17045bde5aade166a1228",
+                                                       "sizeBytes":  50038336,
                                                        "installScript":  "cuemark-install-windows.ps1"
                                                    },
                                            "mac":  {
                                                        "packageUrl":  "https://keyweaver.io/downloads/Cuemark-Install-mac-v1.0.1.zip",
-                                                       "sha256":  "9b9e03bc661c2b565b0dcd5e6cd4eefe5ffd16752eb9ef85159d607e83c8f180",
+                                                       "sha256":  "6fc9deaa09fd1540d0676088bfa81f1825ddca210eddf8b19221fd472cac4811",
                                                        "installScript":  "cuemark-install-macos.sh"
                                                    }
                                        },
