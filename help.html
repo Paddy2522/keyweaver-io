@@ -129,9 +129,9 @@
     .help-video-play {
       position: absolute;
       inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: block;
+      width: 100%;
+      height: 100%;
       padding: 0;
       border: 0;
       background: transparent;
@@ -142,32 +142,6 @@
       height: 100%;
       object-fit: cover;
       display: block;
-    }
-    .help-video-play::after {
-      content: '';
-      position: absolute;
-      width: 72px;
-      height: 72px;
-      border-radius: 50%;
-      background: rgba(10, 10, 15, 0.72);
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      backdrop-filter: blur(8px);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
-      pointer-events: none;
-    }
-    .help-video-play svg {
-      position: relative;
-      z-index: 1;
-      width: 28px;
-      height: 28px;
-      margin-left: 4px;
-      fill: #fff;
-      filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.35));
-      pointer-events: none;
-    }
-    .help-video-play:hover::after {
-      background: rgba(91, 107, 248, 0.88);
-      border-color: rgba(255, 255, 255, 0.28);
     }
     .help-video-caption {
       padding: 0.85rem 1rem;
@@ -358,7 +332,6 @@
       <div class="help-video-inner">
         <button type="button" class="help-video-play" id="help-video-play" aria-label="Play Cuemark how-to video">
           <img src="/images/help/cuemark-how-to-video.jpg" alt="Cuemark how-to video — create AI subtitles in After Effects" width="1280" height="720" loading="eager" />
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
         </button>
       </div>
       <p class="help-video-caption">Watch the full walkthrough — install, generate, style, and export subtitles in After Effects.</p>
