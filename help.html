@@ -103,7 +103,78 @@
       letter-spacing: -0.03em; color: var(--text);
       margin-bottom: 0.5rem;
     }
-    .page-sub { font-size: 15px; color: var(--muted); margin-bottom: 3rem; line-height: 1.6; }
+    .page-sub { font-size: 15px; color: var(--muted); margin-bottom: 2rem; line-height: 1.6; }
+
+    .help-video {
+      margin-bottom: 3rem;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--edge);
+      background: var(--surface);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+    }
+    .help-video-inner {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #000;
+    }
+    .help-video-inner iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+    .help-video-play {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+    }
+    .help-video-play img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .help-video-play::after {
+      content: '';
+      position: absolute;
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: rgba(10, 10, 15, 0.72);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+      pointer-events: none;
+    }
+    .help-video-play svg {
+      position: relative;
+      z-index: 1;
+      width: 28px;
+      height: 28px;
+      margin-left: 4px;
+      fill: #fff;
+      filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.35));
+      pointer-events: none;
+    }
+    .help-video-play:hover::after {
+      background: rgba(91, 107, 248, 0.88);
+      border-color: rgba(255, 255, 255, 0.28);
+    }
+    .help-video-caption {
+      padding: 0.85rem 1rem;
+      font-size: 13px;
+      color: var(--muted);
+      border-top: 1px solid var(--edge);
+    }
 
     /* ARTICLE SECTIONS */
     .help-section { margin-bottom: 4rem; scroll-margin-top: 80px; }
@@ -282,6 +353,16 @@
     <p class="section-label">Help centre</p>
     <h1>Using Cuemark</h1>
     <p class="page-sub">Everything you need to go from footage to finished captions inside After Effects.</p>
+
+    <div class="help-video" id="help-video">
+      <div class="help-video-inner">
+        <button type="button" class="help-video-play" id="help-video-play" aria-label="Play Cuemark how-to video">
+          <img src="/images/help/cuemark-how-to-video.jpg" alt="Cuemark how-to video — create AI subtitles in After Effects" width="1280" height="720" loading="eager" />
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+      </div>
+      <p class="help-video-caption">Watch the full walkthrough — install, generate, style, and export subtitles in After Effects.</p>
+    </div>
 
     <!-- INSTALL -->
     <div class="help-section" id="install">
@@ -603,6 +684,22 @@
   }, { rootMargin: '-20% 0px -70% 0px' });
 
   sections.forEach(s => observer.observe(s));
+
+  (function initHelpVideo() {
+    var playBtn = document.getElementById('help-video-play');
+    var wrap = document.getElementById('help-video');
+    if (!playBtn || !wrap) return;
+    var streamId = '6536b6e70a26ed3b49d18ec758ac33b3';
+    playBtn.addEventListener('click', function () {
+      var inner = wrap.querySelector('.help-video-inner');
+      if (!inner) return;
+      inner.innerHTML =
+        '<iframe src="https://iframe.videodelivery.net/' + streamId +
+        '?preload=true&controls=true&autoplay=true" ' +
+        'allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture" ' +
+        'allowfullscreen title="Cuemark how-to — create AI subtitles in After Effects"></iframe>';
+    });
+  })();
 </script><script src="/js/cuemark-turnstile.js"></script>
   <script src="/js/help-widget.js" defer></script>
 </body>
