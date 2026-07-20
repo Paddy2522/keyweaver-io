@@ -1,0 +1,4 @@
+# Keep Manager launcher scripts byte-stable across Windows/macOS checkouts and Cloudflare.
+installer/manager/*.vbs text eol=lf
+installer/manager/*.cmd text eol=lf
+installer/manager/*.ps1 text eol=lf
