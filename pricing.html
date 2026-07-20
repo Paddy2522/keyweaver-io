@@ -99,6 +99,41 @@
       gap: 16px;
       align-items: start;
     }
+    .pricing-grid-wide {
+      grid-template-columns: repeat(4, 1fr);
+    }
+    .pricing-section:has(.pricing-grid-wide) {
+      max-width: 1280px;
+    }
+    .burn-table-wrap {
+      max-width: 720px;
+      margin: 2.5rem auto 0;
+    }
+    .burn-title {
+      font-size: 1.1rem;
+      margin: 0 0 0.75rem;
+      color: var(--text);
+    }
+    .burn-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+    .burn-table th,
+    .burn-table td {
+      text-align: left;
+      padding: 0.65rem 0.75rem;
+      border-bottom: 1px solid var(--subtle);
+    }
+    .burn-table th {
+      color: var(--muted);
+      font-weight: 600;
+    }
+    .card-soon {
+      margin: 0.75rem 0 0;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
 
     .pricing-card {
       background: var(--surface);
@@ -323,7 +358,8 @@
     .footer-links a:hover { color: var(--text); }
 
     @media (max-width: 720px) {
-      .pricing-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+      .pricing-grid,
+      .pricing-grid-wide { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
       .nav-links { display: none; }
       .comp-table th:nth-child(2), .comp-table td:nth-child(2) { display: none; }
     }
@@ -352,65 +388,73 @@
 <!-- HERO -->
 <div class="hero">
   <h1>Simple, honest pricing</h1>
-  <p>Start free. Pay only when you need more. Credits never expire and work across all Keyweaver products.</p>
+  <p>Start free. Pay only when you need more. Keyweaver Credits work across Cuemark, Superconductor, Trillian, and Tamborine.</p>
 
   <p class="currency-note" id="currency-note">Prices shown in British pounds (GBP).</p>
 </div>
 
 <!-- PRICING CARDS -->
 <div class="pricing-section">
-  <div class="pricing-grid">
+  <div class="pricing-grid pricing-grid-wide">
 
     <!-- FREE -->
     <div class="pricing-card">
       <div class="card-tier">Free</div>
       <div class="card-price"><sup id="sym-free">£</sup><span id="price-free">0</span></div>
       <div class="card-price-period">forever</div>
-      <div class="card-desc">Install Cuemark and try 5 free credits in After Effects - no account required. Sign up free for 5 more, then buy packs or go monthly.</div>
+      <div class="card-desc">Try in After Effects with no account, then sign up free for a real credit balance across every Keyweaver AI plugin.</div>
       <ul class="card-features">
-        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>5 trial credits in the panel (no signup)</li>
-        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>5 more credits when you sign up free</li>
-        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Up to 15 minutes per generate</li>
-        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>All 10 built-in presets</li>
-        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Full Style tab + 13 animations</li>
-        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Top-up credits any time</li>
-        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>SRT / VTT / CSV export</li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Guest trials in each AI panel</li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg><strong>40 credits</strong> when you sign up free</li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Shared across all Keyweaver AI tools</li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Ludo motion toolkit stays free</li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Top up any time</li>
       </ul>
       <a href="/download" class="card-cta cta-outline">Download free</a>
     </div>
 
-    <!-- CREDITS -->
+    <!-- STARTER CREDITS -->
     <div class="pricing-card featured">
       <div class="featured-badge">Most popular</div>
-      <div class="card-tier">Credits</div>
+      <div class="card-tier">Starter</div>
       <div class="card-price"><sup id="sym-credits">£</sup><span id="price-credits">4</span><span id="price-credits-dec" style="font-size:1.4rem; font-weight:700; margin-top:0.7rem; color:var(--muted)">.99</span></div>
       <div class="card-price-period" id="credits-period">one-time · <span id="credits-count">60</span> credits</div>
-      <div class="card-desc">Buy a pack of credits whenever you need them. No subscription, no expiry.</div>
+      <div class="card-desc">Impulse top-up. No subscription, never expires.</div>
       <ul class="card-features">
-        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg><span id="credits-feature">60 minutes of transcription</span></li>
-        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Clips up to 15 minutes each</li>
-        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>All 10 presets + 13 animations</li>
-        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Full Style tab</li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>60 Keyweaver Credits</li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Captions, video, VO, and audio</li>
         <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Credits never expire</li>
         <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Top up any time</li>
-        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>SRT / VTT / CSV export</li>
       </ul>
-      <a href="#" class="card-cta cta-primary" id="cta-credits">Buy credits</a>
+      <a href="#" class="card-cta cta-primary" id="cta-credits">Buy Starter</a>
+    </div>
+
+    <!-- CREATOR CREDITS -->
+    <div class="pricing-card" id="card-credits-150">
+      <div class="card-tier">Creator</div>
+      <div class="card-price"><sup id="sym-credits-150">£</sup><span id="price-credits-150">9</span><span id="price-credits-150-dec" style="font-size:1.4rem; font-weight:700; margin-top:0.7rem; color:var(--muted)">.99</span></div>
+      <div class="card-price-period">one-time · 150 credits</div>
+      <div class="card-desc">Better value for Superconductor and VO-heavy weeks.</div>
+      <ul class="card-features">
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>150 Keyweaver Credits</li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>~2.5× Starter for ~2× the price</li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Credits never expire</li>
+      </ul>
+      <a href="#" class="card-cta cta-outline" id="cta-credits-150">Buy Creator</a>
+      <p class="card-soon" id="soon-credits-150" hidden>Available soon — use Starter for now.</p>
     </div>
 
     <!-- MONTHLY -->
     <div class="pricing-card">
       <div class="card-tier">Monthly</div>
       <div class="card-price"><sup id="sym-monthly">£</sup><span id="price-monthly">12</span></div>
-      <div class="card-price-period">per month · <span id="monthly-count">300</span> credits included</div>
-      <div class="card-desc">Best value for regular users. Credits refresh monthly and unused ones roll over.</div>
+      <div class="card-price-period">per month · <span id="monthly-count">300</span> credits</div>
+      <div class="card-desc">Best for regular editors. Credits refresh monthly with rollover.</div>
       <ul class="card-features">
-        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>300 credits per month</li>
-        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Clips up to 15 minutes each</li>
-        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>All 10 presets + 13 animations</li>
-        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Full Style tab</li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>300 credits every month</li>
         <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Up to 150 credits roll over</li>
-        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>SRT / VTT / CSV export</li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Cancel any time</li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Annual option coming soon (2 months free)</li>
       </ul>
       <a href="#" class="card-cta cta-accent-outline" id="cta-monthly">Start monthly</a>
     </div>
@@ -424,8 +468,50 @@
     </div>
     <div>
       <h3>How credits work</h3>
-      <p>1 Keyweaver Credit = 1 minute of audio transcribed. Fractional minutes round up - a 5 min 20 sec file costs 6 credits. Credits are shared across all Keyweaver products and never expire on the Credits plan.</p>
+      <p>One Keyweaver Credit balance powers every AI plugin. Costs differ by product — see the table below. Pack credits never expire. Monthly unused credits roll over up to the plan cap.</p>
     </div>
+  </div>
+
+  <div class="burn-table-wrap">
+    <h3 class="burn-title">What one job costs</h3>
+    <table class="burn-table">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Typical cost</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Cuemark captions</td>
+          <td>1 credit per minute of audio (rounds up)</td>
+        </tr>
+        <tr>
+          <td>Superconductor · Standard 5s 720p</td>
+          <td>8 credits</td>
+        </tr>
+        <tr>
+          <td>Superconductor · Standard 5s 1080p</td>
+          <td>16 credits</td>
+        </tr>
+        <tr>
+          <td>Superconductor · Pro 5s 1080p</td>
+          <td>20 credits</td>
+        </tr>
+        <tr>
+          <td>Trillian voiceover</td>
+          <td>From 3 credits (scales with script length)</td>
+        </tr>
+        <tr>
+          <td>Tamborine music / SFX</td>
+          <td>From 3 credits (scales with duration)</td>
+        </tr>
+        <tr>
+          <td>Ludo</td>
+          <td>Free — no credits</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
 
@@ -448,8 +534,8 @@
       <tr class="group-row"><td colspan="4">Transcription</td></tr>
       <tr>
         <td>Included transcription</td>
-        <td>5 trial credits (no account) + 5 on signup</td>
-        <td class="featured-col">60 credits per pack</td>
+        <td>5 guest trial (Cuemark) + <strong>40 on signup</strong></td>
+        <td class="featured-col">60 / 150 pack options</td>
         <td>300 credits / month</td>
       </tr>
       <tr>
@@ -588,7 +674,7 @@
       <span>What counts as one credit?</span>
       <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
     </div>
-    <div class="faq-a">1 credit = 1 minute of audio transcribed. Fractional minutes always round up - so a 5 minute 20 second file costs 6 credits. Re-applying a style or editing cue text after a generate costs nothing.</div>
+    <div class="faq-a">One Keyweaver Credit is shared across Cuemark, Superconductor, Trillian, and Tamborine. Cuemark uses about 1 credit per minute of audio (rounds up). Superconductor starts at 8 credits per clip. See the cost table above. Re-styling Cuemark after generate is free.</div>
   </div>
 
   <div class="faq-item">
@@ -620,7 +706,7 @@
       <span>Are credits shared between Cuemark and Keyweaver?</span>
       <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
     </div>
-    <div class="faq-a">Yes. Keyweaver Credits are platform-wide. One balance covers everything - Cuemark transcription today, and any future Keyweaver products you use.</div>
+    <div class="faq-a">Yes. One Keyweaver Credits balance covers Cuemark, Superconductor, Trillian, and Tamborine. Ludo does not use credits.</div>
   </div>
 
 </div>
@@ -628,7 +714,7 @@
 <!-- BOTTOM CTA -->
 <div class="bottom-cta">
   <h2>Ready to generate?</h2>
-  <p>Download the plugin and start with 5 free credits - no account needed. Sign up free for 5 more.</p>
+  <p>Try guest credits in the panel, then sign up free for <strong>40 Keyweaver Credits</strong>.</p>
   <div class="bottom-cta-actions">
     <a href="/download" class="btn btn-primary btn-xl">Download free</a>
     <a href="/signup" class="btn btn-ghost btn-lg">Create account</a>
@@ -696,6 +782,25 @@
 
   document.getElementById('cta-credits').addEventListener('click', (e) => startPlanCheckout(e, 'credits'));
   document.getElementById('cta-monthly').addEventListener('click', (e) => startPlanCheckout(e, 'monthly'));
+  const cta150 = document.getElementById('cta-credits-150');
+  if (cta150) {
+    cta150.addEventListener('click', (e) => startPlanCheckout(e, 'credits_150'));
+  }
+
+  // Hide Creator checkout until Stripe price is configured on the backend.
+  fetch(BACKEND + '/api/captio/billing-config')
+    .then((r) => r.json())
+    .then((cfg) => {
+      const available = cfg && cfg.available_plans ? cfg.available_plans : [];
+      if (available.indexOf('credits_150') === -1) {
+        if (cta150) {
+          cta150.style.display = 'none';
+        }
+        const soon = document.getElementById('soon-credits-150');
+        if (soon) soon.hidden = false;
+      }
+    })
+    .catch(() => {});
 </script><script src="/js/cuemark-turnstile.js"></script>
   <script src="/js/help-widget.js" defer></script>
 </body>

@@ -1,8 +1,35 @@
 (function (global) {
   const CUEMARK_PRICES = {
-    GBP: { sym: '£', name: 'British pounds', code: 'GBP', credits: { whole: '4', dec: '.99' }, monthly: '12' },
-    EUR: { sym: '€', name: 'euros', code: 'EUR', credits: { whole: '5', dec: '.99' }, monthly: '14' },
-    USD: { sym: '$', name: 'US dollars', code: 'USD', credits: { whole: '5', dec: '.99' }, monthly: '15' },
+    GBP: {
+      sym: '£', name: 'British pounds', code: 'GBP',
+      credits: { whole: '4', dec: '.99' },
+      credits_150: { whole: '9', dec: '.99' },
+      credits_500: { whole: '24', dec: '.99' },
+      monthly: '12',
+      monthly_pro: '29',
+      annual: '120',
+      annual_pro: '290',
+    },
+    EUR: {
+      sym: '€', name: 'euros', code: 'EUR',
+      credits: { whole: '5', dec: '.99' },
+      credits_150: { whole: '11', dec: '.99' },
+      credits_500: { whole: '29', dec: '.99' },
+      monthly: '14',
+      monthly_pro: '34',
+      annual: '140',
+      annual_pro: '340',
+    },
+    USD: {
+      sym: '$', name: 'US dollars', code: 'USD',
+      credits: { whole: '5', dec: '.99' },
+      credits_150: { whole: '11', dec: '.99' },
+      credits_500: { whole: '29', dec: '.99' },
+      monthly: '15',
+      monthly_pro: '35',
+      annual: '150',
+      annual_pro: '350',
+    },
   };
 
   const EUR_LANGS = new Set([
@@ -62,7 +89,7 @@
 
   function applyPricingPage(currency) {
     const p = CUEMARK_PRICES[currency] || CUEMARK_PRICES.GBP;
-    ['free', 'credits', 'monthly'].forEach((t) => {
+    ['free', 'credits', 'credits-150', 'monthly'].forEach((t) => {
       const sym = document.getElementById('sym-' + t);
       if (sym) sym.textContent = p.sym;
     });
@@ -72,6 +99,10 @@
     if (pc) pc.textContent = p.credits.whole;
     const pcd = document.getElementById('price-credits-dec');
     if (pcd) pcd.textContent = p.credits.dec;
+    const pc150 = document.getElementById('price-credits-150');
+    if (pc150) pc150.textContent = p.credits_150.whole;
+    const pc150d = document.getElementById('price-credits-150-dec');
+    if (pc150d) pc150d.textContent = p.credits_150.dec;
     const pm = document.getElementById('price-monthly');
     if (pm) pm.textContent = p.monthly;
     const note = document.getElementById('currency-note');
