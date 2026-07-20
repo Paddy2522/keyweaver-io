@@ -4,26 +4,26 @@
     "publisher":  "Keyweaver Ltd",
     "catalogUrl":  "https://keyweaver.io/installer/manifest.json",
     "manager":  {
-                    "version":  "1.0.15",
+                    "version":  "1.0.16",
                     "baseUrl":  "https://keyweaver.io/installer/manager/",
                     "files":  {
                                   "Keyweaver-Manager.ps1":  "fd761a7da47ca394f813b4e4f72842a064f8b5ffc1305faa265b4f7487259563",
                                   "Keyweaver-InstallLib.ps1":  "6c5e128626baf5561b0c36a9214892bc9781f59845b1fd96209d3643378cb219",
                                   "Keyweaver-Manager-Launcher.ps1":  "a88decb8f76ad0858fdc775ad5363b31ec75dfdb31b0b1cec6dd0ec1f1dfcbc4",
                                   "Sync-KeyweaverManagerRuntime.ps1":  "0e32bd8c23215c71cd4de6f3d47663d963fefd1af79afc719e5bfcd113ad10d9",
-                                  "Keyweaver-Manager.exe":  "703b802714c7d4f6b1d59522fdde0913d64045b207f5f23d80b5ab4f8f61677c",
+                                  "Keyweaver-Manager.exe":  "e3c6e0962f8e10dce2ae13d32e130100affcb4f7067aefe519fb77323a6cd328",
                                   "keyweaver.ico":  "a2133d99221ac192cb3e42b008e7edb59d1ef8ad539168785189b1de191e1d4f",
                                   "images/keyweaver-logo.png":  "4b0b8c6eb33d056c4040711d5d8a68085803a91b9300aa1252ed94c77c551d9b",
                                   "images/cuemark-logo.png":  "662898c3eb53a987439e9d9421fb79b22a7d633cfdb7ff5bfdd126d76790e8ba",
-                                  "images/cuemark-icon.png":  "c95aa4c31117d298cfbbdb6c62f8abaca0c404800e34ff6e78e3214c208ec394",
+                                  "images/cuemark-icon.png":  "4454a2e74a11f7d7361df4662a3456f7904867f032f69210b5c09d3f1ac98e80",
                                   "images/superconductor-logo.png":  "90eb00377403f4e9cd0c5e7188c6657a0631e9f46c7ec826af9c2d0acd21a42e",
-                                  "images/superconductor-icon.png":  "0ce21e4afbd318bdde360fbebbaafeb52c224a7388268a49fb50f244638a05f2",
+                                  "images/superconductor-icon.png":  "f209a228a1e5b2b9807512c5c49b40eadea5371eef2fd7782d7a7c06bb77d918",
                                   "images/ludo-logo.png":  "473da1a826789e2d4c585f158320c1a30df1ef9f0413b828de16a4d7219323bd",
-                                  "images/ludo-icon.png":  "c71d1c0a18bb82aecb1ff7d0bbd913dd81c84b66dd191d02b09446a232209e70",
+                                  "images/ludo-icon.png":  "faef406bcb5e700ff19eb3f7ba6b47093d9aa92f8c6524f673d1d41d26fe7cc0",
                                   "images/trillian-logo.png":  "ee7954730e5a750ef6c7626ef080ae2d4043f2908610cb64aa6303ff10a1055b",
-                                  "images/trillian-icon.png":  "16f8219cad54a3aa3578ce697e887d6cae345170e6d2d39b647504b2ce1b175c",
+                                  "images/trillian-icon.png":  "378d36ad7c927c8e86f38834d13e9214ed1d7ec422b0ac4b63a31ab04242a78e",
                                   "images/tamborine-logo.png":  "c700cf8bc9468dc1cef15e445190132c2dfe397b81216690f0b5ddbd1246840c",
-                                  "images/tamborine-icon.png":  "5c700aa6738afb4155889a546379f6a30311cb3ca99c6b9a9e3fc8d58bf62bb5"
+                                  "images/tamborine-icon.png":  "ff6293f90bdc07dbc36b12ff78d1472f03af0b3445569fe897c5f1499bae25e0"
                               }
                 },
     "products":  [
