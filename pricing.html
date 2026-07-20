@@ -129,10 +129,14 @@
       color: var(--muted);
       font-weight: 600;
     }
-    .card-soon {
-      margin: 0.75rem 0 0;
-      font-size: 0.82rem;
+    .pricing-section-label {
+      max-width: 1280px;
+      margin: 2.75rem auto 1rem;
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
       color: var(--muted);
+      font-weight: 600;
     }
 
     .pricing-card {
@@ -441,22 +445,82 @@
         <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Credits never expire</li>
       </ul>
       <a href="#" class="card-cta cta-outline" id="cta-credits-150">Buy Creator</a>
-      <p class="card-soon" id="soon-credits-150" hidden>Available soon — use Starter for now.</p>
     </div>
+
+    <!-- STUDIO CREDITS -->
+    <div class="pricing-card" id="card-credits-500">
+      <div class="card-tier">Studio</div>
+      <div class="card-price"><sup id="sym-credits-500">£</sup><span id="price-credits-500">24</span><span id="price-credits-500-dec" style="font-size:1.4rem; font-weight:700; margin-top:0.7rem; color:var(--muted)">.99</span></div>
+      <div class="card-price-period">one-time · 500 credits</div>
+      <div class="card-desc">Biggest pack for heavy AI weeks — no subscription.</div>
+      <ul class="card-features">
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>500 Keyweaver Credits</li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Best pack rate</li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Credits never expire</li>
+      </ul>
+      <a href="#" class="card-cta cta-outline" id="cta-credits-500">Buy Studio</a>
+    </div>
+
+  </div>
+
+  <p class="pricing-section-label">Subscriptions</p>
+  <div class="pricing-grid pricing-grid-wide">
 
     <!-- MONTHLY -->
     <div class="pricing-card">
       <div class="card-tier">Monthly</div>
       <div class="card-price"><sup id="sym-monthly">£</sup><span id="price-monthly">12</span></div>
-      <div class="card-price-period">per month · <span id="monthly-count">300</span> credits</div>
+      <div class="card-price-period">per month · 300 credits</div>
       <div class="card-desc">Best for regular editors. Credits refresh monthly with rollover.</div>
       <ul class="card-features">
         <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>300 credits every month</li>
         <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Up to 150 credits roll over</li>
         <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Cancel any time</li>
-        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Annual option coming soon (2 months free)</li>
       </ul>
       <a href="#" class="card-cta cta-accent-outline" id="cta-monthly">Start monthly</a>
+    </div>
+
+    <!-- MONTHLY PRO -->
+    <div class="pricing-card featured">
+      <div class="featured-badge">Best for AI video</div>
+      <div class="card-tier">Pro Monthly</div>
+      <div class="card-price"><sup id="sym-monthly-pro">£</sup><span id="price-monthly-pro">29</span></div>
+      <div class="card-price-period">per month · 900 credits</div>
+      <div class="card-desc">For Superconductor, VO, and music in the same workflow.</div>
+      <ul class="card-features">
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>900 credits every month</li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Up to 150 credits roll over</li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Cancel any time</li>
+      </ul>
+      <a href="#" class="card-cta cta-primary" id="cta-monthly-pro">Start Pro monthly</a>
+    </div>
+
+    <!-- ANNUAL -->
+    <div class="pricing-card">
+      <div class="card-tier">Annual</div>
+      <div class="card-price"><sup id="sym-annual">£</sup><span id="price-annual">120</span></div>
+      <div class="card-price-period">per year · 3600 credits</div>
+      <div class="card-desc">Two months free vs paying Monthly each month.</div>
+      <ul class="card-features">
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>3600 credits billed yearly</li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Same as Monthly × 10</li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Cancel any time</li>
+      </ul>
+      <a href="#" class="card-cta cta-outline" id="cta-annual">Go annual</a>
+    </div>
+
+    <!-- ANNUAL PRO -->
+    <div class="pricing-card">
+      <div class="card-tier">Pro Annual</div>
+      <div class="card-price"><sup id="sym-annual-pro">£</sup><span id="price-annual-pro">290</span></div>
+      <div class="card-price-period">per year · 10800 credits</div>
+      <div class="card-desc">Two months free vs Pro Monthly.</div>
+      <ul class="card-features">
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>10800 credits billed yearly</li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Same as Pro Monthly × 10</li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Cancel any time</li>
+      </ul>
+      <a href="#" class="card-cta cta-outline" id="cta-annual-pro">Go Pro annual</a>
     </div>
 
   </div>
@@ -782,25 +846,17 @@
 
   document.getElementById('cta-credits').addEventListener('click', (e) => startPlanCheckout(e, 'credits'));
   document.getElementById('cta-monthly').addEventListener('click', (e) => startPlanCheckout(e, 'monthly'));
-  const cta150 = document.getElementById('cta-credits-150');
-  if (cta150) {
-    cta150.addEventListener('click', (e) => startPlanCheckout(e, 'credits_150'));
-  }
-
-  // Hide Creator checkout until Stripe price is configured on the backend.
-  fetch(BACKEND + '/api/captio/billing-config')
-    .then((r) => r.json())
-    .then((cfg) => {
-      const available = cfg && cfg.available_plans ? cfg.available_plans : [];
-      if (available.indexOf('credits_150') === -1) {
-        if (cta150) {
-          cta150.style.display = 'none';
-        }
-        const soon = document.getElementById('soon-credits-150');
-        if (soon) soon.hidden = false;
-      }
-    })
-    .catch(() => {});
+  const planCtas = [
+    ['cta-credits-150', 'credits_150'],
+    ['cta-credits-500', 'credits_500'],
+    ['cta-monthly-pro', 'monthly_pro'],
+    ['cta-annual', 'annual'],
+    ['cta-annual-pro', 'annual_pro'],
+  ];
+  planCtas.forEach(([id, plan]) => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('click', (e) => startPlanCheckout(e, plan));
+  });
 </script><script src="/js/cuemark-turnstile.js"></script>
   <script src="/js/help-widget.js" defer></script>
 </body>

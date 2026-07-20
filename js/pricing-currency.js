@@ -89,7 +89,7 @@
 
   function applyPricingPage(currency) {
     const p = CUEMARK_PRICES[currency] || CUEMARK_PRICES.GBP;
-    ['free', 'credits', 'credits-150', 'monthly'].forEach((t) => {
+    ['free', 'credits', 'credits-150', 'credits-500', 'monthly', 'monthly-pro', 'annual', 'annual-pro'].forEach((t) => {
       const sym = document.getElementById('sym-' + t);
       if (sym) sym.textContent = p.sym;
     });
@@ -103,8 +103,18 @@
     if (pc150) pc150.textContent = p.credits_150.whole;
     const pc150d = document.getElementById('price-credits-150-dec');
     if (pc150d) pc150d.textContent = p.credits_150.dec;
+    const pc500 = document.getElementById('price-credits-500');
+    if (pc500) pc500.textContent = p.credits_500.whole;
+    const pc500d = document.getElementById('price-credits-500-dec');
+    if (pc500d) pc500d.textContent = p.credits_500.dec;
     const pm = document.getElementById('price-monthly');
     if (pm) pm.textContent = p.monthly;
+    const pmp = document.getElementById('price-monthly-pro');
+    if (pmp) pmp.textContent = p.monthly_pro;
+    const pa = document.getElementById('price-annual');
+    if (pa) pa.textContent = p.annual;
+    const pap = document.getElementById('price-annual-pro');
+    if (pap) pap.textContent = p.annual_pro;
     const note = document.getElementById('currency-note');
     if (note) {
       note.textContent = 'Prices shown in ' + p.name + ' (' + p.code + '). Stripe checkout uses the same currency for your region.';
