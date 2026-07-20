@@ -1,12 +1,9 @@
 {
-  "product": "superconductor",
-  "name": "Superconductor by Keyweaver",
-  "status": "provider-research",
-  "version": null,
-  "releasePage": null,
-  "files": {
-    "macZip": null,
-    "winZip": null
-  },
-  "notes": "Superconductor is not publicly available yet. This file is intentionally separate from downloads.json so Cuemark remains backwards-compatible."
+    "files":  {
+                  "macZip":  "https://keyweaver.io/downloads/Superconductor-Install-mac-v0.1.0.zip",
+                  "winZip":  "https://keyweaver.io/downloads/Superconductor-Install-win-v0.1.0.zip"
+              },
+    "status":  "available",
+    "releasePage":  "https://github.com/Paddy2522/keyweaver-io/releases/tag/superconductor-v0.1.0",
+    "version":  "0.1.0"
 }

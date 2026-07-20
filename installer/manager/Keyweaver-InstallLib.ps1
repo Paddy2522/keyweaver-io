@@ -1,4 +1,4 @@
-# Keyweaver Manager install library — loaded in a dedicated runspace for background installs.
+# Keyweaver Manager install library â€” loaded in a dedicated runspace for background installs.
 #Requires -Version 5.1
 
 Add-Type -AssemblyName System.IO.Compression.FileSystem
@@ -8,7 +8,11 @@ try {
 
 # Static zip sizes (bytes) for progress ratio when manifest omits sizeBytes. Keep in sync with release zips.
 $script:KnownPackageSizes = @{
-  cuemark = [int64]50034417
+  cuemark = [int64]50038336
+  superconductor = [int64]126271
+  ludo = [int64]302084
+  trillian = [int64]123765
+  tamborine = [int64]120657
 }
 
 function Ensure-Directory {

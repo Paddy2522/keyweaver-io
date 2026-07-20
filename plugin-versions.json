@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "manager": {
+    "version": "1.0.12",
+    "url": "https://keyweaver.io/download"
+  },
+  "plugins": {
+    "cuemark": {
+      "version": "1.0.1"
+    },
+    "superconductor": {
+      "version": "0.1.0"
+    },
+    "trillian": {
+      "version": "0.1.0"
+    },
+    "tamborine": {
+      "version": "0.1.0"
+    },
+    "ludo": {
+      "version": "0.3.0"
+    }
+  }
+}

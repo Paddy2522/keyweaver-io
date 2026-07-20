@@ -459,6 +459,22 @@ function Compare-Semver {
   return 0
 }
 
+function Get-CurrentManagerRuntimeVersion {
+  $paths = @(
+    (Join-Path $script:StateRoot 'manager-runtime-version.txt'),
+    (Join-Path $script:ManagerRoot 'VERSION')
+  )
+  foreach ($path in $paths) {
+    if (Test-Path -LiteralPath $path) {
+      try {
+        $value = (Get-Content -LiteralPath $path -Raw).Trim()
+        if ($value) { return $value }
+      } catch {}
+    }
+  }
+  return $null
+}
+
 function Fetch-Manifest {
   param([switch]$ForceNetwork)
 
@@ -606,8 +622,28 @@ function New-ManagerImage {
 function Get-ProductLogoFileName {
   param($Product)
   $id = [string]$Product.id
-  if ($id -eq 'cuemark') { return 'cuemark-logo.png' }
-  return $null
+  # WPF BitmapImage does not render SVG; use PNG assets when present.
+  switch ($id) {
+    'cuemark' {
+      if (Get-ManagerImagePath 'cuemark-logo.png') { return 'cuemark-logo.png' }
+      return $null
+    }
+    default { return $null }
+  }
+}
+
+function Get-ProductAccentColor {
+  param($Product)
+  if ($Product.accent) { return [string]$Product.accent }
+  $id = [string]$Product.id
+  switch ($id) {
+    'cuemark' { return '#3D9CF0' }
+    'superconductor' { return '#5B6BF8' }
+    'trillian' { return '#B56BFF' }
+    'tamborine' { return '#E8952F' }
+    'ludo' { return '#34D399' }
+    default { return '#5B6BF8' }
+  }
 }
 
 function Set-ManagerHeaderLogo {
@@ -625,6 +661,8 @@ function Set-ManagerHeaderLogo {
 function New-ProductCard {
   param($Product)
 
+  $accent = Get-ProductAccentColor $Product
+
   $border = New-Object System.Windows.Controls.Border
   $border.Margin = New-Object System.Windows.Thickness(0, 0, 0, 10)
   $border.Padding = New-Object System.Windows.Thickness(14)
@@ -633,7 +671,24 @@ function New-ProductCard {
   $border.BorderBrush = '#2B2B3D'
   $border.BorderThickness = New-Object System.Windows.Thickness(1)
 
+  # Left accent bar
+  $cardGrid = New-Object System.Windows.Controls.Grid
+  $col0 = New-Object System.Windows.Controls.ColumnDefinition
+  $col0.Width = New-Object System.Windows.GridLength(4)
+  $col1 = New-Object System.Windows.Controls.ColumnDefinition
+  $col1.Width = New-Object System.Windows.GridLength(1, [System.Windows.GridUnitType]::Star)
+  $cardGrid.ColumnDefinitions.Add($col0) | Out-Null
+  $cardGrid.ColumnDefinitions.Add($col1) | Out-Null
+
+  $accentBar = New-Object System.Windows.Controls.Border
+  $accentBar.Background = $accent
+  $accentBar.CornerRadius = New-Object System.Windows.CornerRadius(2)
+  $accentBar.Margin = New-Object System.Windows.Thickness(-10, -6, 10, -6)
+  [System.Windows.Controls.Grid]::SetColumn($accentBar, 0)
+  $cardGrid.Children.Add($accentBar) | Out-Null
+
   $stack = New-Object System.Windows.Controls.StackPanel
+  [System.Windows.Controls.Grid]::SetColumn($stack, 1)
 
   $logoFile = Get-ProductLogoFileName $Product
   $titleAdded = $false
@@ -706,7 +761,8 @@ function New-ProductCard {
   }
 
   $stack.Children.Add($actions) | Out-Null
-  $border.Child = $stack
+  $cardGrid.Children.Add($stack) | Out-Null
+  $border.Child = $cardGrid
   return $border
 }
 
@@ -764,6 +820,7 @@ function Render-ManifestUi {
     $script:UiPromotionsPanel.Children.Clear()
 
     $products = @($manifest.products)
+    $pluginUpdateCount = 0
     if (-not $products -or -not $products.Count) {
       $empty = New-Object System.Windows.Controls.TextBlock
       $empty.Text = 'No plugins are available in the catalog yet.'
@@ -771,8 +828,33 @@ function Render-ManifestUi {
       $script:UiProductsPanel.Children.Add($empty) | Out-Null
     } else {
       foreach ($product in $products) {
+        if (Test-ProductInstalled $product) {
+          $installedVersion = Get-InstalledPanelVersion $product.panelId
+          if ($product.version -and ((Compare-Semver $installedVersion ([string]$product.version)) -lt 0)) {
+            $pluginUpdateCount++
+          }
+        }
         $script:UiProductsPanel.Children.Add((New-ProductCard $product)) | Out-Null
       }
+    }
+
+    $managerCurrent = Get-CurrentManagerRuntimeVersion
+    $managerLatest = if ($manifest.manager -and $manifest.manager.version) { [string]$manifest.manager.version } else { $null }
+    $managerNeedsUpdate = $managerCurrent -and $managerLatest -and ((Compare-Semver $managerCurrent $managerLatest) -lt 0)
+    $alerts = @()
+    if ($managerNeedsUpdate) {
+      # Scripts normally sync in bootstrap-launch before the UI opens; this means
+      # the last sync was offline/failed or VERSION state is stale.
+      $alerts += ('Keyweaver Manager v' + $managerLatest + ' is available. Close Manager and reopen from the Start Menu to sync.')
+    }
+    if ($pluginUpdateCount -gt 0) {
+      $alerts += ($pluginUpdateCount.ToString() + $(if ($pluginUpdateCount -eq 1) { ' plugin update is' } else { ' plugin updates are' }) + ' available below.')
+    }
+    if ($alerts.Count -gt 0) {
+      $script:UiUpdateAlertText.Text = ($alerts -join '  ')
+      $script:UiUpdateAlert.Visibility = 'Visible'
+    } else {
+      $script:UiUpdateAlert.Visibility = 'Collapsed'
     }
 
     $promotions = @($manifest.promotions)
@@ -785,7 +867,11 @@ function Render-ManifestUi {
       $script:UiPromotionsSection.Visibility = 'Collapsed'
     }
 
-    $script:UiSubtitle.Text = 'keyweaver.io'
+    if ($managerLatest) {
+      $script:UiSubtitle.Text = ('v' + $managerLatest + ' · Updates automatically before launch')
+    } else {
+      $script:UiSubtitle.Text = 'keyweaver.io'
+    }
     Set-Progress 0
   }
 }
@@ -951,6 +1037,9 @@ function Initialize-KeyweaverManagerUi {
     </StackPanel>
     <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" Style="{StaticResource CuemarkScrollViewer}">
       <StackPanel>
+        <Border Name="UpdateAlert" Visibility="Collapsed" Background="#2B2418" BorderBrush="#8A6729" BorderThickness="1" CornerRadius="8" Padding="12" Margin="0,0,0,12">
+          <TextBlock Name="UpdateAlertText" Foreground="#F5C46B" FontWeight="SemiBold" TextWrapping="Wrap"/>
+        </Border>
         <TextBlock Text="Plugins" FontSize="13" FontWeight="SemiBold" Foreground="#7B8BFF" Margin="0,0,0,8"/>
         <StackPanel Name="ProductsPanel"/>
         <StackPanel Name="PromotionsSection" Margin="0,18,0,0">
@@ -981,6 +1070,8 @@ function Initialize-KeyweaverManagerUi {
   $script:UiStatus = $window.FindName('StatusText')
   $script:UiProgress = $window.FindName('ProgressBar')
   $script:UiSubtitle = $window.FindName('SubtitleText')
+  $script:UiUpdateAlert = $window.FindName('UpdateAlert')
+  $script:UiUpdateAlertText = $window.FindName('UpdateAlertText')
   $script:ToolbarButtonStyle = $window.FindResource('ToolbarButtonStyle')
   $script:PrimaryButtonStyle = $window.FindResource('PrimaryButtonStyle')
   Set-ManagerHeaderLogo $window
