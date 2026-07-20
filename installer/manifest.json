@@ -4,14 +4,25 @@
     "publisher":  "Keyweaver Ltd",
     "catalogUrl":  "https://keyweaver.io/installer/manifest.json",
     "manager":  {
-                    "version":  "1.0.13",
+                    "version":  "1.0.14",
                     "baseUrl":  "https://keyweaver.io/installer/manager/",
                     "files":  {
-                                  "Keyweaver-Manager.ps1":  "57a3ebea3641285b5eebd2bc1027d24c5766c83e0ffc71d78c1b484c177c6034",
+                                  "Keyweaver-Manager.ps1":  "fd761a7da47ca394f813b4e4f72842a064f8b5ffc1305faa265b4f7487259563",
                                   "Keyweaver-InstallLib.ps1":  "6c5e128626baf5561b0c36a9214892bc9781f59845b1fd96209d3643378cb219",
                                   "Keyweaver-Manager-Launcher.ps1":  "a88decb8f76ad0858fdc775ad5363b31ec75dfdb31b0b1cec6dd0ec1f1dfcbc4",
                                   "Sync-KeyweaverManagerRuntime.ps1":  "0e32bd8c23215c71cd4de6f3d47663d963fefd1af79afc719e5bfcd113ad10d9",
-                                  "Keyweaver-Manager.exe":  "baaee35b4f06ad8349be650f3adc5a7f5c129b2261c5d6b2a0edcf5293d02ab3"
+                                  "Keyweaver-Manager.exe":  "7d33249ab09ef1d3ed782e7475a52ae47b82232e59087c69fb00633625020b3f",
+                                  "images/keyweaver-logo.png":  "2963f1b63aee8e3d5d7b39f073e623dd3cadecddbf81303c570b31982933628a",
+                                  "images/cuemark-logo.png":  "662898c3eb53a987439e9d9421fb79b22a7d633cfdb7ff5bfdd126d76790e8ba",
+                                  "images/cuemark-icon.png":  "c95aa4c31117d298cfbbdb6c62f8abaca0c404800e34ff6e78e3214c208ec394",
+                                  "images/superconductor-logo.png":  "90eb00377403f4e9cd0c5e7188c6657a0631e9f46c7ec826af9c2d0acd21a42e",
+                                  "images/superconductor-icon.png":  "0ce21e4afbd318bdde360fbebbaafeb52c224a7388268a49fb50f244638a05f2",
+                                  "images/ludo-logo.png":  "473da1a826789e2d4c585f158320c1a30df1ef9f0413b828de16a4d7219323bd",
+                                  "images/ludo-icon.png":  "c71d1c0a18bb82aecb1ff7d0bbd913dd81c84b66dd191d02b09446a232209e70",
+                                  "images/trillian-logo.png":  "ee7954730e5a750ef6c7626ef080ae2d4043f2908610cb64aa6303ff10a1055b",
+                                  "images/trillian-icon.png":  "16f8219cad54a3aa3578ce697e887d6cae345170e6d2d39b647504b2ce1b175c",
+                                  "images/tamborine-logo.png":  "c700cf8bc9468dc1cef15e445190132c2dfe397b81216690f0b5ddbd1246840c",
+                                  "images/tamborine-icon.png":  "5c700aa6738afb4155889a546379f6a30311cb3ca99c6b9a9e3fc8d58bf62bb5"
                               }
                 },
     "products":  [

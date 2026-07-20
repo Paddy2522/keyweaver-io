@@ -622,14 +622,20 @@ function New-ManagerImage {
 function Get-ProductLogoFileName {
   param($Product)
   $id = [string]$Product.id
-  # WPF BitmapImage does not render SVG; use PNG assets when present.
-  switch ($id) {
-    'cuemark' {
-      if (Get-ManagerImagePath 'cuemark-logo.png') { return 'cuemark-logo.png' }
-      return $null
-    }
-    default { return $null }
+  # Prefer square icon PNGs (reliable); fall back to wordmark PNGs. WPF cannot render SVG.
+  $candidates = @{
+    'cuemark' = @('cuemark-icon.png', 'cuemark-logo.png')
+    'superconductor' = @('superconductor-icon.png', 'superconductor-logo.png')
+    'ludo' = @('ludo-icon.png', 'ludo-logo.png')
+    'trillian' = @('trillian-icon.png', 'trillian-logo.png')
+    'tamborine' = @('tamborine-icon.png', 'tamborine-logo.png')
   }
+  $list = $candidates[$id]
+  if (-not $list) { return $null }
+  foreach ($name in $list) {
+    if (Get-ManagerImagePath $name) { return $name }
+  }
+  return $null
 }
 
 function Get-ProductAccentColor {
@@ -691,22 +697,29 @@ function New-ProductCard {
   [System.Windows.Controls.Grid]::SetColumn($stack, 1)
 
   $logoFile = Get-ProductLogoFileName $Product
-  $titleAdded = $false
+  $titleRow = New-Object System.Windows.Controls.StackPanel
+  $titleRow.Orientation = 'Horizontal'
+  $titleRow.VerticalAlignment = 'Center'
+
   if ($logoFile) {
-    $productLogo = New-ManagerImage -FileName $logoFile -MaxHeight 30
+    $isIcon = $logoFile -like '*-icon.png'
+    $productLogo = New-ManagerImage -FileName $logoFile -MaxHeight $(if ($isIcon) { 36 } else { 28 })
     if ($productLogo) {
-      $stack.Children.Add($productLogo) | Out-Null
-      $titleAdded = $true
+      $productLogo.Margin = '0,0,10,0'
+      $productLogo.VerticalAlignment = 'Center'
+      $titleRow.Children.Add($productLogo) | Out-Null
     }
   }
-  if (-not $titleAdded) {
-    $title = New-Object System.Windows.Controls.TextBlock
-    $title.Text = Repair-DisplayText ([string]$Product.displayName)
-    $title.FontSize = 15
-    $title.FontWeight = 'SemiBold'
-    $title.Foreground = '#F0F0F7'
-    $stack.Children.Add($title) | Out-Null
-  }
+
+  $title = New-Object System.Windows.Controls.TextBlock
+  $title.Text = Repair-DisplayText ([string]$Product.displayName)
+  $title.FontSize = 15
+  $title.FontWeight = 'SemiBold'
+  $title.Foreground = '#F0F0F7'
+  $title.VerticalAlignment = 'Center'
+  $title.TextWrapping = 'Wrap'
+  $titleRow.Children.Add($title) | Out-Null
+  $stack.Children.Add($titleRow) | Out-Null
 
   if ($Product.description) {
     $desc = New-Object System.Windows.Controls.TextBlock
