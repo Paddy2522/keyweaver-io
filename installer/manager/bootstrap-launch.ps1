@@ -33,9 +33,14 @@ foreach ($name in $runtimeFiles) {
 }
 
 # Full catalog sync (exe, icons, images, hashes).
+# Scripts above were already refreshed; Sync failure must not block opening Manager.
 $syncScript = Join-Path $managerRoot 'Sync-KeyweaverManagerRuntime.ps1'
 if (Test-Path -LiteralPath $syncScript) {
-  & $syncScript -ManagerRoot $managerRoot -ManifestUrl $catalogUrl
+  try {
+    & $syncScript -ManagerRoot $managerRoot -ManifestUrl $catalogUrl
+  } catch {
+    Write-Verbose ("Manager sync warning: " + $_.Exception.Message)
+  }
 }
 
 # Record the catalog Manager version so the UI knows this launch already synced scripts.

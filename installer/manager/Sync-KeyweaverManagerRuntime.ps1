@@ -24,6 +24,20 @@ function Ensure-Directory {
 function Get-FileSha256Hex {
   param([string]$Path)
   if (-not (Test-Path -LiteralPath $Path)) { return '' }
+  $ext = [System.IO.Path]::GetExtension($Path).ToLowerInvariant()
+  # Text files are served LF from Git/Cloudflare; hash the LF form so CRLF checkouts still match.
+  if ($ext -in @('.ps1', '.vbs', '.cmd')) {
+    $bytes = [System.IO.File]::ReadAllBytes($Path)
+    $text = [System.Text.Encoding]::UTF8.GetString($bytes)
+    $text = $text -replace "`r`n", "`n" -replace "`r", "`n"
+    $normalized = [System.Text.Encoding]::UTF8.GetBytes($text)
+    $sha = [System.Security.Cryptography.SHA256]::Create()
+    try {
+      return ([BitConverter]::ToString($sha.ComputeHash($normalized))).Replace('-', '').ToLowerInvariant()
+    } finally {
+      $sha.Dispose()
+    }
+  }
   return (Get-FileHash -LiteralPath $Path -Algorithm SHA256).Hash.ToLowerInvariant()
 }
 
