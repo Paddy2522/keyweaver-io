@@ -269,8 +269,15 @@
       font-size: 1.1rem; font-weight: 700;
       margin-top: 0.5rem;
     }
-    .card-price-period {
-      font-size: 13px; color: var(--muted); margin-bottom: 1.25rem;
+    .card-price-unit {
+      font-size: 14px;
+      color: var(--muted);
+      margin: 0.15rem 0 0.35rem;
+    }
+    .card-price-billed {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 1.1rem;
     }
 
     .card-desc {
@@ -576,9 +583,9 @@
       <div class="billing-toggle-wrap">
         <div class="billing-toggle" role="group" aria-label="Billing period">
           <button type="button" class="billing-toggle-btn is-active" id="billing-monthly" data-billing="monthly" aria-pressed="true">Monthly</button>
-          <button type="button" class="billing-toggle-btn" id="billing-annual" data-billing="annual" aria-pressed="false">
-            Annual
-            <span class="save-pill">Save 2 months</span>
+          <button type="button" class="billing-toggle-btn" id="billing-yearly" data-billing="yearly" aria-pressed="false">
+            Yearly
+            <span class="save-pill" id="yearly-save-pill">Save up to 17%</span>
           </button>
         </div>
         <p class="billing-save-note" id="billing-save-note"></p>
@@ -592,7 +599,9 @@
         <div class="card-save-badge" id="save-badge-standard">Save 2 months</div>
         <div class="card-tier" id="tier-sub-standard">Standard</div>
         <div class="card-price"><sup id="sym-sub-standard">£</sup><span id="price-sub-standard">12</span></div>
-        <div class="card-price-period" id="period-sub-standard">per month · 300 credits</div>
+        <div class="card-price-unit" id="unit-sub-standard">per month</div>
+        <div class="card-price-billed" id="billed-sub-standard" hidden></div>
+        <div class="card-price-period" id="period-sub-standard">300 credits / month</div>
         <div class="card-desc" id="desc-sub-standard">Best for regular editors. Credits refresh each billing period with rollover.</div>
         <ul class="card-features">
           <li id="feat-sub-standard-credits"><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>300 credits every month</li>
@@ -608,7 +617,9 @@
         <div class="card-save-badge" id="save-badge-pro">Save 2 months</div>
         <div class="card-tier" id="tier-sub-pro">Pro</div>
         <div class="card-price"><sup id="sym-sub-pro">£</sup><span id="price-sub-pro">29</span></div>
-        <div class="card-price-period" id="period-sub-pro">per month · 900 credits</div>
+        <div class="card-price-unit" id="unit-sub-pro">per month</div>
+        <div class="card-price-billed" id="billed-sub-pro" hidden></div>
+        <div class="card-price-period" id="period-sub-pro">900 credits / month</div>
         <div class="card-desc" id="desc-sub-pro">For Superconductor, VO, and music in the same workflow.</div>
         <ul class="card-features">
           <li id="feat-sub-pro-credits"><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>900 credits every month</li>
@@ -907,62 +918,88 @@
     return p.sym + amount;
   }
 
+  function monthFromYear(yearly) {
+    const n = Number(yearly) / 12;
+    if (Number.isInteger(n)) return String(n);
+    return (Math.round(n * 100) / 100).toFixed(2).replace(/\.00$/, '').replace(/(\.\d)0$/, '$1');
+  }
+
   function setBillingPeriod(period) {
-    billingPeriod = period === 'annual' ? 'annual' : 'monthly';
-    const isAnnual = billingPeriod === 'annual';
+    billingPeriod = period === 'yearly' || period === 'annual' ? 'yearly' : 'monthly';
+    const isYearly = billingPeriod === 'yearly';
     const p = CuemarkPricing.PRICES[displayCurrency] || CuemarkPricing.PRICES.GBP;
 
-    document.getElementById('billing-monthly').classList.toggle('is-active', !isAnnual);
-    document.getElementById('billing-annual').classList.toggle('is-active', isAnnual);
-    document.getElementById('billing-monthly').setAttribute('aria-pressed', String(!isAnnual));
-    document.getElementById('billing-annual').setAttribute('aria-pressed', String(isAnnual));
+    document.getElementById('billing-monthly').classList.toggle('is-active', !isYearly);
+    document.getElementById('billing-yearly').classList.toggle('is-active', isYearly);
+    document.getElementById('billing-monthly').setAttribute('aria-pressed', String(!isYearly));
+    document.getElementById('billing-yearly').setAttribute('aria-pressed', String(isYearly));
 
-    document.getElementById('card-sub-standard').classList.toggle('is-annual', isAnnual);
-    document.getElementById('card-sub-pro').classList.toggle('is-annual', isAnnual);
+    document.getElementById('card-sub-standard').classList.toggle('is-annual', isYearly);
+    document.getElementById('card-sub-pro').classList.toggle('is-annual', isYearly);
 
     const monthlyYear = Number(p.monthly) * 12;
     const proYear = Number(p.monthly_pro) * 12;
-    const annualSave = monthlyYear - Number(p.annual);
-    const annualProSave = proYear - Number(p.annual_pro);
+    const yearlySave = monthlyYear - Number(p.annual);
+    const yearlyProSave = proYear - Number(p.annual_pro);
+    const maxSavePct = Math.max(
+      Math.round((yearlySave / monthlyYear) * 100),
+      Math.round((yearlyProSave / proYear) * 100)
+    );
+
+    document.getElementById('yearly-save-pill').textContent = 'Save up to ' + maxSavePct + '%';
 
     const saveNote = document.getElementById('billing-save-note');
-    if (isAnnual) {
+    if (isYearly) {
       saveNote.innerHTML =
-        'Billed yearly — <strong>2 months free</strong> vs paying monthly (' +
-        money(annualSave) + '–' + money(annualProSave) + ' saved).';
+        'Shown as monthly price — <strong>billed yearly</strong> (2 months free vs monthly).';
     } else {
-      saveNote.textContent = 'Switch to Annual to get 2 months free.';
+      saveNote.textContent = 'Switch to Yearly to save up to ' + maxSavePct + '%.';
     }
 
     document.getElementById('save-badge-standard').textContent =
-      'Save ' + money(annualSave) + ' / year';
+      'Save ' + money(yearlySave) + ' / year';
     document.getElementById('save-badge-pro').textContent =
-      'Save ' + money(annualProSave) + ' / year';
+      'Save ' + money(yearlyProSave) + ' / year';
 
-    if (isAnnual) {
+    const billedStandard = document.getElementById('billed-sub-standard');
+    const billedPro = document.getElementById('billed-sub-pro');
+
+    if (isYearly) {
       subStandardPlan = 'annual';
       subProPlan = 'annual_pro';
-      document.getElementById('price-sub-standard').textContent = p.annual;
-      document.getElementById('price-sub-pro').textContent = p.annual_pro;
-      document.getElementById('period-sub-standard').textContent = 'per year · 3600 credits';
-      document.getElementById('period-sub-pro').textContent = 'per year · 10800 credits';
+      document.getElementById('price-sub-standard').textContent = monthFromYear(p.annual);
+      document.getElementById('price-sub-pro').textContent = monthFromYear(p.annual_pro);
+      document.getElementById('unit-sub-standard').textContent = 'per month';
+      document.getElementById('unit-sub-pro').textContent = 'per month';
+      billedStandard.hidden = false;
+      billedPro.hidden = false;
+      billedStandard.textContent = 'billed yearly as ' + money(p.annual);
+      billedPro.textContent = 'billed yearly as ' + money(p.annual_pro);
+      document.getElementById('period-sub-standard').textContent = '3600 credits / year';
+      document.getElementById('period-sub-pro').textContent = '10800 credits / year';
       document.getElementById('feat-sub-standard-credits').innerHTML =
         '<svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>3600 credits billed yearly';
       document.getElementById('feat-sub-pro-credits').innerHTML =
         '<svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>10800 credits billed yearly';
       document.getElementById('desc-sub-standard').textContent =
-        'Same as Standard Monthly × 10 — two months free when you pay yearly.';
+        'Same monthly credits as Standard — pay once a year and get 2 months free.';
       document.getElementById('desc-sub-pro').textContent =
-        'Same as Pro Monthly × 10 — two months free when you pay yearly.';
-      document.getElementById('cta-sub-standard').textContent = 'Go annual';
-      document.getElementById('cta-sub-pro').textContent = 'Go Pro annual';
+        'Same monthly credits as Pro — pay once a year and get 2 months free.';
+      document.getElementById('cta-sub-standard').textContent = 'Go yearly';
+      document.getElementById('cta-sub-pro').textContent = 'Go Pro yearly';
     } else {
       subStandardPlan = 'monthly';
       subProPlan = 'monthly_pro';
       document.getElementById('price-sub-standard').textContent = p.monthly;
       document.getElementById('price-sub-pro').textContent = p.monthly_pro;
-      document.getElementById('period-sub-standard').textContent = 'per month · 300 credits';
-      document.getElementById('period-sub-pro').textContent = 'per month · 900 credits';
+      document.getElementById('unit-sub-standard').textContent = 'per month';
+      document.getElementById('unit-sub-pro').textContent = 'per month';
+      billedStandard.hidden = true;
+      billedPro.hidden = true;
+      billedStandard.textContent = '';
+      billedPro.textContent = '';
+      document.getElementById('period-sub-standard').textContent = '300 credits / month';
+      document.getElementById('period-sub-pro').textContent = '900 credits / month';
       document.getElementById('feat-sub-standard-credits').innerHTML =
         '<svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>300 credits every month';
       document.getElementById('feat-sub-pro-credits').innerHTML =
@@ -1023,7 +1060,7 @@
   }
 
   document.getElementById('billing-monthly').addEventListener('click', () => setBillingPeriod('monthly'));
-  document.getElementById('billing-annual').addEventListener('click', () => setBillingPeriod('annual'));
+  document.getElementById('billing-yearly').addEventListener('click', () => setBillingPeriod('yearly'));
   setBillingPeriod('monthly');
 
   document.getElementById('cta-credits').addEventListener('click', (e) => startPlanCheckout(e, 'credits'));
