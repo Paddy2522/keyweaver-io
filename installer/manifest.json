@@ -1,4 +1,4 @@
-{
+﻿{
     "manifestVersion":  1,
     "bootstrapMinVersion":  "1.0.0",
     "publisher":  "Keyweaver Ltd",
@@ -49,7 +49,7 @@
                                                        "installScript":  "cuemark-install-macos.sh"
                                                    }
                                        },
-                         "helpUrl":  "https://keyweaver.io/help",
+                         "helpUrl":  "https://keyweaver.io/help#cuemark",
                          "menuPath":  "Window -\u003e Extensions -\u003e Cuemark by Keyweaver",
                          "accent":  "#3D9CF0"
                      },
@@ -73,7 +73,7 @@
                                                        "installScript":  "superconductor-install-macos.sh"
                                                    }
                                        },
-                         "helpUrl":  "https://keyweaver.io/superconductor",
+                         "helpUrl":  "https://keyweaver.io/help#superconductor",
                          "menuPath":  "Window -\u003e Extensions -\u003e Superconductor by Keyweaver",
                          "accent":  "#5B6BF8"
                      },
@@ -97,7 +97,7 @@
                                                        "installScript":  "ludo-install-macos.sh"
                                                    }
                                        },
-                         "helpUrl":  "https://keyweaver.io/help",
+                         "helpUrl":  "https://keyweaver.io/help#ludo",
                          "menuPath":  "Window -\u003e Extensions -\u003e Keyweaver - Ludo",
                          "accent":  "#34D399"
                      },
@@ -121,7 +121,7 @@
                                                        "installScript":  "trillian-install-macos.sh"
                                                    }
                                        },
-                         "helpUrl":  "https://keyweaver.io/help",
+                         "helpUrl":  "https://keyweaver.io/help#trillian",
                          "menuPath":  "Window -\u003e Extensions -\u003e Keyweaver - Trillian",
                          "accent":  "#B56BFF"
                      },
@@ -145,7 +145,7 @@
                                                        "installScript":  "tamborine-install-macos.sh"
                                                    }
                                        },
-                         "helpUrl":  "https://keyweaver.io/help",
+                         "helpUrl":  "https://keyweaver.io/help#tamborine",
                          "menuPath":  "Window -\u003e Extensions -\u003e Keyweaver - Tamborine",
                          "accent":  "#E8952F"
                      }

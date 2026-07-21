@@ -11,7 +11,9 @@
 <link rel="stylesheet" href="/css/nav-brand.css" />
   <link rel="stylesheet" href="/css/chrome.css" />
   <link rel="stylesheet" href="/css/help-widget.css" />
-  <title>Help - Cuemark by Keyweaver</title>
+  <title>Help — Keyweaver plugins for After Effects</title>
+  <meta name="description" content="Help for Cuemark, Superconductor, Trillian, Tamborine, and Ludo — install, credits, and getting started in After Effects." />
+  <link rel="canonical" href="https://keyweaver.io/help" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet" />
@@ -274,17 +276,58 @@
       .main { padding: 2rem 1.25rem 4rem; }
       nav { padding: 0 1rem; }
       .nav-links { display: none; }
+      .help-tabs { top: 56px; padding: 0.65rem 1rem; overflow-x: auto; }
     }
+
+    .help-tabs {
+      position: sticky; top: 56px; z-index: 90;
+      display: flex; flex-wrap: wrap; gap: 0.4rem;
+      padding: 0.75rem 2rem;
+      background: rgba(10,10,15,0.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--edge);
+    }
+    .help-tab {
+      appearance: none; border: 1px solid var(--edge);
+      background: transparent; color: var(--muted);
+      font: 500 13px/1 'Inter', system-ui, sans-serif;
+      padding: 0.45rem 0.85rem; border-radius: 999px;
+      cursor: pointer; white-space: nowrap;
+    }
+    .help-tab:hover { color: var(--text); border-color: var(--subtle); }
+    .help-tab.is-active {
+      background: rgba(91,107,248,0.15);
+      border-color: rgba(91,107,248,0.45);
+      color: var(--accent2);
+    }
+    .help-panel { display: none; }
+    .help-panel.is-active { display: block; }
+    .page-wrap.help-panel.is-active { display: grid; }
+    .help-simple {
+      max-width: 760px; margin: 0 auto;
+      padding: 2.5rem 2rem 5rem;
+    }
+    .help-simple h1 {
+      font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800;
+      letter-spacing: -0.04em; margin: 0.5rem 0 0.75rem;
+    }
+    .help-simple .page-sub { color: var(--muted); margin-bottom: 1.75rem; }
+    .help-simple h2 {
+      font-family: 'Syne', sans-serif; font-size: 1.25rem;
+      margin: 2rem 0 0.75rem;
+    }
+    .help-simple p, .help-simple li { color: var(--muted); font-size: 15px; line-height: 1.7; margin-bottom: 0.75rem; }
+    .help-simple ul { padding-left: 1.2rem; margin-bottom: 1rem; }
+    .help-simple a { color: var(--accent2); }
   </style>
 </head>
 <body>
 
 <nav>
-  <a href="/" class="nav-logo" aria-label="Cuemark by Keyweaver">
-        <img src="/images/cuemark-logo.svg" alt="" class="nav-logo-img" width="327" height="28" />
-  </a>
+  <a href="/" class="nav-logo" aria-label="Keyweaver" style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.15rem;letter-spacing:-0.04em;color:var(--text);text-decoration:none;">Keyweaver</a>
   <ul class="nav-links">
-    <li><a href="/#pricing">Pricing</a></li>
+    <li><a href="/">Plugins</a></li>
+    <li><a href="/pricing">Pricing</a></li>
     <li><a href="/download">Download</a></li>
   </ul>
   <div style="display:flex;gap:0.75rem;">
@@ -293,7 +336,15 @@
   </div>
 </nav>
 
-<div class="page-wrap">
+<div class="help-tabs" role="tablist" aria-label="Help by plugin">
+  <button type="button" class="help-tab is-active" role="tab" aria-selected="true" data-help="cuemark">Cuemark</button>
+  <button type="button" class="help-tab" role="tab" aria-selected="false" data-help="superconductor">Superconductor</button>
+  <button type="button" class="help-tab" role="tab" aria-selected="false" data-help="trillian">Trillian</button>
+  <button type="button" class="help-tab" role="tab" aria-selected="false" data-help="tamborine">Tamborine</button>
+  <button type="button" class="help-tab" role="tab" aria-selected="false" data-help="ludo">Ludo</button>
+</div>
+
+<div class="page-wrap help-panel is-active" id="help-panel-cuemark" data-help-panel="cuemark">
 
   <!-- SIDEBAR -->
   <aside class="sidebar">
@@ -411,7 +462,7 @@
       <p>Top up or manage your subscription at <a href="/account">keyweaver.io/account</a>. The same balance works in the panel and on the website - sign in with the same email.</p>
       <div class="note note-info">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-        <p>Open Cuemark in After Effects to try 5 free credits without an account. Sign up free for 5 more credits (~5 minutes). After that, buy a credit pack from £4.99 or subscribe monthly.</p>
+        <p>Open Cuemark in After Effects to try guest credits without an account. Sign up free for <strong>40 Keyweaver Credits</strong> shared across Cuemark, Superconductor, Trillian, and Tamborine. After that, buy a credit pack or subscribe.</p>
       </div>
     </div>
 
@@ -631,6 +682,80 @@
   </main>
 </div>
 
+<div class="help-panel help-simple" id="help-panel-superconductor" data-help-panel="superconductor" hidden>
+  <p class="section-label">Help · AI Video</p>
+  <h1>Superconductor</h1>
+  <p class="page-sub">Generate short AI video clips inside After Effects and import them into your active composition.</p>
+  <h2>Install</h2>
+  <p>On Windows, open <a href="/download">Keyweaver Manager</a> and click Install on Superconductor. On macOS, download the Superconductor zip from the <a href="/download#mac">download page</a>, run <strong>Install-Superconductor.command</strong>, then fully quit and reopen After Effects.</p>
+  <p>Open via <strong>Window → Extensions → Superconductor by Keyweaver</strong>.</p>
+  <h2>First generate</h2>
+  <ul>
+    <li>Open the comp you want the clip in</li>
+    <li>Write a prompt, choose style, aspect ratio, and length</li>
+    <li>Confirm the credit cost, then generate</li>
+    <li>Import the finished clip into the timeline</li>
+  </ul>
+  <h2>Credits</h2>
+  <p>Superconductor uses your shared Keyweaver Credits. Guest trials are available without an account. Manage balance at <a href="/account">Account</a> or see <a href="/pricing">Pricing</a>.</p>
+  <p><a href="/superconductor">Product page</a> · <a href="/download">Download</a></p>
+</div>
+
+<div class="help-panel help-simple" id="help-panel-trillian" data-help-panel="trillian" hidden>
+  <p class="section-label">Help · AI Voiceover</p>
+  <h1>Trillian</h1>
+  <p class="page-sub">Turn a script into narration audio and bring it into After Effects.</p>
+  <h2>Install</h2>
+  <p>Install from <a href="/download">Keyweaver Manager</a> (Windows) or the Trillian macOS zip on the <a href="/download#mac">download page</a>. Open <strong>Window → Extensions → Trillian by Keyweaver</strong>.</p>
+  <h2>First generate</h2>
+  <ul>
+    <li>Paste or write your script</li>
+    <li>Pick a voice</li>
+    <li>Confirm credit cost and generate</li>
+    <li>Import the audio into your composition</li>
+  </ul>
+  <h2>Credits</h2>
+  <p>Trillian draws from the same Keyweaver Credits pool as Cuemark and the other AI plugins. Guest trial credits are available in the panel.</p>
+  <p><a href="/trillian">Product page</a> · <a href="/download">Download</a></p>
+</div>
+
+<div class="help-panel help-simple" id="help-panel-tamborine" data-help-panel="tamborine" hidden>
+  <p class="section-label">Help · AI Music &amp; Sound Effects</p>
+  <h1>Tamborine</h1>
+  <p class="page-sub">Generate music beds and SFX for your edit, then place them on the timeline.</p>
+  <h2>Install</h2>
+  <p>Install from <a href="/download">Keyweaver Manager</a> (Windows) or the Tamborine macOS zip on the <a href="/download#mac">download page</a>. Open <strong>Window → Extensions → Tamborine by Keyweaver</strong>.</p>
+  <h2>First generate</h2>
+  <ul>
+    <li>Describe the music bed or sound effect you need</li>
+    <li>Choose length / style options in the panel</li>
+    <li>Confirm credit cost and generate</li>
+    <li>Import the audio into your composition</li>
+  </ul>
+  <h2>Credits</h2>
+  <p>Tamborine uses shared Keyweaver Credits. Guest trials work without signing in; an account keeps your balance across machines.</p>
+  <p><a href="/tamborine">Product page</a> · <a href="/download">Download</a></p>
+</div>
+
+<div class="help-panel help-simple" id="help-panel-ludo" data-help-panel="ludo" hidden>
+  <p class="section-label">Help · Motion Toolkit</p>
+  <h1>Ludo</h1>
+  <p class="page-sub">Free animation, keyframe, text, layout, colour, and export tools — no credits required.</p>
+  <h2>Install</h2>
+  <p>Install from <a href="/download">Keyweaver Manager</a> (Windows) or the Ludo macOS zip on the <a href="/download#mac">download page</a>. Open <strong>Window → Extensions → Keyweaver - Ludo</strong>.</p>
+  <h2>What you can do</h2>
+  <ul>
+    <li>Animation easing and layer transitions</li>
+    <li>Keyframe stagger, align, reverse, distribute, mirror</li>
+    <li>Text split / typewriter-style tools and stroke boxes</li>
+    <li>Layout cloner and colour palette</li>
+    <li>Frame export and work-area GIF export</li>
+  </ul>
+  <h2>Credits</h2>
+  <p>Ludo is free. You do not need Keyweaver Credits to use it.</p>
+  <p><a href="/ludo">Product page</a> · <a href="/download">Download</a></p>
+</div>
+
 <footer>
   <p>© 2026 Keyweaver Ltd. All rights reserved.</p>
   <p class="footer-entity">Registered in England &amp; Wales · Company no. 17283644 · 20 Wenlock Road, London, N1 7GU</p>
@@ -643,15 +768,49 @@
 </footer>
 
 <script>
-  // Highlight active sidebar link on scroll
-  const sections = document.querySelectorAll('.help-section');
-  const links = document.querySelectorAll('.sidebar-link');
+  (function initHelpTabs() {
+    var tabs = document.querySelectorAll('.help-tab');
+    var panels = document.querySelectorAll('[data-help-panel]');
+    var valid = { cuemark: 1, superconductor: 1, trillian: 1, tamborine: 1, ludo: 1 };
+
+    function show(id) {
+      if (!valid[id]) id = 'cuemark';
+      tabs.forEach(function (tab) {
+        var on = tab.getAttribute('data-help') === id;
+        tab.classList.toggle('is-active', on);
+        tab.setAttribute('aria-selected', on ? 'true' : 'false');
+      });
+      panels.forEach(function (panel) {
+        var on = panel.getAttribute('data-help-panel') === id;
+        panel.classList.toggle('is-active', on);
+        if (on) panel.removeAttribute('hidden');
+        else panel.setAttribute('hidden', '');
+      });
+      var hash = '#' + id;
+      if (location.hash !== hash && location.hash !== '#' + id + '-install') {
+        history.replaceState(null, '', hash);
+      }
+    }
+
+    tabs.forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        show(tab.getAttribute('data-help'));
+      });
+    });
+
+    var fromHash = (location.hash || '').replace(/^#/, '').split('-')[0];
+    show(fromHash || 'cuemark');
+  })();
+
+  // Highlight active sidebar link on scroll (Cuemark panel)
+  const sections = document.querySelectorAll('#help-panel-cuemark .help-section');
+  const links = document.querySelectorAll('#help-panel-cuemark .sidebar-link');
 
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         links.forEach(l => l.classList.remove('active'));
-        const active = document.querySelector('.sidebar-link[href="#' + entry.target.id + '"]');
+        const active = document.querySelector('#help-panel-cuemark .sidebar-link[href="#' + entry.target.id + '"]');
         if (active) active.classList.add('active');
       }
     });

@@ -11,7 +11,9 @@
 <link rel="stylesheet" href="/css/nav-brand.css" />
   <link rel="stylesheet" href="/css/chrome.css" />
   <link rel="stylesheet" href="/css/help-widget.css" />
-  <title>Download Cuemark - Cuemark by Keyweaver</title>
+  <title>Download Keyweaver — After Effects plugins</title>
+  <meta name="description" content="Download Keyweaver Manager for Windows or install Cuemark, Superconductor, Trillian, Tamborine, and Ludo on macOS. Free to install." />
+  <link rel="canonical" href="https://keyweaver.io/download" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -510,12 +512,10 @@
 <body>
 
 <nav>
-  <a href="/" class="nav-logo" aria-label="Cuemark by Keyweaver">
-        <img src="/images/cuemark-logo.svg" alt="" class="nav-logo-img" width="327" height="28" />
-  </a>
+  <a href="/" class="nav-logo" aria-label="Keyweaver" style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.15rem;letter-spacing:-0.04em;color:var(--text);text-decoration:none;">Keyweaver</a>
   <ul class="nav-links">
-    <li><a href="/#how-it-works">How it works</a></li>
-    <li><a href="/#pricing">Pricing</a></li>
+    <li><a href="/">Plugins</a></li>
+    <li><a href="/pricing">Pricing</a></li>
     <li><a href="/help">Help</a></li>
   </ul>
   <div style="display:flex;gap:0.75rem;">
@@ -530,10 +530,10 @@
   <div class="hero">
     <div class="hero-eyebrow">
       <span class="version-dot"></span>
-      Version <span id="download-version">1.0.1</span> · Free to install
+      Free to install · After Effects 2022+
     </div>
-    <h1 id="hero-title">Download Cuemark</h1>
-    <p id="hero-subtitle">An After Effects plugin - install it once and it lives inside your panel. Try 5 free credits with no account needed.</p>
+    <h1 id="hero-title">Download Keyweaver</h1>
+    <p id="hero-subtitle">Install the suite for After Effects — AI captions, video, voice, music &amp; SFX, plus a free motion toolkit. One Manager on Windows; per-plugin zips on macOS.</p>
 
     <!-- OS TOGGLE -->
     <div class="os-toggle" role="group" aria-label="Operating system">
@@ -549,24 +549,69 @@
 
     <!-- MAC DOWNLOAD -->
     <div class="os-panel" id="panel-mac">
-      <div class="download-card download-card-primary">
-        <div class="download-card-info">
-          <span class="download-badge">Recommended for macOS</span>
-          <h3 id="mac-zip-name">Cuemark-Install-mac-v1.0.1.zip</h3>
-          <p>macOS 12+ · After Effects 2022+ · ~40 MB download · video transcription included</p>
-        </div>
-        <a href="#" class="btn-download is-loading" id="mac-download-btn" data-file="macZip" aria-disabled="true">
-          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          <span class="btn-download-label">Preparing download…</span>
-        </a>
-      </div>
-      <p class="install-hint">
-        Extract the zip, double-click <strong>Install-Cuemark.command</strong>, then restart After Effects.
-        If macOS blocks it, right-click → <strong>Open</strong> once. Manual steps are in <strong>README.txt</strong>.
+      <p class="install-hint" style="text-align:left;margin-bottom:1.25rem;">
+        On macOS, download the zip for each plugin you want. Extract, run the <strong>Install-*.command</strong>, then fully quit and reopen After Effects.
       </p>
-      <div class="security-notice">
+      <div class="mac-plugin-grid" style="display:grid;gap:0.85rem;text-align:left;">
+        <div class="download-card">
+          <div class="download-card-info">
+            <span class="download-badge">AI Captions</span>
+            <h3>Cuemark</h3>
+            <p>macOS 12+ · After Effects 2022+</p>
+          </div>
+          <a href="/downloads/Cuemark-Install-mac-v1.0.1.zip" class="btn-download" data-file="macZip">
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span class="btn-download-label">Download Cuemark</span>
+          </a>
+        </div>
+        <div class="download-card">
+          <div class="download-card-info">
+            <span class="download-badge">AI Video</span>
+            <h3>Superconductor</h3>
+            <p>macOS 12+ · After Effects 2022+</p>
+          </div>
+          <a href="/downloads/Superconductor-Install-mac-v0.1.0.zip" class="btn-download">
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span class="btn-download-label">Download Superconductor</span>
+          </a>
+        </div>
+        <div class="download-card">
+          <div class="download-card-info">
+            <span class="download-badge">AI Voiceover</span>
+            <h3>Trillian</h3>
+            <p>macOS 12+ · After Effects 2022+</p>
+          </div>
+          <a href="/downloads/Trillian-Install-mac-v0.1.0.zip" class="btn-download">
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span class="btn-download-label">Download Trillian</span>
+          </a>
+        </div>
+        <div class="download-card">
+          <div class="download-card-info">
+            <span class="download-badge">AI Music &amp; SFX</span>
+            <h3>Tamborine</h3>
+            <p>macOS 12+ · After Effects 2022+</p>
+          </div>
+          <a href="/downloads/Tamborine-Install-mac-v0.1.0.zip" class="btn-download">
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span class="btn-download-label">Download Tamborine</span>
+          </a>
+        </div>
+        <div class="download-card">
+          <div class="download-card-info">
+            <span class="download-badge">Motion Toolkit · Free</span>
+            <h3>Ludo</h3>
+            <p>macOS 12+ · After Effects 2022+</p>
+          </div>
+          <a href="/downloads/Ludo-Install-mac-v0.3.0.zip" class="btn-download">
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span class="btn-download-label">Download Ludo</span>
+          </a>
+        </div>
+      </div>
+      <div class="security-notice" style="margin-top:1.25rem;">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        <p><strong>First time on Mac?</strong> Right-click <strong>Install-Cuemark.command</strong> → <strong>Open</strong> → <strong>Open</strong>. No admin password needed.</p>
+        <p><strong>First time on Mac?</strong> Right-click the <strong>Install-*.command</strong> → <strong>Open</strong> → <strong>Open</strong>. No admin password needed.</p>
       </div>
     </div>
 
@@ -596,18 +641,18 @@
         </div>
         <div class="win-quick-step">
           <div class="win-quick-step-num">3</div>
-          <p><strong>Open Keyweaver Manager</strong> and click <strong>Install</strong> on Cuemark (~48 MB)</p>
+          <p><strong>Open Keyweaver Manager</strong> and click <strong>Install</strong> on any plugin</p>
         </div>
         <div class="win-quick-step">
           <div class="win-quick-step-num">4</div>
-          <p><strong>Reopen AE</strong> → Window → Extensions → Cuemark</p>
+          <p><strong>Reopen AE</strong> → Window → Extensions → your plugin</p>
         </div>
       </div>
 
       <div class="win-trust-strip" id="win-trust-strip" hidden>
         <span class="win-trust-pill"><svg viewBox="0 0 24 24"><polyline points="9 12 11 14 15 10"/></svg>Signed by Keyweaver Ltd</span>
         <span class="win-trust-pill">No account to try</span>
-        <span class="win-trust-pill">5 free credits</span>
+        <span class="win-trust-pill">Guest trials in AI panels</span>
         <span class="win-trust-pill">No admin password</span>
       </div>
 
@@ -625,7 +670,7 @@
       </div>
       <div class="security-notice security-notice-trust" id="win-signed-notice" hidden>
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/></svg>
-        <p><strong>One extra click on first run.</strong> Windows may show "Windows protected your PC" for any new installer - even signed ones. Click <strong>More info</strong> → <strong>Run anyway</strong>. Confirm the publisher is <strong>Keyweaver Ltd</strong>, then Keyweaver Manager opens. Install Cuemark from the catalog inside Manager.</p>
+        <p><strong>One extra click on first run.</strong> Windows may show "Windows protected your PC" for any new installer - even signed ones. Click <strong>More info</strong> → <strong>Run anyway</strong>. Confirm the publisher is <strong>Keyweaver Ltd</strong>, then Keyweaver Manager opens. Install Cuemark, Superconductor, Trillian, Tamborine, or Ludo from the catalog.</p>
       </div>
     </div>
 
@@ -661,8 +706,8 @@
     <div class="os-panel active" id="guide-win">
       <div id="win-guide-exe-simple" hidden>
         <p class="section-label">That's it</p>
-        <h2 class="section-title">Four steps, then you're captioning</h2>
-        <p style="color:var(--muted); font-size:14px; max-width:560px; margin-bottom:1.5rem;">Keyweaver Installer sets up Keyweaver Manager on your PC. Manager downloads and installs Cuemark for you - no command lines, no manual folders.</p>
+        <h2 class="section-title">Four steps, then you're in After Effects</h2>
+        <p style="color:var(--muted); font-size:14px; max-width:560px; margin-bottom:1.5rem;">Keyweaver Installer sets up Keyweaver Manager on your PC. Manager downloads and installs any Keyweaver plugin - Cuemark, Superconductor, Trillian, Tamborine, or Ludo.</p>
       </div>
 
       <div class="install-steps" id="win-guide-exe" hidden>
@@ -681,14 +726,14 @@
           <div class="step-number">2</div>
           <div class="step-body">
             <h3>Open Keyweaver Manager</h3>
-            <p>After setup, open <strong>Keyweaver Manager</strong> from the Start Menu (or the desktop shortcut). Manager shows Cuemark in your product catalog.</p>
+            <p>After setup, open <strong>Keyweaver Manager</strong> from the Start Menu (or the desktop shortcut). Manager shows the full Keyweaver catalog.</p>
           </div>
         </div>
         <div class="install-step">
           <div class="step-number">3</div>
           <div class="step-body">
-            <h3>Install Cuemark</h3>
-            <p>Click <strong>Install</strong> on the Cuemark card. Manager downloads the package (~48 MB) and installs the panel to your user AppData folder.</p>
+            <h3>Install a plugin</h3>
+            <p>Click <strong>Install</strong> on Cuemark, Superconductor, Trillian, Tamborine, or Ludo. Manager downloads the package and installs the panel to your user AppData folder.</p>
           </div>
         </div>
         <div class="install-step">
@@ -701,11 +746,11 @@
         <div class="install-step">
           <div class="step-number">5</div>
           <div class="step-body">
-            <h3>Open Cuemark</h3>
-            <p style="font-weight:500; color:var(--text);">Window → Extensions → Cuemark by Keyweaver</p>
+            <h3>Open the panel</h3>
+            <p style="font-weight:500; color:var(--text);">Window → Extensions → your Keyweaver plugin</p>
             <div class="step-success">
               <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-              <p>5 free trial credits. No sign-in required to start.</p>
+              <p>AI panels include guest trials. Ludo is free with no credits.</p>
             </div>
           </div>
         </div>
@@ -748,12 +793,12 @@
         <div class="install-step">
           <div class="step-number">4</div>
           <div class="step-body">
-            <h3>Open Cuemark</h3>
+            <h3>Open a plugin</h3>
             <p>Go to:</p>
-            <p style="margin-top:0.5rem; font-weight:500; color:var(--text);">Window → Extensions → Cuemark by Keyweaver</p>
+            <p style="margin-top:0.5rem; font-weight:500; color:var(--text);">Window → Extensions → your Keyweaver plugin</p>
             <div class="step-success">
               <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-              <p>Start generating right away - 5 trial credits, no sign-in. Sign up free for 5 more, or buy credits and go monthly later.</p>
+              <p>AI panels include guest trials. Sign up free for shared credits across the suite. Ludo needs no credits.</p>
             </div>
           </div>
         </div>
@@ -771,6 +816,7 @@
     <div class="os-panel" id="guide-mac">
       <p class="section-label">Installation guide</p>
       <h2 class="section-title">Installing on macOS</h2>
+      <p style="color:var(--muted);font-size:14px;max-width:560px;margin:0.75rem 0 1.5rem;">Download a zip for each plugin you want from the buttons above. Repeat the steps below for every package.</p>
 
       <div class="install-steps">
 
@@ -778,18 +824,18 @@
           <div class="step-number">1</div>
           <div class="step-body">
             <h3>Download and extract</h3>
-            <p>Download <strong id="mac-step-zip-name">Cuemark-Install-mac-v1.0.1.zip</strong>, extract it fully, and open the folder. Read <strong>README.txt</strong> for the exact paths.</p>
+            <p>Download the plugin zip, extract it fully, and open the folder. Read <strong>README.txt</strong> for the exact paths.</p>
           </div>
         </div>
 
         <div class="install-step">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h3>Run Install-Cuemark.command</h3>
-            <p>Double-click <strong>Install-Cuemark.command</strong>. It copies Cuemark into your CEP extensions folder and enables third-party panels.</p>
+            <h3>Run the install command</h3>
+            <p>Double-click <strong>Install-*.command</strong> (for example <strong>Install-Cuemark.command</strong>). It copies the panel into your CEP extensions folder and enables third-party panels.</p>
             <div class="step-note">
               <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-              <p>If macOS blocks the installer, right-click <strong>Install-Cuemark.command</strong> → <strong>Open</strong> once. Manual steps are in <strong>README.txt</strong>.</p>
+              <p>If macOS blocks the installer, right-click the <strong>.command</strong> file → <strong>Open</strong> once. Manual steps are in <strong>README.txt</strong>.</p>
             </div>
           </div>
         </div>
@@ -805,12 +851,12 @@
         <div class="install-step">
           <div class="step-number">4</div>
           <div class="step-body">
-            <h3>Open Cuemark</h3>
+            <h3>Open a plugin</h3>
             <p>Go to:</p>
-            <p style="margin-top:0.5rem; font-weight:500; color:var(--text);">Window → Extensions → Cuemark by Keyweaver</p>
+            <p style="margin-top:0.5rem; font-weight:500; color:var(--text);">Window → Extensions → your Keyweaver plugin</p>
             <div class="step-success">
               <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-              <p>Start generating right away - 5 trial credits, no sign-in. Sign up free for 5 more, or buy credits and go monthly later.</p>
+              <p>AI panels include guest trials. Sign up free for shared credits across the suite. Ludo needs no credits.</p>
             </div>
           </div>
         </div>

@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" href="/images/favicon.svg" type="image/svg+xml" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/css/cookie-consent.css" />
+  <script src="/js/cookie-consent.js"></script>
+  <script src="/js/nav-auth.js" defer></script>
+
+<link rel="stylesheet" href="/css/nav-brand.css" />
+  <link rel="stylesheet" href="/css/chrome.css" />
+  <link rel="stylesheet" href="/css/help-widget.css" />
+  <title>Cuemark by Keyweaver — AI Captions for After Effects</title>
+  <meta name="description" content="AI-powered subtitle generator that lives inside Adobe After Effects. Transcribe, style, and sync captions in seconds." />
+  <link rel="canonical" href="https://keyweaver.io/cuemark" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:     #0A0A0F;
+      --surface: #13131A;
+      --lift:    #1C1C28;
+      --edge:    #2A2A3D;
+      --accent:  #5B6BF8;
+      --accent2: #7B8BFF;
+      --text:    #E8E8F0;
+      --muted:   #6B6B88;
+      --subtle:  #3A3A52;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--ink);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem;
+      height: 56px;
+      background: rgba(10, 10, 15, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--edge);
+    }
+
+    .nav-links {
+      display: flex; align-items: center; gap: 1.5rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 14px; color: var(--muted); text-decoration: none;
+      transition: color 0.15s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    .nav-cta {
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 0 1rem; height: 34px;
+      border-radius: 6px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px; font-weight: 500;
+      text-decoration: none; cursor: pointer;
+      transition: all 0.15s; border: none;
+    }
+    .btn-ghost {
+      background: transparent; color: var(--muted);
+      border: 1px solid var(--edge);
+    }
+    .btn-ghost:hover { color: var(--text); border-color: var(--subtle); background: var(--lift); }
+    .btn-primary {
+      background: var(--accent); color: #fff;
+    }
+    .btn-primary:hover { background: var(--accent2); }
+    .btn-lg {
+      height: 44px; padding: 0 1.5rem; font-size: 14px; border-radius: 8px;
+    }
+    .btn-xl {
+      height: 52px; padding: 0 2rem; font-size: 15px; border-radius: 10px;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 7rem 2rem 4rem;
+      text-align: center;
+      position: relative; overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(91,107,248,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 5px 12px;
+      background: var(--lift);
+      border: 1px solid var(--edge);
+      border-radius: 100px;
+      font-size: 12px; font-weight: 500;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+    }
+    .hero-eyebrow-dot {
+      width: 6px; height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+    }
+
+    .hero-headline {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(2.8rem, 7vw, 5.5rem);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      max-width: 900px;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Animated caption effect on headline */
+    .caption-word {
+      display: inline-block;
+      position: relative;
+      transition: color 0.2s;
+    }
+    .caption-word.active {
+      color: var(--accent2);
+    }
+    .caption-word.active::after {
+      content: '';
+      position: absolute;
+      bottom: 2px; left: -2px; right: -2px; height: 3px;
+      background: var(--accent);
+      border-radius: 2px;
+      opacity: 0.6;
+    }
+
+    .hero-sub {
+      font-size: 1.125rem;
+      color: var(--muted);
+      max-width: 520px;
+      margin-bottom: 2.5rem;
+      line-height: 1.7;
+    }
+
+    .hero-actions {
+      display: flex; align-items: center; gap: 1rem;
+      flex-wrap: wrap; justify-content: center;
+    }
+
+    .hero-note {
+      margin-top: 1rem;
+      font-size: 12px; color: var(--muted);
+    }
+
+    /* ── CAPTION DEMO ── */
+    .caption-demo {
+      margin: 4rem auto 0;
+      max-width: 720px; width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--edge);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .caption-demo-bar {
+      display: flex; align-items: center; gap: 6px;
+      padding: 10px 14px;
+      background: var(--lift);
+      border-bottom: 1px solid var(--edge);
+    }
+    .demo-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+    .caption-demo-screen {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      background: #07070D;
+      overflow: hidden;
+    }
+
+    .demo-hero-stream {
+      position: absolute;
+      inset: 0;
+    }
+
+    .demo-hero-stream iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+      pointer-events: none;
+    }
+
+    /* ── HOW IT WORKS ── */
+    section { padding: 6rem 2rem; }
+
+    .section-label {
+      font-size: 11px; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--accent);
+      font-weight: 600; margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700; letter-spacing: -0.02em;
+      color: var(--text);
+      line-height: 1.15;
+    }
+
+    .section-sub {
+      color: var(--muted); font-size: 1rem;
+      max-width: 480px; margin-top: 0.75rem;
+      line-height: 1.7;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1px;
+      background: var(--edge);
+      border: 1px solid var(--edge);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-top: 3.5rem;
+    }
+
+    .step {
+      background: var(--surface);
+      padding: 2rem 1.75rem;
+    }
+
+    .step-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 11px; letter-spacing: 0.08em;
+      color: var(--accent); font-weight: 700;
+      margin-bottom: 1rem; display: block;
+    }
+
+    .step-icon {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: var(--lift);
+      border: 1px solid var(--edge);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 1.25rem;
+    }
+    .step-icon img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+    }
+
+    .step h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem; font-weight: 700;
+      color: var(--text); margin-bottom: 0.5rem;
+    }
+    .step p {
+      font-size: 0.875rem; color: var(--muted); line-height: 1.6;
+    }
+
+    /* ── FEATURES ── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1px;
+      background: var(--edge);
+      border: 1px solid var(--edge);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-top: 3.5rem;
+    }
+
+    .feature-card {
+      background: var(--surface);
+      padding: 1.75rem;
+      transition: background 0.2s;
+    }
+    .feature-card:hover { background: var(--lift); }
+
+    .feature-icon {
+      width: 38px; height: 38px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 9px;
+      background: rgba(91, 107, 248, 0.12);
+      border: 1px solid rgba(91, 107, 248, 0.3);
+      margin-bottom: 1.1rem;
+    }
+    .feature-icon svg {
+      width: 19px; height: 19px;
+      stroke: var(--accent2); stroke-width: 1.75;
+      fill: none; stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    .feature-card h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem; font-weight: 700;
+      color: var(--text); margin-bottom: 0.45rem;
+    }
+    .feature-card p {
+      font-size: 0.875rem; color: var(--muted); line-height: 1.6;
+    }
+
+    /* ── STYLES SHOWCASE ── */
+    .styles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-top: 3rem;
+    }
+
+    .style-card {
+      background: var(--surface);
+      border: 1px solid var(--edge);
+      border-radius: 10px;
+      overflow: hidden;
+      transition: border-color 0.2s, transform 0.2s;
+      cursor: default;
+    }
+    .style-card:hover {
+      border-color: var(--subtle);
+      transform: translateY(-2px);
+    }
+
+    .style-preview {
+      aspect-ratio: 16 / 9;
+      background: #07070D;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .style-preview-video {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #07070D;
+    }
+
+    .style-info {
+      padding: 10px 12px;
+      border-top: 1px solid var(--edge);
+    }
+    .style-name { font-size: 13px; font-weight: 500; color: var(--text); }
+    .style-tier {
+      font-size: 11px; color: var(--muted);
+      margin-top: 2px;
+    }
+    .tier-free { color: #4CAF83; }
+    .tier-pay  { color: #F5A623; }
+    .tier-monthly { color: var(--accent2); }
+
+    /* ── PRICING ── */
+    #pricing .container {
+      text-align: center;
+    }
+
+    #pricing .section-sub {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin: 3rem auto 0;
+      max-width: 960px;
+      width: 100%;
+    }
+
+    @media (max-width: 900px) {
+      .pricing-grid {
+        grid-template-columns: 1fr;
+        max-width: 360px;
+      }
+    }
+
+    .pricing-card {
+      background: var(--surface);
+      border: 1px solid var(--edge);
+      border-radius: 12px;
+      padding: 2rem 1.75rem;
+      position: relative;
+      text-align: left;
+    }
+    .pricing-card.featured {
+      border-color: var(--accent);
+    }
+
+    .pricing-badge {
+      position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+      background: var(--accent);
+      color: #fff; font-size: 11px; font-weight: 600;
+      padding: 3px 12px; border-radius: 100px;
+      letter-spacing: 0.04em; white-space: nowrap;
+    }
+
+    .pricing-tier {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.1rem; font-weight: 700;
+      color: var(--text); margin-bottom: 0.5rem;
+    }
+
+    .pricing-price {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.25rem; font-weight: 800;
+      color: var(--text); line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+    .pricing-price sup { font-size: 1rem; font-weight: 600; vertical-align: top; margin-top: 0.4rem; }
+    .pricing-price sub { font-size: 0.875rem; font-weight: 400; color: var(--muted); }
+
+    .pricing-desc {
+      font-size: 13px; color: var(--muted);
+      margin-bottom: 1.5rem; line-height: 1.5;
+    }
+
+    .pricing-features {
+      list-style: none;
+      margin-bottom: 1.75rem;
+    }
+    .pricing-features li {
+      font-size: 13px; color: var(--muted);
+      padding: 5px 0;
+      display: flex; align-items: flex-start; gap: 8px;
+    }
+    .pricing-features li svg {
+      width: 14px; height: 14px; flex-shrink: 0;
+      stroke: #4CAF83; fill: none;
+      stroke-width: 2.5; stroke-linecap: round; margin-top: 2px;
+    }
+
+    .btn-outline-accent {
+      background: transparent; color: var(--accent2);
+      border: 1px solid var(--accent);
+    }
+    .btn-outline-accent:hover { background: rgba(91,107,248,0.1); }
+
+    /* ── DOWNLOAD ── */
+    .download-box {
+      background: var(--surface);
+      border: 1px solid var(--edge);
+      border-radius: 16px;
+      padding: 3rem 2.5rem;
+      display: flex; align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap; gap: 2rem;
+      max-width: 900px;
+    }
+
+    .download-reqs {
+      margin-top: 1rem;
+      display: flex; gap: 1.5rem; flex-wrap: wrap;
+    }
+    .req-badge {
+      font-size: 12px; color: var(--muted);
+      display: flex; align-items: center; gap: 5px;
+    }
+    .req-badge svg {
+      width: 13px; height: 13px;
+      stroke: var(--muted); fill: none;
+      stroke-width: 2; stroke-linecap: round;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--edge);
+      padding: 2.5rem 2rem;
+      display: flex; align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap; gap: 1rem;
+    }
+
+    footer p { font-size: 13px; color: var(--muted); }
+
+    .footer-links {
+      display: flex; gap: 1.5rem; list-style: none;
+    }
+    .footer-links a {
+      font-size: 13px; color: var(--muted);
+      text-decoration: none;
+    }
+    .footer-links a:hover { color: var(--text); }
+
+    /* ── CONTAINER ── */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* ── MISC ── */
+    .text-center { text-align: center; }
+    .flex-center { display: flex; justify-content: center; }
+
+    .divider {
+      border: none;
+      border-top: 1px solid var(--edge);
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      nav { padding: 0 1rem; }
+      .nav-links { display: none; }
+      section { padding: 4rem 1.25rem; }
+      .hero { padding: 6rem 1.25rem 3rem; }
+      .download-box { padding: 2rem 1.5rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .caption-word, .demo-word { transition: none; }
+    }
+
+    .site-banner {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      padding: 0.65rem 1.25rem;
+      background: rgba(76, 175, 131, 0.12);
+      border-bottom: 1px solid rgba(76, 175, 131, 0.35);
+      color: #9fd9bc;
+      font-size: 13px;
+      text-align: center;
+    }
+    .site-banner.is-visible { display: flex; }
+    .site-banner button {
+      background: transparent;
+      border: none;
+      color: inherit;
+      font: inherit;
+      cursor: pointer;
+      text-decoration: underline;
+      padding: 0;
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="/" class="nav-logo" aria-label="Keyweaver" style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.15rem;letter-spacing:-0.04em;color:var(--text);text-decoration:none;">Keyweaver</a>
+  <ul class="nav-links">
+    <li><a href="/">Plugins</a></li>
+    <li><a href="#how-it-works">How it works</a></li>
+    <li><a href="#styles">Styles</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="/pricing">Pricing</a></li>
+    <li><a href="/help#cuemark">Help</a></li>
+  </ul>
+  <div class="nav-cta">
+    <a href="/login" class="btn btn-ghost">Sign in</a>
+    <a href="/download" class="btn btn-primary">Download free</a>
+  </div>
+</nav>
+
+<div class="site-banner" id="deleted-banner" role="status">
+  <span>Your account has been deleted.</span>
+  <button type="button" id="deleted-banner-dismiss">Dismiss</button>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">
+    <span class="hero-eyebrow-dot"></span>
+    AI Captions · After Effects plugin
+  </div>
+
+  <h1 class="hero-headline" id="hero-headline">
+    <!-- words injected by JS for animation -->
+  </h1>
+
+  <p class="hero-sub">
+    AI transcribes your audio, builds native AE text layers, and syncs every caption to the frame. No round-tripping. No copy-paste. Works entirely inside After Effects.
+  </p>
+
+  <div class="hero-actions">
+    <a href="/download" class="btn btn-primary btn-xl">
+      Download free
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M8 2v8M5 7l3 3 3-3M2 12h12" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+    <a href="#how-it-works" class="btn btn-ghost btn-xl">See how it works</a>
+  </div>
+  <p class="hero-note">Guest trial in the panel · Sign up free for 40 shared Keyweaver Credits</p>
+
+  <!-- mini demo -->
+  <div class="caption-demo">
+    <div class="caption-demo-bar">
+      <div class="demo-dot" style="background:#FF5F57"></div>
+      <div class="demo-dot" style="background:#FEBC2E"></div>
+      <div class="demo-dot" style="background:#28C840"></div>
+      <span style="margin-left:8px; font-size:11px; color:var(--muted); font-family:'Inter',sans-serif;">Cuemark by Keyweaver · After Effects 2022+</span>
+    </div>
+    <div class="caption-demo-screen">
+      <div class="demo-hero-stream">
+        <iframe
+          src="https://iframe.videodelivery.net/149f0f5621f011060bdbe98844e2b91d?autoplay=true&muted=true&loop=true&controls=false&preload=true"
+          loading="eager"
+          allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
+          allowfullscreen
+          title="Cuemark subtitle demo in After Effects"></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how-it-works">
+  <div class="container">
+    <p class="section-label">How it works</p>
+    <h2 class="section-title">Generate in three steps</h2>
+    <p class="section-sub">Everything happens inside After Effects. No browser tabs, no exports, no re-linking.</p>
+
+    <div class="steps">
+      <div class="step">
+        <span class="step-num">01</span>
+        <div class="step-icon">
+          <img src="/images/how-to/step-1.jpg" alt="" width="640" height="360" loading="lazy" />
+        </div>
+        <h3>Open your edit comp</h3>
+        <p>Open the composition with your video or audio in After Effects. Cuemark reads layers in the active comp and shows credit cost before you transcribe.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">02</span>
+        <div class="step-icon">
+          <img src="/images/how-to/step-2.jpg" alt="" width="640" height="360" loading="lazy" />
+        </div>
+        <h3>Generate Subtitles</h3>
+        <p>One click transcribes your audio in the cloud. Word-level timestamps come back and are cached for free re-wraps and style changes.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">03</span>
+        <div class="step-icon">
+          <img src="/images/how-to/step-3.jpg" alt="" width="640" height="360" loading="lazy" />
+        </div>
+        <h3>Style in the panel</h3>
+        <p>Native AE text layers land in your timeline - timed, editable, with presets and animations applied from the Cuemark panel.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- STYLES -->
+<section id="styles">
+  <div class="container">
+    <p class="section-label">Style library</p>
+    <h2 class="section-title">Caption presets, built in After Effects</h2>
+    <p class="section-sub">Every preset is a real AE style - font, colour, animation, and background. Change anything in the Style tab after applying.</p>
+
+    <div class="styles-grid" id="presets-grid"></div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="container">
+    <p class="section-label">Make it yours</p>
+    <h2 class="section-title">Total control over every caption</h2>
+    <p class="section-sub">Start from a preset, then change anything. Your fonts, your colours, your look - applied as real After Effects layers you can keep editing.</p>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><path d="M4 7V5h16v2M9 19h6M12 5v14"/></svg>
+        </div>
+        <h3>Use your own fonts</h3>
+        <p>Apply any font installed on your system - brand typefaces, custom display fonts, anything After Effects can render. Set weight and size to match your project.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="10.5" r="2.5"/><circle cx="8.5" cy="7.5" r="2.5"/><circle cx="6.5" cy="12.5" r="2.5"/><path d="M12 22a10 10 0 1 1 0-20c5 0 8 3 8 6 0 2.5-2 3.5-4 3.5h-2.2c-1 0-1.8.8-1.8 1.8 0 .5.2.9.5 1.3.6.7.9 1.4.9 2.1 0 1.8-1.4 3-3.4 3z"/></svg>
+        </div>
+        <h3>Custom colours</h3>
+        <p>Pick exact text, background, and highlight colours. Match a brand palette or a video's grade - nothing is locked to the preset you started from.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="8" rx="4"/></svg>
+        </div>
+        <h3>Backgrounds &amp; shapes</h3>
+        <p>Add a pill or box background behind captions, or turn it off entirely. Control padding and opacity so text stays readable over any footage.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18"/><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+        </div>
+        <h3>Position &amp; alignment</h3>
+        <p>Place captions where you want them - top, centre, or lower third - with alignment and size controls that update live on the timeline.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>
+        </div>
+        <h3>Edit text &amp; punctuation</h3>
+        <p>Fix transcripts line by line in the Text tab - wording, casing, and punctuation - before applying. The AI gets you 95% there; you polish the rest.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
+        </div>
+        <h3>Export anywhere</h3>
+        <p>Need captions outside After Effects? Export to SRT, VTT, or CSV for YouTube, social platforms, or your review workflow.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+        </div>
+        <h3>Re-style any time, free</h3>
+        <p>Your transcript is cached, so changing fonts, colours, presets, or re-wrapping lines costs no extra credits. Experiment until it's right.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><path d="m9 11-6 6v3h9l3-3"/><path d="m22 12-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/></svg>
+        </div>
+        <h3>Word-level highlights</h3>
+        <p>Highlight the active word as it's spoken with spotlight, karaoke, and impact styles - the punchy look short-form viewers expect.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- ANIMATIONS -->
+<section id="animations">
+  <div class="container">
+    <p class="section-label">Motion library</p>
+    <h2 class="section-title">Caption animations, word by word</h2>
+    <p class="section-sub">Character and word-level motion - spotlight, karaoke, typewriter, and more. Apply from the Style tab after generating subtitles.</p>
+
+    <div class="styles-grid" id="animations-grid"></div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="container">
+    <p class="section-label">Pricing</p>
+    <h2 class="section-title">Start free, grow as you need</h2>
+    <p class="section-sub">Credits are shared across the Keyweaver platform. 1 credit = 1 minute of transcription.</p>
+
+    <div class="pricing-grid">
+
+      <div class="pricing-card">
+        <div class="pricing-tier">Free</div>
+        <div class="pricing-price" data-home-price="free"><sup data-price-sym>£</sup><span data-price-val>0</span></div>
+        <div class="pricing-desc">Guest trial in the panel · 40 shared credits when you verify your account.</div>
+        <ul class="pricing-features">
+          <li><svg viewBox="0 0 14 14"><polyline points="2 7 5.5 10.5 12 3.5"/></svg>Guest trial credits - no account needed</li>
+          <li><svg viewBox="0 0 14 14"><polyline points="2 7 5.5 10.5 12 3.5"/></svg>40 Keyweaver Credits on signup</li>
+          <li><svg viewBox="0 0 14 14"><polyline points="2 7 5.5 10.5 12 3.5"/></svg>Up to 15 minutes per generate</li>
+          <li><svg viewBox="0 0 14 14"><polyline points="2 7 5.5 10.5 12 3.5"/></svg>All 10 presets + full Style tab</li>
+          <li><svg viewBox="0 0 14 14"><polyline points="2 7 5.5 10.5 12 3.5"/></svg>SRT / VTT / CSV export</li>
+        </ul>
+        <a href="/download" class="btn btn-ghost btn-lg" style="width:100%;justify-content:center;">Download free</a>
+      </div>
+
+      <div class="pricing-card featured">
+        <div class="pricing-badge">Most popular</div>
+        <div class="pricing-tier">Credits</div>
+        <div class="pricing-price" data-home-price="credits"><sup data-price-sym>£</sup><span data-price-whole>4</span><sub data-price-dec>.99</sub></div>
+        <div class="pricing-desc">60 credits, never expire. Top up any time.</div>
+        <ul class="pricing-features">
+          <li><svg viewBox="0 0 14 14"><polyline points="2 7 5.5 10.5 12 3.5"/></svg>60 minutes of transcription</li>
+          <li><svg viewBox="0 0 14 14"><polyline points="2 7 5.5 10.5 12 3.5"/></svg>Clips up to 15 minutes each</li>
+          <li><svg viewBox="0 0 14 14"><polyline points="2 7 5.5 10.5 12 3.5"/></svg>All presets and animations</li>
+          <li><svg viewBox="0 0 14 14"><polyline points="2 7 5.5 10.5 12 3.5"/></svg>SRT / VTT / CSV export</li>
+          <li><svg viewBox="0 0 14 14"><polyline points="2 7 5.5 10.5 12 3.5"/></svg>Credits never expire</li>
+        </ul>
+        <a href="/signup?plan=credits" class="btn btn-primary btn-lg" style="width:100%;justify-content:center;">Buy credits</a>
+      </div>
+
+      <div class="pricing-card">
+        <div class="pricing-tier">Monthly</div>
+        <div class="pricing-price" data-home-price="monthly"><sup data-price-sym>£</sup><span data-price-val>12</span><sub>/mo</sub></div>
+        <div class="pricing-desc">300 credits/month with rollover.</div>
+        <ul class="pricing-features">
+          <li><svg viewBox="0 0 14 14"><polyline points="2 7 5.5 10.5 12 3.5"/></svg>300 credits per month</li>
+          <li><svg viewBox="0 0 14 14"><polyline points="2 7 5.5 10.5 12 3.5"/></svg>Clips up to 15 minutes each</li>
+          <li><svg viewBox="0 0 14 14"><polyline points="2 7 5.5 10.5 12 3.5"/></svg>All presets and animations</li>
+          <li><svg viewBox="0 0 14 14"><polyline points="2 7 5.5 10.5 12 3.5"/></svg>Up to 150 credits roll over</li>
+        </ul>
+        <a href="/signup?plan=monthly" class="btn btn-outline-accent btn-lg" style="width:100%;justify-content:center;">Start monthly</a>
+      </div>
+
+    </div>
+
+    <p id="home-currency-note" style="margin-top:1.5rem; font-size:13px; color:var(--muted); text-align:center;">
+      Prices shown in GBP · <a href="/pricing" style="color:var(--muted); text-decoration:underline; text-underline-offset:3px;">Full pricing details</a>
+    </p>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- DOWNLOAD -->
+<section id="download-section">
+  <div class="container flex-center">
+    <div class="download-box">
+      <div>
+        <p class="section-label" style="margin-bottom:0.5rem;">Get started</p>
+        <h2 class="section-title" style="font-size:1.8rem;">Download Keyweaver</h2>
+        <div class="download-reqs">
+          <span class="req-badge">
+            <svg viewBox="0 0 13 13"><rect x="1.5" y="1.5" width="10" height="10" rx="1.5"/><path d="M4 6.5h5M6.5 4v5"/></svg>
+            After Effects 2022 or later
+          </span>
+          <span class="req-badge">
+            <svg viewBox="0 0 13 13"><rect x="1.5" y="1.5" width="10" height="10" rx="1.5"/><path d="M4 6.5h5M6.5 4v5"/></svg>
+            Windows 10 / macOS 12+
+          </span>
+          <span class="req-badge">
+            <svg viewBox="0 0 13 13"><rect x="1.5" y="1.5" width="10" height="10" rx="1.5"/><path d="M4 6.5h5M6.5 4v5"/></svg>
+            Free to install
+          </span>
+        </div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-start;">
+        <a href="/download" class="btn btn-primary btn-xl">
+          Download for Windows
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M8 2v8M5 7l3 3 3-3M2 12h12" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <span style="font-size:12px; color:var(--muted);">Windows Manager installs Cuemark and the rest of the suite</span>
+        <a href="/download#mac" class="btn btn-ghost" style="font-size:13px;">Also available for macOS →</a>
+        <a href="/help#cuemark" style="font-size:12px; color:var(--muted); text-decoration:underline; text-underline-offset:3px;">Cuemark help</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 Keyweaver Ltd. All rights reserved.</p>
+  <p class="footer-entity">Registered in England &amp; Wales · Company no. 17283644 · 20 Wenlock Road, London, N1 7GU</p>
+  <ul class="footer-links">
+    <li><a href="/">Keyweaver</a></li>
+    <li><a href="/superconductor">Superconductor</a></li>
+    <li><a href="/trillian">Trillian</a></li>
+    <li><a href="/tamborine">Tamborine</a></li>
+    <li><a href="/ludo">Ludo</a></li>
+    <li><a href="/legal/privacy">Privacy</a></li>
+    <li><a href="/legal/terms">Terms</a></li>
+    <li><a href="/legal/cookies">Cookies</a></li>
+    <li><a href="/changelog">Release notes</a></li>
+    <li><a href="/help#cuemark">Help</a></li>
+    <li><a href="/about">About</a></li>
+  </ul>
+</footer>
+
+<script src="/js/hls.min.js"></script>
+<script>
+  (function () {
+    var params = new URLSearchParams(window.location.search);
+    if (params.get('deleted') !== '1') { return; }
+    var banner = document.getElementById('deleted-banner');
+    if (banner) { banner.classList.add('is-visible'); }
+    params.delete('deleted');
+    var query = params.toString();
+    history.replaceState(null, '', window.location.pathname + (query ? '?' + query : ''));
+    var dismiss = document.getElementById('deleted-banner-dismiss');
+    if (dismiss && banner) {
+      dismiss.addEventListener('click', function () {
+        banner.classList.remove('is-visible');
+      });
+    }
+  })();
+
+  // ── CLOUDFLARE STREAM SHOWCASE ──
+  (function () {
+    function thumbUrl(id) {
+      return 'https://videodelivery.net/' + id + '/thumbnails/thumbnail.jpg';
+    }
+
+    function hlsUrl(id) {
+      return 'https://videodelivery.net/' + id + '/manifest/video.m3u8';
+    }
+
+    function attachStreamVideo(vid) {
+      var streamId = vid.getAttribute('data-stream-id');
+      if (!streamId) { return; }
+      var src = hlsUrl(streamId);
+      var hlsInstance = null;
+      var attached = false;
+
+      function tryPlay() {
+        var p = vid.play();
+        if (p && typeof p.catch === 'function') {
+          p.catch(function () {});
+        }
+      }
+
+      function ensureAttached() {
+        if (attached) { return; }
+        attached = true;
+
+        if (vid.canPlayType('application/vnd.apple.mpegurl')) {
+          vid.src = src;
+          vid.addEventListener('canplay', tryPlay, { once: true });
+          return;
+        }
+
+        if (window.Hls && window.Hls.isSupported()) {
+          hlsInstance = new window.Hls({ enableWorker: false, maxBufferLength: 30 });
+          hlsInstance.loadSource(src);
+          hlsInstance.attachMedia(vid);
+          hlsInstance.on(window.Hls.Events.MANIFEST_PARSED, tryPlay);
+        }
+      }
+
+      function playWhenVisible() {
+        ensureAttached();
+        tryPlay();
+      }
+
+      if ('IntersectionObserver' in window) {
+        var observer = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) { playWhenVisible(); }
+            else { vid.pause(); }
+          });
+        }, { rootMargin: '80px', threshold: 0.2 });
+        observer.observe(vid);
+      } else {
+        playWhenVisible();
+      }
+    }
+
+    var PRESETS = [
+      { name: 'Colour Highlight', id: 'e5f2cbecb89091e1e0f25f354d93a552' },
+      { name: 'Impact Words', id: '9b15232d4dbe96d5cc1fd45f462e1f63' },
+      { name: 'Highlight Words', id: '4fe9ace414836cf1287cbe6849611b78' },
+      { name: 'Word Banner', id: '7a76036c68a7ba2851f468b3a73d5b23' },
+      { name: 'Box Cascade', id: 'e01e8e3e4562f0cc17b1c462ddbbec57' },
+      { name: 'Word Stamp', id: 'f3e48ddd7444e62ba956af1bee115d69' },
+      { name: 'Typing Words', id: '865275c63f509ad50371951dda53339b' },
+      { name: 'Drop Words', id: '0b2b115360b7fc94615210e800bb4137' },
+      { name: 'Elegant Highlight', id: 'b5bdcd09a2fdc1355154cfaf0986bd18' },
+      { name: 'Bold Fade On', id: '3071169bfcd6366a0b2c02e0678d6d0c' }
+    ];
+
+    var ANIMATIONS = [
+      { name: 'Spotlight', id: 'c8469e342b7ee807096460ae55c8f195' },
+      { name: 'Roll', id: '16bc972576713a7046d228aa81403c04' },
+      { name: 'Drop', id: 'f52d970a56a2ceb1b94d489d0e4b08cf' },
+      { name: 'Karaoke', id: 'bfbc56618bd81537bdda29bf55470ae4' },
+      { name: 'Highlighter', id: 'ca96544bf80a1ca7bc07f9338e3669e8' },
+      { name: 'Drift Down', id: '3f24033fb8574e18282e492df421c620' },
+      { name: 'Punch', id: 'ee851d96a68b2ca5cfd90dd1bec10fc3' },
+      { name: 'Impact', id: 'e035dc5511ab58b638728a39b2754cb1' },
+      { name: 'Rise', id: 'fb18562fbcd9dcee3046256f4435bf2b' },
+      { name: 'Stamp', id: '0c07a66b382b351d9821e2dcdd8fffa0' },
+      { name: 'Typewriter', id: 'e6a78bb6141104e17d2e11f39e44f926' },
+      { name: 'Fade On', id: '2840881fb22339796b8b2460ceea62c5' },
+      { name: 'Cascade', id: 'ee7707f7fe0ac06d4b5fefc50dbb8cea' }
+    ];
+
+    function renderStreamGrid(elId, items) {
+      var grid = document.getElementById(elId);
+      if (!grid) { return; }
+      grid.innerHTML = items.map(function (item) {
+        return (
+          '<div class="style-card">' +
+            '<div class="style-preview">' +
+              '<video class="style-preview-video" autoplay muted loop playsinline preload="metadata" ' +
+                'poster="' + thumbUrl(item.id) + '" data-stream-id="' + item.id + '" ' +
+                'title="' + item.name + ' preview"></video>' +
+            '</div>' +
+            '<div class="style-info"><div class="style-name">' + item.name + '</div></div>' +
+          '</div>'
+        );
+      }).join('');
+
+      grid.querySelectorAll('video[data-stream-id]').forEach(attachStreamVideo);
+    }
+
+    renderStreamGrid('presets-grid', PRESETS);
+    renderStreamGrid('animations-grid', ANIMATIONS);
+  })();
+
+  // ── HERO HEADLINE ANIMATION ──
+  const headlineWords = ['AI', 'captions,', 'built', 'natively', 'in', 'After', 'Effects.'];
+  const hl = document.getElementById('hero-headline');
+  headlineWords.forEach(w => {
+    const span = document.createElement('span');
+    span.className = 'caption-word';
+    span.textContent = w;
+    hl.appendChild(span);
+    hl.appendChild(document.createTextNode(' '));
+  });
+
+  let hlIdx = 0;
+  const hlSpans = hl.querySelectorAll('.caption-word');
+  function cycleHeadline() {
+    hlSpans.forEach(s => s.classList.remove('active'));
+    hlSpans[hlIdx].classList.add('active');
+    hlIdx = (hlIdx + 1) % hlSpans.length;
+  }
+  cycleHeadline();
+  setInterval(cycleHeadline, 420);
+
+  // ── LOCALISED PRICING ──
+</script>
+<script src="/js/pricing-currency.js"></script>
+<script>
+  CuemarkPricing.applyHomePricing(CuemarkPricing.detectDisplayCurrency());
+</script><script src="/js/cuemark-turnstile.js"></script>
+  <script src="/js/help-widget.js" defer></script>
+</body>
+</html>
