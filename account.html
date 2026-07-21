@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="/css/nav-brand.css" />
   <link rel="stylesheet" href="/css/chrome.css" />
   <link rel="stylesheet" href="/css/help-widget.css" />
-  <title>Account - Cuemark by Keyweaver</title>
+  <title>Account — Keyweaver</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -430,7 +430,7 @@
           <span id="plan-badge-label">Free</span>
         </div>
         <div class="plan-name" id="plan-name">Free plan</div>
-        <div class="plan-detail" id="plan-detail">5 free credits (~5 min) · up to 15 min per generate</div>
+        <div class="plan-detail" id="plan-detail">40 credits on signup · shared across AI plugins · up to 15 min per generate</div>
         <div class="plan-actions" id="plan-actions">
           <a href="/pricing" class="btn-manage btn-manage-primary">Upgrade plan</a>
         </div>
@@ -453,7 +453,7 @@
         <div id="history-rows">
           <div class="empty-state">
             <p>No generates yet. Download the plugin and make your first caption.</p>
-            <a href="/download" class="btn-sm btn-primary-sm" style="display:inline-flex;">Download Cuemark</a>
+            <a href="/download" class="btn-sm btn-primary-sm" style="display:inline-flex;">Download plugins</a>
           </div>
         </div>
       </div>
@@ -493,7 +493,7 @@
     <!-- ADMIN ANALYTICS (contact@keyweaver.io only - loaded via API) -->
     <div id="admin-analytics">
       <div class="section-header">
-        <h2 class="section-title">Cuemark analytics</h2>
+        <h2 class="section-title">Usage analytics</h2>
         <button class="detail-action" type="button" onclick="loadAdminAnalytics(true)">Refresh</button>
       </div>
       <div class="admin-badge">Admin view</div>
@@ -816,7 +816,7 @@
 
   function renderDashboard(data) {
     const credits = data?.credits_remaining ?? 0;
-    const creditsTotal = data?.credits_total ?? 3;
+    const creditsTotal = data?.credits_total ?? 0;
     const plan = data?.plan ?? 'free';
     const isMonthly =
       plan === 'monthly' ||
@@ -859,8 +859,8 @@
     // Plan
     const planBadge = document.getElementById('plan-badge');
     const planMap = {
-      free:           { label: 'Free',    name: 'Free plan',      detail: '5 free credits (~5 min) · up to 15 min per generate', badge: 'free' },
-      spark:          { label: 'Free',    name: 'Free plan',      detail: '5 free credits (~5 min) · up to 15 min per generate', badge: 'free' },
+      free:           { label: 'Free',    name: 'Free plan',      detail: '40 credits on signup · shared across AI plugins · up to 15 min per generate', badge: 'free' },
+      spark:          { label: 'Free',    name: 'Free plan',      detail: '40 credits on signup · shared across AI plugins · up to 15 min per generate', badge: 'free' },
       monthly:        { label: 'Monthly', name: 'Monthly plan',   detail: '300 credits/month · up to 150 rollover', badge: 'active' },
       captio_monthly: { label: 'Monthly', name: 'Monthly plan',   detail: '300 credits/month · up to 150 rollover', badge: 'active' },
       studio:         { label: 'Studio',  name: 'Studio plan',    detail: '150 credits/month included', badge: 'active' },
@@ -904,7 +904,7 @@
       historyEl.innerHTML = `
         <div class="empty-state">
           <p>No generates yet. Download the plugin and make your first caption.</p>
-          <a href="/download" class="btn-sm btn-primary-sm" style="display:inline-flex; margin:0 auto;">Download Cuemark</a>
+          <a href="/download" class="btn-sm btn-primary-sm" style="display:inline-flex; margin:0 auto;">Download plugins</a>
         </div>`;
     } else {
       historyEl.innerHTML = jobs.slice(0, 10).map(j => {

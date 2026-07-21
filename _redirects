@@ -16,6 +16,10 @@
 /ludo           /ludo.html     200
 /trillian       /trillian.html 200
 /tamborine      /tamborine.html 200
+/home           /cuemark  301
+/home.html      /cuemark  301
+/coming-soon    /  301
+/coming-soon.html /  301
 /superconductor-downloads.json /superconductor-downloads.json 200
 /blog/how-to-create-captions-in-after-effects  /blog/how-to-create-captions-in-after-effects.html  200
 /blog/automatic-subtitles-after-effects  /blog/automatic-subtitles-after-effects.html  200

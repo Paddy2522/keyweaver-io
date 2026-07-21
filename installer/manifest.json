@@ -1,4 +1,4 @@
-﻿{
+{
     "manifestVersion":  1,
     "bootstrapMinVersion":  "1.0.0",
     "publisher":  "Keyweaver Ltd",
@@ -50,7 +50,7 @@
                                                    }
                                        },
                          "helpUrl":  "https://keyweaver.io/help#cuemark",
-                         "menuPath":  "Window -\u003e Extensions -\u003e Cuemark by Keyweaver",
+                         "menuPath":  "Window -\u003e Extensions -\u003e Keyweaver - Cuemark",
                          "accent":  "#3D9CF0"
                      },
                      {
@@ -74,7 +74,7 @@
                                                    }
                                        },
                          "helpUrl":  "https://keyweaver.io/help#superconductor",
-                         "menuPath":  "Window -\u003e Extensions -\u003e Superconductor by Keyweaver",
+                         "menuPath":  "Window -\u003e Extensions -\u003e Keyweaver - Superconductor",
                          "accent":  "#5B6BF8"
                      },
                      {

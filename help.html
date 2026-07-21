@@ -422,7 +422,7 @@
           <div class="step-num">1</div>
           <div class="step-body">
             <h4>Open the panel</h4>
-            <p>In After Effects, go to Window → Extensions → Cuemark by Keyweaver. Sign in with your Keyweaver account.</p>
+            <p>In After Effects, go to Window → Extensions → Keyweaver - Cuemark. Sign in with your Keyweaver account.</p>
           </div>
         </div>
         <div class="step">
@@ -688,7 +688,7 @@
   <p class="page-sub">Generate short AI video clips inside After Effects and import them into your active composition.</p>
   <h2>Install</h2>
   <p>On Windows, open <a href="/download">Keyweaver Manager</a> and click Install on Superconductor. On macOS, download the Superconductor zip from the <a href="/download#mac">download page</a>, run <strong>Install-Superconductor.command</strong>, then fully quit and reopen After Effects.</p>
-  <p>Open via <strong>Window → Extensions → Superconductor by Keyweaver</strong>.</p>
+  <p>Open via <strong>Window → Extensions → Keyweaver - Superconductor</strong>.</p>
   <h2>First generate</h2>
   <ul>
     <li>Open the comp you want the clip in</li>
@@ -706,7 +706,7 @@
   <h1>Trillian</h1>
   <p class="page-sub">Turn a script into narration audio and bring it into After Effects.</p>
   <h2>Install</h2>
-  <p>Install from <a href="/download">Keyweaver Manager</a> (Windows) or the Trillian macOS zip on the <a href="/download#mac">download page</a>. Open <strong>Window → Extensions → Trillian by Keyweaver</strong>.</p>
+  <p>Install from <a href="/download">Keyweaver Manager</a> (Windows) or the Trillian macOS zip on the <a href="/download#mac">download page</a>. Open <strong>Window → Extensions → Keyweaver - Trillian</strong>.</p>
   <h2>First generate</h2>
   <ul>
     <li>Paste or write your script</li>
@@ -724,7 +724,7 @@
   <h1>Tamborine</h1>
   <p class="page-sub">Generate music beds and SFX for your edit, then place them on the timeline.</p>
   <h2>Install</h2>
-  <p>Install from <a href="/download">Keyweaver Manager</a> (Windows) or the Tamborine macOS zip on the <a href="/download#mac">download page</a>. Open <strong>Window → Extensions → Tamborine by Keyweaver</strong>.</p>
+  <p>Install from <a href="/download">Keyweaver Manager</a> (Windows) or the Tamborine macOS zip on the <a href="/download#mac">download page</a>. Open <strong>Window → Extensions → Keyweaver - Tamborine</strong>.</p>
   <h2>First generate</h2>
   <ul>
     <li>Describe the music bed or sound effect you need</li>
@@ -773,7 +773,8 @@
     var panels = document.querySelectorAll('[data-help-panel]');
     var valid = { cuemark: 1, superconductor: 1, trillian: 1, tamborine: 1, ludo: 1 };
 
-    function show(id) {
+    function show(id, opts) {
+      opts = opts || {};
       if (!valid[id]) id = 'cuemark';
       tabs.forEach(function (tab) {
         var on = tab.getAttribute('data-help') === id;
@@ -786,20 +787,48 @@
         if (on) panel.removeAttribute('hidden');
         else panel.setAttribute('hidden', '');
       });
-      var hash = '#' + id;
-      if (location.hash !== hash && location.hash !== '#' + id + '-install') {
-        history.replaceState(null, '', hash);
+      // Only rewrite the hash when switching product tabs — never wipe section anchors like #install
+      if (opts.updateHash) {
+        var next = '#' + id;
+        if (location.hash !== next) history.replaceState(null, '', next);
       }
     }
 
     tabs.forEach(function (tab) {
       tab.addEventListener('click', function () {
-        show(tab.getAttribute('data-help'));
+        show(tab.getAttribute('data-help'), { updateHash: true });
       });
     });
 
-    var fromHash = (location.hash || '').replace(/^#/, '').split('-')[0];
-    show(fromHash || 'cuemark');
+    function applyFromHash() {
+      var raw = (location.hash || '').replace(/^#/, '');
+      if (!raw) {
+        show('cuemark', { updateHash: false });
+        return;
+      }
+      // Product tab: #superconductor, #ludo, …
+      if (valid[raw]) {
+        show(raw, { updateHash: false });
+        return;
+      }
+      // Legacy product-install: #superconductor-install
+      var maybeProduct = raw.split('-')[0];
+      if (valid[maybeProduct] && raw.indexOf('-') > 0) {
+        show(maybeProduct, { updateHash: false });
+        return;
+      }
+      // Cuemark section deep-link: #install, #credits, #faq, …
+      show('cuemark', { updateHash: false });
+      var target = document.getElementById(raw);
+      if (target) {
+        setTimeout(function () {
+          try { target.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (e) {}
+        }, 50);
+      }
+    }
+
+    applyFromHash();
+    window.addEventListener('hashchange', applyFromHash);
   })();
 
   // Highlight active sidebar link on scroll (Cuemark panel)

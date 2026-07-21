@@ -1,12 +1,12 @@
 {
-  "product": "Cuemark",
+  "product": "Keyweaver",
   "releases": [
     {
       "version": "1.0.1",
       "date": "2026-06-25",
       "panel": [
-        "Try Cuemark without an account — 5 free trial credits in the panel",
-        "Guest mode opens straight to Generate; sign up free for 5 more credits",
+        "Try Cuemark without an account — guest trial credits in the panel",
+        "Guest mode opens straight to Generate; sign up free for 40 shared Keyweaver Credits",
         "Signup prompt when trial credits run out",
         "macOS installer bundles ffmpeg for video transcription"
       ],
@@ -30,7 +30,7 @@
         "Separate subtitle tracks for each edit comp in your project",
         "Transcribe up to 15 minutes of footage per generate",
         "Account menu, magic-link sign-in, and Stripe billing in the panel",
-        "Free plan with 5 starter credits (~5 minutes of transcription)"
+        "Free signup with shared starter credits across Keyweaver AI plugins"
       ]
     }
   ]
