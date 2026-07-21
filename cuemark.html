@@ -29,8 +29,9 @@
       --surface: #13131A;
       --lift:    #1C1C28;
       --edge:    #2A2A3D;
-      --accent:  #5B6BF8;
-      --accent2: #7B8BFF;
+      --accent:  #3D9CF0;
+      --accent2: #5EB0F5;
+      --accent-rgb: 61, 156, 240;
       --text:    #E8E8F0;
       --muted:   #6B6B88;
       --subtle:  #3A3A52;
@@ -108,7 +109,7 @@
     .hero::before {
       content: '';
       position: absolute; inset: 0;
-      background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(91,107,248,0.12) 0%, transparent 70%);
+      background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(var(--accent-rgb),0.12) 0%, transparent 70%);
       pointer-events: none;
     }
 
@@ -310,8 +311,8 @@
       width: 38px; height: 38px;
       display: flex; align-items: center; justify-content: center;
       border-radius: 9px;
-      background: rgba(91, 107, 248, 0.12);
-      border: 1px solid rgba(91, 107, 248, 0.3);
+      background: rgba(var(--accent-rgb), 0.12);
+      border: 1px solid rgba(var(--accent-rgb), 0.3);
       margin-bottom: 1.1rem;
     }
     .feature-icon svg {
@@ -463,7 +464,7 @@
       background: transparent; color: var(--accent2);
       border: 1px solid var(--accent);
     }
-    .btn-outline-accent:hover { background: rgba(91,107,248,0.1); }
+    .btn-outline-accent:hover { background: rgba(var(--accent-rgb),0.1); }
 
     /* ── DOWNLOAD ── */
     .download-box {
@@ -563,7 +564,7 @@
     }
   </style>
 </head>
-<body>
+<body class="theme-cuemark">
 
 <!-- NAV -->
 <nav class="site-nav" aria-label="Primary">

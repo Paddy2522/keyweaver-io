@@ -7,9 +7,44 @@
   --edge: #2a2a3d;
   --accent: #5b6bf8;
   --accent2: #7b8bff;
+  --accent-rgb: 91, 107, 248;
   --text: #e8e8f0;
   --muted: #6b6b88;
   --subtle: #3a3a52;
+  /* Nav always stays Keyweaver brand, even on themed product pages */
+  --nav-accent: #5b6bf8;
+  --nav-accent2: #7b8bff;
+}
+
+/* Per-plugin page highlights (content only — not the menu) */
+body.theme-cuemark {
+  --accent: #3d9cf0;
+  --accent2: #5eb0f5;
+  --accent-rgb: 61, 156, 240;
+}
+
+body.theme-superconductor {
+  --accent: #5b6bf8;
+  --accent2: #7b8bff;
+  --accent-rgb: 91, 107, 248;
+}
+
+body.theme-trillian {
+  --accent: #b56bff;
+  --accent2: #c98fff;
+  --accent-rgb: 181, 107, 255;
+}
+
+body.theme-tamborine {
+  --accent: #e8952f;
+  --accent2: #f0a84a;
+  --accent-rgb: 232, 149, 47;
+}
+
+body.theme-ludo {
+  --accent: #34d399;
+  --accent2: #5ee0b0;
+  --accent-rgb: 52, 211, 153;
 }
 
 *,
@@ -92,6 +127,15 @@ body {
   align-items: center;
   gap: 0.75rem;
   flex-shrink: 0;
+}
+
+.site-nav .btn-primary {
+  background: var(--nav-accent);
+  color: #fff;
+}
+
+.site-nav .btn-primary:hover {
+  background: var(--nav-accent2);
 }
 
 .nav-products {
@@ -271,15 +315,28 @@ body {
   transform: translateY(-2px);
 }
 
+/* Icon marks are ~132×132 in a 166.8-tall wordmark SVG — scale so the
+   mark fills a fixed square and clip the wordmark text away. */
 .product-card-logo {
-  /* Height-only scale so each SVG’s icon square stays the same size
-     (max-width was shrinking longer wordmarks and their marks with them). */
-  height: 30px;
+  display: block;
+  width: 36px;
+  height: 36px;
+  overflow: hidden;
+  border-radius: 9px;
+  margin-bottom: 1.1rem;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.product-card-logo img {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  height: calc(36px * 166.8 / 132);
   width: auto;
   max-width: none;
-  object-fit: contain;
-  object-position: left center;
-  margin-bottom: 1.1rem;
+  transform: translateY(-50%);
+  display: block;
 }
 
 .product-card-category {
@@ -325,7 +382,7 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(91, 107, 248, 0.12) 0%, transparent 70%);
+  background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(var(--accent-rgb), 0.14) 0%, transparent 70%);
   pointer-events: none;
 }
 
@@ -431,7 +488,7 @@ body {
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: rgba(91, 107, 248, 0.15);
+  background: rgba(var(--accent-rgb), 0.15);
   color: var(--accent2);
   font-size: 13px;
   font-weight: 700;
@@ -455,7 +512,7 @@ body {
 .cta-band {
   text-align: center;
   padding: 4.5rem 2rem;
-  background: linear-gradient(180deg, transparent, rgba(91, 107, 248, 0.06));
+  background: linear-gradient(180deg, transparent, rgba(var(--accent-rgb), 0.07));
 }
 
 .cta-band h2 {
