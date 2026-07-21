@@ -25,26 +25,35 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
-      # Needs Zone → Cache Purge (+ Zone Read to resolve zone id).
-      # Optional secret CLOUDFLARE_ZONE_ID skips the zone lookup.
+      # Prefer a dedicated user token (Zone Read + Cache Purge). The Workers
+      # "build token" often won't accept Zone Cache Purge on edit — use
+      # secret CLOUDFLARE_CACHE_PURGE_TOKEN instead of editing that token.
+      # Optional CLOUDFLARE_ZONE_ID skips the zone lookup.
       - name: Purge Cloudflare edge cache
         if: success()
         continue-on-error: true
         env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          PURGE_TOKEN: ${{ secrets.CLOUDFLARE_CACHE_PURGE_TOKEN }}
+          FALLBACK_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
         run: |
           set -euo pipefail
 
-          if [ -z "${CLOUDFLARE_API_TOKEN:-}" ]; then
-            echo "::warning::CLOUDFLARE_API_TOKEN missing — skip cache purge"
+          TOKEN="${PURGE_TOKEN:-${FALLBACK_TOKEN:-}}"
+          if [ -z "$TOKEN" ]; then
+            echo "::warning::No CLOUDFLARE_CACHE_PURGE_TOKEN or CLOUDFLARE_API_TOKEN — skip cache purge"
             exit 0
+          fi
+          if [ -n "${PURGE_TOKEN:-}" ]; then
+            echo "Using CLOUDFLARE_CACHE_PURGE_TOKEN"
+          else
+            echo "Using CLOUDFLARE_API_TOKEN (add CLOUDFLARE_CACHE_PURGE_TOKEN for a dedicated purge token)"
           fi
 
           ZONE_ID="${CLOUDFLARE_ZONE_ID:-}"
           if [ -z "$ZONE_ID" ]; then
             ZONES_JSON=$(curl -sS "https://api.cloudflare.com/client/v4/zones?name=keyweaver.io" \
-              -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+              -H "Authorization: Bearer $TOKEN" \
               -H "Content-Type: application/json")
             ZONE_ID=$(echo "$ZONES_JSON" | jq -r '.result[0].id // empty')
             if [ -z "$ZONE_ID" ]; then
@@ -54,13 +63,12 @@ jobs:
           fi
           echo "Purging zone $ZONE_ID"
 
-          # Cloudflare allows ≤30 URLs per purge_cache call.
           purge_batch() {
             local payload="$1"
             local label="$2"
             local resp
             resp=$(curl -sS -X POST "https://api.cloudflare.com/client/v4/zones/$ZONE_ID/purge_cache" \
-              -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+              -H "Authorization: Bearer $TOKEN" \
               -H "Content-Type: application/json" \
               --data "$payload")
             local ok
