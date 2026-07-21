@@ -304,22 +304,6 @@
     .help-panel { display: none; }
     .help-panel.is-active { display: block; }
     .page-wrap.help-panel.is-active { display: grid; }
-    .help-simple {
-      max-width: 760px; margin: 0 auto;
-      padding: 2.5rem 2rem 5rem;
-    }
-    .help-simple h1 {
-      font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800;
-      letter-spacing: -0.04em; margin: 0.5rem 0 0.75rem;
-    }
-    .help-simple .page-sub { color: var(--muted); margin-bottom: 1.75rem; }
-    .help-simple h2 {
-      font-family: 'Syne', sans-serif; font-size: 1.25rem;
-      margin: 2rem 0 0.75rem;
-    }
-    .help-simple p, .help-simple li { color: var(--muted); font-size: 15px; line-height: 1.7; margin-bottom: 0.75rem; }
-    .help-simple ul { padding-left: 1.2rem; margin-bottom: 1rem; }
-    .help-simple a { color: var(--accent2); }
   </style>
 </head>
 <body>
@@ -695,78 +679,755 @@
   </main>
 </div>
 
-<div class="help-panel help-simple" id="help-panel-superconductor" data-help-panel="superconductor" hidden>
-  <p class="section-label">Help · AI Video</p>
-  <h1>Superconductor</h1>
-  <p class="page-sub">Generate short AI video clips inside After Effects and import them into your active composition.</p>
-  <h2>Install</h2>
-  <p>On Windows, open <a href="/download">Keyweaver Manager</a> and click Install on Superconductor. On macOS, download the Superconductor zip from the <a href="/download#mac">download page</a>, run <strong>Install-Superconductor.command</strong>, then fully quit and reopen After Effects.</p>
-  <p>Open via <strong>Window → Extensions → Keyweaver - Superconductor</strong>.</p>
-  <h2>First generate</h2>
-  <ul>
-    <li>Open the comp you want the clip in</li>
-    <li>Write a prompt, choose style, aspect ratio, and length</li>
-    <li>Confirm the credit cost, then generate</li>
-    <li>Import the finished clip into the timeline</li>
-  </ul>
-  <h2>Credits</h2>
-  <p>Superconductor uses your shared Keyweaver Credits. Guest trials are available without an account. Manage balance at <a href="/account">Account</a> or see <a href="/pricing">Pricing</a>.</p>
-  <p><a href="/superconductor">Product page</a> · <a href="/download">Download</a></p>
+<div class="page-wrap help-panel" id="help-panel-superconductor" data-help-panel="superconductor" hidden>
+
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Getting started</div>
+      <a href="#superconductor-install" class="sidebar-link">Installation</a>
+      <a href="#superconductor-first-generate" class="sidebar-link">Your first generate</a>
+      <a href="#superconductor-credits" class="sidebar-link">Credits &amp; account</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Using Superconductor</div>
+      <a href="#superconductor-generate" class="sidebar-link">Generate tab</a>
+      <a href="#superconductor-library" class="sidebar-link">Library tab</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Troubleshooting</div>
+      <a href="#superconductor-troubleshooting" class="sidebar-link">Common issues</a>
+      <a href="#superconductor-faq" class="sidebar-link">FAQ</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Support</div>
+      <a href="#superconductor-contact" class="sidebar-link">Contact us</a>
+    </div>
+  </aside>
+
+  <main class="main">
+    <p class="section-label">Help centre</p>
+    <h1>Using Superconductor</h1>
+    <p class="page-sub">Everything you need to go from a prompt to a video clip on your After Effects timeline.</p>
+
+    <div class="help-section" id="superconductor-install">
+      <h2>Installation</h2>
+      <p>Superconductor is a CEP panel for Adobe After Effects. The panel appears under <strong>Window → Extensions</strong> after you install it and fully restart AE.</p>
+      <p>Full step-by-step instructions are on the <a href="/download">download page</a>.</p>
+
+      <h3>Windows (recommended)</h3>
+      <p>Download <strong>Keyweaver Installer</strong> from the <a href="/download">download page</a> and run <strong>Keyweaver-Setup.exe</strong>. Open <strong>Keyweaver Manager</strong>, click <strong>Install</strong> on Superconductor, then fully quit and reopen After Effects.</p>
+      <p>If Windows shows SmartScreen, click <strong>More info</strong> → <strong>Run anyway</strong> and confirm the publisher is <strong>Keyweaver Ltd</strong>.</p>
+
+      <h3>Windows (zip fallback)</h3>
+      <p>Download the Superconductor zip from the <a href="/download">download page</a>, extract it, and double-click <strong>Install-Superconductor.cmd</strong>. The installer copies files to your user AppData folder only.</p>
+
+      <h3>macOS</h3>
+      <p>Extract the zip and double-click <strong>Install-Superconductor.command</strong>. If macOS blocks it, right-click → <strong>Open</strong> → <strong>Open</strong> once.</p>
+      <div class="note note-warn">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <p>After installing, you must fully quit and relaunch After Effects. Restarting is required - closing and reopening a panel is not enough.</p>
+      </div>
+    </div>
+
+    <div class="help-section" id="superconductor-first-generate">
+      <h2>Your first generate</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <h4>Open the panel</h4>
+            <p>In After Effects, go to Window → Extensions → Keyweaver - Superconductor. Sign in with your Keyweaver account, or start with guest trial credits.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <h4>Open your edit comp</h4>
+            <p>Open the composition you want the clip in. Use <strong>Refresh active comp</strong> if the panel needs to pick up the current aspect ratio.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <h4>Write a prompt and set options</h4>
+            <p>On the <strong>Generate</strong> tab, describe the shot. Choose style, quality (Standard or Pro), aspect ratio, duration (5s or 9s), and output size. The panel shows the credit cost before you run.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <h4>Generate, then import</h4>
+            <p>Click <strong>Generate video</strong>. When the job finishes, open the <strong>Library</strong> tab and click <strong>Import</strong> to place the clip in your active composition.</p>
+          </div>
+        </div>
+      </div>
+      <div class="note note-success">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        <p>Import does not consume credits - only a successful generate does. Failed provider runs are refunded.</p>
+      </div>
+    </div>
+
+    <div class="help-section" id="superconductor-credits">
+      <h2>Credits &amp; account</h2>
+      <p>Superconductor uses your shared <strong>Keyweaver Credits</strong> balance - the same pool as Cuemark, Trillian, and Tamborine. Exact cost is shown in the panel before you generate.</p>
+      <p>Typical base costs (before optional upscale): Standard 5s = 8 credits, Standard 9s = 14, Pro 5s = 20, Pro 9s = 36. Choosing 1080p or 4K output can add upscale credits on Standard jobs - the Cost line always reflects your current settings.</p>
+      <p>Top up or manage your subscription at <a href="/account">keyweaver.io/account</a>. Sign in with the same email in the panel and on the website.</p>
+      <div class="note note-info">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        <p>Open Superconductor in After Effects to try <strong>guest trial credits</strong> without an account. Sign up free for <strong>40 Keyweaver Credits</strong> shared across the AI plugins.</p>
+      </div>
+    </div>
+
+    <div class="help-section" id="superconductor-generate">
+      <h2>Generate tab</h2>
+      <p>This is where you describe the shot and kick off generation.</p>
+      <h3>Prompt and enhance</h3>
+      <p>Write what you want to see. <strong>Enhance prompt for better results</strong> (on by default) expands short prompts into clearer generation instructions.</p>
+      <h3>Style, quality, aspect, duration</h3>
+      <ul>
+        <li><strong>Style</strong> - optional presets such as Motion plate, Cinematic B-roll, Abstract background, Product backdrop, or Social cutaway</li>
+        <li><strong>Quality</strong> - Standard or Pro</li>
+        <li><strong>Aspect</strong> - Active comp, 16:9, 9:16, or 1:1</li>
+        <li><strong>Duration</strong> - 5 seconds or 9 seconds</li>
+        <li><strong>Output size</strong> - Active comp (fit on import), 720p, 1080p, or 4K AI upscale</li>
+      </ul>
+      <h3>Image-to-video</h3>
+      <p>Enable <strong>Use current frame as start</strong> to seed the clip from the frame under the playhead in your active composition.</p>
+      <div class="note note-warn">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <p>Do not prompt for copyrighted characters, brand logos, public-figure impersonation, deepfakes, or unsafe content. Blocked prompts will not generate.</p>
+      </div>
+    </div>
+
+    <div class="help-section" id="superconductor-library">
+      <h2>Library tab</h2>
+      <p>Completed jobs appear in <strong>Your library</strong>. Click <strong>Refresh</strong> if a job just finished. When a clip is ready, click <strong>Import</strong> to add it to the active composition.</p>
+      <p>Jobs may show as Failed, Refunded, or Blocked. Refunded jobs return credits to your balance.</p>
+    </div>
+
+    <div class="help-section" id="superconductor-troubleshooting">
+      <h2>Troubleshooting</h2>
+      <h3>Panel doesn't appear in Window → Extensions</h3>
+      <p>Re-run the installer from a fresh zip extract (or reinstall from Keyweaver Manager), then fully quit and relaunch After Effects.</p>
+      <h3>Blank white panel</h3>
+      <p>Re-copy the panel from a fresh zip download and fully relaunch AE. If still blank, right-click inside the panel and choose <strong>Inspect</strong> to see any JavaScript errors.</p>
+      <h3>Active comp not available</h3>
+      <p>Open a composition in After Effects, then click <strong>Refresh active comp</strong> in the panel.</p>
+      <h3>Generate fails with a network error</h3>
+      <p>Check your internet connection. Corporate firewalls may block <code>keyweaver-backend.vercel.app</code> - try another network if needed.</p>
+      <h3>Not enough credits</h3>
+      <p>The credit check happens before generate. Top up at <a href="/account">Account</a> or see <a href="/pricing">Pricing</a>.</p>
+    </div>
+
+    <div class="help-section" id="superconductor-faq">
+      <h2>FAQ</h2>
+      <div class="faq-item">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          <span>Can I use generated clips on client work?</span>
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-a">Yes. Commercial use is permitted on paid credit plans. Follow the panel safety rules - no copyrighted characters, logos, or public-figure impersonation.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          <span>Do I need an account?</span>
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-a">You can start with guest trial credits in the panel. Create a free account for 40 shared Keyweaver Credits that follow you across Cuemark, Superconductor, Trillian, and Tamborine.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          <span>Does Superconductor work offline?</span>
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-a">No. Video generation runs in the cloud and needs an internet connection. Importing a clip you already generated still requires the panel and a local file from your library.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          <span>How do I update Superconductor?</span>
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-a">On Windows, open Keyweaver Manager and click Install on Superconductor. On macOS, download the latest zip from the <a href="/download">download page</a> and run the installer again. Fully quit and reopen After Effects after updating.</div>
+      </div>
+    </div>
+
+    <div class="help-section" id="superconductor-contact">
+      <h2>Still need help?</h2>
+      <div class="contact-card">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </div>
+        <div class="contact-info">
+          <h3>Email support</h3>
+          <p>We typically respond within one business day.<br />
+          <a href="mailto:hello@keyweaver.io">hello@keyweaver.io</a></p>
+        </div>
+      </div>
+    </div>
+  </main>
 </div>
 
-<div class="help-panel help-simple" id="help-panel-trillian" data-help-panel="trillian" hidden>
-  <p class="section-label">Help · AI Voiceover</p>
-  <h1>Trillian</h1>
-  <p class="page-sub">Turn a script into narration audio and bring it into After Effects.</p>
-  <h2>Install</h2>
-  <p>Install from <a href="/download">Keyweaver Manager</a> (Windows) or the Trillian macOS zip on the <a href="/download#mac">download page</a>. Open <strong>Window → Extensions → Keyweaver - Trillian</strong>.</p>
-  <h2>First generate</h2>
-  <ul>
-    <li>Paste or write your script</li>
-    <li>Pick a voice</li>
-    <li>Confirm credit cost and generate</li>
-    <li>Import the audio into your composition</li>
-  </ul>
-  <h2>Credits</h2>
-  <p>Trillian draws from the same Keyweaver Credits pool as Cuemark and the other AI plugins. Guest trial credits are available in the panel.</p>
-  <p><a href="/trillian">Product page</a> · <a href="/download">Download</a></p>
+<div class="page-wrap help-panel" id="help-panel-trillian" data-help-panel="trillian" hidden>
+
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Getting started</div>
+      <a href="#trillian-install" class="sidebar-link">Installation</a>
+      <a href="#trillian-first-generate" class="sidebar-link">Your first generate</a>
+      <a href="#trillian-credits" class="sidebar-link">Credits &amp; account</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Using Trillian</div>
+      <a href="#trillian-generate" class="sidebar-link">Generate tab</a>
+      <a href="#trillian-library" class="sidebar-link">Library tab</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Troubleshooting</div>
+      <a href="#trillian-troubleshooting" class="sidebar-link">Common issues</a>
+      <a href="#trillian-faq" class="sidebar-link">FAQ</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Support</div>
+      <a href="#trillian-contact" class="sidebar-link">Contact us</a>
+    </div>
+  </aside>
+
+  <main class="main">
+    <p class="section-label">Help centre</p>
+    <h1>Using Trillian</h1>
+    <p class="page-sub">Everything you need to go from a script to narration audio inside After Effects.</p>
+
+    <div class="help-section" id="trillian-install">
+      <h2>Installation</h2>
+      <p>Trillian is a CEP panel for Adobe After Effects. The panel appears under <strong>Window → Extensions</strong> after you install it and fully restart AE.</p>
+      <p>Full step-by-step instructions are on the <a href="/download">download page</a>.</p>
+
+      <h3>Windows (recommended)</h3>
+      <p>Download <strong>Keyweaver Installer</strong> from the <a href="/download">download page</a> and run <strong>Keyweaver-Setup.exe</strong>. Open <strong>Keyweaver Manager</strong>, click <strong>Install</strong> on Trillian, then fully quit and reopen After Effects.</p>
+
+      <h3>Windows (zip fallback)</h3>
+      <p>Download the Trillian zip, extract it, and double-click <strong>Install-Trillian.cmd</strong>.</p>
+
+      <h3>macOS</h3>
+      <p>Extract the zip and double-click <strong>Install-Trillian.command</strong>. If macOS blocks it, right-click → <strong>Open</strong> → <strong>Open</strong> once.</p>
+      <div class="note note-warn">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <p>After installing, you must fully quit and relaunch After Effects. Restarting is required - closing and reopening a panel is not enough.</p>
+      </div>
+    </div>
+
+    <div class="help-section" id="trillian-first-generate">
+      <h2>Your first generate</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <h4>Open the panel</h4>
+            <p>In After Effects, go to Window → Extensions → Keyweaver - Trillian. Sign in, or start with guest trial credits.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <h4>Write or paste your script</h4>
+            <p>On the <strong>Generate</strong> tab, enter the narration. The panel shows character count and estimated credits as you type (scripts are capped at 2500 characters).</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <h4>Pick a voice</h4>
+            <p>Browse or search the voice list. Filter by gender or accent, preview a voice, then select it.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <h4>Generate and import</h4>
+            <p>Confirm the cost, click <strong>Generate voiceover</strong>, then open the <strong>Library</strong> tab and click <strong>Import</strong> to place the audio in your active composition.</p>
+          </div>
+        </div>
+      </div>
+      <div class="note note-success">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        <p>If Cuemark is installed, Library also offers <strong>Import + captions (Free)</strong> to hand the take to Cuemark for subtitles without spending extra Trillian credits.</p>
+      </div>
+    </div>
+
+    <div class="help-section" id="trillian-credits">
+      <h2>Credits &amp; account</h2>
+      <p>Trillian uses shared <strong>Keyweaver Credits</strong>. Cost scales with script length - the panel estimates as you type. Short scripts start at a few credits (minimum applies); longer scripts cost more.</p>
+      <p>Credits are only consumed when you generate voiceover. Importing from the library does not charge again.</p>
+      <p>Manage your balance at <a href="/account">keyweaver.io/account</a>.</p>
+      <div class="note note-info">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        <p>Guest trial credits are available in the panel without an account. Sign up free for <strong>40 Keyweaver Credits</strong> shared across Cuemark, Superconductor, Trillian, and Tamborine.</p>
+      </div>
+    </div>
+
+    <div class="help-section" id="trillian-generate">
+      <h2>Generate tab</h2>
+      <p>Enter your script, choose a voice, and generate narration.</p>
+      <h3>Script</h3>
+      <p>Paste dialogue or narration into the script field. Keep it under <strong>2500 characters</strong>. The meta line shows character count and credit estimate.</p>
+      <h3>Voices</h3>
+      <p>Search by name, filter by gender or accent, and sort by Most popular or A–Z. Preview a voice before you generate.</p>
+      <h3>Generate voiceover</h3>
+      <p>Generate is enabled when you have a non-empty script, a selected voice, and enough credits. The finished take is saved to your library.</p>
+    </div>
+
+    <div class="help-section" id="trillian-library">
+      <h2>Library tab</h2>
+      <p>Find past takes under <strong>Your library</strong>. Use <strong>Refresh</strong> after a generate finishes.</p>
+      <ul>
+        <li><strong>Import</strong> - places the audio in your active composition</li>
+        <li><strong>Import + captions (Free)</strong> - imports audio and opens Cuemark to caption it (Cuemark must be installed)</li>
+      </ul>
+    </div>
+
+    <div class="help-section" id="trillian-troubleshooting">
+      <h2>Troubleshooting</h2>
+      <h3>Panel doesn't appear in Window → Extensions</h3>
+      <p>Reinstall from Keyweaver Manager or a fresh zip, then fully quit and relaunch After Effects.</p>
+      <h3>Generate button stays disabled</h3>
+      <p>Check that the script is not empty, a voice is selected, the script is under 2500 characters, and the voice provider is ready.</p>
+      <h3>Import + captions says install Cuemark</h3>
+      <p>Install Cuemark from Keyweaver Manager (or the Cuemark zip), then try again. Caption import is free once Cuemark is available.</p>
+      <h3>Import fails</h3>
+      <p>Make sure a composition is open and active in After Effects, then retry Import.</p>
+      <h3>Network or auth errors</h3>
+      <p>Confirm you can reach <code>keyweaver-backend.vercel.app</code>. Sign out and back in if your session expired.</p>
+    </div>
+
+    <div class="help-section" id="trillian-faq">
+      <h2>FAQ</h2>
+      <div class="faq-item">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          <span>How are credits charged?</span>
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-a">Trillian shows an estimate before you generate. Cost scales with script length and comes from your shared Keyweaver Credits balance.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          <span>Where does the audio go?</span>
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-a">Generated narration is saved to your library. Import places it in the active After Effects composition so you can time it with picture.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          <span>Can I caption a Trillian take?</span>
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-a">Yes. Use Import + captions in the Library tab if Cuemark is installed. That handoff does not charge Trillian credits again.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          <span>How do I update Trillian?</span>
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-a">On Windows, use Keyweaver Manager. On macOS, download the latest zip from the <a href="/download">download page</a> and run the installer again. Fully quit and reopen After Effects after updating.</div>
+      </div>
+    </div>
+
+    <div class="help-section" id="trillian-contact">
+      <h2>Still need help?</h2>
+      <div class="contact-card">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </div>
+        <div class="contact-info">
+          <h3>Email support</h3>
+          <p>We typically respond within one business day.<br />
+          <a href="mailto:hello@keyweaver.io">hello@keyweaver.io</a></p>
+        </div>
+      </div>
+    </div>
+  </main>
 </div>
 
-<div class="help-panel help-simple" id="help-panel-tamborine" data-help-panel="tamborine" hidden>
-  <p class="section-label">Help · AI Music &amp; Sound Effects</p>
-  <h1>Tamborine</h1>
-  <p class="page-sub">Generate music beds and SFX for your edit, then place them on the timeline.</p>
-  <h2>Install</h2>
-  <p>Install from <a href="/download">Keyweaver Manager</a> (Windows) or the Tamborine macOS zip on the <a href="/download#mac">download page</a>. Open <strong>Window → Extensions → Keyweaver - Tamborine</strong>.</p>
-  <h2>First generate</h2>
-  <ul>
-    <li>Describe the music bed or sound effect you need</li>
-    <li>Choose length / style options in the panel</li>
-    <li>Confirm credit cost and generate</li>
-    <li>Import the audio into your composition</li>
-  </ul>
-  <h2>Credits</h2>
-  <p>Tamborine uses shared Keyweaver Credits. Guest trials work without signing in; an account keeps your balance across machines.</p>
-  <p><a href="/tamborine">Product page</a> · <a href="/download">Download</a></p>
+<div class="page-wrap help-panel" id="help-panel-tamborine" data-help-panel="tamborine" hidden>
+
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Getting started</div>
+      <a href="#tamborine-install" class="sidebar-link">Installation</a>
+      <a href="#tamborine-first-generate" class="sidebar-link">Your first generate</a>
+      <a href="#tamborine-credits" class="sidebar-link">Credits &amp; account</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Using Tamborine</div>
+      <a href="#tamborine-music" class="sidebar-link">Music tab</a>
+      <a href="#tamborine-sfx" class="sidebar-link">Sound effects tab</a>
+      <a href="#tamborine-library" class="sidebar-link">Library tab</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Troubleshooting</div>
+      <a href="#tamborine-troubleshooting" class="sidebar-link">Common issues</a>
+      <a href="#tamborine-faq" class="sidebar-link">FAQ</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Support</div>
+      <a href="#tamborine-contact" class="sidebar-link">Contact us</a>
+    </div>
+  </aside>
+
+  <main class="main">
+    <p class="section-label">Help centre</p>
+    <h1>Using Tamborine</h1>
+    <p class="page-sub">Everything you need to generate music beds and sound effects for your After Effects edit.</p>
+
+    <div class="help-section" id="tamborine-install">
+      <h2>Installation</h2>
+      <p>Tamborine is a CEP panel for Adobe After Effects. The panel appears under <strong>Window → Extensions</strong> after you install it and fully restart AE.</p>
+      <p>Full step-by-step instructions are on the <a href="/download">download page</a>.</p>
+
+      <h3>Windows (recommended)</h3>
+      <p>Download <strong>Keyweaver Installer</strong> from the <a href="/download">download page</a> and run <strong>Keyweaver-Setup.exe</strong>. Open <strong>Keyweaver Manager</strong>, click <strong>Install</strong> on Tamborine, then fully quit and reopen After Effects.</p>
+
+      <h3>Windows (zip fallback)</h3>
+      <p>Download the Tamborine zip, extract it, and double-click <strong>Install-Tamborine.cmd</strong>.</p>
+
+      <h3>macOS</h3>
+      <p>Extract the zip and double-click <strong>Install-Tamborine.command</strong>. If macOS blocks it, right-click → <strong>Open</strong> → <strong>Open</strong> once.</p>
+      <div class="note note-warn">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <p>After installing, you must fully quit and relaunch After Effects. Restarting is required - closing and reopening a panel is not enough.</p>
+      </div>
+    </div>
+
+    <div class="help-section" id="tamborine-first-generate">
+      <h2>Your first generate</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <h4>Open the panel</h4>
+            <p>In After Effects, go to Window → Extensions → Keyweaver - Tamborine. Sign in, or start with guest trial credits.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <h4>Choose Music or Sound effects</h4>
+            <p>Use the <strong>Music</strong> tab for beds and underlays, or <strong>Sound effects</strong> for one-shots, whooshes, and accents.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <h4>Describe the sound</h4>
+            <p>Write a prompt, set duration and options, and check the credit cost shown in the panel.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <h4>Generate and import</h4>
+            <p>Click generate, then open the <strong>Library</strong> tab and click <strong>Import</strong> to place the audio in your active composition.</p>
+          </div>
+        </div>
+      </div>
+      <div class="note note-success">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        <p>Import does not consume credits - only a successful generate does.</p>
+      </div>
+    </div>
+
+    <div class="help-section" id="tamborine-credits">
+      <h2>Credits &amp; account</h2>
+      <p>Tamborine uses shared <strong>Keyweaver Credits</strong>. Cost scales with duration - short beds and SFX start from a few credits; longer music costs more. The Cost line updates as you change settings.</p>
+      <p>Manage your balance at <a href="/account">keyweaver.io/account</a>.</p>
+      <div class="note note-info">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        <p>Guest trial credits are available in the panel without an account. Sign up free for <strong>40 Keyweaver Credits</strong> shared across Cuemark, Superconductor, Trillian, and Tamborine.</p>
+      </div>
+    </div>
+
+    <div class="help-section" id="tamborine-music">
+      <h2>Music tab</h2>
+      <p>Generate music beds for underlays and scene atmosphere.</p>
+      <h3>Prompt and option chips</h3>
+      <p>Describe the track you want. Optional chips for <strong>Genre</strong>, <strong>Mood</strong>, <strong>Video Theme</strong>, and <strong>Instrument</strong> help shape the AI prompt without cluttering the text box.</p>
+      <h3>Duration and instrumental</h3>
+      <p>Set length from a few seconds up to two minutes. Enable <strong>Instrumental only</strong> when you need beds without vocals.</p>
+      <h3>Generate music</h3>
+      <p>Confirm the cost, then click <strong>Generate music</strong>. The finished bed appears in your library.</p>
+    </div>
+
+    <div class="help-section" id="tamborine-sfx">
+      <h2>Sound effects tab</h2>
+      <p>Generate one-shot effects for hits, whooshes, transitions, and accents.</p>
+      <h3>Description and length</h3>
+      <p>Describe the effect. Choose <strong>Auto</strong> length (provider decides) or a <strong>Custom</strong> length.</p>
+      <h3>Loop and influence</h3>
+      <p><strong>Seamless loop</strong> is useful for beds or repeating accents. <strong>Prompt influence</strong> controls how strongly the description drives the result.</p>
+      <h3>Generate sound effect</h3>
+      <p>Confirm the cost, then click <strong>Generate sound effect</strong>.</p>
+    </div>
+
+    <div class="help-section" id="tamborine-library">
+      <h2>Library tab</h2>
+      <p>Browse <strong>All</strong>, <strong>Music</strong>, or <strong>SFX</strong>. Click <strong>Refresh</strong> after a generate finishes, then <strong>Import</strong> to place audio in the active composition.</p>
+    </div>
+
+    <div class="help-section" id="tamborine-troubleshooting">
+      <h2>Troubleshooting</h2>
+      <h3>Panel doesn't appear in Window → Extensions</h3>
+      <p>Reinstall from Keyweaver Manager or a fresh zip, then fully quit and relaunch After Effects.</p>
+      <h3>Generate button stays disabled</h3>
+      <p>Enter a prompt and wait until the audio provider is ready. Check that you have enough credits for the selected duration.</p>
+      <h3>Import fails</h3>
+      <p>Open a composition in After Effects, then retry Import from the library.</p>
+      <h3>Network or auth errors</h3>
+      <p>Confirm you can reach <code>keyweaver-backend.vercel.app</code>. Sign out and back in if your session expired.</p>
+    </div>
+
+    <div class="help-section" id="tamborine-faq">
+      <h2>FAQ</h2>
+      <div class="faq-item">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          <span>Can Tamborine do both music and SFX?</span>
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-a">Yes. Use the Music tab for beds and underlays, and the Sound effects tab for one-shots. Both share the same library.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          <span>How are credits charged?</span>
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-a">Tamborine shows cost before generate. Music and SFX scale with duration and draw from your shared Keyweaver Credits.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          <span>Do I need an account?</span>
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-a">You can try guest trial credits in the panel. A free account adds 40 shared credits across the AI plugins.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          <span>How do I update Tamborine?</span>
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-a">On Windows, use Keyweaver Manager. On macOS, download the latest zip from the <a href="/download">download page</a> and run the installer again. Fully quit and reopen After Effects after updating.</div>
+      </div>
+    </div>
+
+    <div class="help-section" id="tamborine-contact">
+      <h2>Still need help?</h2>
+      <div class="contact-card">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </div>
+        <div class="contact-info">
+          <h3>Email support</h3>
+          <p>We typically respond within one business day.<br />
+          <a href="mailto:hello@keyweaver.io">hello@keyweaver.io</a></p>
+        </div>
+      </div>
+    </div>
+  </main>
 </div>
 
-<div class="help-panel help-simple" id="help-panel-ludo" data-help-panel="ludo" hidden>
-  <p class="section-label">Help · Motion Toolkit</p>
-  <h1>Ludo</h1>
-  <p class="page-sub">Free animation, keyframe, text, layout, colour, and export tools — no credits required.</p>
-  <h2>Install</h2>
-  <p>Install from <a href="/download">Keyweaver Manager</a> (Windows) or the Ludo macOS zip on the <a href="/download#mac">download page</a>. Open <strong>Window → Extensions → Keyweaver - Ludo</strong>.</p>
-  <h2>What you can do</h2>
-  <ul>
-    <li>Animation easing and layer transitions</li>
-    <li>Keyframe stagger, align, reverse, distribute, mirror</li>
-    <li>Text split / typewriter-style tools and stroke boxes</li>
-    <li>Layout cloner and colour palette</li>
-    <li>Frame export and work-area GIF export</li>
-  </ul>
-  <h2>Credits</h2>
-  <p>Ludo is free. You do not need Keyweaver Credits to use it.</p>
-  <p><a href="/ludo">Product page</a> · <a href="/download">Download</a></p>
+<div class="page-wrap help-panel" id="help-panel-ludo" data-help-panel="ludo" hidden>
+
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Getting started</div>
+      <a href="#ludo-install" class="sidebar-link">Installation</a>
+      <a href="#ludo-first-steps" class="sidebar-link">First steps</a>
+      <a href="#ludo-credits" class="sidebar-link">Credits &amp; account</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Using Ludo</div>
+      <a href="#ludo-animation" class="sidebar-link">Animation &amp; keys</a>
+      <a href="#ludo-layers" class="sidebar-link">Layer controls</a>
+      <a href="#ludo-text" class="sidebar-link">Text tools</a>
+      <a href="#ludo-layout" class="sidebar-link">Layout &amp; colour</a>
+      <a href="#ludo-export" class="sidebar-link">Export</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Troubleshooting</div>
+      <a href="#ludo-troubleshooting" class="sidebar-link">Common issues</a>
+      <a href="#ludo-faq" class="sidebar-link">FAQ</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Support</div>
+      <a href="#ludo-contact" class="sidebar-link">Contact us</a>
+    </div>
+  </aside>
+
+  <main class="main">
+    <p class="section-label">Help centre</p>
+    <h1>Using Ludo</h1>
+    <p class="page-sub">Everything you need to animate, arrange, and export everyday After Effects work from one panel.</p>
+
+    <div class="help-section" id="ludo-install">
+      <h2>Installation</h2>
+      <p>Ludo is a CEP panel for Adobe After Effects. The panel appears under <strong>Window → Extensions</strong> after you install it and fully restart AE.</p>
+      <p>Full step-by-step instructions are on the <a href="/download">download page</a>.</p>
+
+      <h3>Windows (recommended)</h3>
+      <p>Download <strong>Keyweaver Installer</strong> from the <a href="/download">download page</a> and run <strong>Keyweaver-Setup.exe</strong>. Open <strong>Keyweaver Manager</strong>, click <strong>Install</strong> on Ludo, then fully quit and reopen After Effects.</p>
+
+      <h3>Windows (zip fallback)</h3>
+      <p>Download the Ludo zip, extract it, and double-click <strong>Install-Ludo.cmd</strong>.</p>
+
+      <h3>macOS</h3>
+      <p>Extract the zip and double-click <strong>Install-Ludo.command</strong>. If macOS blocks it, right-click → <strong>Open</strong> → <strong>Open</strong> once.</p>
+      <div class="note note-warn">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <p>After installing, you must fully quit and relaunch After Effects. Restarting is required - closing and reopening a panel is not enough.</p>
+      </div>
+    </div>
+
+    <div class="help-section" id="ludo-first-steps">
+      <h2>First steps</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <h4>Open the panel</h4>
+            <p>In After Effects, go to Window → Extensions → Keyweaver - Ludo.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <h4>Select a layer or keys</h4>
+            <p>Open a composition and select the layers or keyframes you want to work on. Ludo enables tools based on what you have selected.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <h4>Pick a tool category</h4>
+            <p>Expand Animation, Layer, Text, Colour, Layout, Extras, or Export and apply a tool. Changes write to native AE properties and layers.</p>
+          </div>
+        </div>
+      </div>
+      <div class="note note-success">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        <p>Ludo does not use Keyweaver Credits. You can use the full toolkit without signing in for credits.</p>
+      </div>
+    </div>
+
+    <div class="help-section" id="ludo-credits">
+      <h2>Credits &amp; account</h2>
+      <p>Ludo does not draw from your Keyweaver Credits balance. Animation, keyframe, text, layout, colour, and export tools run locally in After Effects.</p>
+      <p>You can still sign in from the account menu to manage your Keyweaver account, or open the other AI plugins from <strong>Extras</strong>.</p>
+    </div>
+
+    <div class="help-section" id="ludo-animation">
+      <h2>Animation &amp; keys</h2>
+      <p>Use <strong>Animation controls</strong> for ease curves and live expressions, plus keyframe helpers.</p>
+      <h3>Easing</h3>
+      <p>Choose an ease curve (Linear, Bezier, Smooth, Soft, Natural, Punchy, Snappy, Whip, Bounce, Overshoot, Spring, and more). Target Start, End, or All keys, and apply In, Out, or All directions.</p>
+      <h3>Keyframe tools</h3>
+      <p>With multiple keys selected across layers: <strong>Stagger</strong>, <strong>Align</strong>, <strong>Reverse</strong>, <strong>Distribute</strong>, and <strong>Mirror</strong>. Stagger includes a gap control.</p>
+    </div>
+
+    <div class="help-section" id="ludo-layers">
+      <h2>Layer controls</h2>
+      <p>Apply transitions, loops, and simple physics-style motion to selected layers.</p>
+      <ul>
+        <li><strong>Transitions</strong> - Fade, Slide, Scale, Drop, Bounce, Roll, Blur, and more (in or out)</li>
+        <li><strong>Looping</strong> - Float, Pulse, Shake, Drift, Spin, Wiggle</li>
+        <li><strong>Physics / Collider</strong> - optional motion helpers with clear/reset controls</li>
+      </ul>
+    </div>
+
+    <div class="help-section" id="ludo-text">
+      <h2>Text tools</h2>
+      <p>Select a text layer to unlock text helpers.</p>
+      <ul>
+        <li><strong>Split characters</strong> - break glyphs into layers (optional precomp)</li>
+        <li><strong>Stagger / Animate on</strong> - Fade on, Slide up, Typewriter, Cascade, Smooth in, and more</li>
+        <li><strong>Blink cursor</strong> - available when Typewriter is on</li>
+        <li><strong>Text box</strong> - stroke box with padding, width, roundness, and colour</li>
+        <li><strong>Copy style to all text</strong> - match the selected text layer’s style across other text in the comp</li>
+      </ul>
+    </div>
+
+    <div class="help-section" id="ludo-layout">
+      <h2>Layout &amp; colour</h2>
+      <h3>Layout</h3>
+      <p>Use the <strong>Cloner</strong> (Linear, Grid, or Radial) with live effectors for scale, spacing, opacity, rotation, and time. Arrange selected layers in a grid, or open Effect Controls for the cloner driver.</p>
+      <h3>Colour palette</h3>
+      <p>Save swatches, sample from the comp, and apply colours to text, solids, shapes, lights, and Color Controls. Swatches are stored locally in the panel.</p>
+      <h3>Extras</h3>
+      <p>Launch Cuemark, Superconductor, Trillian, or Tamborine from Ludo - or open Keyweaver Manager if a plugin is missing.</p>
+    </div>
+
+    <div class="help-section" id="ludo-export">
+      <h2>Export</h2>
+      <h3>Still frame</h3>
+      <p>Export the current frame as PNG, JPEG, TIFF, or PSD with a save dialog. The Render Queue window stays out of the way.</p>
+      <h3>GIF</h3>
+      <p>Export the work area as a GIF. Choose scale, frame skip, and compression - the panel shows a live size estimate. GIF export needs ffmpeg (bundled with the Ludo install, or it can fall back to Cuemark’s bundled copy if present).</p>
+    </div>
+
+    <div class="help-section" id="ludo-troubleshooting">
+      <h2>Troubleshooting</h2>
+      <h3>Panel doesn't appear in Window → Extensions</h3>
+      <p>Reinstall from Keyweaver Manager or a fresh zip, then fully quit and relaunch After Effects.</p>
+      <h3>Tools are greyed out</h3>
+      <p>Open a composition and select a layer or keyframes that match the tool. Text tools need a text layer; keyframe tools need selected keys.</p>
+      <h3>GIF export fails</h3>
+      <p>Confirm ffmpeg is available (reinstall Ludo, or install Cuemark which also bundles ffmpeg), then try again.</p>
+      <h3>Blank white panel</h3>
+      <p>Re-copy the panel from a fresh zip and fully relaunch AE. If still blank, right-click inside the panel and choose <strong>Inspect</strong>.</p>
+    </div>
+
+    <div class="help-section" id="ludo-faq">
+      <h2>FAQ</h2>
+      <div class="faq-item">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          <span>Does Ludo use credits?</span>
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-a">No. Ludo does not draw from your Keyweaver Credits balance.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          <span>What is included?</span>
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-a">Animation easing, keyframe tools, layer transitions and loops, text helpers, layout/cloner, colour palette, frame export, and work-area GIF export.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          <span>Are the results editable in After Effects?</span>
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-a">Yes. Ludo writes native properties, expressions, and layers - you can keep editing everything in the timeline after you apply a tool.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          <span>How do I update Ludo?</span>
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-a">On Windows, use Keyweaver Manager. On macOS, download the latest zip from the <a href="/download">download page</a> and run the installer again. Fully quit and reopen After Effects after updating.</div>
+      </div>
+    </div>
+
+    <div class="help-section" id="ludo-contact">
+      <h2>Still need help?</h2>
+      <div class="contact-card">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </div>
+        <div class="contact-info">
+          <h3>Email support</h3>
+          <p>We typically respond within one business day.<br />
+          <a href="mailto:hello@keyweaver.io">hello@keyweaver.io</a></p>
+        </div>
+      </div>
+    </div>
+  </main>
 </div>
 
 <footer>
@@ -807,6 +1468,14 @@
       }
     }
 
+    function scrollToId(id) {
+      var target = document.getElementById(id);
+      if (!target) return;
+      setTimeout(function () {
+        try { target.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (e) {}
+      }, 50);
+    }
+
     tabs.forEach(function (tab) {
       tab.addEventListener('click', function () {
         show(tab.getAttribute('data-help'), { updateHash: true });
@@ -824,41 +1493,43 @@
         show(raw, { updateHash: false });
         return;
       }
-      // Legacy product-install: #superconductor-install
-      var maybeProduct = raw.split('-')[0];
-      if (valid[maybeProduct] && raw.indexOf('-') > 0) {
-        show(maybeProduct, { updateHash: false });
-        return;
+      // Prefixed section: #superconductor-install, #ludo-export, …
+      var dash = raw.indexOf('-');
+      if (dash > 0) {
+        var product = raw.slice(0, dash);
+        if (valid[product]) {
+          show(product, { updateHash: false });
+          scrollToId(raw);
+          return;
+        }
       }
       // Cuemark section deep-link: #install, #credits, #faq, …
       show('cuemark', { updateHash: false });
-      var target = document.getElementById(raw);
-      if (target) {
-        setTimeout(function () {
-          try { target.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (e) {}
-        }, 50);
-      }
+      scrollToId(raw);
     }
 
     applyFromHash();
     window.addEventListener('hashchange', applyFromHash);
   })();
 
-  // Highlight active sidebar link on scroll (Cuemark panel)
-  const sections = document.querySelectorAll('#help-panel-cuemark .help-section');
-  const links = document.querySelectorAll('#help-panel-cuemark .sidebar-link');
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        links.forEach(l => l.classList.remove('active'));
-        const active = document.querySelector('#help-panel-cuemark .sidebar-link[href="#' + entry.target.id + '"]');
+  // Highlight active sidebar link on scroll (active help panel)
+  (function initHelpSidebarSpy() {
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var panel = entry.target.closest('[data-help-panel]');
+        if (!panel || !panel.classList.contains('is-active')) return;
+        var links = panel.querySelectorAll('.sidebar-link');
+        links.forEach(function (l) { l.classList.remove('active'); });
+        var active = panel.querySelector('.sidebar-link[href="#' + entry.target.id + '"]');
         if (active) active.classList.add('active');
-      }
-    });
-  }, { rootMargin: '-20% 0px -70% 0px' });
+      });
+    }, { rootMargin: '-20% 0px -70% 0px' });
 
-  sections.forEach(s => observer.observe(s));
+    document.querySelectorAll('.help-panel .help-section').forEach(function (s) {
+      observer.observe(s);
+    });
+  })();
 
   (function initHelpVideo() {
     var playBtn = document.getElementById('help-video-play');
