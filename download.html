@@ -10,10 +10,14 @@
 
 <link rel="stylesheet" href="/css/nav-brand.css" />
   <link rel="stylesheet" href="/css/chrome.css" />
+  <link rel="stylesheet" href="/css/site.css" />
   <link rel="stylesheet" href="/css/help-widget.css" />
   <title>Download Keyweaver — After Effects plugins</title>
   <meta name="description" content="Download Keyweaver Manager for Windows or install Cuemark, Superconductor, Trillian, Tamborine, and Ludo on macOS. Free to install." />
   <link rel="canonical" href="https://keyweaver.io/download" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Keyweaver" />
+  <meta property="og:image" content="https://keyweaver.io/images/keyweaver-logo.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -511,16 +515,28 @@
 </head>
 <body>
 
-<nav>
-  <a href="/" class="nav-logo" aria-label="Keyweaver"><img src="/images/keyweaver-logo.svg" alt="" class="nav-logo-img" width="162" height="28" /></a>
+<nav class="site-nav" aria-label="Primary">
+  <a href="/" class="nav-brand" aria-label="Keyweaver"><img src="/images/keyweaver-logo.svg" alt="" width="162" height="28" /></a>
   <ul class="nav-links">
-    <li><a href="/">Plugins</a></li>
+    <li>
+      <details class="nav-products">
+        <summary>Plugins</summary>
+        <div class="nav-products-menu" role="menu">
+          <a href="/cuemark" role="menuitem">Cuemark<span>AI Captions</span></a>
+          <a href="/superconductor" role="menuitem">Superconductor<span>AI Video</span></a>
+          <a href="/trillian" role="menuitem">Trillian<span>AI Voiceover</span></a>
+          <a href="/tamborine" role="menuitem">Tamborine<span>AI Music &amp; SFX</span></a>
+          <a href="/ludo" role="menuitem">Ludo<span>Motion Toolkit</span></a>
+        </div>
+      </details>
+    </li>
     <li><a href="/pricing">Pricing</a></li>
+    <li><a href="/download">Download</a></li>
     <li><a href="/help">Help</a></li>
   </ul>
-  <div style="display:flex;gap:0.75rem;">
+  <div class="nav-cta">
     <a href="/login" class="btn btn-ghost">Sign in</a>
-    <a href="/signup" class="btn btn-ghost">Create account</a>
+    <a href="/download" class="btn btn-primary">Download free</a>
   </div>
 </nav>
 
@@ -559,7 +575,7 @@
             <h3>Cuemark</h3>
             <p>macOS 12+ · After Effects 2022+</p>
           </div>
-          <a href="/downloads/Cuemark-Install-mac-v1.0.1.zip" class="btn-download" data-file="macZip">
+          <a href="/downloads/Cuemark-Install-mac-v1.0.1.zip" class="btn-download" data-file="macZip" data-keep-label>
             <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             <span class="btn-download-label">Download Cuemark</span>
           </a>
@@ -1216,7 +1232,10 @@
     el.classList.remove('is-loading');
     el.removeAttribute('aria-disabled');
     var label = el.querySelector('.btn-download-label');
-    if (label && DOWNLOAD_LABELS[key]) { label.textContent = DOWNLOAD_LABELS[key]; }
+    // Preserve per-plugin Mac labels (data-keep-label) — do not overwrite with generic macZip text
+    if (label && DOWNLOAD_LABELS[key] && !el.hasAttribute('data-keep-label')) {
+      label.textContent = DOWNLOAD_LABELS[key];
+    }
   }
 
   // Resolve download URLs (GitHub Releases - Vercel cannot host ~140 MB of installers)

@@ -10,10 +10,14 @@
 
 <link rel="stylesheet" href="/css/nav-brand.css" />
   <link rel="stylesheet" href="/css/chrome.css" />
+  <link rel="stylesheet" href="/css/site.css" />
   <link rel="stylesheet" href="/css/help-widget.css" />
   <title>Pricing — Keyweaver Credits</title>
   <meta name="description" content="Keyweaver credit packs and subscriptions for Cuemark, Superconductor, Trillian, and Tamborine. Ludo is free." />
   <link rel="canonical" href="https://keyweaver.io/pricing" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Keyweaver" />
+  <meta property="og:image" content="https://keyweaver.io/images/keyweaver-logo.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -481,16 +485,28 @@
 </head>
 <body>
 
-<nav>
-  <a href="/" class="nav-logo" aria-label="Keyweaver"><img src="/images/keyweaver-logo.svg" alt="" class="nav-logo-img" width="162" height="28" /></a>
+<nav class="site-nav" aria-label="Primary">
+  <a href="/" class="nav-brand" aria-label="Keyweaver"><img src="/images/keyweaver-logo.svg" alt="" width="162" height="28" /></a>
   <ul class="nav-links">
-    <li><a href="/">Plugins</a></li>
+    <li>
+      <details class="nav-products">
+        <summary>Plugins</summary>
+        <div class="nav-products-menu" role="menu">
+          <a href="/cuemark" role="menuitem">Cuemark<span>AI Captions</span></a>
+          <a href="/superconductor" role="menuitem">Superconductor<span>AI Video</span></a>
+          <a href="/trillian" role="menuitem">Trillian<span>AI Voiceover</span></a>
+          <a href="/tamborine" role="menuitem">Tamborine<span>AI Music &amp; SFX</span></a>
+          <a href="/ludo" role="menuitem">Ludo<span>Motion Toolkit</span></a>
+        </div>
+      </details>
+    </li>
+    <li><a href="/pricing">Pricing</a></li>
     <li><a href="/download">Download</a></li>
     <li><a href="/help">Help</a></li>
   </ul>
-  <div style="display:flex;gap:0.75rem;">
+  <div class="nav-cta">
     <a href="/login" class="btn btn-ghost">Sign in</a>
-    <a href="/signup" class="btn btn-primary">Get started free</a>
+    <a href="/download" class="btn btn-primary">Download free</a>
   </div>
 </nav>
 

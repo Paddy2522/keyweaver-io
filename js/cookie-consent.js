@@ -1,7 +1,7 @@
 /**
- * Cuemark - cookie consent (UK/EU).
- * Meta basic PageView loads for ad measurement; richer conversion tags and
- * Google Ads load only after opt-in.
+ * Keyweaver cookie consent (UK/EU).
+ * Strictly necessary storage only by default.
+ * Marketing tags (Meta + Google Ads) load only after Accept.
  */
 (function (global) {
   'use strict';
@@ -12,6 +12,7 @@
   var marketingLoaded = false;
   var metaPageViewLoaded = false;
   var bannerEl = null;
+  var consentDefaultsSet = false;
 
   function getConsent() {
     try {
@@ -28,8 +29,24 @@
       global.localStorage.setItem(CONSENT_KEY, JSON.stringify({
         marketing: !!marketing,
         ts: new Date().toISOString(),
-        v: 1
+        v: 2
       }));
+    } catch (e) {}
+  }
+
+  function setConsentDefaultsDenied() {
+    if (consentDefaultsSet) { return; }
+    consentDefaultsSet = true;
+    global.dataLayer = global.dataLayer || [];
+    global.gtag = global.gtag || function () { global.dataLayer.push(arguments); };
+    try {
+      gtag('consent', 'default', {
+        ad_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied',
+        analytics_storage: 'denied',
+        wait_for_update: 500
+      });
     } catch (e) {}
   }
 
@@ -44,7 +61,6 @@
   function loadGoogleAds() {
     global.dataLayer = global.dataLayer || [];
     global.gtag = global.gtag || function () { global.dataLayer.push(arguments); };
-    gtag('js', new Date());
     gtag('consent', 'update', {
       ad_storage: 'granted',
       ad_user_data: 'granted',
@@ -121,7 +137,7 @@
     bannerEl.innerHTML =
       '<div class="cuemark-cookie-inner">' +
         '<p class="cuemark-cookie-text">' +
-          'We use strictly necessary storage to keep you signed in. We use Meta for basic ad measurement, and with your permission we also use Google and richer conversion tags. ' +
+          'We use strictly necessary storage to keep you signed in and run the site. Optional marketing cookies (Meta and Google) are used only if you accept. ' +
           '<a href="/legal/cookies">Cookie Policy</a> · <a href="/legal/privacy">Privacy Policy</a>.' +
         '</p>' +
         '<div class="cuemark-cookie-actions">' +
@@ -156,7 +172,7 @@
   }
 
   function init() {
-    loadMetaPageView();
+    setConsentDefaultsDenied();
     var consent = getConsent();
     if (consent && consent.marketing) {
       loadMarketingTags();
@@ -167,6 +183,7 @@
         document.addEventListener('DOMContentLoaded', buildBanner);
       }
     }
+    // Rejected or undecided → no Meta / Google until Accept
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', injectFooterSettingsLink);
     } else {
