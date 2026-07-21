@@ -55,17 +55,15 @@ body {
   align-items: center;
   text-decoration: none;
   flex-shrink: 0;
-  font-family: 'Syne', sans-serif;
-  font-weight: 800;
-  font-size: 1.15rem;
-  letter-spacing: -0.04em;
-  color: var(--text);
 }
 
 .nav-brand img {
   height: 28px;
   width: auto;
+  max-width: min(42vw, 168px);
   display: block;
+  object-fit: contain;
+  object-position: left center;
 }
 
 .nav-links {

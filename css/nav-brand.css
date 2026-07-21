@@ -1,42 +1,84 @@
-/* Cuemark nav wordmark — outlined SVG at 28px height */
-.nav-logo {
-  display: flex;
-  align-items: center;
-  text-decoration: none;
-  flex-shrink: 1;
-  min-width: 0;
-}
-
-.nav-logo-img {
-  height: 28px;
-  width: auto;
-  max-width: 100%;
-  display: block;
-  object-fit: contain;
-  object-position: left center;
-}
-
-.nav-cta {
-  flex-shrink: 0;
-}
-
-@media (max-width: 640px) {
-  .nav-logo {
-    max-width: min(52vw, 168px);
-  }
-
-  .nav-logo-img {
-    height: 20px;
-  }
-
-  .nav-cta {
-    gap: 0.4rem;
-  }
-
-  .nav-cta .btn {
-    height: 32px;
-    padding: 0 0.65rem;
-    font-size: 12px;
-    white-space: nowrap;
-  }
-}
+/* Keyweaver nav wordmark — SVG at 28px height */
+
+.nav-logo {
+
+  display: flex;
+
+  align-items: center;
+
+  text-decoration: none;
+
+  flex-shrink: 1;
+
+  min-width: 0;
+
+}
+
+
+
+.nav-logo-img {
+
+  height: 28px;
+
+  width: auto;
+
+  max-width: 100%;
+
+  display: block;
+
+  object-fit: contain;
+
+  object-position: left center;
+
+}
+
+
+
+.nav-cta {
+
+  flex-shrink: 0;
+
+}
+
+
+
+@media (max-width: 640px) {
+
+  .nav-logo {
+
+    max-width: min(52vw, 168px);
+
+  }
+
+
+
+  .nav-logo-img {
+
+    height: 20px;
+
+  }
+
+
+
+  .nav-cta {
+
+    gap: 0.4rem;
+
+  }
+
+
+
+  .nav-cta .btn {
+
+    height: 32px;
+
+    padding: 0 0.65rem;
+
+    font-size: 12px;
+
+    white-space: nowrap;
+
+  }
+
+}
+
