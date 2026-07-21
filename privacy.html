@@ -186,12 +186,12 @@
   <div class="summary-box">
     <h2>Plain English summary</h2>
     <ul>
-      <li>We process media you submit (such as audio for captions, prompts for video/voice/SFX) to run the features you request. We do not sell your content or use it to train our own models.</li>
+      <li>We process media and prompts you submit (audio for Cuemark captions; prompts and optional reference images for Superconductor, Trillian, and Tamborine) only to run the features you request.</li>
       <li>We may store job metadata and outputs needed to operate the product (for example transcripts for Cuemark restyle, or generation history for AI tools).</li>
-      <li>We do not sell your data. We do not use your content to train AI models.</li>
-      <li>We use Supabase (database), Stripe (payments), and Vercel (hosting). All are GDPR-compliant.</li>
-      <li>You can delete your account and all associated data at any time from your account page.</li>
-      <li>Marketing emails are optional at signup - we only email you about product news if you opt in.</li>
+      <li>We do not sell your data. We do not use your content to train our own AI models.</li>
+      <li>We use processors such as Supabase, Stripe, Vercel, OpenAI, Replicate, and ElevenLabs under data-processing terms. See section 4.</li>
+      <li>You can delete your account and associated product data at any time from your account page.</li>
+      <li>Marketing emails are optional at signup — we only email you about product news if you opt in.</li>
     </ul>
   </div>
 
@@ -214,7 +214,7 @@
       <li>Marketing preferences - only if you tick the optional checkbox at signup (first name, email address, consent date, and consent wording version)</li>
     </ul>
 
-    <h3>Audio and transcript data</h3>
+    <h3>Audio and transcript data (Cuemark)</h3>
     <p>When you generate captions, the Cuemark plugin sends your audio file to our backend, which forwards it to the OpenAI Whisper API for transcription. Here is exactly what happens:</p>
 
     <table class="data-table">
@@ -258,12 +258,22 @@
       <p><strong>Important:</strong> OpenAI's API terms state that audio submitted via the API is not used to train their models. We recommend reviewing <a href="https://openai.com/policies/api-data-usage-policies" target="_blank" rel="noopener">OpenAI's API data usage policy</a> for the latest information.</p>
     </div>
 
+    <h3>AI generation data (Superconductor, Trillian, Tamborine)</h3>
+    <p>When you use our AI generation plugins, we process the inputs you provide so the feature can run, and we may keep related job records so you can review history and download results:</p>
+    <ul>
+      <li><strong>Prompts and settings</strong> — text prompts, style/voice/length options, and similar controls you choose in the panel</li>
+      <li><strong>Optional reference media</strong> — for example a start-frame image for Superconductor image-to-video, when you attach one</li>
+      <li><strong>Outputs and metadata</strong> — generated video/audio URLs or storage references, credit estimates/charges, status, and error messages</li>
+      <li><strong>Alignment / caption data</strong> — where a plugin returns timing data (for example Trillian voice captions), we may store it with the generation</li>
+    </ul>
+    <p>Inputs are forwarded to the third-party model providers listed in section 4 solely to fulfil your request. We do not use your prompts or outputs to train Keyweaver’s own models.</p>
+
     <h3>Usage data</h3>
     <p>We collect basic usage information including:</p>
     <ul>
-      <li>Number of generates, credits consumed, and job status (complete / failed)</li>
+      <li>Number of generates across Keyweaver plugins, credits consumed, and job status (complete / failed)</li>
       <li>Errors and crash reports to help us fix bugs</li>
-      <li>Plugin version in use</li>
+      <li>Plugin identity and version in use (for example Cuemark, Superconductor, Trillian, Tamborine, Ludo)</li>
     </ul>
     <p>We use the Meta Pixel on keyweaver.io to measure visits and ad performance from Meta (Facebook/Instagram) campaigns. Meta may set cookies or similar identifiers in your browser. See Meta’s privacy policy at <a href="https://www.facebook.com/privacy/policy/" target="_blank" rel="noopener">facebook.com/privacy/policy</a>. We use Google Ads conversion tracking (gtag.js) to measure visits and conversions from Google Ads campaigns. Google may set cookies such as <code>_gcl_au</code>. See Google’s privacy policy at <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">policies.google.com/privacy</a>.</p>
 
@@ -281,11 +291,11 @@
       </thead>
       <tbody>
         <tr>
-          <td>Providing the transcription service</td>
+          <td>Providing transcription and AI generation services</td>
           <td>Performance of a contract</td>
         </tr>
         <tr>
-          <td>Managing your account and credits</td>
+          <td>Managing your account and shared credit balance</td>
           <td>Performance of a contract</td>
         </tr>
         <tr>
@@ -311,7 +321,7 @@
       </tbody>
     </table>
 
-    <p>We do not sell your data. We do not use your audio, transcripts, or captions to train AI models.</p>
+    <p>We do not sell your data. We do not use your audio, transcripts, captions, prompts, or generated media to train Keyweaver’s own AI models.</p>
 
     <h2>4. Who we share data with</h2>
 
@@ -326,12 +336,22 @@
       <tbody>
         <tr>
           <td>OpenAI</td>
-          <td>Audio file (for transcription only)</td>
+          <td>Audio for Cuemark transcription (and related API calls where used for fallback captioning)</td>
+          <td>USA (SCCs in place)</td>
+        </tr>
+        <tr>
+          <td>Replicate</td>
+          <td>Prompts and optional reference images for Superconductor video generation</td>
+          <td>USA (SCCs in place)</td>
+        </tr>
+        <tr>
+          <td>ElevenLabs</td>
+          <td>Prompts and settings for Trillian voiceover and Tamborine music/SFX generation; may return audio and timing data</td>
           <td>USA (SCCs in place)</td>
         </tr>
         <tr>
           <td>Supabase</td>
-          <td>Account data, transcripts, job history, first-party download and panel-open analytics</td>
+          <td>Account data, transcripts, generation job history, stored outputs/metadata, first-party download and panel-open analytics</td>
           <td>EU (AWS eu-west-2)</td>
         </tr>
         <tr>
@@ -394,12 +414,13 @@
     <p>If you discover a security vulnerability, please contact us at <a href="mailto:security@keyweaver.io">security@keyweaver.io</a> before disclosing it publicly.</p>
 
     <h2>8. Cookies</h2>
-    <p>This website uses cookies and similar browser storage as follows:</p>
+    <p>keyweaver.io and Keyweaver After Effects panels use cookies and similar browser storage as follows:</p>
     <ul>
-      <li><strong>Authentication</strong> - a session token stored in localStorage to keep you signed in. This is strictly necessary.</li>
-      <li><strong>Cookie preference</strong> - we store your accept/reject choice so we do not ask on every visit.</li>
-      <li><strong>First-party product analytics</strong> - we record download clicks and plugin opens so we can understand whether installs are working.</li>
-      <li><strong>Meta Pixel and Google Ads</strong> - Meta Pixel may load for basic page-view ad measurement. Google Ads and richer conversion tags load only if you accept non-essential cookies on our banner. See our <a href="/legal/cookies">Cookie Policy</a>.</li>
+      <li><strong>Authentication</strong> — a session token stored in localStorage (website and panels) to keep you signed in to your Keyweaver account. This is strictly necessary.</li>
+      <li><strong>Cookie preference</strong> — we store your accept/reject choice so we do not ask on every visit.</li>
+      <li><strong>First-party product analytics</strong> — we record download clicks and plugin opens so we can understand whether installs are working.</li>
+      <li><strong>Panel preferences</strong> — some panels store UI preferences locally on your machine (for example layout or recent settings). These stay on your device.</li>
+      <li><strong>Meta Pixel and Google Ads</strong> — optional marketing tags on the website. Google Ads and richer conversion tags load only if you accept non-essential cookies. See our <a href="/legal/cookies">Cookie Policy</a>.</li>
     </ul>
     <p>On your first visit, a banner lets you <strong>Accept all</strong> or <strong>Reject non-essential</strong> cookies. Google Ads and richer conversion tags do not run until you accept. You can reopen the banner via <strong>Cookie settings</strong> in the footer.</p>
 

@@ -262,6 +262,7 @@ body {
   color: inherit;
   transition: border-color 0.15s, background 0.15s, transform 0.15s;
   min-height: 220px;
+  overflow: hidden;
 }
 
 .product-card:hover {
@@ -271,9 +272,11 @@ body {
 }
 
 .product-card-logo {
-  height: 28px;
+  /* Height-only scale so each SVG’s icon square stays the same size
+     (max-width was shrinking longer wordmarks and their marks with them). */
+  height: 30px;
   width: auto;
-  max-width: 180px;
+  max-width: none;
   object-fit: contain;
   object-position: left center;
   margin-bottom: 1.1rem;
@@ -327,11 +330,18 @@ body {
 }
 
 .product-hero-logo {
-  height: 36px;
+  /* Same height for every product so the left icon square matches across pages. */
+  height: 40px;
   width: auto;
-  max-width: min(90vw, 280px);
+  max-width: none;
   margin: 0 auto 1.5rem;
   display: block;
+}
+
+@media (max-width: 720px) {
+  .product-hero-logo {
+    height: 28px;
+  }
 }
 
 .product-hero-eyebrow {
