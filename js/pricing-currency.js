@@ -32,6 +32,23 @@
     },
   };
 
+  /** ISO country → display currency (matches Stripe multi-currency prices). */
+  const COUNTRY_CURRENCY = {
+    GB: 'GBP', UK: 'GBP', IM: 'GBP', JE: 'GBP', GG: 'GBP',
+    US: 'USD', CA: 'USD',
+    AT: 'EUR', BE: 'EUR', CY: 'EUR', DE: 'EUR', EE: 'EUR', ES: 'EUR',
+    FI: 'EUR', FR: 'EUR', GR: 'EUR', HR: 'EUR', IE: 'EUR', IT: 'EUR',
+    LT: 'EUR', LU: 'EUR', LV: 'EUR', MT: 'EUR', NL: 'EUR', PT: 'EUR',
+    SI: 'EUR', SK: 'EUR',
+  };
+
+  /** Non-euro Europe — show EUR (closest of our three Stripe currencies). */
+  const EUROPE_EUR_FALLBACK = new Set([
+    'AL', 'AD', 'BA', 'BG', 'BY', 'CH', 'CZ', 'DK', 'FO', 'GI', 'GL', 'HU',
+    'IS', 'LI', 'MC', 'MD', 'ME', 'MK', 'NO', 'PL', 'RO', 'RS', 'SE', 'SM',
+    'UA', 'VA', 'XK',
+  ]);
+
   const EUR_LANGS = new Set([
     'de', 'fr', 'es', 'it', 'nl', 'pt', 'pl', 'fi', 'sv', 'da', 'no', 'cs', 'sk', 'hu', 'ro',
     'el', 'hr', 'sl', 'et', 'lv', 'lt', 'mt', 'ga', 'eu', 'lb',
@@ -65,16 +82,27 @@
     return null;
   }
 
+  function currencyFromCountry(code) {
+    if (!code) return null;
+    const c = String(code).toUpperCase();
+    if (c === 'XX' || c === 'T1') return null;
+    if (COUNTRY_CURRENCY[c]) return COUNTRY_CURRENCY[c];
+    if (EUROPE_EUR_FALLBACK.has(c)) return 'EUR';
+    // Rest of world → USD (Stripe multi-currency display)
+    return 'USD';
+  }
+
   function detectDisplayCurrency() {
-    // Timezone reflects where the user actually is - prefer over browser language
-    // (many UK machines still report en-US in navigator.languages).
+    // Sync fallback: timezone, then browser language
     const tzCurrency = currencyFromTimezone(getTimezone());
     if (tzCurrency) return tzCurrency;
 
-    const langs = navigator.languages?.length ? [...navigator.languages] : [navigator.language || 'en-GB'];
+    const langs = navigator.languages && navigator.languages.length
+      ? Array.prototype.slice.call(navigator.languages)
+      : [navigator.language || 'en-GB'];
 
-    for (const raw of langs) {
-      const loc = (raw || '').toLowerCase();
+    for (var i = 0; i < langs.length; i++) {
+      const loc = (langs[i] || '').toLowerCase();
       const parts = loc.split('-');
       const lang = parts[0];
       const region = parts[1];
@@ -87,9 +115,50 @@
     return 'GBP';
   }
 
+  /**
+   * Prefer Cloudflare IP country (where the visitor actually is),
+   * then fall back to timezone / locale.
+   */
+  function detectDisplayCurrencyAsync() {
+    var fallback = detectDisplayCurrency();
+    var controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+    var timer = null;
+
+    var fetchPromise = fetch('/cdn-cgi/trace', {
+      cache: 'no-store',
+      signal: controller ? controller.signal : undefined,
+    })
+      .then(function (res) {
+        if (!res.ok) throw new Error('trace ' + res.status);
+        return res.text();
+      })
+      .then(function (text) {
+        var m = /(?:^|\n)loc=([A-Za-z]{2})(?:\n|$)/.exec(text);
+        if (!m) return fallback;
+        return currencyFromCountry(m[1]) || fallback;
+      })
+      .catch(function () {
+        return fallback;
+      });
+
+    var timeoutPromise = new Promise(function (resolve) {
+      timer = setTimeout(function () {
+        if (controller) {
+          try { controller.abort(); } catch (e) {}
+        }
+        resolve(fallback);
+      }, 1800);
+    });
+
+    return Promise.race([fetchPromise, timeoutPromise]).then(function (code) {
+      if (timer) clearTimeout(timer);
+      return code;
+    });
+  }
+
   function applyPricingPage(currency) {
     const p = CUEMARK_PRICES[currency] || CUEMARK_PRICES.GBP;
-    ['free', 'credits', 'credits-150', 'credits-500', 'sub-standard', 'sub-pro'].forEach((t) => {
+    ['free', 'credits', 'credits-150', 'credits-500', 'sub-standard', 'sub-pro'].forEach(function (t) {
       const sym = document.getElementById('sym-' + t);
       if (sym) sym.textContent = p.sym;
     });
@@ -109,14 +178,16 @@
     if (pc500d) pc500d.textContent = p.credits_500.dec;
     const note = document.getElementById('currency-note');
     if (note) {
-      note.textContent = 'Prices shown in ' + p.name + ' (' + p.code + '). Stripe checkout uses the same currency for your region.';
+      note.textContent =
+        'Prices shown in ' + p.name + ' (' + p.code +
+        '). Based on your location. Stripe checkout uses the same currency for your region.';
     }
     return p.code;
   }
 
   function applyHomePricing(currency) {
     const p = CUEMARK_PRICES[currency] || CUEMARK_PRICES.GBP;
-    document.querySelectorAll('[data-home-price]').forEach((el) => {
+    document.querySelectorAll('[data-home-price]').forEach(function (el) {
       const kind = el.dataset.homePrice;
       const sym = el.querySelector('[data-price-sym]');
       if (sym) sym.textContent = p.sym;
@@ -153,9 +224,11 @@
 
   global.CuemarkPricing = {
     PRICES: CUEMARK_PRICES,
-    detectDisplayCurrency,
-    applyPricingPage,
-    applyHomePricing,
-    applySignupPlans,
+    detectDisplayCurrency: detectDisplayCurrency,
+    detectDisplayCurrencyAsync: detectDisplayCurrencyAsync,
+    currencyFromCountry: currencyFromCountry,
+    applyPricingPage: applyPricingPage,
+    applyHomePricing: applyHomePricing,
+    applySignupPlans: applySignupPlans,
   };
 })(typeof window !== 'undefined' ? window : globalThis);

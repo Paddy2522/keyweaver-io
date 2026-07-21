@@ -865,7 +865,7 @@
       <span>What currencies are supported?</span>
       <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
     </div>
-    <div class="faq-a">We show GBP in the UK, EUR across most of Europe, and USD in the United States and Canada - based on your browser locale. Stripe checkout uses the same currency for your region. We never store card details.</div>
+    <div class="faq-a">We show GBP in the UK, EUR across the eurozone (and nearby Europe), and USD in the US, Canada, and most other countries — based on your IP location. Stripe checkout uses the same currency for your region. We never store card details.</div>
   </div>
 
   <div class="faq-item">
@@ -910,7 +910,7 @@
 <script src="/js/pricing-currency.js"></script>
 <script>
   const BACKEND = 'https://keyweaver-backend.vercel.app';
-  const displayCurrency = CuemarkPricing.detectDisplayCurrency();
+  let displayCurrency = CuemarkPricing.detectDisplayCurrency();
   CuemarkPricing.applyPricingPage(displayCurrency);
 
   let billingPeriod = 'monthly';
@@ -1072,6 +1072,14 @@
   document.getElementById('cta-credits-500').addEventListener('click', (e) => startPlanCheckout(e, 'credits_500'));
   document.getElementById('cta-sub-standard').addEventListener('click', (e) => startPlanCheckout(e, subStandardPlan));
   document.getElementById('cta-sub-pro').addEventListener('click', (e) => startPlanCheckout(e, subProPlan));
+
+  // Refine currency from Cloudflare IP country (async), then refresh prices
+  CuemarkPricing.detectDisplayCurrencyAsync().then(function (code) {
+    if (!code || code === displayCurrency) return;
+    displayCurrency = code;
+    CuemarkPricing.applyPricingPage(displayCurrency);
+    setBillingPeriod(billingPeriod);
+  });
 </script><script src="/js/cuemark-turnstile.js"></script>
   <script src="/js/help-widget.js" defer></script>
 </body>

@@ -1044,6 +1044,9 @@
 <script src="/js/pricing-currency.js"></script>
 <script>
   CuemarkPricing.applyHomePricing(CuemarkPricing.detectDisplayCurrency());
+  CuemarkPricing.detectDisplayCurrencyAsync().then(function (code) {
+    CuemarkPricing.applyHomePricing(code);
+  });
 </script><script src="/js/cuemark-turnstile.js"></script>
   <script src="/js/help-widget.js" defer></script>
 </body>

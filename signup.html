@@ -454,6 +454,9 @@
   const BACKEND = 'https://keyweaver-backend.vercel.app';
 
   CuemarkPricing.applySignupPlans(CuemarkPricing.detectDisplayCurrency());
+  CuemarkPricing.detectDisplayCurrencyAsync().then(function (code) {
+    CuemarkPricing.applySignupPlans(code);
+  });
 
   // If already logged in
   if (localStorage.getItem('cc_token')) window.location.href = '/account';
