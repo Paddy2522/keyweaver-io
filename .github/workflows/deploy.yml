@@ -25,21 +25,126 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
-      - name: Purge Cloudflare HTML cache
+      # Needs Zone → Cache Purge (+ Zone Read to resolve zone id).
+      # Optional secret CLOUDFLARE_ZONE_ID skips the zone lookup.
+      - name: Purge Cloudflare edge cache
         if: success()
         continue-on-error: true
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
         run: |
-          ZONE_ID=$(curl -fsS "https://api.cloudflare.com/client/v4/zones?name=keyweaver.io" \
-            -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
-            -H "Content-Type: application/json" | jq -r '.result[0].id')
-          if [ -z "$ZONE_ID" ] || [ "$ZONE_ID" = "null" ]; then
-            echo "Could not resolve zone id for keyweaver.io — skip purge"
+          set -euo pipefail
+
+          if [ -z "${CLOUDFLARE_API_TOKEN:-}" ]; then
+            echo "::warning::CLOUDFLARE_API_TOKEN missing — skip cache purge"
             exit 0
           fi
-          curl -fsS -X POST "https://api.cloudflare.com/client/v4/zones/$ZONE_ID/purge_cache" \
-            -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
-            -H "Content-Type: application/json" \
-            --data '{"files":["https://keyweaver.io/","https://keyweaver.io/index.html","https://keyweaver.io/download","https://keyweaver.io/download.html"]}'
-          echo "Purged key HTML URLs"
+
+          ZONE_ID="${CLOUDFLARE_ZONE_ID:-}"
+          if [ -z "$ZONE_ID" ]; then
+            ZONES_JSON=$(curl -sS "https://api.cloudflare.com/client/v4/zones?name=keyweaver.io" \
+              -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+              -H "Content-Type: application/json")
+            ZONE_ID=$(echo "$ZONES_JSON" | jq -r '.result[0].id // empty')
+            if [ -z "$ZONE_ID" ]; then
+              echo "::warning::Could not resolve zone id for keyweaver.io. Token needs Zone.Zone:Read (or set CLOUDFLARE_ZONE_ID). Response: $(echo "$ZONES_JSON" | jq -c '{success,errors}')"
+              exit 1
+            fi
+          fi
+          echo "Purging zone $ZONE_ID"
+
+          # Cloudflare allows ≤30 URLs per purge_cache call.
+          purge_batch() {
+            local payload="$1"
+            local label="$2"
+            local resp
+            resp=$(curl -sS -X POST "https://api.cloudflare.com/client/v4/zones/$ZONE_ID/purge_cache" \
+              -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+              -H "Content-Type: application/json" \
+              --data "$payload")
+            local ok
+            ok=$(echo "$resp" | jq -r '.success')
+            if [ "$ok" != "true" ]; then
+              echo "::warning::Cache purge failed ($label): $(echo "$resp" | jq -c '{success,errors,messages}')"
+              return 1
+            fi
+            echo "Purged OK ($label)"
+          }
+
+          FAIL=0
+
+          # Batch 1 — marketing HTML (clean URLs + .html)
+          if ! purge_batch '{"files":[
+            "https://keyweaver.io/",
+            "https://keyweaver.io/index.html",
+            "https://keyweaver.io/cuemark",
+            "https://keyweaver.io/cuemark.html",
+            "https://keyweaver.io/superconductor",
+            "https://keyweaver.io/superconductor.html",
+            "https://keyweaver.io/trillian",
+            "https://keyweaver.io/trillian.html",
+            "https://keyweaver.io/tamborine",
+            "https://keyweaver.io/tamborine.html",
+            "https://keyweaver.io/ludo",
+            "https://keyweaver.io/ludo.html",
+            "https://keyweaver.io/download",
+            "https://keyweaver.io/download.html",
+            "https://keyweaver.io/pricing",
+            "https://keyweaver.io/pricing.html",
+            "https://keyweaver.io/help",
+            "https://keyweaver.io/help.html",
+            "https://keyweaver.io/about",
+            "https://keyweaver.io/about.html",
+            "https://keyweaver.io/changelog",
+            "https://keyweaver.io/changelog.html",
+            "https://keyweaver.io/privacy",
+            "https://keyweaver.io/privacy.html",
+            "https://keyweaver.io/terms",
+            "https://keyweaver.io/terms.html",
+            "https://keyweaver.io/cookies",
+            "https://keyweaver.io/cookies.html",
+            "https://keyweaver.io/account",
+            "https://keyweaver.io/login",
+            "https://keyweaver.io/signup",
+            "https://keyweaver.io/forgot-password",
+            "https://keyweaver.io/reset-password",
+            "https://keyweaver.io/404.html"
+          ]}' "html-pages"; then
+            FAIL=1
+          fi
+
+          # Batch 2 — CSS / JS / JSON that browsers cache aggressively
+          if ! purge_batch '{"files":[
+            "https://keyweaver.io/css/site.css",
+            "https://keyweaver.io/css/chrome.css",
+            "https://keyweaver.io/css/nav-brand.css",
+            "https://keyweaver.io/css/cookie-consent.css",
+            "https://keyweaver.io/css/help-widget.css",
+            "https://keyweaver.io/css/blog.css",
+            "https://keyweaver.io/js/cookie-consent.js",
+            "https://keyweaver.io/js/nav-auth.js",
+            "https://keyweaver.io/js/pricing-currency.js",
+            "https://keyweaver.io/js/help-widget.js",
+            "https://keyweaver.io/js/cuemark-turnstile.js",
+            "https://keyweaver.io/js/meta-pixel-events.js",
+            "https://keyweaver.io/js/google-ads-events.js",
+            "https://keyweaver.io/js/changelog.js",
+            "https://keyweaver.io/downloads.json",
+            "https://keyweaver.io/changelog.json",
+            "https://keyweaver.io/sitemap.xml",
+            "https://keyweaver.io/images/keyweaver-logo.svg",
+            "https://keyweaver.io/installer/manifest.json"
+          ]}' "assets"; then
+            FAIL=1
+          fi
+
+          # Prefix purge — host+path, no scheme (Cloudflare API format).
+          if ! purge_batch '{"prefixes":["keyweaver.io/css","keyweaver.io/js","keyweaver.io/images","keyweaver.io/installer"]}' "prefixes"; then
+            echo "Prefix purge unavailable or rate-limited — file batches above still ran."
+          fi
+
+          if [ "$FAIL" -ne 0 ]; then
+            echo "::warning::One or more file purge batches failed. Check token has Zone.Cache Purge. Deploy itself succeeded."
+            exit 1
+          fi
