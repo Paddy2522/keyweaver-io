@@ -1,6 +1,8 @@
 name: KeyweaverManager
 options:
   bundleIdPrefix: io.keyweaver
+  # Keep objectVersion compatible with Xcode 15+ (GitHub macos-14/15 runners)
+  xcodeVersion: "15.0"
   deploymentTarget:
     macOS: "13.0"
   createIntermediateGroups: true
