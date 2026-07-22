@@ -11,3 +11,6 @@ wrangler.toml
 node_modules/
 .github/
 .git/
+mac-manager/
+mac-docs/
+dist/

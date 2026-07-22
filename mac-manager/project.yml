@@ -1,0 +1,37 @@
+name: KeyweaverManager
+options:
+  bundleIdPrefix: io.keyweaver
+  deploymentTarget:
+    macOS: "13.0"
+  createIntermediateGroups: true
+settings:
+  base:
+    PRODUCT_NAME: Keyweaver Manager
+    MARKETING_VERSION: "1.0.0"
+    CURRENT_PROJECT_VERSION: "1"
+    SWIFT_VERSION: "5.9"
+    MACOSX_DEPLOYMENT_TARGET: "13.0"
+    CODE_SIGN_STYLE: Manual
+    ENABLE_HARDENED_RUNTIME: YES
+targets:
+  KeyweaverManager:
+    type: application
+    platform: macOS
+    sources:
+      - path: KeyweaverManager
+        excludes:
+          - Resources/Info.plist
+          - Resources/KeyweaverManager.entitlements
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: io.keyweaver.manager
+        INFOPLIST_FILE: KeyweaverManager/Resources/Info.plist
+        CODE_SIGN_ENTITLEMENTS: KeyweaverManager/Resources/KeyweaverManager.entitlements
+        LD_RUNPATH_SEARCH_PATHS: "@executable_path/../Frameworks"
+        GENERATE_INFOPLIST_FILE: NO
+        COMBINE_HIDPI_IMAGES: YES
+    info:
+      path: KeyweaverManager/Resources/Info.plist
+      properties:
+        CFBundleDisplayName: Keyweaver Manager
+        LSApplicationCategoryType: public.app-category.developer-tools
