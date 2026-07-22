@@ -49,8 +49,8 @@
                                                        "installScript":  "cuemark-install-macos.sh"
                                                    }
                                        },
-                         "helpUrl":  "https://keyweaver.io/help#cuemark",
-                         "menuPath":  "Window -\u003e Extensions -\u003e Keyweaver - Cuemark",
+                         "helpUrl":  "https://keyweaver.io/help",
+                         "menuPath":  "Window -\u003e Extensions -\u003e Cuemark by Keyweaver",
                          "accent":  "#3D9CF0"
                      },
                      {
@@ -62,19 +62,19 @@
                          "platforms":  {
                                            "win":  {
                                                        "packageUrl":  "https://keyweaver.io/downloads/Superconductor-Install-win-v0.1.0.zip",
-                                                       "sha256":  "c3a182b77be37be3647b572084937f15ee954ce2d86d0b44861463790fdb8cd8",
-                                                       "sizeBytes":  126271,
+                                                       "sha256":  "daaec5291ab05c7ab886af71c506451df365fce22985efcf2322b07ca38ffe1d",
+                                                       "sizeBytes":  126066,
                                                        "installScript":  "superconductor-install-windows.ps1"
                                                    },
                                            "mac":  {
                                                        "packageUrl":  "https://keyweaver.io/downloads/Superconductor-Install-mac-v0.1.0.zip",
-                                                       "sha256":  "32f080538030240116943a697eb219cfc06207e4ba1a7cc8da2ae1f61752da79",
-                                                       "sizeBytes":  125695,
+                                                       "sha256":  "307f40d1ed6aecb8a2fde25fe6a98193bafa09b05be602a88333ed89f9b96785",
+                                                       "sizeBytes":  125490,
                                                        "installScript":  "superconductor-install-macos.sh"
                                                    }
                                        },
-                         "helpUrl":  "https://keyweaver.io/help#superconductor",
-                         "menuPath":  "Window -\u003e Extensions -\u003e Keyweaver - Superconductor",
+                         "helpUrl":  "https://keyweaver.io/superconductor",
+                         "menuPath":  "Window -\u003e Extensions -\u003e Superconductor by Keyweaver",
                          "accent":  "#5B6BF8"
                      },
                      {
@@ -97,7 +97,7 @@
                                                        "installScript":  "ludo-install-macos.sh"
                                                    }
                                        },
-                         "helpUrl":  "https://keyweaver.io/help#ludo",
+                         "helpUrl":  "https://keyweaver.io/help",
                          "menuPath":  "Window -\u003e Extensions -\u003e Keyweaver - Ludo",
                          "accent":  "#34D399"
                      },
@@ -121,7 +121,7 @@
                                                        "installScript":  "trillian-install-macos.sh"
                                                    }
                                        },
-                         "helpUrl":  "https://keyweaver.io/help#trillian",
+                         "helpUrl":  "https://keyweaver.io/help",
                          "menuPath":  "Window -\u003e Extensions -\u003e Keyweaver - Trillian",
                          "accent":  "#B56BFF"
                      },
@@ -145,7 +145,7 @@
                                                        "installScript":  "tamborine-install-macos.sh"
                                                    }
                                        },
-                         "helpUrl":  "https://keyweaver.io/help#tamborine",
+                         "helpUrl":  "https://keyweaver.io/help",
                          "menuPath":  "Window -\u003e Extensions -\u003e Keyweaver - Tamborine",
                          "accent":  "#E8952F"
                      }
