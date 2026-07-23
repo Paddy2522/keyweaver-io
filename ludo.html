@@ -19,6 +19,200 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    .ludo-kit {
+      margin-top: 2.75rem;
+      padding: 1.5rem;
+      border: 1px solid var(--edge);
+      border-radius: 16px;
+      background:
+        radial-gradient(ellipse 60% 50% at 10% 0%, rgba(52, 211, 153, 0.08), transparent 55%),
+        var(--surface);
+    }
+    .ludo-kit-head {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.25rem 1.5rem;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 1.5rem;
+    }
+    .ludo-kit-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.35rem, 3vw, 1.75rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin: 0 0 0.4rem;
+    }
+    .ludo-kit-sub {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+      max-width: 420px;
+      margin: 0;
+    }
+    .ludo-kit-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+    .ludo-kit-filter {
+      appearance: none;
+      border: 1px solid var(--edge);
+      background: var(--lift);
+      color: var(--muted);
+      font: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 0.4rem 0.75rem;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: color .2s, border-color .2s, background .2s, transform .2s;
+    }
+    .ludo-kit-filter:hover {
+      color: var(--text);
+      border-color: rgba(52, 211, 153, 0.35);
+    }
+    .ludo-kit-filter.is-active {
+      color: #062016;
+      background: var(--accent2);
+      border-color: transparent;
+    }
+    .ludo-kit-groups {
+      display: grid;
+      gap: 0.85rem;
+    }
+    .ludo-kit-group {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 1rem;
+      padding: 1.15rem 1.2rem;
+      border-radius: 12px;
+      border: 1px solid var(--edge);
+      background: rgba(10, 10, 15, 0.35);
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity .45s ease, transform .45s ease, border-color .25s;
+    }
+    .ludo-kit-group.is-in {
+      opacity: 1;
+      transform: none;
+    }
+    .ludo-kit-group.is-hidden {
+      display: none;
+    }
+    .ludo-kit-group:hover {
+      border-color: rgba(52, 211, 153, 0.35);
+    }
+    .ludo-kit-group-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 11px;
+      display: grid;
+      place-items: center;
+      color: var(--accent2);
+      background: rgba(52, 211, 153, 0.1);
+      border: 1px solid rgba(52, 211, 153, 0.2);
+    }
+    .ludo-kit-group-icon svg { width: 22px; height: 22px; }
+    .ludo-kit-group-body h4 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.05rem;
+      margin: 0 0 0.35rem;
+    }
+    .ludo-kit-group-body > p {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+      margin: 0 0 0.75rem;
+    }
+    .ludo-chip-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--subtle);
+      margin: 0.85rem 0 0.45rem !important;
+    }
+    .ludo-chip-row {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin: 0;
+      padding: 0;
+    }
+    .ludo-chip {
+      position: relative;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.38rem 0.7rem;
+      border-radius: 999px;
+      border: 1px solid var(--edge);
+      background: var(--lift);
+      color: var(--text);
+      font-size: 12.5px;
+      font-weight: 500;
+      line-height: 1.2;
+      transition: transform .2s, border-color .2s, background .2s;
+    }
+    .ludo-chip em {
+      font-style: normal;
+      color: var(--accent2);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .ludo-chip:hover {
+      transform: translateY(-1px);
+      border-color: rgba(52, 211, 153, 0.45);
+      background: rgba(52, 211, 153, 0.08);
+    }
+    .ludo-chip-spark {
+      width: 14px;
+      height: 8px;
+      border-radius: 2px;
+      background:
+        linear-gradient(90deg, transparent 0%, var(--accent2) 45%, transparent 100%);
+      opacity: 0.7;
+      flex: 0 0 auto;
+    }
+    .ludo-chip[data-ease="linear"] .ludo-chip-spark {
+      background: linear-gradient(90deg, var(--muted), var(--muted));
+      opacity: 0.5;
+    }
+    .ludo-chip[data-ease="bounce"] .ludo-chip-spark,
+    .ludo-chip[data-ease="overshoot"] .ludo-chip-spark,
+    .ludo-chip[data-ease="spring"] .ludo-chip-spark {
+      animation: ludoSpark 1.4s ease-in-out infinite;
+    }
+    .ludo-chip-loop {
+      animation: ludoPulse 2.4s ease-in-out infinite;
+    }
+    .ludo-chip-live {
+      border-color: rgba(52, 211, 153, 0.35);
+    }
+    @keyframes ludoSpark {
+      0%, 100% { transform: translateX(-2px); opacity: 0.45; }
+      50% { transform: translateX(2px); opacity: 1; }
+    }
+    @keyframes ludoPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0); }
+      50% { box-shadow: 0 0 0 4px rgba(52, 211, 153, 0.08); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .ludo-kit-group { opacity: 1; transform: none; transition: none; }
+      .ludo-chip-loop,
+      .ludo-chip-spark { animation: none !important; }
+    }
+    @media (max-width: 640px) {
+      .ludo-kit { padding: 1.1rem; }
+      .ludo-kit-group { grid-template-columns: 1fr; gap: 0.75rem; }
+    }
+  </style>
 </head>
 <body class="theme-ludo">
 <nav class="site-nav" aria-label="Primary">
@@ -67,7 +261,7 @@
         <div class="step-card">
           <div class="step-num">1</div>
           <h3>Open Ludo</h3>
-          <p>Install from Keyweaver Manager (or the Mac zip), then open the panel in After Effects.</p>
+          <p>Install from Keyweaver Manager, then open the panel in After Effects.</p>
         </div>
         <div class="step-card">
           <div class="step-num">2</div>
@@ -85,7 +279,7 @@
 
 <hr class="divider" />
 
-<section class="section">
+<section class="section" id="features">
   <div class="container">
     <p class="section-label">Features</p>
     <h2 class="section-title">Built for real edit sessions</h2>
@@ -107,6 +301,213 @@
         <p>Export frames or a work-area GIF without digging through the Render Queue.</p>
       </div>
     </div>
+
+    <div class="ludo-kit" id="ludo-kit">
+      <div class="ludo-kit-head">
+        <div>
+          <p class="section-label" style="margin-bottom:0.5rem;">Full toolkit</p>
+          <h3 class="ludo-kit-title">Everything in the panel</h3>
+          <p class="ludo-kit-sub">Filter a category, or browse the full inventory - the same tools you get in After Effects.</p>
+        </div>
+        <div class="ludo-kit-filters" role="tablist" aria-label="Ludo feature categories">
+          <button type="button" class="ludo-kit-filter is-active" data-kit="all" role="tab" aria-selected="true">All</button>
+          <button type="button" class="ludo-kit-filter" data-kit="easing" role="tab" aria-selected="false">Easing</button>
+          <button type="button" class="ludo-kit-filter" data-kit="keys" role="tab" aria-selected="false">Keys</button>
+          <button type="button" class="ludo-kit-filter" data-kit="layers" role="tab" aria-selected="false">Layers</button>
+          <button type="button" class="ludo-kit-filter" data-kit="text" role="tab" aria-selected="false">Text</button>
+          <button type="button" class="ludo-kit-filter" data-kit="cloner" role="tab" aria-selected="false">Cloner</button>
+          <button type="button" class="ludo-kit-filter" data-kit="colour" role="tab" aria-selected="false">Colour</button>
+          <button type="button" class="ludo-kit-filter" data-kit="export" role="tab" aria-selected="false">Export</button>
+        </div>
+      </div>
+
+      <div class="ludo-kit-groups">
+        <article class="ludo-kit-group" data-kit="easing">
+          <div class="ludo-kit-group-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M3 17c4-10 6 6 10-2s5-8 8-8"/><circle cx="21" cy="7" r="1.5" fill="currentColor" stroke="none"/></svg>
+          </div>
+          <div class="ludo-kit-group-body">
+            <h4>Easing curves</h4>
+            <p>Apply to Start, End, or All keys - Position, Scale, Rotation, Opacity - In, Out, or All.</p>
+            <ul class="ludo-chip-row">
+              <li class="ludo-chip" data-ease="linear"><span class="ludo-chip-spark" aria-hidden="true"></span>Linear</li>
+              <li class="ludo-chip" data-ease="bezier"><span class="ludo-chip-spark" aria-hidden="true"></span>Bezier</li>
+              <li class="ludo-chip" data-ease="circ"><span class="ludo-chip-spark" aria-hidden="true"></span>Smooth</li>
+              <li class="ludo-chip" data-ease="quad"><span class="ludo-chip-spark" aria-hidden="true"></span>Soft</li>
+              <li class="ludo-chip" data-ease="cubic"><span class="ludo-chip-spark" aria-hidden="true"></span>Natural</li>
+              <li class="ludo-chip" data-ease="quart"><span class="ludo-chip-spark" aria-hidden="true"></span>Punchy</li>
+              <li class="ludo-chip" data-ease="quint"><span class="ludo-chip-spark" aria-hidden="true"></span>Snappy</li>
+              <li class="ludo-chip" data-ease="expo"><span class="ludo-chip-spark" aria-hidden="true"></span>Whip</li>
+              <li class="ludo-chip ludo-chip-live" data-ease="bounce"><span class="ludo-chip-spark" aria-hidden="true"></span>Bounce <em>strength</em></li>
+              <li class="ludo-chip ludo-chip-live" data-ease="overshoot"><span class="ludo-chip-spark" aria-hidden="true"></span>Overshoot <em>strength</em></li>
+              <li class="ludo-chip ludo-chip-live" data-ease="spring"><span class="ludo-chip-spark" aria-hidden="true"></span>Spring <em>strength</em></li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="ludo-kit-group" data-kit="keys">
+          <div class="ludo-kit-group-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="3" y="10" width="4" height="4" rx="1"/><rect x="10" y="6" width="4" height="4" rx="1"/><rect x="17" y="14" width="4" height="4" rx="1"/><path d="M7 12h3M14 8h3"/></svg>
+          </div>
+          <div class="ludo-kit-group-body">
+            <h4>Keyframe tools</h4>
+            <p>Multi-layer selected keys - with stagger gap control (0-24f).</p>
+            <ul class="ludo-chip-row">
+              <li class="ludo-chip">Stagger</li>
+              <li class="ludo-chip">Align</li>
+              <li class="ludo-chip">Reverse</li>
+              <li class="ludo-chip">Distribute</li>
+              <li class="ludo-chip">Mirror</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="ludo-kit-group" data-kit="layers">
+          <div class="ludo-kit-group-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="4" y="5" width="16" height="5" rx="1.5"/><rect x="4" y="12" width="16" height="5" rx="1.5"/><path d="M8 19h8"/></svg>
+          </div>
+          <div class="ludo-kit-group-body">
+            <h4>Layer transitions &amp; motion</h4>
+            <p>Duration 6-60f · Amount 10-100% · Clear layer animation · Physics + Collider.</p>
+            <p class="ludo-chip-label">Transitions in</p>
+            <ul class="ludo-chip-row">
+              <li class="ludo-chip">Fade</li>
+              <li class="ludo-chip">Slide →</li>
+              <li class="ludo-chip">Slide ←</li>
+              <li class="ludo-chip">Slide ↓</li>
+              <li class="ludo-chip">Slide ↑</li>
+              <li class="ludo-chip">Scale</li>
+              <li class="ludo-chip">Drop</li>
+              <li class="ludo-chip">Bounce</li>
+              <li class="ludo-chip">Roll</li>
+              <li class="ludo-chip">Blur</li>
+            </ul>
+            <p class="ludo-chip-label">Transitions out</p>
+            <ul class="ludo-chip-row">
+              <li class="ludo-chip">Fade</li>
+              <li class="ludo-chip">Slide →</li>
+              <li class="ludo-chip">Slide ←</li>
+              <li class="ludo-chip">Slide ↓</li>
+              <li class="ludo-chip">Slide ↑</li>
+              <li class="ludo-chip">Scale</li>
+              <li class="ludo-chip">Blur</li>
+            </ul>
+            <p class="ludo-chip-label">Looping (stackable)</p>
+            <ul class="ludo-chip-row">
+              <li class="ludo-chip ludo-chip-loop">Float</li>
+              <li class="ludo-chip ludo-chip-loop">Pulse</li>
+              <li class="ludo-chip ludo-chip-loop">Shake</li>
+              <li class="ludo-chip ludo-chip-loop">Drift</li>
+              <li class="ludo-chip ludo-chip-loop">Spin</li>
+              <li class="ludo-chip ludo-chip-loop">Wiggle</li>
+            </ul>
+            <p class="ludo-chip-label">Physics</p>
+            <ul class="ludo-chip-row">
+              <li class="ludo-chip">Physics body</li>
+              <li class="ludo-chip">Collider floor</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="ludo-kit-group" data-kit="text">
+          <div class="ludo-kit-group-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M5 6h14M12 6v12M8 18h8"/><path d="M7 10h3M14 10h3" opacity=".5"/></svg>
+          </div>
+          <div class="ludo-kit-group-body">
+            <h4>Text tools</h4>
+            <p>Split chars · Split + precomp · Stagger in-points (0-12f gap) · Match all text to selection.</p>
+            <p class="ludo-chip-label">Animate on (stackable)</p>
+            <ul class="ludo-chip-row">
+              <li class="ludo-chip">Fade on</li>
+              <li class="ludo-chip">Slide up</li>
+              <li class="ludo-chip">Scale on</li>
+              <li class="ludo-chip">Drop on</li>
+              <li class="ludo-chip">Bounce on</li>
+              <li class="ludo-chip">Typewriter</li>
+              <li class="ludo-chip">Cascade</li>
+              <li class="ludo-chip">Smooth in</li>
+              <li class="ludo-chip">Blink cursor</li>
+            </ul>
+            <p class="ludo-chip-label">Text box</p>
+            <ul class="ludo-chip-row">
+              <li class="ludo-chip">Box on/off</li>
+              <li class="ludo-chip">Draw on</li>
+              <li class="ludo-chip">Pad</li>
+              <li class="ludo-chip">Stroke</li>
+              <li class="ludo-chip">Round</li>
+              <li class="ludo-chip">Stroke colour</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="ludo-kit-group" data-kit="cloner">
+          <div class="ludo-kit-group-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+          </div>
+          <div class="ludo-kit-group-body">
+            <h4>Cloner &amp; layout</h4>
+            <p>Live driver null with Expression Controls · Open Effect Controls · Arrange selected in grid.</p>
+            <p class="ludo-chip-label">Patterns</p>
+            <ul class="ludo-chip-row">
+              <li class="ludo-chip">Linear</li>
+              <li class="ludo-chip">Grid</li>
+              <li class="ludo-chip">Radial</li>
+            </ul>
+            <p class="ludo-chip-label">Effectors (On · Reverse · Amount)</p>
+            <ul class="ludo-chip-row">
+              <li class="ludo-chip ludo-chip-loop">Scale</li>
+              <li class="ludo-chip ludo-chip-loop">Spacing</li>
+              <li class="ludo-chip ludo-chip-loop">Opacity</li>
+              <li class="ludo-chip ludo-chip-loop">Rotation</li>
+              <li class="ludo-chip ludo-chip-loop">Time</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="ludo-kit-group" data-kit="colour">
+          <div class="ludo-kit-group-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="12" cy="12" r="3"/><circle cx="6.5" cy="8" r="2.2"/><circle cx="17.5" cy="8" r="2.2"/><circle cx="6.5" cy="16" r="2.2"/><circle cx="17.5" cy="16" r="2.2"/></svg>
+          </div>
+          <div class="ludo-kit-group-body">
+            <h4>Colour palette</h4>
+            <p>Saved swatches · Add · Apply · Sample.</p>
+            <ul class="ludo-chip-row">
+              <li class="ludo-chip">Text fill</li>
+              <li class="ludo-chip">Solids</li>
+              <li class="ludo-chip">Shape fill</li>
+              <li class="ludo-chip">Shape stroke</li>
+              <li class="ludo-chip">Lights</li>
+              <li class="ludo-chip">Color Controls</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="ludo-kit-group" data-kit="export">
+          <div class="ludo-kit-group-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M12 3v10"/><path d="M8 9l4 4 4-4"/><rect x="4" y="17" width="16" height="4" rx="1"/></svg>
+          </div>
+          <div class="ludo-kit-group-body">
+            <h4>Export</h4>
+            <p>Still frame or animated GIF from the work area - no Render Queue dig.</p>
+            <p class="ludo-chip-label">Still frame</p>
+            <ul class="ludo-chip-row">
+              <li class="ludo-chip">PNG</li>
+              <li class="ludo-chip">JPEG</li>
+              <li class="ludo-chip">TIFF</li>
+              <li class="ludo-chip">PSD</li>
+            </ul>
+            <p class="ludo-chip-label">GIF</p>
+            <ul class="ludo-chip-row">
+              <li class="ludo-chip">Scale %</li>
+              <li class="ludo-chip">Frame skip</li>
+              <li class="ludo-chip">Compression %</li>
+              <li class="ludo-chip">Live size estimate</li>
+            </ul>
+          </div>
+        </article>
+      </div>
+    </div>
+
     <p style="margin-top:1.75rem;color:var(--muted);font-size:14px;max-width:640px;">Ludo does not use Keyweaver Credits. Open via <strong>Window → Extensions → Keyweaver - Ludo</strong>.</p>
   </div>
 </section>
@@ -120,8 +521,8 @@
     <h2 class="section-title">Common questions</h2>
     <div class="feature-grid" style="margin-top:1.5rem;">
       <div class="feature-cell"><h3>Does Ludo use credits?</h3><p>No. Ludo does not draw from your Keyweaver Credits balance.</p></div>
-      <div class="feature-cell"><h3>What is included?</h3><p>Animation easing, keyframe tools, text helpers, layout/cloner, colour palette, frame and GIF export.</p></div>
-      <div class="feature-cell"><h3>How do I install?</h3><p>Windows: Keyweaver Manager. macOS: Ludo zip from the download page.</p></div>
+      <div class="feature-cell"><h3>What is included?</h3><p>Eleven easing curves, layer transitions and loops, text animate-ons, cloner patterns and effectors, keyframe tools, colour palette, frame and GIF export.</p></div>
+      <div class="feature-cell"><h3>How do I install?</h3><p>Download Keyweaver Manager for Windows or macOS, then click Install on Ludo in the catalog.</p></div>
     </div>
   </div>
 </section>
@@ -155,5 +556,53 @@
 </footer>
 <script src="/js/help-widget.js" defer></script>
 <script src="/js/cuemark-turnstile.js"></script>
+<script>
+(function () {
+  var root = document.getElementById('ludo-kit');
+  if (!root) return;
+  var filters = root.querySelectorAll('.ludo-kit-filter');
+  var groups = root.querySelectorAll('.ludo-kit-group');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function reveal(el, delay) {
+    if (reduce) {
+      el.classList.add('is-in');
+      return;
+    }
+    window.setTimeout(function () { el.classList.add('is-in'); }, delay || 0);
+  }
+
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var els = root.querySelectorAll('.ludo-kit-group:not(.is-hidden)');
+        els.forEach(function (el, i) { reveal(el, i * 70); });
+        io.disconnect();
+      });
+    }, { threshold: 0.12 });
+    io.observe(root);
+  } else {
+    groups.forEach(function (el, i) { reveal(el, i * 40); });
+  }
+
+  filters.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var kit = btn.getAttribute('data-kit') || 'all';
+      filters.forEach(function (b) {
+        var on = b === btn;
+        b.classList.toggle('is-active', on);
+        b.setAttribute('aria-selected', on ? 'true' : 'false');
+      });
+      groups.forEach(function (group, i) {
+        var match = kit === 'all' || group.getAttribute('data-kit') === kit;
+        group.classList.toggle('is-hidden', !match);
+        group.classList.remove('is-in');
+        if (match) reveal(group, i * 50);
+      });
+    });
+  });
+})();
+</script>
 </body>
 </html>
