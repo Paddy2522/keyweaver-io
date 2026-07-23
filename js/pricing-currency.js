@@ -42,7 +42,7 @@
     SI: 'EUR', SK: 'EUR',
   };
 
-  /** Non-euro Europe — show EUR (closest of our three Stripe currencies). */
+  /** Non-euro Europe - show EUR (closest of our three Stripe currencies). */
   const EUROPE_EUR_FALLBACK = new Set([
     'AL', 'AD', 'BA', 'BG', 'BY', 'CH', 'CZ', 'DK', 'FO', 'GI', 'GL', 'HU',
     'IS', 'LI', 'MC', 'MD', 'ME', 'MK', 'NO', 'PL', 'RO', 'RS', 'SE', 'SM',

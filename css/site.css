@@ -1,4 +1,4 @@
-/* Keyweaver shared marketing chrome — tokens, nav, footer, product cards */
+/* Keyweaver shared marketing chrome - tokens, nav, footer, product cards */
 
 :root {
   --ink: #0a0a0f;
@@ -16,7 +16,7 @@
   --nav-accent2: #7b8bff;
 }
 
-/* Per-plugin page highlights (content only — not the menu) */
+/* Per-plugin page highlights (content only - not the menu) */
 body.theme-cuemark {
   --accent: #3d9cf0;
   --accent2: #5eb0f5;
@@ -315,7 +315,7 @@ body {
   transform: translateY(-2px);
 }
 
-/* Icon marks are ~132×132 in a 166.8-tall wordmark SVG — scale so the
+/* Icon marks are ~132×132 in a 166.8-tall wordmark SVG - scale so the
    mark fills a fixed square and clip the wordmark text away. */
 .product-card-logo {
   display: block;
