@@ -13,7 +13,7 @@ enum InstallError: LocalizedError {
     case .noMacPackage:
       return "No macOS package URL in the catalog for this plugin."
     case .checksumMismatch:
-      return "Download verification failed (checksum mismatch). Try again or use the zip from keyweaver.io/download."
+      return "Download verification failed (checksum mismatch). Try Install again from Keyweaver Manager."
     case .installScriptMissing(let name):
       return "Install script not found in the package: \(name)"
     case .installFailed(let message):
@@ -93,6 +93,7 @@ final class InstallService: ObservableObject {
 
     update(0.94, "Installing \(product.shortName) into After Effects…")
     try runInstallScript(scriptURL)
+    try enableCepPlayerDebugMode()
 
     let state = InstalledProductState(
       id: product.id,
@@ -179,6 +180,17 @@ final class InstallService: ObservableObject {
       }
     }
     return nil
+  }
+
+  private func enableCepPlayerDebugMode() throws {
+    // Match Windows Manager (CSXS 9–14) even if an older product zip only wrote 9–13.
+    for v in 9...14 {
+      let process = Process()
+      process.executableURL = URL(fileURLWithPath: "/usr/bin/defaults")
+      process.arguments = ["write", "com.adobe.CSXS.\(v)", "PlayerDebugMode", "1"]
+      try process.run()
+      process.waitUntilExit()
+    }
   }
 
   private func runInstallScript(_ scriptURL: URL) throws {
