@@ -1,0 +1,347 @@
+/* Ludo marketing toolkit - panel-style previews */
+.ludo-chip.has-preview,
+.ludo-chip.ludo-chip-ease {
+  min-height: 34px;
+  padding-right: 0.65rem;
+}
+.ludo-chip-label-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+.ludo-chip.has-preview .ludo-web-preview {
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.ludo-chip.has-preview:hover .ludo-chip-label-text,
+.ludo-chip.has-preview.is-playing .ludo-chip-label-text {
+  display: none;
+}
+.ludo-chip.has-preview:hover .ludo-web-preview,
+.ludo-chip.has-preview.is-playing .ludo-web-preview {
+  display: inline-flex;
+}
+.ludo-prev-stage {
+  position: relative;
+  width: 40px;
+  height: 18px;
+  overflow: hidden;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.06);
+}
+.ludo-prev-box {
+  position: absolute;
+  left: 14px;
+  top: 4px;
+  width: 12px;
+  height: 10px;
+  border-radius: 2px;
+  background: var(--accent2);
+  box-shadow: 0 0 0 1px rgba(52, 211, 153, 0.25);
+}
+.ludo-chip.has-preview:hover .ludo-web-preview[data-preview="fade"] .ludo-prev-box,
+.ludo-chip.has-preview.is-playing .ludo-web-preview[data-preview="fade"] .ludo-prev-box {
+  animation: ludo-prev-fade 0.75s ease both;
+}
+.ludo-chip.has-preview:hover .ludo-web-preview[data-preview="blur"] .ludo-prev-box,
+.ludo-chip.has-preview.is-playing .ludo-web-preview[data-preview="blur"] .ludo-prev-box {
+  animation: ludo-prev-blur 0.8s ease both;
+}
+.ludo-chip.has-preview:hover .ludo-web-preview[data-preview="scale"] .ludo-prev-box,
+.ludo-chip.has-preview.is-playing .ludo-web-preview[data-preview="scale"] .ludo-prev-box {
+  animation: ludo-prev-scale 0.7s ease both;
+}
+.ludo-chip.has-preview:hover .ludo-web-preview[data-preview="drop"] .ludo-prev-box,
+.ludo-chip.has-preview.is-playing .ludo-web-preview[data-preview="drop"] .ludo-prev-box {
+  animation: ludo-prev-drop 0.7s ease both;
+}
+.ludo-chip.has-preview:hover .ludo-web-preview[data-preview="bounce"] .ludo-prev-box,
+.ludo-chip.has-preview.is-playing .ludo-web-preview[data-preview="bounce"] .ludo-prev-box {
+  animation: ludo-prev-bounce 0.85s ease both;
+}
+.ludo-chip.has-preview:hover .ludo-web-preview[data-preview="roll"] .ludo-prev-box,
+.ludo-chip.has-preview.is-playing .ludo-web-preview[data-preview="roll"] .ludo-prev-box {
+  animation: ludo-prev-roll 0.8s ease both;
+}
+.ludo-chip.has-preview:hover .ludo-web-preview[data-preview="slide-l"] .ludo-prev-box,
+.ludo-chip.has-preview.is-playing .ludo-web-preview[data-preview="slide-l"] .ludo-prev-box {
+  animation: ludo-prev-slide-l 0.7s ease both;
+}
+.ludo-chip.has-preview:hover .ludo-web-preview[data-preview="slide-r"] .ludo-prev-box,
+.ludo-chip.has-preview.is-playing .ludo-web-preview[data-preview="slide-r"] .ludo-prev-box {
+  animation: ludo-prev-slide-r 0.7s ease both;
+}
+.ludo-chip.has-preview:hover .ludo-web-preview[data-preview="slide-u"] .ludo-prev-box,
+.ludo-chip.has-preview.is-playing .ludo-web-preview[data-preview="slide-u"] .ludo-prev-box {
+  animation: ludo-prev-slide-u 0.7s ease both;
+}
+.ludo-chip.has-preview:hover .ludo-web-preview[data-preview="slide-d"] .ludo-prev-box,
+.ludo-chip.has-preview.is-playing .ludo-web-preview[data-preview="slide-d"] .ludo-prev-box {
+  animation: ludo-prev-slide-d 0.7s ease both;
+}
+.ludo-chip.has-preview:hover .ludo-web-preview[data-preview="float"] .ludo-prev-box,
+.ludo-chip.has-preview.is-playing .ludo-web-preview[data-preview="float"] .ludo-prev-box,
+.ludo-chip.ludo-chip-loop .ludo-web-preview[data-preview="float"] .ludo-prev-box {
+  animation: ludo-prev-float 0.9s ease-in-out both infinite;
+}
+.ludo-chip.has-preview:hover .ludo-web-preview[data-preview="pulse"] .ludo-prev-box,
+.ludo-chip.has-preview.is-playing .ludo-web-preview[data-preview="pulse"] .ludo-prev-box,
+.ludo-chip.ludo-chip-loop .ludo-web-preview[data-preview="pulse"] .ludo-prev-box {
+  animation: ludo-prev-pulse 0.8s ease-in-out both infinite;
+}
+.ludo-chip.has-preview:hover .ludo-web-preview[data-preview="shake"] .ludo-prev-box,
+.ludo-chip.has-preview.is-playing .ludo-web-preview[data-preview="shake"] .ludo-prev-box,
+.ludo-chip.ludo-chip-loop .ludo-web-preview[data-preview="shake"] .ludo-prev-box {
+  animation: ludo-prev-shake 0.45s ease-in-out both infinite;
+}
+.ludo-chip.has-preview:hover .ludo-web-preview[data-preview="drift"] .ludo-prev-box,
+.ludo-chip.has-preview.is-playing .ludo-web-preview[data-preview="drift"] .ludo-prev-box,
+.ludo-chip.ludo-chip-loop .ludo-web-preview[data-preview="drift"] .ludo-prev-box {
+  animation: ludo-prev-drift 1.1s ease-in-out both infinite;
+}
+.ludo-chip.has-preview:hover .ludo-web-preview[data-preview="spin"] .ludo-prev-box,
+.ludo-chip.has-preview.is-playing .ludo-web-preview[data-preview="spin"] .ludo-prev-box,
+.ludo-chip.ludo-chip-loop .ludo-web-preview[data-preview="spin"] .ludo-prev-box {
+  animation: ludo-prev-spin 0.85s linear both infinite;
+}
+.ludo-chip.has-preview:hover .ludo-web-preview[data-preview="wiggle"] .ludo-prev-box,
+.ludo-chip.has-preview.is-playing .ludo-web-preview[data-preview="wiggle"] .ludo-prev-box,
+.ludo-chip.ludo-chip-loop .ludo-web-preview[data-preview="wiggle"] .ludo-prev-box {
+  animation: ludo-prev-wiggle 0.55s ease-in-out both infinite;
+}
+.ludo-chip.ludo-chip-loop.has-preview .ludo-chip-label-text { display: none; }
+.ludo-chip.ludo-chip-loop.has-preview .ludo-web-preview { display: inline-flex; }
+.ludo-chip.ludo-chip-loop.has-preview::after {
+  content: attr(data-name);
+  margin-left: 0.45rem;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* Ease curve icons (match panel) */
+.ludo-ease-icon {
+  display: inline-flex;
+  width: 44px;
+  height: 22px;
+  flex: 0 0 auto;
+}
+.ludo-ease-icon svg {
+  width: 44px;
+  height: 22px;
+  display: block;
+  overflow: visible;
+}
+.ludo-ease-icon .ease-curve {
+  fill: none;
+  stroke: rgba(94, 224, 176, 0.85);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.ludo-ease-icon .ease-dot {
+  fill: var(--accent2);
+}
+
+/* Key tool micro-previews */
+.ludo-key-preview {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  height: 14px;
+}
+.ludo-key-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 1px;
+  background: var(--accent2);
+  opacity: 0.85;
+}
+.ludo-chip[data-key="stagger"]:hover .ludo-key-dot,
+.ludo-chip[data-key="stagger"].is-playing .ludo-key-dot {
+  animation: ludo-key-stagger 0.9s ease both infinite;
+}
+.ludo-chip[data-key="stagger"] .ludo-key-dot:nth-child(2) { animation-delay: 0.1s; }
+.ludo-chip[data-key="stagger"] .ludo-key-dot:nth-child(3) { animation-delay: 0.2s; }
+.ludo-chip[data-key="align"]:hover .ludo-key-dot,
+.ludo-chip[data-key="align"].is-playing .ludo-key-dot {
+  animation: ludo-key-align 0.7s ease both;
+}
+.ludo-chip[data-key="reverse"]:hover .ludo-key-preview,
+.ludo-chip[data-key="reverse"].is-playing .ludo-key-preview {
+  animation: ludo-key-reverse 0.7s ease both;
+}
+.ludo-chip[data-key="distribute"]:hover .ludo-key-preview,
+.ludo-chip[data-key="distribute"].is-playing .ludo-key-preview {
+  animation: ludo-key-distribute 0.8s ease both;
+}
+.ludo-chip[data-key="mirror"]:hover .ludo-key-preview,
+.ludo-chip[data-key="mirror"].is-playing .ludo-key-preview {
+  animation: ludo-key-mirror 0.75s ease both;
+}
+
+/* Cloner pattern previews */
+.ludo-clone-preview {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  width: 36px;
+  height: 18px;
+}
+.ludo-clone-preview[data-pattern="grid"] {
+  display: grid;
+  grid-template-columns: repeat(3, 6px);
+  gap: 2px;
+}
+.ludo-clone-cell {
+  width: 6px;
+  height: 6px;
+  border-radius: 1px;
+  background: var(--accent2);
+}
+.ludo-chip[data-pattern="linear"]:hover .ludo-clone-cell,
+.ludo-chip[data-pattern="linear"].is-playing .ludo-clone-cell {
+  animation: ludo-clone-linear 0.9s ease both infinite;
+}
+.ludo-chip[data-pattern="linear"] .ludo-clone-cell:nth-child(2) { animation-delay: 0.1s; }
+.ludo-chip[data-pattern="linear"] .ludo-clone-cell:nth-child(3) { animation-delay: 0.2s; }
+.ludo-chip[data-pattern="grid"]:hover .ludo-clone-cell,
+.ludo-chip[data-pattern="grid"].is-playing .ludo-clone-cell {
+  animation: ludo-prev-pulse 1s ease-in-out both infinite;
+}
+.ludo-chip[data-pattern="grid"] .ludo-clone-cell:nth-child(odd) { animation-delay: 0.15s; }
+.ludo-chip[data-pattern="radial"] .ludo-clone-preview {
+  position: relative;
+  width: 20px;
+  height: 20px;
+}
+.ludo-chip[data-pattern="radial"] .ludo-clone-cell {
+  position: absolute;
+  left: 7px;
+  top: 7px;
+}
+.ludo-chip[data-pattern="radial"]:hover .ludo-clone-cell:nth-child(1),
+.ludo-chip[data-pattern="radial"].is-playing .ludo-clone-cell:nth-child(1) {
+  animation: ludo-clone-orbit 1.2s linear infinite;
+  offset-path: path('M10,10 m-7,0 a7,7 0 1,1 14,0 a7,7 0 1,1 -14,0');
+}
+.ludo-chip[data-pattern="radial"] .ludo-clone-cell:nth-child(1) { transform: translate(0, -7px); }
+.ludo-chip[data-pattern="radial"] .ludo-clone-cell:nth-child(2) { transform: translate(6px, 3px); }
+.ludo-chip[data-pattern="radial"] .ludo-clone-cell:nth-child(3) { transform: translate(-6px, 3px); }
+.ludo-chip[data-pattern="radial"]:hover .ludo-clone-preview,
+.ludo-chip[data-pattern="radial"].is-playing .ludo-clone-preview {
+  animation: ludo-prev-spin 2s linear infinite;
+}
+
+@keyframes ludo-prev-fade {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+@keyframes ludo-prev-blur {
+  0% { opacity: 0.2; filter: blur(3px); transform: scale(1.15); }
+  100% { opacity: 1; filter: blur(0); transform: scale(1); }
+}
+@keyframes ludo-prev-scale {
+  0% { transform: scale(0.2); opacity: 0.4; }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes ludo-prev-drop {
+  0% { transform: translateY(-10px); opacity: 0; }
+  70% { transform: translateY(1px); opacity: 1; }
+  100% { transform: translateY(0); }
+}
+@keyframes ludo-prev-bounce {
+  0% { transform: translateY(-9px); }
+  45% { transform: translateY(0); }
+  65% { transform: translateY(-4px); }
+  100% { transform: translateY(0); }
+}
+@keyframes ludo-prev-roll {
+  0% { transform: translateX(-12px) rotate(-120deg); opacity: 0.4; }
+  100% { transform: translateX(0) rotate(0deg); opacity: 1; }
+}
+@keyframes ludo-prev-slide-l {
+  0% { transform: translateX(-14px); opacity: 0.3; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+@keyframes ludo-prev-slide-r {
+  0% { transform: translateX(14px); opacity: 0.3; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+@keyframes ludo-prev-slide-u {
+  0% { transform: translateY(-10px); opacity: 0.3; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+@keyframes ludo-prev-slide-d {
+  0% { transform: translateY(10px); opacity: 0.3; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+@keyframes ludo-prev-float {
+  0%, 100% { transform: translateY(3px); }
+  50% { transform: translateY(-3px); }
+}
+@keyframes ludo-prev-pulse {
+  0%, 100% { transform: scale(0.75); }
+  50% { transform: scale(1.15); }
+}
+@keyframes ludo-prev-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-3px); }
+  75% { transform: translateX(3px); }
+}
+@keyframes ludo-prev-drift {
+  0%, 100% { transform: translate(2px, 2px); }
+  50% { transform: translate(-3px, -1px); }
+}
+@keyframes ludo-prev-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+@keyframes ludo-prev-wiggle {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  25% { transform: translate(2px, -2px) rotate(-8deg); }
+  75% { transform: translate(-2px, 1px) rotate(8deg); }
+}
+@keyframes ludo-key-stagger {
+  0% { transform: translateY(4px); opacity: 0.3; }
+  40%, 100% { transform: translateY(0); opacity: 1; }
+}
+@keyframes ludo-key-align {
+  0% { transform: translateY(var(--dy, 0)); }
+  100% { transform: translateY(0); }
+}
+@keyframes ludo-key-reverse {
+  0% { flex-direction: row; }
+  100% { transform: scaleX(-1); }
+}
+@keyframes ludo-key-distribute {
+  0% { gap: 1px; }
+  100% { gap: 6px; }
+}
+@keyframes ludo-key-mirror {
+  0% { transform: scaleX(1); }
+  50% { transform: scaleX(-1); }
+  100% { transform: scaleX(1); }
+}
+@keyframes ludo-clone-linear {
+  0% { transform: translateX(-4px); opacity: 0.3; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+@keyframes ludo-clone-orbit {
+  to { offset-distance: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ludo-chip.has-preview:hover .ludo-prev-box,
+  .ludo-chip.has-preview.is-playing .ludo-prev-box,
+  .ludo-chip.ludo-chip-loop .ludo-prev-box,
+  .ludo-key-dot,
+  .ludo-clone-cell,
+  .ludo-clone-preview {
+    animation: none !important;
+  }
+  .ludo-chip.ludo-chip-loop.has-preview .ludo-chip-label-text { display: inline-flex; }
+  .ludo-chip.ludo-chip-loop.has-preview .ludo-web-preview { display: none; }
+  .ludo-chip.ludo-chip-loop.has-preview::after { content: none; }
+}

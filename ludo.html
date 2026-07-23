@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="/css/chrome.css" />
   <link rel="stylesheet" href="/css/help-widget.css" />
   <link rel="stylesheet" href="/css/site.css" />
+  <link rel="stylesheet" href="/css/ludo-kit-previews.css" />
   <title>Ludo by Keyweaver - Motion Toolkit for After Effects</title>
   <meta name="description" content="After Effects motion toolkit: animation, keyframes, text tools, layout, colour palette, and frame or GIF export." />
   <link rel="canonical" href="https://keyweaver.io/ludo" />
@@ -147,7 +148,7 @@
       overflow: hidden;
       display: inline-flex;
       align-items: center;
-      gap: 0.35rem;
+      gap: 0.4rem;
       padding: 0.38rem 0.7rem;
       border-radius: 999px;
       border: 1px solid var(--edge);
@@ -157,6 +158,8 @@
       font-weight: 500;
       line-height: 1.2;
       transition: transform .2s, border-color .2s, background .2s;
+      cursor: default;
+      user-select: none;
     }
     .ludo-chip em {
       font-style: normal;
@@ -171,42 +174,11 @@
       border-color: rgba(52, 211, 153, 0.45);
       background: rgba(52, 211, 153, 0.08);
     }
-    .ludo-chip-spark {
-      width: 14px;
-      height: 8px;
-      border-radius: 2px;
-      background:
-        linear-gradient(90deg, transparent 0%, var(--accent2) 45%, transparent 100%);
-      opacity: 0.7;
-      flex: 0 0 auto;
-    }
-    .ludo-chip[data-ease="linear"] .ludo-chip-spark {
-      background: linear-gradient(90deg, var(--muted), var(--muted));
-      opacity: 0.5;
-    }
-    .ludo-chip[data-ease="bounce"] .ludo-chip-spark,
-    .ludo-chip[data-ease="overshoot"] .ludo-chip-spark,
-    .ludo-chip[data-ease="spring"] .ludo-chip-spark {
-      animation: ludoSpark 1.4s ease-in-out infinite;
-    }
-    .ludo-chip-loop {
-      animation: ludoPulse 2.4s ease-in-out infinite;
-    }
     .ludo-chip-live {
       border-color: rgba(52, 211, 153, 0.35);
     }
-    @keyframes ludoSpark {
-      0%, 100% { transform: translateX(-2px); opacity: 0.45; }
-      50% { transform: translateX(2px); opacity: 1; }
-    }
-    @keyframes ludoPulse {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0); }
-      50% { box-shadow: 0 0 0 4px rgba(52, 211, 153, 0.08); }
-    }
     @media (prefers-reduced-motion: reduce) {
       .ludo-kit-group { opacity: 1; transform: none; transition: none; }
-      .ludo-chip-loop,
-      .ludo-chip-spark { animation: none !important; }
     }
     @media (max-width: 640px) {
       .ludo-kit { padding: 1.1rem; }
@@ -307,7 +279,7 @@
         <div>
           <p class="section-label" style="margin-bottom:0.5rem;">Full toolkit</p>
           <h3 class="ludo-kit-title">Everything in the panel</h3>
-          <p class="ludo-kit-sub">Filter a category, or browse the full inventory - the same tools you get in After Effects.</p>
+          <p class="ludo-kit-sub">Hover any tool to preview it - the same micro-animations as in the Ludo panel.</p>
         </div>
         <div class="ludo-kit-filters" role="tablist" aria-label="Ludo feature categories">
           <button type="button" class="ludo-kit-filter is-active" data-kit="all" role="tab" aria-selected="true">All</button>
@@ -330,17 +302,17 @@
             <h4>Easing curves</h4>
             <p>Apply to Start, End, or All keys - Position, Scale, Rotation, Opacity - In, Out, or All.</p>
             <ul class="ludo-chip-row">
-              <li class="ludo-chip" data-ease="linear"><span class="ludo-chip-spark" aria-hidden="true"></span>Linear</li>
-              <li class="ludo-chip" data-ease="bezier"><span class="ludo-chip-spark" aria-hidden="true"></span>Bezier</li>
-              <li class="ludo-chip" data-ease="circ"><span class="ludo-chip-spark" aria-hidden="true"></span>Smooth</li>
-              <li class="ludo-chip" data-ease="quad"><span class="ludo-chip-spark" aria-hidden="true"></span>Soft</li>
-              <li class="ludo-chip" data-ease="cubic"><span class="ludo-chip-spark" aria-hidden="true"></span>Natural</li>
-              <li class="ludo-chip" data-ease="quart"><span class="ludo-chip-spark" aria-hidden="true"></span>Punchy</li>
-              <li class="ludo-chip" data-ease="quint"><span class="ludo-chip-spark" aria-hidden="true"></span>Snappy</li>
-              <li class="ludo-chip" data-ease="expo"><span class="ludo-chip-spark" aria-hidden="true"></span>Whip</li>
-              <li class="ludo-chip ludo-chip-live" data-ease="bounce"><span class="ludo-chip-spark" aria-hidden="true"></span>Bounce <em>strength</em></li>
-              <li class="ludo-chip ludo-chip-live" data-ease="overshoot"><span class="ludo-chip-spark" aria-hidden="true"></span>Overshoot <em>strength</em></li>
-              <li class="ludo-chip ludo-chip-live" data-ease="spring"><span class="ludo-chip-spark" aria-hidden="true"></span>Spring <em>strength</em></li>
+              <li class="ludo-chip ludo-chip-ease" data-ease="linear" tabindex="0"><span class="ludo-ease-icon" aria-hidden="true"></span><span class="ludo-chip-label-text">Linear</span></li>
+              <li class="ludo-chip ludo-chip-ease" data-ease="bezier" tabindex="0"><span class="ludo-ease-icon" aria-hidden="true"></span><span class="ludo-chip-label-text">Bezier</span></li>
+              <li class="ludo-chip ludo-chip-ease" data-ease="circ" tabindex="0"><span class="ludo-ease-icon" aria-hidden="true"></span><span class="ludo-chip-label-text">Smooth</span></li>
+              <li class="ludo-chip ludo-chip-ease" data-ease="quad" tabindex="0"><span class="ludo-ease-icon" aria-hidden="true"></span><span class="ludo-chip-label-text">Soft</span></li>
+              <li class="ludo-chip ludo-chip-ease" data-ease="cubic" tabindex="0"><span class="ludo-ease-icon" aria-hidden="true"></span><span class="ludo-chip-label-text">Natural</span></li>
+              <li class="ludo-chip ludo-chip-ease" data-ease="quart" tabindex="0"><span class="ludo-ease-icon" aria-hidden="true"></span><span class="ludo-chip-label-text">Punchy</span></li>
+              <li class="ludo-chip ludo-chip-ease" data-ease="quint" tabindex="0"><span class="ludo-ease-icon" aria-hidden="true"></span><span class="ludo-chip-label-text">Snappy</span></li>
+              <li class="ludo-chip ludo-chip-ease" data-ease="expo" tabindex="0"><span class="ludo-ease-icon" aria-hidden="true"></span><span class="ludo-chip-label-text">Whip</span></li>
+              <li class="ludo-chip ludo-chip-ease ludo-chip-live" data-ease="bounce" tabindex="0"><span class="ludo-ease-icon" aria-hidden="true"></span><span class="ludo-chip-label-text">Bounce <em>strength</em></span></li>
+              <li class="ludo-chip ludo-chip-ease ludo-chip-live" data-ease="overshoot" tabindex="0"><span class="ludo-ease-icon" aria-hidden="true"></span><span class="ludo-chip-label-text">Overshoot <em>strength</em></span></li>
+              <li class="ludo-chip ludo-chip-ease ludo-chip-live" data-ease="spring" tabindex="0"><span class="ludo-ease-icon" aria-hidden="true"></span><span class="ludo-chip-label-text">Spring <em>strength</em></span></li>
             </ul>
           </div>
         </article>
@@ -353,11 +325,11 @@
             <h4>Keyframe tools</h4>
             <p>Multi-layer selected keys - with stagger gap control (0-24f).</p>
             <ul class="ludo-chip-row">
-              <li class="ludo-chip">Stagger</li>
-              <li class="ludo-chip">Align</li>
-              <li class="ludo-chip">Reverse</li>
-              <li class="ludo-chip">Distribute</li>
-              <li class="ludo-chip">Mirror</li>
+              <li class="ludo-chip" data-key="stagger"><span class="ludo-key-preview" aria-hidden="true"><span class="ludo-key-dot"></span><span class="ludo-key-dot"></span><span class="ludo-key-dot"></span></span><span class="ludo-chip-label-text">Stagger</span></li>
+              <li class="ludo-chip" data-key="align"><span class="ludo-key-preview" aria-hidden="true"><span class="ludo-key-dot"></span><span class="ludo-key-dot"></span><span class="ludo-key-dot"></span></span><span class="ludo-chip-label-text">Align</span></li>
+              <li class="ludo-chip" data-key="reverse"><span class="ludo-key-preview" aria-hidden="true"><span class="ludo-key-dot"></span><span class="ludo-key-dot"></span><span class="ludo-key-dot"></span></span><span class="ludo-chip-label-text">Reverse</span></li>
+              <li class="ludo-chip" data-key="distribute"><span class="ludo-key-preview" aria-hidden="true"><span class="ludo-key-dot"></span><span class="ludo-key-dot"></span><span class="ludo-key-dot"></span></span><span class="ludo-chip-label-text">Distribute</span></li>
+              <li class="ludo-chip" data-key="mirror"><span class="ludo-key-preview" aria-hidden="true"><span class="ludo-key-dot"></span><span class="ludo-key-dot"></span><span class="ludo-key-dot"></span></span><span class="ludo-chip-label-text">Mirror</span></li>
             </ul>
           </div>
         </article>
@@ -371,35 +343,35 @@
             <p>Duration 6-60f · Amount 10-100% · Clear layer animation · Physics + Collider.</p>
             <p class="ludo-chip-label">Transitions in</p>
             <ul class="ludo-chip-row">
-              <li class="ludo-chip">Fade</li>
-              <li class="ludo-chip">Slide →</li>
-              <li class="ludo-chip">Slide ←</li>
-              <li class="ludo-chip">Slide ↓</li>
-              <li class="ludo-chip">Slide ↑</li>
-              <li class="ludo-chip">Scale</li>
-              <li class="ludo-chip">Drop</li>
-              <li class="ludo-chip">Bounce</li>
-              <li class="ludo-chip">Roll</li>
-              <li class="ludo-chip">Blur</li>
+              <li class="ludo-chip has-preview"><span class="ludo-chip-label-text">Fade</span><span class="ludo-web-preview" data-preview="fade"><span class="ludo-prev-stage"><span class="ludo-prev-box"></span></span></span></li>
+              <li class="ludo-chip has-preview"><span class="ludo-chip-label-text">Slide →</span><span class="ludo-web-preview" data-preview="slide-r"><span class="ludo-prev-stage"><span class="ludo-prev-box"></span></span></span></li>
+              <li class="ludo-chip has-preview"><span class="ludo-chip-label-text">Slide ←</span><span class="ludo-web-preview" data-preview="slide-l"><span class="ludo-prev-stage"><span class="ludo-prev-box"></span></span></span></li>
+              <li class="ludo-chip has-preview"><span class="ludo-chip-label-text">Slide ↓</span><span class="ludo-web-preview" data-preview="slide-d"><span class="ludo-prev-stage"><span class="ludo-prev-box"></span></span></span></li>
+              <li class="ludo-chip has-preview"><span class="ludo-chip-label-text">Slide ↑</span><span class="ludo-web-preview" data-preview="slide-u"><span class="ludo-prev-stage"><span class="ludo-prev-box"></span></span></span></li>
+              <li class="ludo-chip has-preview"><span class="ludo-chip-label-text">Scale</span><span class="ludo-web-preview" data-preview="scale"><span class="ludo-prev-stage"><span class="ludo-prev-box"></span></span></span></li>
+              <li class="ludo-chip has-preview"><span class="ludo-chip-label-text">Drop</span><span class="ludo-web-preview" data-preview="drop"><span class="ludo-prev-stage"><span class="ludo-prev-box"></span></span></span></li>
+              <li class="ludo-chip has-preview"><span class="ludo-chip-label-text">Bounce</span><span class="ludo-web-preview" data-preview="bounce"><span class="ludo-prev-stage"><span class="ludo-prev-box"></span></span></span></li>
+              <li class="ludo-chip has-preview"><span class="ludo-chip-label-text">Roll</span><span class="ludo-web-preview" data-preview="roll"><span class="ludo-prev-stage"><span class="ludo-prev-box"></span></span></span></li>
+              <li class="ludo-chip has-preview"><span class="ludo-chip-label-text">Blur</span><span class="ludo-web-preview" data-preview="blur"><span class="ludo-prev-stage"><span class="ludo-prev-box"></span></span></span></li>
             </ul>
             <p class="ludo-chip-label">Transitions out</p>
             <ul class="ludo-chip-row">
-              <li class="ludo-chip">Fade</li>
-              <li class="ludo-chip">Slide →</li>
-              <li class="ludo-chip">Slide ←</li>
-              <li class="ludo-chip">Slide ↓</li>
-              <li class="ludo-chip">Slide ↑</li>
-              <li class="ludo-chip">Scale</li>
-              <li class="ludo-chip">Blur</li>
+              <li class="ludo-chip has-preview"><span class="ludo-chip-label-text">Fade</span><span class="ludo-web-preview" data-preview="fade"><span class="ludo-prev-stage"><span class="ludo-prev-box"></span></span></span></li>
+              <li class="ludo-chip has-preview"><span class="ludo-chip-label-text">Slide →</span><span class="ludo-web-preview" data-preview="slide-r"><span class="ludo-prev-stage"><span class="ludo-prev-box"></span></span></span></li>
+              <li class="ludo-chip has-preview"><span class="ludo-chip-label-text">Slide ←</span><span class="ludo-web-preview" data-preview="slide-l"><span class="ludo-prev-stage"><span class="ludo-prev-box"></span></span></span></li>
+              <li class="ludo-chip has-preview"><span class="ludo-chip-label-text">Slide ↓</span><span class="ludo-web-preview" data-preview="slide-d"><span class="ludo-prev-stage"><span class="ludo-prev-box"></span></span></span></li>
+              <li class="ludo-chip has-preview"><span class="ludo-chip-label-text">Slide ↑</span><span class="ludo-web-preview" data-preview="slide-u"><span class="ludo-prev-stage"><span class="ludo-prev-box"></span></span></span></li>
+              <li class="ludo-chip has-preview"><span class="ludo-chip-label-text">Scale</span><span class="ludo-web-preview" data-preview="scale"><span class="ludo-prev-stage"><span class="ludo-prev-box"></span></span></span></li>
+              <li class="ludo-chip has-preview"><span class="ludo-chip-label-text">Blur</span><span class="ludo-web-preview" data-preview="blur"><span class="ludo-prev-stage"><span class="ludo-prev-box"></span></span></span></li>
             </ul>
             <p class="ludo-chip-label">Looping (stackable)</p>
             <ul class="ludo-chip-row">
-              <li class="ludo-chip ludo-chip-loop">Float</li>
-              <li class="ludo-chip ludo-chip-loop">Pulse</li>
-              <li class="ludo-chip ludo-chip-loop">Shake</li>
-              <li class="ludo-chip ludo-chip-loop">Drift</li>
-              <li class="ludo-chip ludo-chip-loop">Spin</li>
-              <li class="ludo-chip ludo-chip-loop">Wiggle</li>
+              <li class="ludo-chip has-preview ludo-chip-loop" data-name="Float"><span class="ludo-chip-label-text">Float</span><span class="ludo-web-preview" data-preview="float"><span class="ludo-prev-stage"><span class="ludo-prev-box"></span></span></span></li>
+              <li class="ludo-chip has-preview ludo-chip-loop" data-name="Pulse"><span class="ludo-chip-label-text">Pulse</span><span class="ludo-web-preview" data-preview="pulse"><span class="ludo-prev-stage"><span class="ludo-prev-box"></span></span></span></li>
+              <li class="ludo-chip has-preview ludo-chip-loop" data-name="Shake"><span class="ludo-chip-label-text">Shake</span><span class="ludo-web-preview" data-preview="shake"><span class="ludo-prev-stage"><span class="ludo-prev-box"></span></span></span></li>
+              <li class="ludo-chip has-preview ludo-chip-loop" data-name="Drift"><span class="ludo-chip-label-text">Drift</span><span class="ludo-web-preview" data-preview="drift"><span class="ludo-prev-stage"><span class="ludo-prev-box"></span></span></span></li>
+              <li class="ludo-chip has-preview ludo-chip-loop" data-name="Spin"><span class="ludo-chip-label-text">Spin</span><span class="ludo-web-preview" data-preview="spin"><span class="ludo-prev-stage"><span class="ludo-prev-box"></span></span></span></li>
+              <li class="ludo-chip has-preview ludo-chip-loop" data-name="Wiggle"><span class="ludo-chip-label-text">Wiggle</span><span class="ludo-web-preview" data-preview="wiggle"><span class="ludo-prev-stage"><span class="ludo-prev-box"></span></span></span></li>
             </ul>
             <p class="ludo-chip-label">Physics</p>
             <ul class="ludo-chip-row">
@@ -418,15 +390,15 @@
             <p>Split chars · Split + precomp · Stagger in-points (0-12f gap) · Match all text to selection.</p>
             <p class="ludo-chip-label">Animate on (stackable)</p>
             <ul class="ludo-chip-row">
-              <li class="ludo-chip">Fade on</li>
-              <li class="ludo-chip">Slide up</li>
-              <li class="ludo-chip">Scale on</li>
-              <li class="ludo-chip">Drop on</li>
-              <li class="ludo-chip">Bounce on</li>
-              <li class="ludo-chip">Typewriter</li>
-              <li class="ludo-chip">Cascade</li>
-              <li class="ludo-chip">Smooth in</li>
-              <li class="ludo-chip">Blink cursor</li>
+              <li class="ludo-chip has-preview"><span class="ludo-chip-label-text">Fade on</span><span class="ludo-web-preview" data-preview="fade"><span class="ludo-prev-stage"><span class="ludo-prev-box"></span></span></span></li>
+              <li class="ludo-chip has-preview"><span class="ludo-chip-label-text">Slide up</span><span class="ludo-web-preview" data-preview="slide-u"><span class="ludo-prev-stage"><span class="ludo-prev-box"></span></span></span></li>
+              <li class="ludo-chip has-preview"><span class="ludo-chip-label-text">Scale on</span><span class="ludo-web-preview" data-preview="scale"><span class="ludo-prev-stage"><span class="ludo-prev-box"></span></span></span></li>
+              <li class="ludo-chip has-preview"><span class="ludo-chip-label-text">Drop on</span><span class="ludo-web-preview" data-preview="drop"><span class="ludo-prev-stage"><span class="ludo-prev-box"></span></span></span></li>
+              <li class="ludo-chip has-preview"><span class="ludo-chip-label-text">Bounce on</span><span class="ludo-web-preview" data-preview="bounce"><span class="ludo-prev-stage"><span class="ludo-prev-box"></span></span></span></li>
+              <li class="ludo-chip has-preview"><span class="ludo-chip-label-text">Typewriter</span><span class="ludo-web-preview" data-preview="fade"><span class="ludo-prev-stage"><span class="ludo-prev-box"></span></span></span></li>
+              <li class="ludo-chip has-preview"><span class="ludo-chip-label-text">Cascade</span><span class="ludo-web-preview" data-preview="slide-u"><span class="ludo-prev-stage"><span class="ludo-prev-box"></span></span></span></li>
+              <li class="ludo-chip has-preview"><span class="ludo-chip-label-text">Smooth in</span><span class="ludo-web-preview" data-preview="fade"><span class="ludo-prev-stage"><span class="ludo-prev-box"></span></span></span></li>
+              <li class="ludo-chip has-preview"><span class="ludo-chip-label-text">Blink cursor</span><span class="ludo-web-preview" data-preview="pulse"><span class="ludo-prev-stage"><span class="ludo-prev-box"></span></span></span></li>
             </ul>
             <p class="ludo-chip-label">Text box</p>
             <ul class="ludo-chip-row">
@@ -449,17 +421,17 @@
             <p>Live driver null with Expression Controls · Open Effect Controls · Arrange selected in grid.</p>
             <p class="ludo-chip-label">Patterns</p>
             <ul class="ludo-chip-row">
-              <li class="ludo-chip">Linear</li>
-              <li class="ludo-chip">Grid</li>
-              <li class="ludo-chip">Radial</li>
+              <li class="ludo-chip" data-pattern="linear"><span class="ludo-clone-preview" aria-hidden="true"><span class="ludo-clone-cell"></span><span class="ludo-clone-cell"></span><span class="ludo-clone-cell"></span></span><span class="ludo-chip-label-text">Linear</span></li>
+              <li class="ludo-chip" data-pattern="grid"><span class="ludo-clone-preview" data-pattern="grid" aria-hidden="true"><span class="ludo-clone-cell"></span><span class="ludo-clone-cell"></span><span class="ludo-clone-cell"></span><span class="ludo-clone-cell"></span><span class="ludo-clone-cell"></span><span class="ludo-clone-cell"></span></span><span class="ludo-chip-label-text">Grid</span></li>
+              <li class="ludo-chip" data-pattern="radial"><span class="ludo-clone-preview" aria-hidden="true"><span class="ludo-clone-cell"></span><span class="ludo-clone-cell"></span><span class="ludo-clone-cell"></span></span><span class="ludo-chip-label-text">Radial</span></li>
             </ul>
             <p class="ludo-chip-label">Effectors (On · Reverse · Amount)</p>
             <ul class="ludo-chip-row">
-              <li class="ludo-chip ludo-chip-loop">Scale</li>
-              <li class="ludo-chip ludo-chip-loop">Spacing</li>
-              <li class="ludo-chip ludo-chip-loop">Opacity</li>
-              <li class="ludo-chip ludo-chip-loop">Rotation</li>
-              <li class="ludo-chip ludo-chip-loop">Time</li>
+              <li class="ludo-chip has-preview ludo-chip-loop" data-name="Scale"><span class="ludo-chip-label-text">Scale</span><span class="ludo-web-preview" data-preview="pulse"><span class="ludo-prev-stage"><span class="ludo-prev-box"></span></span></span></li>
+              <li class="ludo-chip has-preview ludo-chip-loop" data-name="Spacing"><span class="ludo-chip-label-text">Spacing</span><span class="ludo-web-preview" data-preview="drift"><span class="ludo-prev-stage"><span class="ludo-prev-box"></span></span></span></li>
+              <li class="ludo-chip has-preview ludo-chip-loop" data-name="Opacity"><span class="ludo-chip-label-text">Opacity</span><span class="ludo-web-preview" data-preview="pulse"><span class="ludo-prev-stage"><span class="ludo-prev-box"></span></span></span></li>
+              <li class="ludo-chip has-preview ludo-chip-loop" data-name="Rotation"><span class="ludo-chip-label-text">Rotation</span><span class="ludo-web-preview" data-preview="spin"><span class="ludo-prev-stage"><span class="ludo-prev-box"></span></span></span></li>
+              <li class="ludo-chip has-preview ludo-chip-loop" data-name="Time"><span class="ludo-chip-label-text">Time</span><span class="ludo-web-preview" data-preview="drift"><span class="ludo-prev-stage"><span class="ludo-prev-box"></span></span></span></li>
             </ul>
           </div>
         </article>
@@ -556,6 +528,7 @@
 </footer>
 <script src="/js/help-widget.js" defer></script>
 <script src="/js/cuemark-turnstile.js"></script>
+<script src="/js/ludo-kit-previews.js" defer></script>
 <script>
 (function () {
   var root = document.getElementById('ludo-kit');
