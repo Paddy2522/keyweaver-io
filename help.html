@@ -12,8 +12,8 @@
   <link rel="stylesheet" href="/css/chrome.css" />
   <link rel="stylesheet" href="/css/site.css" />
   <link rel="stylesheet" href="/css/help-widget.css" />
-  <title>Help â€” Keyweaver plugins for After Effects</title>
-  <meta name="description" content="Help for Cuemark, Superconductor, Trillian, Tamborine, and Ludo â€” install, credits, and getting started in After Effects." />
+  <title>Help - Keyweaver plugins for After Effects</title>
+  <meta name="description" content="Help for Cuemark, Superconductor, Trillian, Tamborine, and Ludo - install, credits, and getting started in After Effects." />
   <link rel="canonical" href="https://keyweaver.io/help" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -276,7 +276,6 @@
       .sidebar { display: none; }
       .main { padding: 2rem 1.25rem 4rem; }
       nav { padding: 0 1rem; }
-      .nav-links { display: none; }
       .help-tabs { top: 56px; padding: 0.65rem 1rem; overflow-x: auto; }
     }
 
@@ -389,21 +388,15 @@
     <!-- INSTALL -->
     <div class="help-section" id="install">
       <h2>Installation</h2>
-      <p>Cuemark is a CEP panel for Adobe After Effects. The panel appears under <strong>Window â†’ Extensions</strong> after you install it and fully restart AE.</p>
+      <p>Cuemark is a CEP panel for Adobe After Effects. The panel appears under <strong>Window → Extensions</strong> after you install it and fully restart AE.</p>
       <p>Full step-by-step instructions are on the <a href="/download">download page</a>.</p>
 
       <h3>Windows (recommended)</h3>
       <p>Download <strong>Keyweaver Installer</strong> from the <a href="/download">download page</a> and run <strong>Keyweaver-Setup.exe</strong>. It installs <strong>Keyweaver Manager</strong> on your PC (signed by Keyweaver Ltd). Open Manager from the Start Menu, click <strong>Install</strong> on Cuemark, then fully quit and reopen After Effects.</p>
-      <p>If Windows shows SmartScreen, click <strong>More info</strong> â†’ <strong>Run anyway</strong> and confirm the publisher is <strong>Keyweaver Ltd</strong>. No admin password is required.</p>
-
-      <h3>Windows (zip fallback)</h3>
-      <p>Prefer not to run an .exe? Download the zip from the <a href="/download">download page</a>, extract it, and double-click <strong>Install-Cuemark.cmd</strong>. Click <strong>Run</strong> if Windows says the publisher could not be verified. The installer copies files to your user AppData folder only.</p>
-      <p>Manual fallback: copy <strong>com.captioncraft.panel</strong> to <code>%AppData%\Adobe\CEP\extensions\</code> and double-click <strong>Enable-Cuemark-CEP.reg</strong> once (both included in the zip).</p>
+      <p>If Windows shows SmartScreen, click <strong>More info</strong> → <strong>Run anyway</strong> and confirm the publisher is <strong>Keyweaver Ltd</strong>. No admin password is required.</p>
 
       <h3>macOS</h3>
-      <p>Download <strong>Keyweaver Manager</strong> (<code>Keyweaver-Manager.pkg</code>) from the <a href="/download#mac">download page</a>, install it, then click <strong>Install</strong> on Cuemark in the catalog. Fully quit and reopen After Effects.</p>
-      <p>Manual fallback: copy the panel folder to <code>~/Library/Application Support/Adobe/CEP/extensions/</code> and run <code>defaults write com.adobe.CSXS.12 PlayerDebugMode 1</code> in Terminal (see README.txt).</p>
-      <p>The Mac installer includes ffmpeg for video transcription - no Homebrew or extra setup needed. If video generate still fails, re-download from the <a href="/download">download page</a> and run the installer again.</p>
+      <p>Download <strong>Keyweaver Manager</strong> (<code>Keyweaver-Manager.pkg</code>) from the <a href="/download#mac">download page</a>, install it, then click <strong>Install</strong> on Cuemark in the catalog. Fully quit and reopen After Effects. ffmpeg is bundled for video transcription.</p>
       <div class="note note-warn">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
         <p>After installing, you must fully quit and relaunch After Effects. Restarting is required - closing and reopening a panel is not enough.</p>
@@ -419,7 +412,7 @@
           <div class="step-num">1</div>
           <div class="step-body">
             <h4>Open the panel</h4>
-            <p>In After Effects, go to Window â†’ Extensions â†’ Keyweaver - Cuemark. Sign in with your Keyweaver account.</p>
+            <p>In After Effects, go to Window → Extensions → Keyweaver - Cuemark. Sign in with your Keyweaver account.</p>
           </div>
         </div>
         <div class="step">
@@ -582,7 +575,7 @@
     <div class="help-section" id="troubleshooting">
       <h2>Troubleshooting</h2>
 
-      <h3>Panel doesn't appear in Window â†’ Extensions</h3>
+      <h3>Panel doesn't appear in Window → Extensions</h3>
       <p>On Windows or macOS, open <strong>Keyweaver Manager</strong> and click <strong>Install</strong> on Cuemark. Then fully quit and relaunch After Effects.</p>
 
       <h3>Video generate fails on Mac</h3>
@@ -711,15 +704,12 @@
 
     <div class="help-section" id="superconductor-install">
       <h2>Installation</h2>
-      <p>Superconductor is a CEP panel for Adobe After Effects. The panel appears under <strong>Window â†’ Extensions</strong> after you install it and fully restart AE.</p>
+      <p>Superconductor is a CEP panel for Adobe After Effects. The panel appears under <strong>Window → Extensions</strong> after you install it and fully restart AE.</p>
       <p>Full step-by-step instructions are on the <a href="/download">download page</a>.</p>
 
       <h3>Windows (recommended)</h3>
       <p>Download <strong>Keyweaver Installer</strong> from the <a href="/download">download page</a> and run <strong>Keyweaver-Setup.exe</strong>. Open <strong>Keyweaver Manager</strong>, click <strong>Install</strong> on Superconductor, then fully quit and reopen After Effects.</p>
-      <p>If Windows shows SmartScreen, click <strong>More info</strong> â†’ <strong>Run anyway</strong> and confirm the publisher is <strong>Keyweaver Ltd</strong>.</p>
-
-      <h3>Windows (zip fallback)</h3>
-      <p>Download the Superconductor zip from the <a href="/download">download page</a>, extract it, and double-click <strong>Install-Superconductor.cmd</strong>. The installer copies files to your user AppData folder only.</p>
+      <p>If Windows shows SmartScreen, click <strong>More info</strong> → <strong>Run anyway</strong> and confirm the publisher is <strong>Keyweaver Ltd</strong>.</p>
 
       <h3>macOS</h3>
       <p>Install <strong>Keyweaver Manager</strong> from the <a href="/download#mac">download page</a>, then click <strong>Install</strong> on Superconductor in the catalog. Fully quit and reopen After Effects.</p>
@@ -736,7 +726,7 @@
           <div class="step-num">1</div>
           <div class="step-body">
             <h4>Open the panel</h4>
-            <p>In After Effects, go to Window â†’ Extensions â†’ Keyweaver - Superconductor. Sign in with your Keyweaver account, or start with guest trial credits.</p>
+            <p>In After Effects, go to Window → Extensions → Keyweaver - Superconductor. Sign in with your Keyweaver account, or start with guest trial credits.</p>
           </div>
         </div>
         <div class="step">
@@ -807,7 +797,7 @@
 
     <div class="help-section" id="superconductor-troubleshooting">
       <h2>Troubleshooting</h2>
-      <h3>Panel doesn't appear in Window â†’ Extensions</h3>
+      <h3>Panel doesn't appear in Window → Extensions</h3>
       <p>Reinstall from Keyweaver Manager, then fully quit and relaunch After Effects.</p>
       <h3>Blank white panel</h3>
       <p>Reinstall from Keyweaver Manager and fully relaunch AE. If still blank, right-click inside the panel and choose <strong>Inspect</strong> to see any JavaScript errors.</p>
@@ -899,14 +889,11 @@
 
     <div class="help-section" id="trillian-install">
       <h2>Installation</h2>
-      <p>Trillian is a CEP panel for Adobe After Effects. The panel appears under <strong>Window â†’ Extensions</strong> after you install it and fully restart AE.</p>
+      <p>Trillian is a CEP panel for Adobe After Effects. The panel appears under <strong>Window → Extensions</strong> after you install it and fully restart AE.</p>
       <p>Full step-by-step instructions are on the <a href="/download">download page</a>.</p>
 
       <h3>Windows (recommended)</h3>
       <p>Download <strong>Keyweaver Installer</strong> from the <a href="/download">download page</a> and run <strong>Keyweaver-Setup.exe</strong>. Open <strong>Keyweaver Manager</strong>, click <strong>Install</strong> on Trillian, then fully quit and reopen After Effects.</p>
-
-      <h3>Windows (zip fallback)</h3>
-      <p>Download the Trillian zip, extract it, and double-click <strong>Install-Trillian.cmd</strong>.</p>
 
       <h3>macOS</h3>
       <p>Install <strong>Keyweaver Manager</strong> from the <a href="/download#mac">download page</a>, then click <strong>Install</strong> on Trillian in the catalog. Fully quit and reopen After Effects.</p>
@@ -923,7 +910,7 @@
           <div class="step-num">1</div>
           <div class="step-body">
             <h4>Open the panel</h4>
-            <p>In After Effects, go to Window â†’ Extensions â†’ Keyweaver - Trillian. Sign in, or start with guest trial credits.</p>
+            <p>In After Effects, go to Window → Extensions → Keyweaver - Trillian. Sign in, or start with guest trial credits.</p>
           </div>
         </div>
         <div class="step">
@@ -971,7 +958,7 @@
       <h3>Script</h3>
       <p>Paste dialogue or narration into the script field. Keep it under <strong>2500 characters</strong>. The meta line shows character count and credit estimate.</p>
       <h3>Voices</h3>
-      <p>Search by name, filter by gender or accent, and sort by Most popular or Aâ€“Z. Preview a voice before you generate.</p>
+      <p>Search by name, filter by gender or accent, and sort by Most popular or A-Z. Preview a voice before you generate.</p>
       <h3>Generate voiceover</h3>
       <p>Generate is enabled when you have a non-empty script, a selected voice, and enough credits. The finished take is saved to your library.</p>
     </div>
@@ -987,12 +974,12 @@
 
     <div class="help-section" id="trillian-troubleshooting">
       <h2>Troubleshooting</h2>
-      <h3>Panel doesn't appear in Window â†’ Extensions</h3>
+      <h3>Panel doesn't appear in Window → Extensions</h3>
       <p>Reinstall from Keyweaver Manager, then fully quit and relaunch After Effects.</p>
       <h3>Generate button stays disabled</h3>
       <p>Check that the script is not empty, a voice is selected, the script is under 2500 characters, and the voice provider is ready.</p>
       <h3>Import + captions says install Cuemark</h3>
-      <p>Install Cuemark from Keyweaver Manager (or the Cuemark zip), then try again. Caption import is free once Cuemark is available.</p>
+      <p>Install Cuemark from Keyweaver Manager, then try again. Caption import is free once Cuemark is available.</p>
       <h3>Import fails</h3>
       <p>Make sure a composition is open and active in After Effects, then retry Import.</p>
       <h3>Network or auth errors</h3>
@@ -1080,14 +1067,11 @@
 
     <div class="help-section" id="tamborine-install">
       <h2>Installation</h2>
-      <p>Tamborine is a CEP panel for Adobe After Effects. The panel appears under <strong>Window â†’ Extensions</strong> after you install it and fully restart AE.</p>
+      <p>Tamborine is a CEP panel for Adobe After Effects. The panel appears under <strong>Window → Extensions</strong> after you install it and fully restart AE.</p>
       <p>Full step-by-step instructions are on the <a href="/download">download page</a>.</p>
 
       <h3>Windows (recommended)</h3>
       <p>Download <strong>Keyweaver Installer</strong> from the <a href="/download">download page</a> and run <strong>Keyweaver-Setup.exe</strong>. Open <strong>Keyweaver Manager</strong>, click <strong>Install</strong> on Tamborine, then fully quit and reopen After Effects.</p>
-
-      <h3>Windows (zip fallback)</h3>
-      <p>Download the Tamborine zip, extract it, and double-click <strong>Install-Tamborine.cmd</strong>.</p>
 
       <h3>macOS</h3>
       <p>Install <strong>Keyweaver Manager</strong> from the <a href="/download#mac">download page</a>, then click <strong>Install</strong> on Tamborine in the catalog. Fully quit and reopen After Effects.</p>
@@ -1104,7 +1088,7 @@
           <div class="step-num">1</div>
           <div class="step-body">
             <h4>Open the panel</h4>
-            <p>In After Effects, go to Window â†’ Extensions â†’ Keyweaver - Tamborine. Sign in, or start with guest trial credits.</p>
+            <p>In After Effects, go to Window → Extensions → Keyweaver - Tamborine. Sign in, or start with guest trial credits.</p>
           </div>
         </div>
         <div class="step">
@@ -1174,7 +1158,7 @@
 
     <div class="help-section" id="tamborine-troubleshooting">
       <h2>Troubleshooting</h2>
-      <h3>Panel doesn't appear in Window â†’ Extensions</h3>
+      <h3>Panel doesn't appear in Window → Extensions</h3>
       <p>Reinstall from Keyweaver Manager, then fully quit and relaunch After Effects.</p>
       <h3>Generate button stays disabled</h3>
       <p>Enter a prompt and wait until the audio provider is ready. Check that you have enough credits for the selected duration.</p>
@@ -1267,14 +1251,11 @@
 
     <div class="help-section" id="ludo-install">
       <h2>Installation</h2>
-      <p>Ludo is a CEP panel for Adobe After Effects. The panel appears under <strong>Window â†’ Extensions</strong> after you install it and fully restart AE.</p>
+      <p>Ludo is a CEP panel for Adobe After Effects. The panel appears under <strong>Window → Extensions</strong> after you install it and fully restart AE.</p>
       <p>Full step-by-step instructions are on the <a href="/download">download page</a>.</p>
 
       <h3>Windows (recommended)</h3>
       <p>Download <strong>Keyweaver Installer</strong> from the <a href="/download">download page</a> and run <strong>Keyweaver-Setup.exe</strong>. Open <strong>Keyweaver Manager</strong>, click <strong>Install</strong> on Ludo, then fully quit and reopen After Effects.</p>
-
-      <h3>Windows (zip fallback)</h3>
-      <p>Download the Ludo zip, extract it, and double-click <strong>Install-Ludo.cmd</strong>.</p>
 
       <h3>macOS</h3>
       <p>Install <strong>Keyweaver Manager</strong> from the <a href="/download#mac">download page</a>, then click <strong>Install</strong> on Ludo in the catalog. Fully quit and reopen After Effects.</p>
@@ -1291,7 +1272,7 @@
           <div class="step-num">1</div>
           <div class="step-body">
             <h4>Open the panel</h4>
-            <p>In After Effects, go to Window â†’ Extensions â†’ Keyweaver - Ludo.</p>
+            <p>In After Effects, go to Window → Extensions → Keyweaver - Ludo.</p>
           </div>
         </div>
         <div class="step">
@@ -1348,7 +1329,7 @@
         <li><strong>Stagger / Animate on</strong> - Fade on, Slide up, Typewriter, Cascade, Smooth in, and more</li>
         <li><strong>Blink cursor</strong> - available when Typewriter is on</li>
         <li><strong>Text box</strong> - stroke box with padding, width, roundness, and colour</li>
-        <li><strong>Copy style to all text</strong> - match the selected text layerâ€™s style across other text in the comp</li>
+        <li><strong>Copy style to all text</strong> - match the selected text layer's style across other text in the comp</li>
       </ul>
     </div>
 
@@ -1367,12 +1348,12 @@
       <h3>Still frame</h3>
       <p>Export the current frame as PNG, JPEG, TIFF, or PSD with a save dialog. The Render Queue window stays out of the way.</p>
       <h3>GIF</h3>
-      <p>Export the work area as a GIF. Choose scale, frame skip, and compression - the panel shows a live size estimate. GIF export needs ffmpeg (bundled with the Ludo install, or it can fall back to Cuemarkâ€™s bundled copy if present).</p>
+      <p>Export the work area as a GIF. Choose scale, frame skip, and compression - the panel shows a live size estimate. GIF export needs ffmpeg (bundled with the Ludo install, or it can fall back to Cuemark's bundled copy if present).</p>
     </div>
 
     <div class="help-section" id="ludo-troubleshooting">
       <h2>Troubleshooting</h2>
-      <h3>Panel doesn't appear in Window â†’ Extensions</h3>
+      <h3>Panel doesn't appear in Window → Extensions</h3>
       <p>Reinstall from Keyweaver Manager, then fully quit and relaunch After Effects.</p>
       <h3>Tools are greyed out</h3>
       <p>Open a composition and select a layer or keyframes that match the tool. Text tools need a text layer; keyframe tools need selected keys.</p>
@@ -1461,7 +1442,7 @@
         if (on) panel.removeAttribute('hidden');
         else panel.setAttribute('hidden', '');
       });
-      // Only rewrite the hash when switching product tabs â€” never wipe section anchors like #install
+      // Only rewrite the hash when switching product tabs - never wipe section anchors like #install
       if (opts.updateHash) {
         var next = '#' + id;
         if (location.hash !== next) history.replaceState(null, '', next);
@@ -1488,12 +1469,12 @@
         show('cuemark', { updateHash: false });
         return;
       }
-      // Product tab: #superconductor, #ludo, â€¦
+      // Product tab: #superconductor, #ludo, ...
       if (valid[raw]) {
         show(raw, { updateHash: false });
         return;
       }
-      // Prefixed section: #superconductor-install, #ludo-export, â€¦
+      // Prefixed section: #superconductor-install, #ludo-export, ...
       var dash = raw.indexOf('-');
       if (dash > 0) {
         var product = raw.slice(0, dash);
@@ -1503,7 +1484,7 @@
           return;
         }
       }
-      // Cuemark section deep-link: #install, #credits, #faq, â€¦
+      // Cuemark section deep-link: #install, #credits, #faq, ...
       show('cuemark', { updateHash: false });
       scrollToId(raw);
     }

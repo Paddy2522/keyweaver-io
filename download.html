@@ -507,7 +507,6 @@
 
     @media (max-width: 640px) {
       nav { padding: 0 1rem; }
-      .nav-links { display: none; }
       .content { padding: 3rem 1.25rem; }
       .hero { padding: 4rem 1.25rem 2.5rem; }
     }
@@ -1055,7 +1054,6 @@
     winExe: 'Download Keyweaver Installer',
     winZip: 'Download zip for Windows',
     macPkg: 'Download Keyweaver Manager',
-    macZip: 'Download for macOS'
   };
 
   var pendingWinExeHref = '';
@@ -1221,8 +1219,7 @@
     const fileNames = {
       winExe: '',
       winZip: '',
-      macPkg: '',
-      macZip: ''
+      macPkg: ''
     };
 
     function setVersion(v, bootstrap) {
@@ -1231,24 +1228,19 @@
       fileNames.winExe = 'Keyweaver-Setup-' + bootstrapVersion + '.exe';
       fileNames.winZip = 'Cuemark-Install-win-v' + version + '.zip';
       fileNames.macPkg = 'Keyweaver-Manager-' + bootstrapVersion + '.pkg';
-      fileNames.macZip = 'Cuemark-Install-mac-v' + version + '.zip';
       const verEl = document.getElementById('download-version');
       if (verEl) verEl.textContent = version;
       const winPrimary = document.getElementById('win-primary-name');
-      const macName = document.getElementById('mac-zip-name');
       const winStepZip = document.getElementById('win-step-zip-name');
       const winStepExe = document.getElementById('win-step-exe-name');
-      const macStepName = document.getElementById('mac-step-zip-name');
       const macStepPkg = document.getElementById('mac-step-pkg-name');
       const macFilename = document.getElementById('mac-filename-muted');
       const winZipAltLink = document.getElementById('win-zip-alt-link');
       if (winPrimary && !document.body.dataset.winExePrimary) {
         winPrimary.textContent = 'Cuemark for Windows (zip)';
       }
-      if (macName) macName.textContent = fileNames.macZip;
       if (winStepZip) winStepZip.textContent = fileNames.winZip;
       if (winStepExe) winStepExe.textContent = fileNames.winExe;
-      if (macStepName) macStepName.textContent = fileNames.macZip;
       if (macStepPkg) macStepPkg.textContent = fileNames.macPkg;
       if (macFilename) macFilename.textContent = fileNames.macPkg;
       if (winZipAltLink) winZipAltLink.textContent = fileNames.winZip;
@@ -1330,7 +1322,6 @@
         winExe: SITE_DOWNLOAD_BASE + fileNames.winExe,
         winZip: SITE_DOWNLOAD_BASE + fileNames.winZip,
         macPkg: SITE_DOWNLOAD_BASE + fileNames.macPkg,
-        macZip: SITE_DOWNLOAD_BASE + fileNames.macZip
       };
       document.querySelectorAll('[data-file]').forEach(el => {
         const key = el.getAttribute('data-file');

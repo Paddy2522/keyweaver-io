@@ -113,6 +113,12 @@
       pointer-events: none;
     }
 
+    .hero .product-hero-logo {
+      position: relative;
+      z-index: 1;
+      margin-bottom: 1.75rem;
+    }
+
     .hero-eyebrow {
       display: inline-flex; align-items: center; gap: 8px;
       padding: 5px 12px;
@@ -124,6 +130,8 @@
       letter-spacing: 0.04em;
       text-transform: uppercase;
       margin-bottom: 2rem;
+      position: relative;
+      z-index: 1;
     }
     .hero-eyebrow-dot {
       width: 6px; height: 6px;
@@ -530,7 +538,6 @@
     /* Responsive */
     @media (max-width: 640px) {
       nav { padding: 0 1rem; }
-      .nav-links { display: none; }
       section { padding: 4rem 1.25rem; }
       .hero { padding: 6rem 1.25rem 3rem; }
       .download-box { padding: 2rem 1.5rem; }
@@ -584,7 +591,7 @@
     </li>
     <li><a href="/pricing">Pricing</a></li>
     <li><a href="/download">Download</a></li>
-    <li><a href="/help">Help</a></li>
+    <li><a href="/help#cuemark">Help</a></li>
   </ul>
   <div class="nav-cta">
     <a href="/login" class="btn btn-ghost">Sign in</a>
@@ -599,6 +606,7 @@
 
 <!-- HERO -->
 <section class="hero">
+  <img class="product-hero-logo" src="/images/plugins/cuemark-web-logo.svg" alt="Cuemark" width="280" height="48" />
   <div class="hero-eyebrow">
     <span class="hero-eyebrow-dot"></span>
     AI Captions · After Effects plugin
@@ -619,9 +627,9 @@
         <path d="M8 2v8M5 7l3 3 3-3M2 12h12" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
     </a>
-    <a href="#how-it-works" class="btn btn-ghost btn-xl">See how it works</a>
+    <a href="/pricing" class="btn btn-ghost btn-xl">See pricing</a>
   </div>
-  <p class="hero-note">Guest trial in the panel · Sign up free for 40 shared Keyweaver Credits</p>
+  <p class="hero-note">Guest trial in the panel · Sign up free for 40 shared Keyweaver Credits · <a href="#how-it-works" style="color:var(--muted);text-decoration:underline;text-underline-offset:3px;">How it works</a></p>
 
   <!-- mini demo -->
   <div class="caption-demo">
@@ -846,53 +854,53 @@
 
 <hr class="divider" />
 
-<!-- DOWNLOAD -->
-<section id="download-section">
-  <div class="container flex-center">
-    <div class="download-box">
-      <div>
-        <p class="section-label" style="margin-bottom:0.5rem;">Get started</p>
-        <h2 class="section-title" style="font-size:1.8rem;">Download Keyweaver</h2>
-        <div class="download-reqs">
-          <span class="req-badge">
-            <svg viewBox="0 0 13 13"><rect x="1.5" y="1.5" width="10" height="10" rx="1.5"/><path d="M4 6.5h5M6.5 4v5"/></svg>
-            After Effects 2022 or later
-          </span>
-          <span class="req-badge">
-            <svg viewBox="0 0 13 13"><rect x="1.5" y="1.5" width="10" height="10" rx="1.5"/><path d="M4 6.5h5M6.5 4v5"/></svg>
-            Windows 10 / macOS 12+
-          </span>
-          <span class="req-badge">
-            <svg viewBox="0 0 13 13"><rect x="1.5" y="1.5" width="10" height="10" rx="1.5"/><path d="M4 6.5h5M6.5 4v5"/></svg>
-            Free to install
-          </span>
-        </div>
-      </div>
-      <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-start;">
-        <a href="/download" class="btn btn-primary btn-xl">
-          Download for Windows
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-            <path d="M8 2v8M5 7l3 3 3-3M2 12h12" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </a>
-        <span style="font-size:12px; color:var(--muted);">Windows Manager installs Cuemark and the rest of the suite</span>
-        <a href="/download#mac" class="btn btn-ghost" style="font-size:13px;">Also available for macOS →</a>
-        <a href="/help#cuemark" style="font-size:12px; color:var(--muted); text-decoration:underline; text-underline-offset:3px;">Cuemark help</a>
-      </div>
+<hr class="divider" />
+
+<!-- FAQ -->
+<section id="faq" class="section">
+  <div class="container">
+    <p class="section-label">FAQ</p>
+    <h2 class="section-title">Common questions</h2>
+    <div class="feature-grid" style="margin-top:1.5rem;">
+      <div class="feature-cell"><h3>Native After Effects layers?</h3><p>Yes - Cuemark builds real AE text layers in your comp. Edit fonts, timing, and styles like any other layer.</p></div>
+      <div class="feature-cell"><h3>Credits?</h3><p>About 1 credit per minute of audio. Re-style and re-wrap from a cached transcript for free. Shared Keyweaver Credits across the suite.</p></div>
+      <div class="feature-cell"><h3>Guest trial?</h3><p>Try Cuemark in the panel without an account. Verified signup adds 40 shared credits.</p></div>
     </div>
   </div>
 </section>
 
-<!-- FOOTER -->
-<footer>
+<section class="suite-strip" aria-label="Also in Keyweaver">
+  <div class="container">
+    <p class="suite-strip-label">Also in Keyweaver</p>
+    <div class="suite-strip-links">
+      <a href="/superconductor">Superconductor<span>AI Video</span></a>
+      <a href="/trillian">Trillian<span>AI Voiceover</span></a>
+      <a href="/tamborine">Tamborine<span>AI Music &amp; SFX</span></a>
+      <a href="/ludo">Ludo<span>Motion Toolkit</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="cta-band">
+  <h2>Ready to try Cuemark?</h2>
+  <p>Install with Keyweaver Manager on Windows or macOS.</p>
+  <div class="product-hero-ctas">
+    <a href="/download" class="btn btn-primary btn-xl">Download</a>
+    <a href="/help#cuemark" class="btn btn-ghost btn-xl">Cuemark help</a>
+  </div>
+</section>
+
+<footer class="site-footer">
   <p>© 2026 Keyweaver Ltd. All rights reserved.</p>
   <p class="footer-entity">Registered in England &amp; Wales · Company no. 17283644 · 20 Wenlock Road, London, N1 7GU</p>
-  <ul class="footer-links">
-    <li><a href="/">Keyweaver</a></li>
+  <ul class="footer-products">
+    <li><a href="/cuemark">Cuemark</a></li>
     <li><a href="/superconductor">Superconductor</a></li>
     <li><a href="/trillian">Trillian</a></li>
     <li><a href="/tamborine">Tamborine</a></li>
     <li><a href="/ludo">Ludo</a></li>
+  </ul>
+  <ul class="footer-links">
     <li><a href="/legal/privacy">Privacy</a></li>
     <li><a href="/legal/terms">Terms</a></li>
     <li><a href="/legal/cookies">Cookies</a></li>
