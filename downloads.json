@@ -6,6 +6,7 @@
     "files":  {
                   "winExe":  "https://keyweaver.io/downloads/Keyweaver-Setup-1.0.0.exe",
                   "winZip":  "https://keyweaver.io/downloads/Cuemark-Install-win-v1.0.1.zip",
+                  "macPkg":  "https://keyweaver.io/downloads/Keyweaver-Manager-1.0.0.pkg",
                   "macZip":  "https://keyweaver.io/downloads/Cuemark-Install-mac-v1.0.1.zip"
               },
     "fallbackPrefix":  "/downloads/"
