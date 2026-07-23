@@ -56,16 +56,27 @@ echo "Product-signing pkg with: $INSTALLER_IDENTITY"
 productsign --sign "$INSTALLER_IDENTITY" "$COMPONENT_PKG" "$SIGNED_PKG"
 pkgutil --check-signature "$SIGNED_PKG" || true
 
+if [[ "${SKIP_NOTARIZE:-0}" == "1" ]]; then
+  echo ""
+  echo "Signed pkg ready (notarize skipped): $SIGNED_PKG"
+  exit 0
+fi
+
 echo "Submitting for notarization…"
 # Prefer API key env (non-interactive CI). Fall back to keychain profile for local use.
+NOTARY_TIMEOUT="${NOTARY_TIMEOUT:-150m}"
 if [[ -n "${NOTARY_KEY:-}" && -n "${NOTARY_KEY_ID:-}" && -n "${NOTARY_ISSUER:-}" ]]; then
   xcrun notarytool submit "$SIGNED_PKG" \
     --key "$NOTARY_KEY" \
     --key-id "$NOTARY_KEY_ID" \
     --issuer "$NOTARY_ISSUER" \
-    --wait
+    --wait \
+    --timeout "$NOTARY_TIMEOUT"
 else
-  xcrun notarytool submit "$SIGNED_PKG" --keychain-profile "$NOTARY_PROFILE" --wait
+  xcrun notarytool submit "$SIGNED_PKG" \
+    --keychain-profile "$NOTARY_PROFILE" \
+    --wait \
+    --timeout "$NOTARY_TIMEOUT"
 fi
 xcrun stapler staple "$SIGNED_PKG"
 xcrun stapler validate "$SIGNED_PKG"
