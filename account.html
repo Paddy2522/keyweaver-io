@@ -253,7 +253,7 @@
     }
     .empty-state p { font-size: 14px; color: var(--muted); margin-bottom: 1rem; }
 
-    /* ADMIN ANALYTICS */
+    /* ADMIN DASHBOARD */
     #admin-analytics { display: none; margin-bottom: 2.5rem; }
     #admin-analytics.visible { display: block; }
     .admin-badge {
@@ -262,7 +262,22 @@
       font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
       background: rgba(91,107,248,0.12); color: var(--accent2); border: 1px solid rgba(91,107,248,0.25);
     }
-    .admin-updated { font-size: 12px; color: var(--muted); margin-bottom: 1.25rem; }
+    .admin-updated { font-size: 12px; color: var(--muted); margin-bottom: 1rem; }
+    .admin-toolbar {
+      display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+      margin-bottom: 1.25rem;
+    }
+    .admin-btn {
+      appearance: none; cursor: pointer;
+      font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600;
+      padding: 8px 12px; border-radius: 8px;
+      border: 1px solid var(--edge); background: var(--surface); color: var(--text);
+    }
+    .admin-btn:hover { border-color: var(--accent2); color: var(--accent2); }
+    .admin-btn.primary {
+      background: var(--accent2); border-color: var(--accent2); color: #fff;
+    }
+    .admin-btn.primary:hover { filter: brightness(1.05); color: #fff; }
     .admin-stats-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -281,6 +296,22 @@
       display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 16px; margin-bottom: 1.25rem;
     }
+    .admin-panel {
+      background: var(--surface); border: 1px solid var(--edge);
+      border-radius: 12px; padding: 1rem 1.25rem;
+    }
+    .admin-panel h3 {
+      font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 700;
+      color: var(--text); margin-bottom: 0.75rem;
+    }
+    .admin-kv { display: flex; flex-direction: column; gap: 8px; }
+    .admin-kv-row {
+      display: flex; justify-content: space-between; gap: 12px;
+      font-size: 13px; padding-bottom: 8px; border-bottom: 1px solid var(--edge);
+    }
+    .admin-kv-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .admin-kv-row span { color: var(--muted); }
+    .admin-kv-row strong { color: var(--text); font-weight: 600; }
     .admin-mini-chart {
       background: var(--surface); border: 1px solid var(--edge);
       border-radius: 12px; padding: 1rem 1.25rem;
@@ -296,8 +327,10 @@
       background: var(--accent); border-radius: 3px 3px 0 0;
     }
     .admin-bar.panel { background: var(--success); }
+    .admin-bar.install { background: #e6a23c; }
     .admin-bar-label { font-size: 9px; color: var(--muted); }
-    .admin-table .history-row { grid-template-columns: 1.2fr 0.8fr 0.8fr auto; }
+    .admin-table .history-row { grid-template-columns: 1.4fr 0.7fr 0.7fr 0.8fr; }
+    .admin-table.wide .history-row { grid-template-columns: 1.3fr 0.7fr 0.7fr 0.8fr 0.7fr; }
     .admin-muted { color: var(--muted); font-size: 12px; }
     .admin-funnel {
       display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 1.25rem;
@@ -307,6 +340,32 @@
       border-radius: 999px; padding: 8px 14px; font-size: 13px; color: var(--text);
     }
     .admin-funnel-pill strong { color: var(--accent2); }
+    .admin-consent-yes { color: var(--success); font-weight: 600; font-size: 12px; }
+    .admin-consent-no { color: var(--muted); font-size: 12px; }
+    .admin-search-row {
+      display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 0.75rem;
+    }
+    .admin-search-row input {
+      flex: 1; min-width: 200px;
+      background: var(--bg); border: 1px solid var(--edge); border-radius: 8px;
+      padding: 10px 12px; color: var(--text); font-size: 13px;
+      font-family: 'Inter', sans-serif;
+    }
+    .admin-search-row input:focus { outline: none; border-color: var(--accent2); }
+    .admin-customer-card {
+      background: var(--bg); border: 1px solid var(--edge); border-radius: 10px;
+      padding: 12px 14px; margin-bottom: 8px;
+    }
+    .admin-customer-card h4 {
+      font-size: 14px; font-weight: 600; margin: 0 0 6px;
+      display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+    }
+    .admin-customer-meta {
+      display: flex; flex-wrap: wrap; gap: 10px 16px;
+      font-size: 12px; color: var(--muted);
+    }
+    .admin-customer-meta a { color: var(--accent2); text-decoration: none; }
+    .admin-customer-meta a:hover { text-decoration: underline; }
 
     /* ACCOUNT DETAILS */
     .details-list { background: var(--surface); border: 1px solid var(--edge); border-radius: 12px; overflow: hidden; }
@@ -492,21 +551,48 @@
       </div>
     </div>
 
-    <!-- ADMIN ANALYTICS (contact@keyweaver.io only - loaded via API) -->
+    <!-- ADMIN DASHBOARD (contact@keyweaver.io only - loaded via API) -->
     <div id="admin-analytics">
       <div class="section-header">
-        <h2 class="section-title">Usage analytics</h2>
+        <h2 class="section-title">Admin dashboard</h2>
         <button class="detail-action" type="button" onclick="loadAdminAnalytics(true)">Refresh</button>
       </div>
-      <div class="admin-badge">Admin view</div>
+      <div class="admin-badge">Visible only to contact@keyweaver.io</div>
       <p class="admin-updated" id="admin-updated">Loading analytics…</p>
+
+      <div class="admin-toolbar">
+        <button class="admin-btn primary" type="button" onclick="exportAdminData('signups','xls')">Export signups (.xls)</button>
+        <button class="admin-btn" type="button" onclick="exportAdminData('signups','xls',true)">Consent-only signups</button>
+        <button class="admin-btn" type="button" onclick="exportAdminData('customers','xls')">Export customers</button>
+        <button class="admin-btn" type="button" onclick="exportAdminData('marketing','xls')">Marketing list</button>
+        <button class="admin-btn" type="button" onclick="exportAdminData('signups','csv')">CSV signups</button>
+      </div>
+
       <div class="admin-stats-grid" id="admin-stats-grid"></div>
       <div class="admin-funnel" id="admin-funnel"></div>
+
+      <div class="admin-subgrid" id="admin-breakdowns"></div>
       <div class="admin-subgrid" id="admin-charts"></div>
+
       <div class="section" style="margin-top:0.5rem;">
+        <div class="section-header"><h2 class="section-title">Find customer</h2></div>
+        <div class="admin-search-row">
+          <input id="admin-customer-q" type="search" placeholder="Search by email…" onkeydown="if(event.key==='Enter')searchAdminCustomers()" />
+          <button class="admin-btn primary" type="button" onclick="searchAdminCustomers()">Search</button>
+        </div>
+        <div id="admin-customer-results"><p class="admin-muted">Search an email to see plan, Stripe IDs, consent, credits, and devices.</p></div>
+      </div>
+
+      <div class="section">
+        <div class="section-header"><h2 class="section-title">Paying / Stripe customers</h2></div>
+        <div class="history-table admin-table wide" id="admin-customers-table"></div>
+      </div>
+
+      <div class="section">
         <div class="section-header"><h2 class="section-title">Recent signups</h2></div>
         <div class="history-table admin-table" id="admin-signups-table"></div>
       </div>
+
       <div class="section">
         <div class="section-header"><h2 class="section-title">Recent funnel events</h2></div>
         <div class="history-table admin-table" id="admin-events-table"></div>
@@ -750,11 +836,44 @@
     return '<div class="admin-mini-chart"><h3>' + title + '</h3><div class="admin-bars">' + bars + '</div></div>';
   }
 
+  function renderKvPanel(title, entries) {
+    const rows = Object.keys(entries || {}).length
+      ? Object.entries(entries)
+          .sort((a, b) => Number(b[1]) - Number(a[1]))
+          .map(([k, v]) => '<div class="admin-kv-row"><span>' + escapeHtml(labelAsset(k)) + '</span><strong>' + v + '</strong></div>')
+          .join('')
+      : '<p class="admin-muted">No data yet.</p>';
+    return '<div class="admin-panel"><h3>' + escapeHtml(title) + '</h3><div class="admin-kv">' + rows + '</div></div>';
+  }
+
+  function labelAsset(key) {
+    const map = {
+      winExe: 'Windows installer (.exe)',
+      winZip: 'Windows zip',
+      macPkg: 'Mac installer (.pkg)',
+      winUnknown: 'Windows (unspecified)',
+      macUnknown: 'Mac (unspecified)',
+      windows: 'Windows',
+      macos: 'macOS',
+      other: 'Other',
+      'manager-win': 'Manager install (Windows)',
+      'manager-mac': 'Manager install (Mac)',
+    };
+    return map[key] || key;
+  }
+
+  function consentBadge(ok) {
+    return ok
+      ? '<span class="admin-consent-yes">Consent yes</span>'
+      : '<span class="admin-consent-no">No consent</span>';
+  }
+
   function renderAdminAnalytics(data) {
     const p7 = data.periods?.['7d'] || {};
     const p30 = data.periods?.['30d'] || {};
     const acct = data.accounts || {};
-    const funnel30 = data.funnel?.download_to_panel_pct_30d;
+    const dl = data.downloads || {};
+    const installs = data.installs || {};
 
     document.getElementById('admin-updated').textContent =
       'Updated ' + formatShortDate(data.generated_at) + ' · unique visitors = distinct IPs on tracked events';
@@ -766,43 +885,72 @@
       { v: acct.last_7d, l: 'Signups (7d)' },
       { v: acct.last_30d, l: 'Signups (30d)' },
       { v: acct.monthly_subscribers, l: 'Monthly subscribers' },
+      { v: acct.paying_customers, l: 'Paying / Stripe customers' },
+      { v: dl.by_os?.windows ?? 0, l: 'Windows downloads (all)' },
+      { v: dl.by_os?.macos ?? 0, l: 'Mac downloads (all)' },
+      { v: dl.by_os_30d?.windows ?? 0, l: 'Windows downloads (30d)' },
+      { v: dl.by_os_30d?.macos ?? 0, l: 'Mac downloads (30d)' },
+      { v: p7.plugin_install || 0, l: 'Plugin installs (7d)' },
+      { v: p30.plugin_install || 0, l: 'Plugin installs (30d)' },
       { v: p7.download_click, l: 'Download clicks (7d)' },
       { v: p7.panel_open, l: 'Panel opens (7d)' },
       { v: p7.unique_visitors, l: 'Unique visitors (7d)' },
-      { v: p30.download_click, l: 'Download clicks (30d)' },
-      { v: p30.panel_open, l: 'Panel opens (30d)' },
       { v: data.marketing?.active_opt_ins ?? 0, l: 'Marketing opt-ins' },
       { v: data.guests?.total ?? 0, l: 'Guest trials' },
+      { v: data.guests?.converted ?? 0, l: 'Guests converted' },
       { v: data.usage?.generates_last_30d ?? 0, l: 'Generates (30d)' },
       { v: data.devices?.total ?? 0, l: 'Plugin devices' },
     ].map((s) => '<div class="admin-stat"><div class="admin-stat-value">' + s.v + '</div><div class="admin-stat-label">' + s.l + '</div></div>').join('');
 
-    const funnelEl = document.getElementById('admin-funnel');
-    funnelEl.innerHTML = [
+    document.getElementById('admin-funnel').innerHTML = [
       '<span class="admin-funnel-pill">30d downloads: <strong>' + (p30.download_click || 0) + '</strong></span>',
+      '<span class="admin-funnel-pill">30d installs: <strong>' + (p30.plugin_install || 0) + '</strong></span>',
       '<span class="admin-funnel-pill">30d panel opens: <strong>' + (p30.panel_open || 0) + '</strong></span>',
-      '<span class="admin-funnel-pill">Download → panel (30d): <strong>' + (funnel30 == null ? '-' : funnel30 + '%') + '</strong></span>',
-      '<span class="admin-funnel-pill">All-time download → panel: <strong>' + (data.funnel?.download_to_panel_pct == null ? '-' : data.funnel.download_to_panel_pct + '%') + '</strong></span>',
+      '<span class="admin-funnel-pill">Download → install (30d): <strong>' + (data.funnel?.download_to_install_pct_30d == null ? '-' : data.funnel.download_to_install_pct_30d + '%') + '</strong></span>',
+      '<span class="admin-funnel-pill">Download → panel (30d): <strong>' + (data.funnel?.download_to_panel_pct_30d == null ? '-' : data.funnel.download_to_panel_pct_30d + '%') + '</strong></span>',
+    ].join('');
+
+    document.getElementById('admin-breakdowns').innerHTML = [
+      renderKvPanel('Installer downloads by OS (all time)', dl.by_os || {}),
+      renderKvPanel('Installer downloads by asset (all time)', dl.by_asset || {}),
+      renderKvPanel('Plugins installed (all time)', installs.by_product || {}),
+      renderKvPanel('Plugins installed (30d)', installs.by_product_30d || {}),
+      renderKvPanel('Panel opens by product (30d)', data.panel_opens?.by_product_30d || {}),
     ].join('');
 
     document.getElementById('admin-charts').innerHTML = [
       renderMiniChart('Signups (14d)', data.daily?.signups || [], ''),
       renderMiniChart('Download clicks (14d)', data.daily?.download_clicks || [], ''),
+      renderMiniChart('Plugin installs (14d)', data.daily?.plugin_installs || [], 'install'),
       renderMiniChart('Panel opens (14d)', data.daily?.panel_opens || [], 'panel'),
     ].join('');
 
+    const customers = data.recent?.customers || [];
+    const customerRows = customers.length
+      ? customers.map((c) => {
+          const mail = 'mailto:' + encodeURIComponent(c.email);
+          return '<div class="history-row"><div><div class="history-file"><a href="' + mail + '">' + escapeHtml(c.email) + '</a></div><div class="history-date">' + formatShortDate(c.created_at) + '</div></div><span class="admin-muted">' + escapeHtml((c.tier || '-') + (c.billing_cycle ? ' / ' + c.billing_cycle : '')) + '</span><span class="admin-muted">' + escapeHtml(c.subscription_status || '-') + '</span><span>' + consentBadge(c.marketing_consent) + '</span><span class="admin-muted">' + (c.credits_remaining == null ? '-' : c.credits_remaining + ' cr') + '</span></div>';
+        }).join('')
+      : '<div class="empty-state"><p>No paying customers yet.</p></div>';
+    document.getElementById('admin-customers-table').innerHTML =
+      '<div class="history-row header"><span>Email</span><span>Plan</span><span>Status</span><span>Consent</span><span>Credits</span></div><div id="admin-customer-rows">' + customerRows + '</div>';
+
     const signups = data.recent?.signups || [];
     const signupRows = signups.length
-      ? signups.map((s) => '<div class="history-row"><div><div class="history-file">' + escapeHtml(s.email) + '</div><div class="history-date">' + formatShortDate(s.created_at) + '</div></div><span class="admin-muted">' + escapeHtml(s.tier || 'spark') + '</span><span></span><span></span></div>').join('')
+      ? signups.map((s) => {
+          const mail = 'mailto:' + encodeURIComponent(s.email);
+          const name = s.name ? ' · ' + escapeHtml(s.name) : '';
+          return '<div class="history-row"><div><div class="history-file"><a href="' + mail + '">' + escapeHtml(s.email) + '</a>' + name + '</div><div class="history-date">' + formatShortDate(s.created_at) + '</div></div><span class="admin-muted">' + escapeHtml(s.tier || 'spark') + '</span><span>' + consentBadge(s.marketing_consent) + '</span><span></span></div>';
+        }).join('')
       : '<div class="empty-state"><p>No signups yet.</p></div>';
     document.getElementById('admin-signups-table').innerHTML =
-      '<div class="history-row header"><span>Email</span><span>Tier</span><span></span><span></span></div><div id="admin-signup-rows">' + signupRows + '</div>';
+      '<div class="history-row header"><span>Email</span><span>Tier</span><span>Consent</span><span></span></div><div id="admin-signup-rows">' + signupRows + '</div>';
 
     const events = data.recent?.events || [];
     const eventRows = events.length
       ? events.map((e) => {
-          const meta = [e.os, e.source, e.panel_version].filter(Boolean).join(' · ');
-          const ref = e.referrer ? truncate(e.referrer, 48) : '-';
+          const meta = [e.product, e.os, e.asset, e.source, e.panel_version].filter(Boolean).join(' · ');
+          const ref = e.referrer ? truncate(e.referrer, 40) : '-';
           return '<div class="history-row"><div><div class="history-file">' + escapeHtml(e.event_name) + '</div><div class="history-date">' + formatShortDate(e.created_at) + (meta ? ' · ' + escapeHtml(meta) : '') + '</div></div><span class="admin-muted">' + escapeHtml(ref) + '</span><span></span><span></span></div>';
         }).join('')
       : '<div class="empty-state"><p>No tracked events yet.</p></div>';
@@ -835,6 +983,78 @@
       renderAdminAnalytics(data);
       if (showToastOnRefresh) showToast('Analytics refreshed.');
     } catch {}
+  }
+
+  async function exportAdminData(type, format, consentOnly) {
+    const token = localStorage.getItem('cc_token');
+    if (!token) return;
+    const qs = new URLSearchParams({ type: type || 'signups', format: format || 'xls' });
+    if (consentOnly) qs.set('consent', '1');
+    try {
+      const res = await fetch(BACKEND + '/api/captio/account/analytics/export?' + qs.toString(), {
+        headers: { 'Authorization': 'Bearer ' + token }
+      });
+      if (!res.ok) {
+        showToast('Export failed.');
+        return;
+      }
+      const blob = await res.blob();
+      const cd = res.headers.get('Content-Disposition') || '';
+      const match = /filename="([^"]+)"/.exec(cd);
+      const filename = match ? match[1] : ('keyweaver-export.' + (format === 'csv' ? 'csv' : 'xls'));
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(a.href);
+      showToast('Export downloaded.');
+    } catch {
+      showToast('Export failed.');
+    }
+  }
+
+  async function searchAdminCustomers() {
+    const token = localStorage.getItem('cc_token');
+    if (!token) return;
+    const q = (document.getElementById('admin-customer-q').value || '').trim();
+    const box = document.getElementById('admin-customer-results');
+    if (q.length < 2) {
+      box.innerHTML = '<p class="admin-muted">Enter at least 2 characters.</p>';
+      return;
+    }
+    box.innerHTML = '<p class="admin-muted">Searching…</p>';
+    try {
+      const res = await fetch(BACKEND + '/api/captio/account/analytics/customers?q=' + encodeURIComponent(q), {
+        headers: { 'Authorization': 'Bearer ' + token }
+      });
+      if (!res.ok) {
+        box.innerHTML = '<p class="admin-muted">Search failed.</p>';
+        return;
+      }
+      const data = await res.json();
+      const customers = data.customers || [];
+      if (!customers.length) {
+        box.innerHTML = '<p class="admin-muted">No matches.</p>';
+        return;
+      }
+      box.innerHTML = customers.map((c) => {
+        const devices = (c.devices || []).map((d) => escapeHtml(d.device_name || 'device') + (d.last_seen_at ? ' (' + formatShortDate(d.last_seen_at) + ')' : '')).join(', ') || '—';
+        return '<div class="admin-customer-card"><h4><a href="mailto:' + encodeURIComponent(c.email) + '">' + escapeHtml(c.email) + '</a> ' + consentBadge(c.marketing_consent) + '</h4><div class="admin-customer-meta">' +
+          '<span>Name: ' + escapeHtml(c.name || '—') + '</span>' +
+          '<span>Plan: ' + escapeHtml((c.tier || '-') + (c.billing_cycle ? ' / ' + c.billing_cycle : '')) + '</span>' +
+          '<span>Status: ' + escapeHtml(c.subscription_status || '-') + '</span>' +
+          '<span>Credits: ' + (c.credits_remaining == null ? '—' : c.credits_remaining + ' / ' + (c.credits_total || 0)) + '</span>' +
+          '<span>Stripe: ' + escapeHtml(c.stripe_customer_id || '—') + '</span>' +
+          '<span>Sub: ' + escapeHtml(c.stripe_subscription_id || '—') + '</span>' +
+          '<span>Joined: ' + formatShortDate(c.created_at) + '</span>' +
+          '<span>Devices: ' + devices + '</span>' +
+          '</div></div>';
+      }).join('');
+    } catch {
+      box.innerHTML = '<p class="admin-muted">Search failed.</p>';
+    }
   }
 
   function renderDashboard(data) {

@@ -106,6 +106,29 @@ final class InstallService: ObservableObject {
 
     update(1.0, "\(product.shortName) installed.")
     lastMessage = "\(product.shortName) installed. Fully quit and reopen After Effects, then open \(product.menuPath ?? "Window → Extensions")."
+    Task { await Self.reportPluginInstall(productId: product.id, version: version) }
+  }
+
+  private static func reportPluginInstall(productId: String, version: String) async {
+    guard let url = URL(string: "https://keyweaver-backend.vercel.app/api/captio/analytics") else { return }
+    var request = URLRequest(url: url)
+    request.httpMethod = "POST"
+    request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
+    request.setValue("Keyweaver-Manager-Mac/1.0", forHTTPHeaderField: "User-Agent")
+    request.timeoutInterval = 8
+    let body: [String: Any] = [
+      "event_name": "plugin_install",
+      "source": "manager",
+      "product": productId.lowercased(),
+      "os": "macos",
+      "asset": "manager-mac",
+      "panel_version": version,
+      "metadata": [
+        "product": productId.lowercased(),
+      ],
+    ]
+    request.httpBody = try? JSONSerialization.data(withJSONObject: body)
+    _ = try? await URLSession.shared.data(for: request)
   }
 
   private func update(_ fraction: Double, _ status: String) {

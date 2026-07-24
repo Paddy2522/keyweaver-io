@@ -527,6 +527,37 @@ function Open-ExternalUrl {
   Start-Process $Url
 }
 
+function Send-PluginInstallAnalytics {
+  param(
+    [string]$ProductId,
+    [string]$ProductVersion = ''
+  )
+  if (-not $ProductId) { return }
+  try {
+    $payload = @{
+      event_name = 'plugin_install'
+      source = 'manager'
+      product = ([string]$ProductId).ToLowerInvariant()
+      os = 'windows'
+      asset = 'manager-win'
+      panel_version = if ($ProductVersion) { [string]$ProductVersion } else { $null }
+      metadata = @{
+        product = ([string]$ProductId).ToLowerInvariant()
+        manager_version = (Get-Content -LiteralPath (Join-Path $script:ManagerRoot 'VERSION') -ErrorAction SilentlyContinue | Select-Object -First 1)
+      }
+    }
+    $json = $payload | ConvertTo-Json -Compress -Depth 5
+    $null = Invoke-RestMethod `
+      -Method Post `
+      -Uri 'https://keyweaver-backend.vercel.app/api/captio/analytics' `
+      -ContentType 'application/json; charset=utf-8' `
+      -Body $json `
+      -TimeoutSec 8
+  } catch {
+    # Analytics must never block installs.
+  }
+}
+
 function Reset-InstallUiState {
   $script:IsBusy = $false
   Set-ManagerBusyState $false
@@ -559,6 +590,9 @@ function Initialize-InstallWorkerHost {
   $script:KwInstallBgWorker.OnCompleted = [System.Action]{
     $name = $script:KwInstallProductName
     $prod = $script:KwInstallProduct
+    try {
+      Send-PluginInstallAnalytics -ProductId ([string]$prod.id) -ProductVersion ([string]$prod.version)
+    } catch {}
     Set-Status ($name + ' installed. Quit and reopen After Effects.')
     [System.Windows.MessageBox]::Show(
       ($name + " is installed.`n`n1. Quit After Effects completely`n2. Reopen After Effects`n3. " + $prod.menuPath),
