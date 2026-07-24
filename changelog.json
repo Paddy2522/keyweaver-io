@@ -2,6 +2,18 @@
   "product": "Keyweaver",
   "releases": [
     {
+      "version": "1.0.2",
+      "date": "2026-07-24",
+      "panel": [
+        "Help opens the right product section on keyweaver.io/help",
+        "Clearer guest trial copy - each AI panel has its own trial; signup credits are shared",
+        "Preset export status no longer shows internal shipping wording"
+      ],
+      "website": [
+        "Manager catalog updated for Cuemark 1.0.2, Superconductor/Trillian/Tamborine 0.1.1, Ludo 0.3.1"
+      ]
+    },
+    {
       "version": "1.0.1",
       "date": "2026-06-25",
       "panel": [
