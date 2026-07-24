@@ -12,7 +12,7 @@
       ],
       "website": [
         "Download page and pricing copy updated for no-account trial",
-        "Windows and macOS installers updated to v1.0.1",
+        "Cuemark panel packages updated to v1.0.1 (Manager bootstrap remains 1.0.0)",
         "macOS installer now bundles ffmpeg for video transcription"
       ]
     },
