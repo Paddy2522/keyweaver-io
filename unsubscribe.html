@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" href="/images/favicon.svg" type="image/svg+xml" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/css/cookie-consent.css" />
+  <script src="/js/cookie-consent.js"></script>
+  <link rel="stylesheet" href="/css/nav-brand.css" />
+  <link rel="stylesheet" href="/css/chrome.css" />
+  <title>Unsubscribe - Keyweaver</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --ink: #0A0A0F; --lift: #1C1C28; --edge: #2A2A3D;
+      --accent: #5B6BF8; --text: #E8E8F0; --muted: #6B6B88; --danger: #E24B4A;
+    }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--ink); color: var(--text); min-height: 100vh; }
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem; height: 56px; border-bottom: 1px solid var(--edge);
+    }
+    .nav-logo { display: flex; align-items: center; text-decoration: none; color: var(--text); }
+    .page { max-width: 440px; margin: 0 auto; padding: 4rem 1.5rem 6rem; }
+    h1 { font-family: 'Syne', sans-serif; font-size: 1.75rem; font-weight: 800; margin-bottom: 0.5rem; }
+    .lead { color: var(--muted); font-size: 14px; line-height: 1.6; margin-bottom: 1.5rem; }
+    label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+    input {
+      width: 100%; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--edge);
+      background: var(--lift); color: var(--text); font-size: 14px; margin-bottom: 1rem;
+      font-family: inherit;
+    }
+    input:focus { outline: none; border-color: var(--accent); }
+    button {
+      width: 100%; padding: 12px; border: none; border-radius: 10px;
+      background: var(--accent); color: #fff; font-weight: 600; font-size: 14px;
+      cursor: pointer; font-family: inherit;
+    }
+    button:disabled { opacity: 0.6; cursor: not-allowed; }
+    .msg { margin-top: 1rem; font-size: 14px; line-height: 1.5; color: var(--muted); }
+    .msg.ok { color: #4CAF83; }
+    .msg.err { color: var(--danger); }
+    footer {
+      border-top: 1px solid var(--edge); padding: 2rem; font-size: 13px; color: var(--muted);
+      text-align: center;
+    }
+    footer a { color: var(--muted); }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="/" class="nav-logo" aria-label="Keyweaver">
+    <img src="/images/keyweaver-logo.svg" alt="" class="nav-logo-img" width="162" height="28" />
+  </a>
+  <a href="/legal/privacy" style="font-size:13px;color:var(--muted);text-decoration:none;">Privacy</a>
+</nav>
+
+<div class="page">
+  <h1>Unsubscribe</h1>
+  <p class="lead">Stop receiving Keyweaver product updates and offers. Transactional emails (account, receipts, security) are unaffected.</p>
+  <form id="unsub-form">
+    <label for="email">Email address</label>
+    <input id="email" name="email" type="email" required autocomplete="email" placeholder="you@studio.com" />
+    <button type="submit" id="submit-btn">Unsubscribe from marketing</button>
+  </form>
+  <p class="msg" id="msg" hidden></p>
+</div>
+
+<footer>
+  <p>© 2026 Keyweaver Ltd · <a href="/legal/privacy">Privacy</a> · <a href="/legal/cookies">Cookies</a></p>
+</footer>
+
+<script>
+  const BACKEND = 'https://keyweaver-backend.vercel.app';
+  const params = new URLSearchParams(window.location.search);
+  const prefill = params.get('email');
+  if (prefill) document.getElementById('email').value = prefill;
+
+  document.getElementById('unsub-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('email').value.trim();
+    const msg = document.getElementById('msg');
+    const btn = document.getElementById('submit-btn');
+    msg.hidden = true;
+    btn.disabled = true;
+    try {
+      const res = await fetch(BACKEND + '/api/captio/marketing/unsubscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+      const data = await res.json().catch(() => ({}));
+      msg.hidden = false;
+      if (!res.ok) {
+        msg.className = 'msg err';
+        msg.textContent = data.error || 'Could not unsubscribe. Try again or email privacy@keyweaver.io.';
+      } else {
+        msg.className = 'msg ok';
+        msg.textContent = data.message || 'You have been unsubscribed from marketing emails.';
+      }
+    } catch {
+      msg.hidden = false;
+      msg.className = 'msg err';
+      msg.textContent = 'Network error. Email privacy@keyweaver.io if this continues.';
+    }
+    btn.disabled = false;
+  });
+</script>
+</body>
+</html>

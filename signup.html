@@ -396,16 +396,16 @@
       </div>
 
       <div class="form-group marketing-name-wrap" id="marketing-name-wrap" hidden>
-        <label for="marketing-name">First name</label>
+        <label for="marketing-name">First name <span style="color:var(--muted);font-weight:400">(optional)</span></label>
         <input type="text" id="marketing-name" name="name" placeholder="Alex" autocomplete="given-name" maxlength="80" />
       </div>
 
       <label class="marketing-opt-in" for="marketing-opt-in">
         <input type="checkbox" id="marketing-opt-in" name="marketing_opt_in" value="1" />
         <span>
-          Email me occasional product updates, tips, and offers about Cuemark and Keyweaver.
-          Unsubscribe any time via the link in emails or by contacting
-          <a href="mailto:privacy@keyweaver.io">privacy@keyweaver.io</a>.
+          Email me occasional product updates, tips, and offers about Keyweaver plugins.
+          Unsubscribe any time via the link in emails or
+          <a href="/unsubscribe">unsubscribe here</a>.
           See our <a href="/legal/privacy">Privacy Policy</a>.
         </span>
       </label>
@@ -557,7 +557,7 @@
   function syncMarketingNameField() {
     const on = marketingOptInEl.checked;
     marketingNameWrap.hidden = !on;
-    marketingNameEl.required = on;
+    marketingNameEl.required = false;
     if (!on) marketingNameEl.value = '';
   }
 
@@ -609,12 +609,6 @@
     const password = document.getElementById('password').value;
     const marketingOptIn = marketingOptInEl.checked === true;
     const name = marketingNameEl.value.trim();
-
-    if (marketingOptIn && !name) {
-      showAlert('Please enter your first name to join the mailing list.', 'error');
-      marketingNameEl.focus();
-      return;
-    }
 
     document.getElementById('step2-label').textContent = 'Creating account…';
     document.getElementById('step2-spinner').style.display = 'block';
