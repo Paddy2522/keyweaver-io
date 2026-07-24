@@ -217,6 +217,11 @@
   </div>
 </nav>
 
+<div class="site-banner" id="deleted-banner" role="status">
+  <span>Your account has been deleted.</span>
+  <button type="button" id="deleted-banner-dismiss">Dismiss</button>
+</div>
+
 <section class="hub-hero">
   <div class="hub-hero-inner">
     <h1 class="hub-brand">Keyweaver</h1>
@@ -226,7 +231,7 @@
       <a href="/download" class="btn btn-primary btn-xl">Download free</a>
       <a href="#plugins" class="btn btn-ghost btn-xl">Explore plugins</a>
     </div>
-    <p class="hub-note">Free to install · Guest trial in every AI panel · Shared credits across the suite</p>
+    <p class="hub-note">Free to install · Per-panel guest trials · Shared credits after you create an account</p>
     <p class="hub-note" style="margin-top:0.35rem;opacity:0.85;">Windows · macOS · After Effects 2022+</p>
   </div>
 
@@ -407,6 +412,23 @@
 
 <script src="/js/help-widget.js" defer></script>
 <script src="/js/cuemark-turnstile.js"></script>
+<script>
+(function () {
+  var params = new URLSearchParams(window.location.search);
+  if (params.get('deleted') !== '1') return;
+  var banner = document.getElementById('deleted-banner');
+  if (banner) banner.classList.add('is-visible');
+  params.delete('deleted');
+  var query = params.toString();
+  history.replaceState(null, '', window.location.pathname + (query ? '?' + query : ''));
+  var dismiss = document.getElementById('deleted-banner-dismiss');
+  if (dismiss && banner) {
+    dismiss.addEventListener('click', function () {
+      banner.classList.remove('is-visible');
+    });
+  }
+})();
+</script>
 <script>
 (function () {
   var track = document.getElementById('hub-demo-track');

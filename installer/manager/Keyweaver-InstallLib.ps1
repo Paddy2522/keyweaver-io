@@ -230,7 +230,7 @@ function Install-KeyweaverProduct {
     $expected = ([string]$plat.sha256).ToLowerInvariant()
     $actual = Get-FileSha256Hex -Path $zipPath
     if ($expected -ne $actual) {
-      throw 'Download verification failed (checksum mismatch). Try again or use the zip fallback from keyweaver.io/download.'
+      throw 'Download verification failed (checksum mismatch). Try Install again from Keyweaver Manager, or re-download from keyweaver.io/download.'
     }
   }
 

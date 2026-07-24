@@ -194,6 +194,34 @@ body {
   background: var(--nav-accent2);
 }
 
+.site-banner {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 0.65rem 1.25rem;
+  background: rgba(76, 175, 131, 0.12);
+  border-bottom: 1px solid rgba(76, 175, 131, 0.35);
+  color: #9fd9bc;
+  font-size: 13px;
+  text-align: center;
+}
+
+.site-banner.is-visible {
+  display: flex;
+}
+
+.site-banner button {
+  background: transparent;
+  border: none;
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+}
+
 .nav-products {
   position: relative;
 }

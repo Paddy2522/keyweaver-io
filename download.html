@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="/css/site.css" />
   <link rel="stylesheet" href="/css/help-widget.css" />
   <title>Download Keyweaver - After Effects plugins</title>
-  <meta name="description" content="Download Keyweaver Manager for Windows or install Cuemark, Superconductor, Trillian, Tamborine, and Ludo on macOS. Free to install." />
+  <meta name="description" content="Download Keyweaver Manager for Windows and macOS, then install Cuemark, Superconductor, Trillian, Tamborine, and Ludo from the catalog. Free to install." />
   <link rel="canonical" href="https://keyweaver.io/download" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Keyweaver" />
@@ -592,7 +592,7 @@
         </div>
         <div class="win-quick-step">
           <div class="win-quick-step-num">4</div>
-          <p><strong>Reopen AE</strong> → Window → Extensions → your plugin</p>
+          <p><strong>Fully quit and reopen AE</strong> → Window → Extensions (or Extensions Legacy) → <strong>Keyweaver - …</strong></p>
         </div>
       </div>
 
@@ -600,7 +600,7 @@
         <span class="win-trust-pill"><svg viewBox="0 0 24 24"><polyline points="9 12 11 14 15 10"/></svg>Notarized by Apple</span>
         <span class="win-trust-pill">No account to try</span>
         <span class="win-trust-pill">Guest trials in AI panels</span>
-        <span class="win-trust-pill">No admin password</span>
+        <span class="win-trust-pill">Publisher: Keyweaver Limited</span>
       </div>
 
       <div class="security-notice security-notice-trust">
@@ -613,18 +613,18 @@
     <div class="os-panel active" id="panel-win">
       <div class="download-card download-card-primary">
         <div class="download-card-info">
-          <span class="download-badge" id="win-badge">Recommended for Windows</span>
+          <span class="download-badge" id="win-badge">Signed · Keyweaver Ltd</span>
           <h3 id="win-primary-name">Keyweaver Installer for Windows</h3>
-          <p id="win-primary-desc">Installs Keyweaver Manager · then install any plugin from the catalog · ~2 MB</p>
-          <span class="win-filename-muted" id="win-filename-muted" hidden></span>
+          <p id="win-primary-desc">Installs Keyweaver Manager · then install any plugin from the catalog · ~2 MB download</p>
+          <span class="win-filename-muted" id="win-filename-muted">Keyweaver-Setup-1.0.0.exe</span>
         </div>
-        <a href="#" class="btn-download is-loading" id="win-download-btn" data-file="winZip" aria-disabled="true">
+        <a href="https://keyweaver.io/downloads/Keyweaver-Setup-1.0.0.exe" class="btn-download is-loading" id="win-download-btn" data-file="winExe" aria-disabled="true" title="Download Keyweaver Installer for Windows">
           <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           <span class="btn-download-label">Preparing download…</span>
         </a>
       </div>
 
-      <div class="win-quick-steps" id="win-quick-steps" hidden>
+      <div class="win-quick-steps" id="win-quick-steps">
         <div class="win-quick-step">
           <div class="win-quick-step-num">1</div>
           <p><strong>Download</strong> Keyweaver Installer (~2 MB)</p>
@@ -639,30 +639,30 @@
         </div>
         <div class="win-quick-step">
           <div class="win-quick-step-num">4</div>
-          <p><strong>Reopen AE</strong> → Window → Extensions → your plugin</p>
+          <p><strong>Fully quit and reopen AE</strong> → Window → Extensions (or Extensions Legacy) → <strong>Keyweaver - Cuemark</strong> (or Superconductor, Trillian, Tamborine, Ludo)</p>
         </div>
       </div>
 
-      <div class="win-trust-strip" id="win-trust-strip" hidden>
+      <div class="win-trust-strip" id="win-trust-strip">
         <span class="win-trust-pill"><svg viewBox="0 0 24 24"><polyline points="9 12 11 14 15 10"/></svg>Signed by Keyweaver Ltd</span>
         <span class="win-trust-pill">No account to try</span>
         <span class="win-trust-pill">Guest trials in AI panels</span>
         <span class="win-trust-pill">No admin password</span>
       </div>
 
-      <p class="download-alt" id="win-zip-alt" hidden>Prefer no .exe? <a href="#" id="win-zip-alt-link" data-file="winZip">Download Cuemark zip instead</a> - extract and run <strong>Install-Cuemark.cmd</strong> (Cuemark only; other plugins install from Manager)</p>
-      <p class="install-hint" id="win-install-hint-zip">
+      <p class="download-alt" id="win-zip-alt">Prefer no .exe? <a href="#" id="win-zip-alt-link" data-file="winZip">Download Cuemark zip instead</a> - extract and run <strong>Install-Cuemark.cmd</strong> (Cuemark only; other plugins install from Manager)</p>
+      <p class="install-hint" id="win-install-hint-zip" hidden>
         Extract the zip, double-click <strong>Install-Cuemark.cmd</strong>, click <strong>Run</strong> if Windows asks, then restart After Effects.
         Manual copy steps are in <strong>README.txt</strong> if you prefer not to run the installer. For Superconductor, Trillian, Tamborine, or Ludo on Windows, use Keyweaver Manager.
       </p>
-      <p class="install-hint" id="win-install-hint-exe" hidden>
-        Run <strong>Keyweaver-Setup</strong> to install Keyweaver Manager. Open Manager from the Start Menu, click <strong>Install</strong> on any plugin, then fully quit and reopen After Effects.
+      <p class="install-hint" id="win-install-hint-exe">
+        Run <strong>Keyweaver-Setup</strong> to install Keyweaver Manager. Open Manager from the Start Menu, click <strong>Install</strong> on any plugin, then fully quit and reopen After Effects. On newer AE builds, look under <strong>Window → Extensions (Legacy)</strong> if Extensions is empty.
       </p>
-      <div class="security-notice" id="win-security-notice">
+      <div class="security-notice" id="win-security-notice" hidden>
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
         <p><strong>Windows may say "publisher could not be verified."</strong> That is normal for the zip installer. Click <strong>Run</strong>. The zip installs to your user folder only - no admin rights.</p>
       </div>
-      <div class="security-notice security-notice-trust" id="win-signed-notice" hidden>
+      <div class="security-notice security-notice-trust" id="win-signed-notice">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/></svg>
         <p><strong>One extra click on first run.</strong> Windows may show "Windows protected your PC" for any new installer - even signed ones. Click <strong>More info</strong> → <strong>Run anyway</strong>. Confirm the publisher is <strong>Keyweaver Ltd</strong>, then Keyweaver Manager opens. Install Cuemark, Superconductor, Trillian, Tamborine, or Ludo from the catalog.</p>
       </div>
@@ -1315,8 +1315,8 @@
 
     function applyUrls(manifest) {
       if (manifest.version) setVersion(manifest.version, manifest.bootstrapVersion);
-      const hasWinExe = !!(manifest.files && manifest.files.winExe);
-      setWindowsExePrimary(hasWinExe);
+      // Always prefer Manager installer. Zip is an optional alt only.
+      setWindowsExePrimary(true);
       initSmartscreenModal();
       const siteFallback = {
         winExe: SITE_DOWNLOAD_BASE + fileNames.winExe,
@@ -1340,11 +1340,19 @@
       if (res.ok) applyUrls(await res.json());
       else {
         setVersion(version, bootstrapVersion);
-        applyUrls({ files: {} });
+        applyUrls({ files: {
+          winExe: SITE_DOWNLOAD_BASE + fileNames.winExe,
+          winZip: SITE_DOWNLOAD_BASE + fileNames.winZip,
+          macPkg: SITE_DOWNLOAD_BASE + fileNames.macPkg
+        }});
       }
     } catch {
       setVersion(version, bootstrapVersion);
-      applyUrls({ files: {} });
+      applyUrls({ files: {
+        winExe: SITE_DOWNLOAD_BASE + fileNames.winExe,
+        winZip: SITE_DOWNLOAD_BASE + fileNames.winZip,
+        macPkg: SITE_DOWNLOAD_BASE + fileNames.macPkg
+      }});
     }
   })();
 </script>

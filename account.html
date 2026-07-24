@@ -8,9 +8,11 @@
   <script src="/js/cookie-consent.js"></script>
 
 <script src="/js/google-ads-events.js" defer></script>
+  <script src="/js/nav-auth.js" defer></script>
 
   <link rel="stylesheet" href="/css/nav-brand.css" />
   <link rel="stylesheet" href="/css/chrome.css" />
+  <link rel="stylesheet" href="/css/site.css" />
   <link rel="stylesheet" href="/css/help-widget.css" />
   <title>Account - Keyweaver</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -430,7 +432,7 @@
           <span id="plan-badge-label">Free</span>
         </div>
         <div class="plan-name" id="plan-name">Free plan</div>
-        <div class="plan-detail" id="plan-detail">40 credits on signup · shared across AI plugins · up to 15 min per generate</div>
+        <div class="plan-detail" id="plan-detail">40 credits after email verify · shared across AI plugins · up to 15 min per generate</div>
         <div class="plan-actions" id="plan-actions">
           <a href="/pricing" class="btn-manage btn-manage-primary">Upgrade plan</a>
         </div>
@@ -561,12 +563,22 @@
 
   function absorbTokenFromHash() {
     const hash = window.location.hash.replace(/^#/, '');
-    if (!hash) return;
-    const params = new URLSearchParams(hash);
-    const token = params.get('token');
-    if (token) {
-      localStorage.setItem('cc_token', token);
-      history.replaceState(null, '', window.location.pathname + window.location.search);
+    if (hash) {
+      const params = new URLSearchParams(hash);
+      const token = params.get('token');
+      if (token) {
+        localStorage.setItem('cc_token', token);
+        history.replaceState(null, '', window.location.pathname + window.location.search);
+      }
+    }
+
+    const query = new URLSearchParams(window.location.search);
+    const auth = query.get('auth');
+    if (auth) {
+      localStorage.setItem('cc_token', auth);
+      query.delete('auth');
+      const qs = query.toString();
+      history.replaceState(null, '', window.location.pathname + (qs ? '?' + qs : '') + window.location.hash);
     }
   }
 
@@ -670,9 +682,17 @@
   async function loadAccount() {
     absorbTokenFromHash();
 
+    const params = new URLSearchParams(window.location.search);
+    const justVerified = params.get('verified') === '1';
+    if (justVerified) {
+      params.delete('verified');
+      const query = params.toString();
+      history.replaceState(null, '', window.location.pathname + (query ? '?' + query : '') + window.location.hash);
+    }
+
     const token = localStorage.getItem('cc_token');
     if (!token) {
-      const next = encodeURIComponent(window.location.pathname + window.location.search);
+      const next = encodeURIComponent(window.location.pathname + window.location.search + window.location.hash);
       window.location.href = '/login?next=' + next;
       return;
     }
@@ -700,6 +720,9 @@
       document.getElementById('loading').style.display = 'none';
       document.getElementById('dashboard').style.display = 'block';
       loadAdminAnalytics(false);
+      if (justVerified) {
+        showToast('Email verified - your free credits are ready.');
+      }
 
     } catch (err) {
       showLoadError('Network error - check your connection and try again.');
@@ -859,8 +882,8 @@
     // Plan
     const planBadge = document.getElementById('plan-badge');
     const planMap = {
-      free:           { label: 'Free',    name: 'Free plan',      detail: '40 credits on signup · shared across AI plugins · up to 15 min per generate', badge: 'free' },
-      spark:          { label: 'Free',    name: 'Free plan',      detail: '40 credits on signup · shared across AI plugins · up to 15 min per generate', badge: 'free' },
+      free:           { label: 'Free',    name: 'Free plan',      detail: '40 credits after email verify · shared across AI plugins · up to 15 min per generate', badge: 'free' },
+      spark:          { label: 'Free',    name: 'Free plan',      detail: '40 credits after email verify · shared across AI plugins · up to 15 min per generate', badge: 'free' },
       monthly:        { label: 'Monthly', name: 'Monthly plan',   detail: '300 credits/month · up to 150 rollover', badge: 'active' },
       captio_monthly: { label: 'Monthly', name: 'Monthly plan',   detail: '300 credits/month · up to 150 rollover', badge: 'active' },
       studio:         { label: 'Studio',  name: 'Studio plan',    detail: '150 credits/month included', badge: 'active' },
