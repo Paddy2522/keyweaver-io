@@ -5,6 +5,13 @@
   --scrollbar-thumb: #2e2e42;
   --scrollbar-thumb-hover: #5b6bf8;
   --scrollbar-thumb-active: #7b8bff;
+  /* Cal Sans is cut very tight — open display tracking by default */
+  --display-tracking: 0.04em;
+}
+
+/* Open Cal Sans headlines (font ships optically tight) */
+h1, h2, h3 {
+  letter-spacing: var(--display-tracking);
 }
 
 .footer-entity {
