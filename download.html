@@ -1103,22 +1103,10 @@
 
   function startFileDownload(url) {
     if (!url || url === '#') return;
-    // Prefer a hidden iframe so Safari does not navigate the tab away for .pkg redirects.
-    try {
-      var frame = document.createElement('iframe');
-      frame.style.display = 'none';
-      frame.setAttribute('aria-hidden', 'true');
-      frame.src = url;
-      document.body.appendChild(frame);
-      setTimeout(function () {
-        try { frame.remove(); } catch (e) {}
-      }, 120000);
-      return;
-    } catch (e) {}
+    // Direct <a> click — do not use an iframe (CSP frame-src blocks download redirects).
     var link = document.createElement('a');
     link.href = url;
     link.rel = 'noopener';
-    link.target = '_blank';
     document.body.appendChild(link);
     link.click();
     link.remove();
