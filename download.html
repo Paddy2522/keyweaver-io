@@ -571,9 +571,9 @@
           <p>Installs Keyweaver Manager · then install any plugin from the catalog · macOS 12+</p>
           <span class="win-filename-muted" id="mac-filename-muted">Keyweaver-Manager-1.0.0.pkg</span>
         </div>
-        <a href="/downloads/Keyweaver-Manager-1.0.0.pkg" class="btn-download" data-file="macPkg" data-keep-label>
+        <a href="/downloads/Keyweaver-Manager-1.0.0.pkg" class="btn-download is-loading" id="mac-download-btn" data-file="macPkg" data-keep-label aria-disabled="true" title="Download Keyweaver Manager for Mac">
           <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          <span class="btn-download-label">Download Keyweaver Manager</span>
+          <span class="btn-download-label">Preparing download…</span>
         </a>
       </div>
 
@@ -1060,10 +1060,12 @@
 
   function trackCuemarkDownloadClick(key, href) {
     var os = (key === 'winZip' || key === 'winExe') ? 'windows' : 'macos';
+    var isInstaller = key === 'winExe' || key === 'macPkg';
     // First-party signal (consent-independent) - stored in Supabase + admin email.
     const payload = JSON.stringify({
       event_name: 'download_click',
       source: 'website',
+      product: isInstaller ? 'keyweaver' : 'cuemark',
       asset: key,
       href: href,
       page: window.location.href,
@@ -1080,10 +1082,23 @@
       body: payload,
       keepalive: true
     }).catch(function () {});
-    // Meta conversion signal so ad campaigns can optimize for the actual download action.
+
+    // Meta conversion (same PluginDownload event as the original Cuemark setup).
+    // Fires for Windows installer (.exe) and Mac installer (.pkg). Cookie consent required for fbq.
     try {
       if (typeof fbq === 'function') {
-        fbq('trackCustom', 'PluginDownload', { os: os, asset: key, content_name: 'Keyweaver Installer' });
+        var metaParams = {
+          os: os,
+          asset: key,
+          content_name: isInstaller ? 'Keyweaver Installer' : 'Cuemark Install',
+          content_category: isInstaller ? 'installer' : 'plugin_zip',
+          content_ids: [isInstaller ? 'keyweaver-installer' : 'cuemark-zip'],
+        };
+        fbq('trackCustom', 'PluginDownload', metaParams);
+        // Standard Lead helps campaigns that optimize for Lead rather than the custom event.
+        if (isInstaller) {
+          fbq('track', 'Lead', metaParams);
+        }
       }
     } catch (e) {}
     return request;
@@ -1205,8 +1220,7 @@
     el.classList.remove('is-loading');
     el.removeAttribute('aria-disabled');
     var label = el.querySelector('.btn-download-label');
-    // Preserve labels with data-keep-label (do not overwrite with generic DOWNLOAD_LABELS text)
-    if (label && DOWNLOAD_LABELS[key] && !el.hasAttribute('data-keep-label')) {
+    if (label && DOWNLOAD_LABELS[key]) {
       label.textContent = DOWNLOAD_LABELS[key];
     }
   }
