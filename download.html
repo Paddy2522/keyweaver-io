@@ -1061,7 +1061,6 @@
   function trackCuemarkDownloadClick(key, href) {
     var os = (key === 'winZip' || key === 'winExe') ? 'windows' : 'macos';
     var isInstaller = key === 'winExe' || key === 'macPkg';
-    // First-party signal (consent-independent) - stored in Supabase + admin email.
     const payload = JSON.stringify({
       event_name: 'download_click',
       source: 'website',
@@ -1073,7 +1072,8 @@
       os: os
     });
     const endpoint = 'https://keyweaver-backend.vercel.app/api/captio/analytics';
-    // Finish the request before starting the file download (keepalive alone is not reliable here).
+
+    // Await fetch so admin email is sent before the file download starts.
     const request = fetch(endpoint, {
       method: 'POST',
       mode: 'cors',
@@ -1083,8 +1083,6 @@
       keepalive: true
     }).catch(function () {});
 
-    // Meta conversion (same PluginDownload event as the original Cuemark setup).
-    // Fires for Windows installer (.exe) and Mac installer (.pkg). Cookie consent required for fbq.
     try {
       if (typeof fbq === 'function') {
         var metaParams = {
@@ -1095,7 +1093,6 @@
           content_ids: [isInstaller ? 'keyweaver-installer' : 'cuemark-zip'],
         };
         fbq('trackCustom', 'PluginDownload', metaParams);
-        // Standard Lead helps campaigns that optimize for Lead rather than the custom event.
         if (isInstaller) {
           fbq('track', 'Lead', metaParams);
         }
@@ -1106,9 +1103,22 @@
 
   function startFileDownload(url) {
     if (!url || url === '#') return;
+    // Prefer a hidden iframe so Safari does not navigate the tab away for .pkg redirects.
+    try {
+      var frame = document.createElement('iframe');
+      frame.style.display = 'none';
+      frame.setAttribute('aria-hidden', 'true');
+      frame.src = url;
+      document.body.appendChild(frame);
+      setTimeout(function () {
+        try { frame.remove(); } catch (e) {}
+      }, 120000);
+      return;
+    } catch (e) {}
     var link = document.createElement('a');
     link.href = url;
     link.rel = 'noopener';
+    link.target = '_blank';
     document.body.appendChild(link);
     link.click();
     link.remove();
