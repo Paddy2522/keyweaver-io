@@ -106,18 +106,18 @@
                          "displayName":  "Trillian by Keyweaver",
                          "description":  "AI voiceover and narration you can drop into your comp.",
                          "panelId":  "com.keyweaver.trillian.panel",
-                         "version":  "0.1.1",
+                         "version":  "0.1.2",
                          "platforms":  {
                                            "win":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Trillian-Install-win-v0.1.1.zip",
-                                                       "sha256":  "96c36bdd6f4b09d1e32b86a9d7834c844f6769f61c60f4854c843b61091ef6c8",
-                                                       "sizeBytes":  123785,
+                                                       "packageUrl":  "https://keyweaver.io/downloads/Trillian-Install-win-v0.1.2.zip",
+                                                       "sha256":  "2c3c684eb005d1f914831675f5a718d0b649bac594eb414e41d190f265d7cf70",
+                                                       "sizeBytes":  124276,
                                                        "installScript":  "trillian-install-windows.ps1"
                                                    },
                                            "mac":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Trillian-Install-mac-v0.1.1.zip",
-                                                       "sha256":  "c0421a1f621f51d5b0d549db67c5c9dba906b71c68ba9c8025e91f4ed5e8b4ef",
-                                                       "sizeBytes":  123250,
+                                                       "packageUrl":  "https://keyweaver.io/downloads/Trillian-Install-mac-v0.1.2.zip",
+                                                       "sha256":  "773641a7ec37c6b5e0eb55304c103382e2332aa2f032e18ecf2ac4048f383e23",
+                                                       "sizeBytes":  123741,
                                                        "installScript":  "trillian-install-macos.sh"
                                                    }
                                        },
