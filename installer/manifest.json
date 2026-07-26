@@ -130,18 +130,18 @@
                          "displayName":  "Tamborine by Keyweaver",
                          "description":  "Generate music beds and sound effects for your edit.",
                          "panelId":  "com.keyweaver.tamborine.panel",
-                         "version":  "0.1.1",
+                         "version":  "0.1.2",
                          "platforms":  {
                                            "win":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Tamborine-Install-win-v0.1.1.zip",
-                                                       "sha256":  "aa36ec0d35bd3ac6646d01be16262cfb889af678f8407a90ab0b8b545d4c40ce",
-                                                       "sizeBytes":  120692,
+                                                       "packageUrl":  "https://keyweaver.io/downloads/Tamborine-Install-win-v0.1.2.zip",
+                                                       "sha256":  "75d18f22e69e7732e537e012c4a9f5f8cd107e2ddbc38b4ef027a1fefc3e29ac",
+                                                       "sizeBytes":  121229,
                                                        "installScript":  "tamborine-install-windows.ps1"
                                                    },
                                            "mac":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Tamborine-Install-mac-v0.1.1.zip",
-                                                       "sha256":  "98bc6f29251d25e5366e60d2f52a7e6256bed49fd76155559993e2092dfc154c",
-                                                       "sizeBytes":  120156,
+                                                       "packageUrl":  "https://keyweaver.io/downloads/Tamborine-Install-mac-v0.1.2.zip",
+                                                       "sha256":  "a05f9c0b9d1fbde60ab581c18fcef906f32943aa8cee4aae668d0fac333de681",
+                                                       "sizeBytes":  120693,
                                                        "installScript":  "tamborine-install-macos.sh"
                                                    }
                                        },
