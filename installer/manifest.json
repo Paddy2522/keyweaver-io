@@ -38,14 +38,14 @@
                          "platforms":  {
                                            "win":  {
                                                        "packageUrl":  "https://keyweaver.io/downloads/Cuemark-Install-win-v1.0.3.zip",
-                                                       "sha256":  "e06310edc6bd8d4a434f8fce512f6ab3d7803ea32074ae1437974779a0fb849a",
-                                                       "sizeBytes":  50207714,
+                                                       "sha256":  "c6832e872b6d8e3c6fddbf2f8f02a184320bfa50bb6d8a6e6fb5127b13aefba5",
+                                                       "sizeBytes":  50207827,
                                                        "installScript":  "cuemark-install-windows.ps1"
                                                    },
                                            "mac":  {
                                                        "packageUrl":  "https://keyweaver.io/downloads/Cuemark-Install-mac-v1.0.3.zip",
-                                                       "sha256":  "ba4410c0ac1d21786f1e2ea0ba0599bd1bbec87c1eaba0a8ca59c20cf8e0da3f",
-                                                       "sizeBytes":  67621580,
+                                                       "sha256":  "3885b3cd6b377949f24c11c09e593ac5c973144be327ac0466bbd0a27c5e00ae",
+                                                       "sizeBytes":  67621693,
                                                        "installScript":  "cuemark-install-macos.sh"
                                                    }
                                        },
@@ -62,14 +62,14 @@
                          "platforms":  {
                                            "win":  {
                                                        "packageUrl":  "https://keyweaver.io/downloads/Superconductor-Install-win-v0.1.3.zip",
-                                                       "sha256":  "43e167eaeec99f1bb53bc8f3e6edb176930f6aeb031674f8c76dd4364fcb80eb",
-                                                       "sizeBytes":  126731,
+                                                       "sha256":  "45845374a57f260f72d2355b79bb13c028284fc2424bd0d9a9d4814591238354",
+                                                       "sizeBytes":  126844,
                                                        "installScript":  "superconductor-install-windows.ps1"
                                                    },
                                            "mac":  {
                                                        "packageUrl":  "https://keyweaver.io/downloads/Superconductor-Install-mac-v0.1.3.zip",
-                                                       "sha256":  "fa036ad61e22eb56e4c244ee2bae05fff3fbf7ab18baeb8124452853797bbfcb",
-                                                       "sizeBytes":  126195,
+                                                       "sha256":  "0e176c3543656c678c2d5cd78d5a566cee08e589d8417f10067f16bc2cec2734",
+                                                       "sizeBytes":  126308,
                                                        "installScript":  "superconductor-install-macos.sh"
                                                    }
                                        },
@@ -110,14 +110,14 @@
                          "platforms":  {
                                            "win":  {
                                                        "packageUrl":  "https://keyweaver.io/downloads/Trillian-Install-win-v0.1.4.zip",
-                                                       "sha256":  "fae8c56f10395cfadaafd7b7f8dd052b722d103505f8fde59aded62902183664",
-                                                       "sizeBytes":  124865,
+                                                       "sha256":  "7d6f2fb62dbaf48478e17177fd81ea4dadc7a9bc6b4725cc57526f0c2e3a4d8e",
+                                                       "sizeBytes":  124978,
                                                        "installScript":  "trillian-install-windows.ps1"
                                                    },
                                            "mac":  {
                                                        "packageUrl":  "https://keyweaver.io/downloads/Trillian-Install-mac-v0.1.4.zip",
-                                                       "sha256":  "06f01475f85f4aa8c36aa8f4f804fde10e704fb9bf2bfea5c441855d8e1910f2",
-                                                       "sizeBytes":  124330,
+                                                       "sha256":  "729f38c9082ee50a83b7209aae95590bdf68c375b69862c43e3bf5197f3c1168",
+                                                       "sizeBytes":  124443,
                                                        "installScript":  "trillian-install-macos.sh"
                                                    }
                                        },
@@ -134,14 +134,14 @@
                          "platforms":  {
                                            "win":  {
                                                        "packageUrl":  "https://keyweaver.io/downloads/Tamborine-Install-win-v0.1.4.zip",
-                                                       "sha256":  "407d2671b11c8ddc40e1651b0f87409a0955bf9a768b22fee4821f1472652aed",
-                                                       "sizeBytes":  121815,
+                                                       "sha256":  "f8b32ccd1b0a7272c1c9545148ac1eae91a934071082b60c97a7cf2e6c468652",
+                                                       "sizeBytes":  121928,
                                                        "installScript":  "tamborine-install-windows.ps1"
                                                    },
                                            "mac":  {
                                                        "packageUrl":  "https://keyweaver.io/downloads/Tamborine-Install-mac-v0.1.4.zip",
-                                                       "sha256":  "32b3edf5e3647e717939810fb1b940f3126165847fcf570f1e23f9d3f6cd8524",
-                                                       "sizeBytes":  121279,
+                                                       "sha256":  "1e74505eb1d3da8b3c41ad7e9eeeec7ac8ea0837989d8370fb7a6b0e02fecd36",
+                                                       "sizeBytes":  121392,
                                                        "installScript":  "tamborine-install-macos.sh"
                                                    }
                                        },
