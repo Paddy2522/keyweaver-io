@@ -215,6 +215,64 @@
       background: #07070D;
       pointer-events: none;
     }
+
+    /* How-it-works steps — match Cuemark main page */
+    .ludo-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1px;
+      background: var(--edge);
+      border: 1px solid var(--edge);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-top: 3.5rem;
+    }
+    .ludo-steps .step {
+      background: var(--surface);
+      padding: 2rem 1.75rem;
+    }
+    .ludo-steps .step-num {
+      font-family: 'Cal Sans', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      font-weight: 700;
+      margin-bottom: 1rem;
+      display: block;
+      width: auto;
+      height: auto;
+      border-radius: 0;
+      background: none;
+      justify-content: flex-start;
+    }
+    .ludo-steps .step-icon {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: var(--lift);
+      border: 1px solid var(--edge);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 1.25rem;
+    }
+    .ludo-steps .step-icon img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+    }
+    .ludo-steps .step h3 {
+      font-family: 'Cal Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+    .ludo-steps .step p {
+      font-size: 0.875rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
     @media (prefers-reduced-motion: reduce) {
       .ludo-kit-group { opacity: 1; transform: none; transition: none; }
     }
@@ -287,26 +345,35 @@
 
 <hr class="divider" />
 
-<section class="section">
+<section class="section" id="how-it-works">
   <div class="container">
     <p class="section-label">How it works</p>
     <h2 class="section-title">Inside After Effects, end to end</h2>
-    <div class="steps-row">
-        <div class="step-card">
-          <div class="step-num">1</div>
-          <h3>Open Ludo</h3>
-          <p>Install from Keyweaver Manager, then open the panel in After Effects.</p>
+    <div class="ludo-steps">
+      <div class="step">
+        <span class="step-num">01</span>
+        <div class="step-icon">
+          <img src="/images/how-to/ludo-step-1.jpg" alt="Ludo Animation controls panel in After Effects" width="640" height="360" loading="lazy" />
         </div>
-        <div class="step-card">
-          <div class="step-num">2</div>
-          <h3>Pick a tool</h3>
-          <p>Animate layers, stagger keys, split text, clone layouts, sample colours, or export a frame.</p>
+        <h3>Open Ludo</h3>
+        <p>Install from Keyweaver Manager, then open the panel in After Effects.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">02</span>
+        <div class="step-icon">
+          <img src="/images/how-to/ludo-step-2.jpg" alt="Ludo Layout and Cloner tools" width="640" height="360" loading="lazy" />
         </div>
-        <div class="step-card">
-          <div class="step-num">3</div>
-          <h3>Stay native</h3>
-          <p>Everything writes to AE properties and layers - no opaque black boxes.</p>
+        <h3>Pick a tool</h3>
+        <p>Animate layers, stagger keys, split text, clone layouts, sample colours, or export a frame.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">03</span>
+        <div class="step-icon">
+          <img src="/images/how-to/ludo-step-3.jpg" alt="Native After Effects timeline keyframes from Ludo" width="640" height="360" loading="lazy" />
         </div>
+        <h3>Stay native</h3>
+        <p>Everything writes to AE properties and layers - no opaque black boxes.</p>
+      </div>
     </div>
   </div>
 </section>
