@@ -2,6 +2,18 @@
   "product": "Keyweaver",
   "releases": [
     {
+      "version": "1.0.3",
+      "date": "2026-07-27",
+      "panel": [
+        "Shared Keyweaver login is more reliable across Cuemark and companion panels",
+        "Credit balance refreshes when you return to the panel after buying credits",
+        "Guest trial and signed-in account sessions no longer overwrite each other"
+      ],
+      "website": [
+        "Manager catalog updated for Cuemark 1.0.3, Superconductor 0.1.3, Trillian/Tamborine 0.1.4"
+      ]
+    },
+    {
       "version": "1.0.2",
       "date": "2026-07-24",
       "panel": [
