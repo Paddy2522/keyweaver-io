@@ -15,6 +15,9 @@ settings:
     MACOSX_DEPLOYMENT_TARGET: "13.0"
     CODE_SIGN_STYLE: Manual
     ENABLE_HARDENED_RUNTIME: YES
+    # Universal binary so Intel Macs can run builds produced on Apple Silicon CI
+    ARCHS: arm64 x86_64
+    ONLY_ACTIVE_ARCH: NO
 targets:
   KeyweaverManager:
     type: application
@@ -32,8 +35,11 @@ targets:
         LD_RUNPATH_SEARCH_PATHS: "@executable_path/../Frameworks"
         GENERATE_INFOPLIST_FILE: NO
         COMBINE_HIDPI_IMAGES: YES
+        ARCHS: arm64 x86_64
+        ONLY_ACTIVE_ARCH: NO
     info:
       path: KeyweaverManager/Resources/Info.plist
       properties:
         CFBundleDisplayName: Keyweaver Manager
         LSApplicationCategoryType: public.app-category.developer-tools
+        CFBundleIconFile: AppIcon

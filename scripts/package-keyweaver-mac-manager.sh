@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Sign + package Keyweaver Manager as a Developer ID .pkg and notarize.
 #
-# Prereqs (see docs/APPLE_MAC_SIGNING_SETUP.md):
+# Prereqs (see mac-docs/APPLE_MAC_SIGNING_SETUP.md):
 #   - Developer ID Application + Installer certs in Keychain
 #   - notarytool credentials stored (profile keyweaver-notary)
 #
@@ -20,6 +20,15 @@ SIGNED_PKG="$OUT_DIR/Keyweaver-Manager-${VERSION}.pkg"
 IDENTIFIER="io.keyweaver.manager"
 NOTARY_PROFILE="${NOTARY_PROFILE:-keyweaver-notary}"
 
+if [[ -d "$ROOT/mac-manager" ]]; then
+  ENTITLEMENTS="$ROOT/mac-manager/KeyweaverManager/Resources/KeyweaverManager.entitlements"
+elif [[ -d "$ROOT/installer/mac-manager" ]]; then
+  ENTITLEMENTS="$ROOT/installer/mac-manager/KeyweaverManager/Resources/KeyweaverManager.entitlements"
+else
+  echo "mac-manager entitlements not found under $ROOT" >&2
+  exit 1
+fi
+
 APP_IDENTITY="${APP_IDENTITY:-Developer ID Application: Keyweaver Limited (4M29F3JH68)}"
 INSTALLER_IDENTITY="${INSTALLER_IDENTITY:-Developer ID Installer: Keyweaver Limited (4M29F3JH68)}"
 
@@ -33,9 +42,17 @@ if [[ ! -d "$APP" ]]; then
   exit 1
 fi
 
+BIN="$(find "$APP/Contents/MacOS" -type f | head -n 1)"
+ARCHS_FOUND="$(lipo -archs "$BIN" 2>/dev/null || true)"
+echo "Packaging binary architectures: ${ARCHS_FOUND:-unknown}"
+if [[ "$ARCHS_FOUND" != *"arm64"* || "$ARCHS_FOUND" != *"x86_64"* ]]; then
+  echo "ERROR: refusing to package a non-universal app (${ARCHS_FOUND:-none})" >&2
+  exit 1
+fi
+
 echo "Signing app with: $APP_IDENTITY"
 codesign --force --deep --options runtime \
-  --entitlements "$ROOT/mac-manager/KeyweaverManager/Resources/KeyweaverManager.entitlements" \
+  --entitlements "$ENTITLEMENTS" \
   --sign "$APP_IDENTITY" \
   "$APP"
 codesign --verify --deep --strict --verbose=2 "$APP"
