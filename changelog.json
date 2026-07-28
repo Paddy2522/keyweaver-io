@@ -2,6 +2,18 @@
   "product": "Keyweaver",
   "releases": [
     {
+      "version": "1.0.4",
+      "date": "2026-07-28",
+      "panel": [
+        "Ludo: reliable character/word split via isolate layers",
+        "Ludo: colour palette applies to selected split characters only",
+        "Ludo: easing applies across multi-layer keyframes; cloner Offset X/Y has numeric input and snap-to-zero"
+      ],
+      "website": [
+        "Manager catalog updated for Ludo 0.3.2"
+      ]
+    },
+    {
       "version": "1.0.3",
       "date": "2026-07-27",
       "panel": [
