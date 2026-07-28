@@ -8,7 +8,7 @@
                     "baseUrl":  "https://keyweaver.io/installer/manager/",
                     "files":  {
                                   "Keyweaver-Manager.ps1":  "40f3bb5500ac10b5416990b04ac04e5dadc3b21a6d90012dbbaa0f329decbc0d",
-                                  "Keyweaver-InstallLib.ps1":  "d6569cc8c3919333bd980473f4377c23e871337048666b8d0037c2e7bc80690c",
+                                  "Keyweaver-InstallLib.ps1":  "861a8177626a03da116bfc54d103a03d77f7dead292abc2a55dcd8c6079c0afc",
                                   "Keyweaver-Manager-Launcher.ps1":  "9167c5fcf3dfd8c849ef38d2118079cddffcf1187b3bb7bac281eb2f9ba934df",
                                   "Sync-KeyweaverManagerRuntime.ps1":  "21230c134a1daaf901971817d14d317c53cd34f3df1daf54f6605885712c57bb",
                                   "Keyweaver-Manager.exe":  "218337941fcd079b68d96d73d2bc2594a27ffb20b50a94e5be9014898a10f057",
@@ -82,18 +82,18 @@
                          "displayName":  "Ludo by Keyweaver",
                          "description":  "Motion toolkit - animation, text, layout, colour, and export.",
                          "panelId":  "com.keyweaver.ludo.panel",
-                         "version":  "0.3.2",
+                         "version":  "0.3.3",
                          "platforms":  {
                                            "win":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Ludo-Install-win-v0.3.2.zip",
-                                                       "sha256":  "36fae249daba5b1d4fd62659924805257c20c687be26a7766b275e81d07e4202",
-                                                       "sizeBytes":  305876,
+                                                       "packageUrl":  "https://keyweaver.io/downloads/Ludo-Install-win-v0.3.3.zip",
+                                                       "sha256":  "c1eb95e5fb001ac88ceeed64bce94ebdb8d4b4acb162681a3ad9cbbd097148b3",
+                                                       "sizeBytes":  306334,
                                                        "installScript":  "ludo-install-windows.ps1"
                                                    },
                                            "mac":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Ludo-Install-mac-v0.3.2.zip",
-                                                       "sha256":  "491a4e5ad5d9212835af8715b928e6ccdadfecfb6e35b80283f797367d8e002c",
-                                                       "sizeBytes":  305342,
+                                                       "packageUrl":  "https://keyweaver.io/downloads/Ludo-Install-mac-v0.3.3.zip",
+                                                       "sha256":  "d24e6081abaf30ecbe1f7c75cd7e31435e2675677222ea131224a603346e2524",
+                                                       "sizeBytes":  305800,
                                                        "installScript":  "ludo-install-macos.sh"
                                                    }
                                        },

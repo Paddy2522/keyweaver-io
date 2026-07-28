@@ -2,6 +2,16 @@
   "product": "Keyweaver",
   "releases": [
     {
+      "version": "1.0.5",
+      "date": "2026-07-28",
+      "panel": [
+        "Ludo: busy overlay while After Effects applies changes, including cloner adjustments"
+      ],
+      "website": [
+        "Manager catalog updated for Ludo 0.3.3"
+      ]
+    },
+    {
       "version": "1.0.4",
       "date": "2026-07-28",
       "panel": [
