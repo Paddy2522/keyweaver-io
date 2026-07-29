@@ -34,18 +34,18 @@
                          "displayName":  "Cuemark by Keyweaver",
                          "description":  "AI subtitles and captions inside Adobe After Effects.",
                          "panelId":  "com.captioncraft.panel",
-                         "version":  "1.0.3",
+                         "version":  "1.0.4",
                          "platforms":  {
                                            "win":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Cuemark-Install-win-v1.0.3.zip",
-                                                       "sha256":  "c6832e872b6d8e3c6fddbf2f8f02a184320bfa50bb6d8a6e6fb5127b13aefba5",
-                                                       "sizeBytes":  50207827,
+                                                       "packageUrl":  "https://keyweaver.io/downloads/Cuemark-Install-win-v1.0.4.zip",
+                                                       "sha256":  "2836eaf7b61a8ef40ce848e0f9b4e94d0d884a199de8dc83d96212951126264e",
+                                                       "sizeBytes":  50208703,
                                                        "installScript":  "cuemark-install-windows.ps1"
                                                    },
                                            "mac":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Cuemark-Install-mac-v1.0.3.zip",
-                                                       "sha256":  "3885b3cd6b377949f24c11c09e593ac5c973144be327ac0466bbd0a27c5e00ae",
-                                                       "sizeBytes":  67621693,
+                                                       "packageUrl":  "https://keyweaver.io/downloads/Cuemark-Install-mac-v1.0.4.zip",
+                                                       "sha256":  "f312a4cc6d6250208d615e9787eb0b581910e4f23cc500b8b80fc2fdfc624f1c",
+                                                       "sizeBytes":  67622569,
                                                        "installScript":  "cuemark-install-macos.sh"
                                                    }
                                        },

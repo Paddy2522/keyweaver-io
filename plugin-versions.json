@@ -6,7 +6,7 @@
   },
   "plugins": {
     "cuemark": {
-      "version": "1.0.3"
+      "version": "1.0.4"
     },
     "superconductor": {
       "version": "0.1.3"

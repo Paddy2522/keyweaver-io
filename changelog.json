@@ -2,6 +2,17 @@
   "product": "Keyweaver",
   "releases": [
     {
+      "version": "1.0.6",
+      "date": "2026-07-29",
+      "panel": [
+        "Cuemark Impact Words bounce once when a word highlights",
+        "Cuemark highlight colour picker works with eyedropper and hex paste"
+      ],
+      "website": [
+        "Manager catalog updated for Cuemark 1.0.4"
+      ]
+    },
+    {
       "version": "1.0.5",
       "date": "2026-07-28",
       "panel": [
