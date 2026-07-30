@@ -4,14 +4,14 @@
   <meta charset="UTF-8" />
   <link rel="icon" href="/images/favicon.svg" type="image/svg+xml" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="/css/cookie-consent.css?v=20260730-anti-ai" />
+  <link rel="stylesheet" href="/css/cookie-consent.css" />
   <script src="/js/cookie-consent.js"></script>
   <script src="/js/nav-auth.js" defer></script>
 
 <link rel="stylesheet" href="/css/nav-brand.css" />
-  <link rel="stylesheet" href="/css/chrome.css?v=20260730-anti-ai" />
-  <link rel="stylesheet" href="/css/site.css?v=20260730-anti-ai" />
-  <link rel="stylesheet" href="/css/help-widget.css?v=20260730-anti-ai" />
+  <link rel="stylesheet" href="/css/chrome.css" />
+  <link rel="stylesheet" href="/css/site.css" />
+  <link rel="stylesheet" href="/css/help-widget.css" />
   <title>Cuemark by Keyweaver - AI Captions for After Effects</title>
   <meta name="description" content="AI-powered subtitle generator that lives inside Adobe After Effects. Transcribe, style, and sync captions in seconds." />
   <link rel="canonical" href="https://keyweaver.io/cuemark" />
@@ -20,27 +20,27 @@
   <meta property="og:image" content="https://keyweaver.io/images/keyweaver-logo.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cal+Sans&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cal+Sans&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --ink:     #161616;
-      --surface: #252525;
-      --lift:    #2c2c2c;
-      --edge:    #333333;
+      --ink:     #0A0A0F;
+      --surface: #13131A;
+      --lift:    #1C1C28;
+      --edge:    #2A2A3D;
       --accent:  #3D9CF0;
       --accent2: #5EB0F5;
       --accent-rgb: 61, 156, 240;
-      --text:    #e6e6ea;
-      --muted:   #8b8b96;
-      --subtle:  #5c5c66;
+      --text:    #E8E8F0;
+      --muted:   #6B6B88;
+      --subtle:  #3A3A52;
     }
 
     html { scroll-behavior: smooth; }
 
     body {
-      font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Inter', system-ui, sans-serif;
       background: var(--ink);
       color: var(--text);
       line-height: 1.6;
@@ -75,7 +75,7 @@
       display: inline-flex; align-items: center; gap: 6px;
       padding: 0 1rem; height: 34px;
       border-radius: 6px;
-      font-family: inherit;
+      font-family: 'Inter', sans-serif;
       font-size: 13px; font-weight: 500;
       text-decoration: none; cursor: pointer;
       transition: all 0.15s; border: none;
@@ -109,7 +109,7 @@
     .hero::before {
       content: '';
       position: absolute; inset: 0;
-      background: transparent;
+      background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(var(--accent-rgb),0.12) 0%, transparent 70%);
       pointer-events: none;
     }
 
@@ -124,7 +124,7 @@
       padding: 5px 12px;
       background: var(--lift);
       border: 1px solid var(--edge);
-      border-radius: 4px;
+      border-radius: 100px;
       font-size: 12px; font-weight: 500;
       color: var(--muted);
       letter-spacing: 0.04em;
@@ -192,7 +192,7 @@
       max-width: 720px; width: 100%;
       background: var(--surface);
       border: 1px solid var(--edge);
-      border-radius: 6px;
+      border-radius: 12px;
       overflow: hidden;
     }
 
@@ -253,7 +253,7 @@
       gap: 1px;
       background: var(--edge);
       border: 1px solid var(--edge);
-      border-radius: 6px;
+      border-radius: 12px;
       overflow: hidden;
       margin-top: 3.5rem;
     }
@@ -303,7 +303,7 @@
       gap: 1px;
       background: var(--edge);
       border: 1px solid var(--edge);
-      border-radius: 6px;
+      border-radius: 12px;
       overflow: hidden;
       margin-top: 3.5rem;
     }
@@ -416,7 +416,7 @@
     .pricing-card {
       background: var(--surface);
       border: 1px solid var(--edge);
-      border-radius: 6px;
+      border-radius: 12px;
       padding: 2rem 1.75rem;
       position: relative;
       text-align: left;
@@ -429,7 +429,7 @@
       position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
       background: var(--accent);
       color: #fff; font-size: 11px; font-weight: 600;
-      padding: 3px 12px; border-radius: 4px;
+      padding: 3px 12px; border-radius: 100px;
       letter-spacing: 0.04em; white-space: nowrap;
     }
 
@@ -478,7 +478,7 @@
     .download-box {
       background: var(--surface);
       border: 1px solid var(--edge);
-      border-radius: 6px;
+      border-radius: 16px;
       padding: 3rem 2.5rem;
       display: flex; align-items: center;
       justify-content: space-between;
@@ -637,7 +637,7 @@
       <div class="demo-dot" style="background:#FF5F57"></div>
       <div class="demo-dot" style="background:#FEBC2E"></div>
       <div class="demo-dot" style="background:#28C840"></div>
-      <span style="margin-left:8px; font-size:11px; color:var(--muted); font-family:inherit;">Cuemark by Keyweaver · After Effects 2022+</span>
+      <span style="margin-left:8px; font-size:11px; color:var(--muted); font-family:'Inter',sans-serif;">Cuemark by Keyweaver · After Effects 2022+</span>
     </div>
     <div class="caption-demo-screen">
       <div class="demo-hero-stream">
