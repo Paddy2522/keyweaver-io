@@ -8,39 +8,33 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 0 18px 0 14px;
-  height: 48px;
-  border: 1px solid rgba(91, 107, 248, 0.35);
-  border-radius: 100px;
-  background: linear-gradient(145deg, #1c1c28 0%, #13131a 100%);
-  color: #e8e8f0;
-  font-family: 'Inter', system-ui, sans-serif;
+  padding: 0 16px 0 12px;
+  height: 44px;
+  border: 1px solid #333333;
+  border-radius: 4px;
+  background: #252525;
+  color: #e6e6ea;
+  font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  box-shadow:
-    0 4px 24px rgba(0, 0, 0, 0.45),
-    0 0 0 1px rgba(255, 255, 255, 0.04) inset,
-    0 0 32px rgba(91, 107, 248, 0.12);
-  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  transition: border-color 0.15s ease, background 0.15s ease;
 }
 
 .kw-help-launcher:hover {
-  transform: translateY(-2px);
-  border-color: rgba(123, 139, 255, 0.55);
-  box-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.5),
-    0 0 40px rgba(91, 107, 248, 0.2);
+  border-color: #5c5c66;
+  background: #2c2c2c;
 }
 
 .kw-help-launcher:focus-visible {
-  outline: 2px solid #7b8bff;
+  outline: 2px solid #8796c4;
   outline-offset: 3px;
 }
 
 .kw-help-launcher[aria-expanded="true"] {
-  border-color: #5b6bf8;
-  background: linear-gradient(145deg, #252538 0%, #1a1a26 100%);
+  border-color: #6a7ab0;
+  background: #2c2c2c;
 }
 
 .kw-help-launcher-icon {
@@ -50,14 +44,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
-  background: rgba(91, 107, 248, 0.2);
+  border-radius: 4px;
+  background: transparent;
+  border: 1px solid #333333;
 }
 
 .kw-help-launcher-icon svg {
   width: 14px;
   height: 14px;
-  stroke: #7b8bff;
+  stroke: #8796c4;
   fill: none;
   stroke-width: 2;
   stroke-linecap: round;
@@ -71,9 +66,8 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #4caf83;
-  border: 2px solid #13131a;
-  box-shadow: 0 0 8px rgba(76, 175, 131, 0.6);
+  background: #5a9e78;
+  border: 2px solid #252525;
 }
 
 .kw-help-launcher {
@@ -84,11 +78,11 @@
   position: fixed;
   inset: 0;
   z-index: 9999;
-  background: rgba(6, 6, 10, 0.55);
-  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: none;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.25s ease;
+  transition: opacity 0.2s ease;
 }
 
 .kw-help-backdrop.is-open {
@@ -105,16 +99,14 @@
   max-height: min(640px, calc(100vh - 7rem));
   display: flex;
   flex-direction: column;
-  border: 1px solid #2a2a3d;
-  border-radius: 16px;
-  background: linear-gradient(180deg, #1a1a26 0%, #13131a 100%);
-  box-shadow:
-    0 24px 64px rgba(0, 0, 0, 0.55),
-    0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+  border: 1px solid #333333;
+  border-radius: 6px;
+  background: #252525;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
   opacity: 0;
-  transform: translateY(12px) scale(0.98);
+  transform: translateY(8px);
   pointer-events: none;
-  transition: opacity 0.25s ease, transform 0.25s ease;
+  transition: opacity 0.2s ease, transform 0.2s ease;
   overflow: hidden;
 }
 
@@ -130,22 +122,22 @@
   justify-content: space-between;
   gap: 12px;
   padding: 1.25rem 1.25rem 1rem;
-  border-bottom: 1px solid #2a2a3d;
-  background: rgba(91, 107, 248, 0.06);
+  border-bottom: 1px solid #333333;
+  background: rgba(106, 122, 176, 0.06);
 }
 
 .kw-help-header-text h2 {
-  font-family: 'Cal Sans', 'Inter', sans-serif;
+  font-family: 'Cal Sans', sans-serif;
   font-size: 1.1rem;
   font-weight: 700;
-  color: #e8e8f0;
+  color: #e6e6ea;
   margin-bottom: 4px;
   letter-spacing: 0.03em;
 }
 
 .kw-help-header-text p {
   font-size: 12px;
-  color: #6b6b88;
+  color: #8b8b96;
   line-height: 1.5;
 }
 
@@ -156,7 +148,7 @@
   border: none;
   border-radius: 8px;
   background: transparent;
-  color: #6b6b88;
+  color: #8b8b96;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -166,7 +158,7 @@
 
 .kw-help-close:hover {
   background: rgba(255, 255, 255, 0.06);
-  color: #e8e8f0;
+  color: #e6e6ea;
 }
 
 .kw-help-close svg {
@@ -192,7 +184,7 @@
   display: block;
   font-size: 12px;
   font-weight: 500;
-  color: #6b6b88;
+  color: #8b8b96;
   margin-bottom: 6px;
 }
 
@@ -200,11 +192,11 @@
 .kw-help-form select,
 .kw-help-form textarea {
   width: 100%;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 14px;
-  color: #e8e8f0;
-  background: #13131a;
-  border: 1px solid #2a2a3d;
+  color: #e6e6ea;
+  background: #252525;
+  border: 1px solid #333333;
   border-radius: 8px;
   padding: 0 12px;
   outline: none;
@@ -228,12 +220,12 @@
 .kw-help-form input:focus,
 .kw-help-form select:focus,
 .kw-help-form textarea:focus {
-  border-color: #5b6bf8;
+  border-color: #6a7ab0;
 }
 
 .kw-help-form input::placeholder,
 .kw-help-form textarea::placeholder {
-  color: #6b6b88;
+  color: #8b8b96;
 }
 
 .kw-help-hp {
@@ -256,9 +248,9 @@
   margin-top: 0.25rem;
   border: none;
   border-radius: 8px;
-  background: #5b6bf8;
+  background: #6a7ab0;
   color: #fff;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
@@ -270,7 +262,7 @@
 }
 
 .kw-help-submit:hover:not(:disabled) {
-  background: #7b8bff;
+  background: #8796c4;
 }
 
 .kw-help-submit:disabled {
@@ -349,22 +341,22 @@
 }
 
 .kw-help-success h3 {
-  font-family: 'Cal Sans', 'Inter', sans-serif;
+  font-family: 'Cal Sans', sans-serif;
   font-size: 1.15rem;
   font-weight: 700;
-  color: #e8e8f0;
+  color: #e6e6ea;
   margin-bottom: 0.5rem;
 }
 
 .kw-help-success p {
   font-size: 13px;
-  color: #6b6b88;
+  color: #8b8b96;
   line-height: 1.6;
 }
 
 .kw-help-footer-note {
   font-size: 11px;
-  color: #6b6b88;
+  color: #8b8b96;
   text-align: center;
   margin-top: 0.75rem;
   line-height: 1.5;

@@ -4,14 +4,14 @@
   <meta charset="UTF-8" />
   <link rel="icon" href="/images/favicon.svg" type="image/svg+xml" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="/css/cookie-consent.css" />
+  <link rel="stylesheet" href="/css/cookie-consent.css?v=20260730-anti-ai" />
   <script src="/js/cookie-consent.js"></script>
   <script src="/js/nav-auth.js" defer></script>
 
 <link rel="stylesheet" href="/css/nav-brand.css" />
-  <link rel="stylesheet" href="/css/chrome.css" />
-  <link rel="stylesheet" href="/css/site.css" />
-  <link rel="stylesheet" href="/css/help-widget.css" />
+  <link rel="stylesheet" href="/css/chrome.css?v=20260730-anti-ai" />
+  <link rel="stylesheet" href="/css/site.css?v=20260730-anti-ai" />
+  <link rel="stylesheet" href="/css/help-widget.css?v=20260730-anti-ai" />
   <title>Pricing - Keyweaver Credits</title>
   <meta name="description" content="Keyweaver credit packs and subscriptions for Cuemark, Superconductor, Trillian, and Tamborine. Ludo is free." />
   <link rel="canonical" href="https://keyweaver.io/pricing" />
@@ -20,25 +20,25 @@
   <meta property="og:image" content="https://keyweaver.io/images/keyweaver-logo.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cal+Sans&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cal+Sans&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --ink:     #0A0A0F;
-      --surface: #13131A;
-      --lift:    #1C1C28;
-      --edge:    #2A2A3D;
-      --accent:  #5B6BF8;
-      --accent2: #7B8BFF;
-      --text:    #E8E8F0;
-      --muted:   #6B6B88;
-      --subtle:  #3A3A52;
+      --ink:     #161616;
+      --surface: #252525;
+      --lift:    #2c2c2c;
+      --edge:    #333333;
+      --accent:  #6a7ab0;
+      --accent2: #8796c4;
+      --text:    #e6e6ea;
+      --muted:   #8b8b96;
+      --subtle:  #5c5c66;
       --success: #4CAF83;
     }
 
     body {
-      font-family: 'Inter', system-ui, sans-serif;
+      font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
       background: var(--ink); color: var(--text);
       -webkit-font-smoothing: antialiased;
     }
@@ -60,7 +60,7 @@
     .btn {
       display: inline-flex; align-items: center; gap: 6px;
       padding: 0 1rem; height: 34px; border-radius: 6px;
-      font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500;
+      font-family: inherit; font-size: 13px; font-weight: 500;
       text-decoration: none; cursor: pointer; transition: all 0.15s; border: none;
     }
     .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--edge); }
@@ -77,7 +77,7 @@
     .hero::before {
       content: '';
       position: absolute; inset: 0;
-      background: radial-gradient(ellipse 50% 55% at 50% 0%, rgba(91,107,248,0.1) 0%, transparent 70%);
+      background: transparent;
       pointer-events: none;
     }
     .hero h1 {
@@ -151,7 +151,7 @@
     .billing-toggle {
       display: inline-flex;
       padding: 4px;
-      border-radius: 999px;
+      border-radius: 4px;
       background: var(--lift);
       border: 1px solid var(--edge);
       gap: 2px;
@@ -161,11 +161,11 @@
       border: none;
       background: transparent;
       color: var(--muted);
-      font-family: 'Inter', sans-serif;
+      font-family: inherit;
       font-size: 13px;
       font-weight: 550;
       padding: 0.55rem 1.1rem;
-      border-radius: 999px;
+      border-radius: 4px;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
@@ -182,9 +182,9 @@
       letter-spacing: 0.04em;
       text-transform: uppercase;
       padding: 2px 7px;
-      border-radius: 999px;
+      border-radius: 4px;
       background: rgba(52, 211, 153, 0.18);
-      color: #34d399;
+      color: #3da87a;
     }
     .billing-toggle-btn.is-active .save-pill {
       background: rgba(255, 255, 255, 0.22);
@@ -196,7 +196,7 @@
       min-height: 1.2em;
     }
     .billing-save-note strong {
-      color: #34d399;
+      color: #3da87a;
     }
     .card-save-badge {
       display: none;
@@ -206,10 +206,10 @@
       font-weight: 700;
       letter-spacing: 0.04em;
       text-transform: uppercase;
-      color: #34d399;
+      color: #3da87a;
       background: rgba(52, 211, 153, 0.12);
       border: 1px solid rgba(52, 211, 153, 0.28);
-      border-radius: 999px;
+      border-radius: 4px;
       padding: 3px 10px;
     }
     .pricing-card.is-annual .card-save-badge {
@@ -243,7 +243,7 @@
     .pricing-card {
       background: var(--surface);
       border: 1px solid var(--edge);
-      border-radius: 14px;
+      border-radius: 6px;
       padding: 2rem 1.75rem;
       position: relative;
       transition: border-color 0.2s;
@@ -251,14 +251,14 @@
     .pricing-card:hover { border-color: var(--subtle); }
     .pricing-card.featured {
       border-color: var(--accent);
-      background: linear-gradient(180deg, rgba(91,107,248,0.06) 0%, var(--surface) 40%);
+      background: linear-gradient(180deg, rgba(106,122,176,0.06) 0%, var(--surface) 40%);
     }
 
     .featured-badge {
       position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
       background: var(--accent); color: #fff;
       font-size: 11px; font-weight: 600; letter-spacing: 0.05em;
-      padding: 3px 14px; border-radius: 100px; white-space: nowrap;
+      padding: 3px 14px; border-radius: 4px; white-space: nowrap;
     }
 
     .card-tier {
@@ -314,7 +314,7 @@
     .card-cta {
       display: flex; align-items: center; justify-content: center;
       width: 100%; height: 44px; border-radius: 9px;
-      font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 500;
+      font-family: inherit; font-size: 14px; font-weight: 500;
       text-decoration: none; cursor: pointer; transition: all 0.15s; border: none;
     }
     .cta-primary { background: var(--accent); color: #fff; }
@@ -328,18 +328,18 @@
       background: transparent; color: var(--accent2);
       border: 1px solid var(--accent);
     }
-    .cta-accent-outline:hover { background: rgba(91,107,248,0.08); }
+    .cta-accent-outline:hover { background: rgba(106,122,176,0.08); }
 
     /* CREDIT MODEL EXPLAINER */
     .credit-explainer {
       background: var(--lift); border: 1px solid var(--edge);
-      border-radius: 12px; padding: 1.5rem 2rem;
+      border-radius: 6px; padding: 1.5rem 2rem;
       display: flex; align-items: center; gap: 2rem;
       flex-wrap: wrap; margin-top: 1.5rem;
     }
     .credit-explainer-icon {
       width: 44px; height: 44px; border-radius: 10px;
-      background: rgba(91,107,248,0.1); border: 1px solid rgba(91,107,248,0.2);
+      background: rgba(106,122,176,0.1); border: 1px solid rgba(106,122,176,0.2);
       display: flex; align-items: center; justify-content: center; flex-shrink: 0;
     }
     .credit-explainer-icon svg { width: 22px; height: 22px; stroke: var(--accent2); fill: none; stroke-width: 1.75; stroke-linecap: round; }
@@ -366,7 +366,7 @@
     .comp-table {
       width: 100%; border-collapse: collapse;
       background: var(--surface); border: 1px solid var(--edge);
-      border-radius: 12px; overflow: hidden;
+      border-radius: 6px; overflow: hidden;
     }
 
     .comp-table thead tr {
@@ -379,7 +379,7 @@
     .comp-table th:first-child { color: var(--muted); font-weight: 500; }
     .comp-table th.featured-col {
       color: var(--accent2);
-      background: rgba(91,107,248,0.04);
+      background: rgba(106,122,176,0.04);
     }
 
     .comp-table tbody tr {
@@ -394,7 +394,7 @@
       vertical-align: middle;
     }
     .comp-table td.featured-col {
-      background: rgba(91,107,248,0.02);
+      background: rgba(106,122,176,0.02);
     }
     .comp-table td:first-child { color: var(--text); }
 
@@ -402,7 +402,7 @@
       padding: 10px 1.25rem 6px;
       font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
       color: var(--accent); font-weight: 600;
-      background: rgba(91,107,248,0.03);
+      background: rgba(106,122,176,0.03);
       border-bottom: 1px solid var(--edge);
     }
 

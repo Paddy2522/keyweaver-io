@@ -4,26 +4,26 @@
   <meta charset="UTF-8" />
   <link rel="icon" href="/images/favicon.svg" type="image/svg+xml" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="/css/cookie-consent.css" />
+  <link rel="stylesheet" href="/css/cookie-consent.css?v=20260730-anti-ai" />
   <script src="/js/cookie-consent.js"></script>
   <script src="/js/nav-auth.js" defer></script>
 
 <link rel="stylesheet" href="/css/nav-brand.css" />
-  <link rel="stylesheet" href="/css/chrome.css" />
-  <link rel="stylesheet" href="/css/site.css" />
-  <link rel="stylesheet" href="/css/help-widget.css" />
+  <link rel="stylesheet" href="/css/chrome.css?v=20260730-anti-ai" />
+  <link rel="stylesheet" href="/css/site.css?v=20260730-anti-ai" />
+  <link rel="stylesheet" href="/css/help-widget.css?v=20260730-anti-ai" />
   <title>Release notes - Keyweaver</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cal+Sans&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cal+Sans&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --ink: #0A0A0F; --surface: #13131A; --lift: #1C1C28; --edge: #2A2A3D;
-      --accent: #5B6BF8; --accent2: #7B8BFF; --text: #E8E8F0; --muted: #6B6B88;
+      --ink: #161616; --surface: #252525; --lift: #2c2c2c; --edge: #333333;
+      --accent: #6a7ab0; --accent2: #8796c4; --text: #e6e6ea; --muted: #8b8b96;
       --success: #4CAF83;
     }
-    body { font-family: 'Inter', system-ui, sans-serif; background: var(--ink); color: var(--text); }
+    body { font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif; background: var(--ink); color: var(--text); }
     nav {
       display: flex; align-items: center; justify-content: space-between;
       padding: 0 2rem; height: 56px; border-bottom: 1px solid var(--edge);
@@ -38,10 +38,10 @@
     .page-intro a { color: var(--accent2); text-decoration: none; }
     #changelog-list { display: flex; flex-direction: column; gap: 1.5rem; }
     .changelog-release {
-      background: var(--surface); border: 1px solid var(--edge); border-radius: 12px;
+      background: var(--surface); border: 1px solid var(--edge); border-radius: 6px;
       padding: 1.5rem 1.75rem;
     }
-    .changelog-release.is-latest { border-color: rgba(91,107,248,0.45); }
+    .changelog-release.is-latest { border-color: rgba(106,122,176,0.45); }
     .changelog-release-head {
       display: flex; align-items: center; flex-wrap: wrap; gap: 0.75rem;
       margin-bottom: 1.25rem;
@@ -53,7 +53,7 @@
     .changelog-badge {
       font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
       background: rgba(76,175,131,0.15); color: var(--success);
-      padding: 3px 10px; border-radius: 100px;
+      padding: 3px 10px; border-radius: 4px;
     }
     .changelog-section-title {
       font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
