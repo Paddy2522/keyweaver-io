@@ -2,6 +2,17 @@
   "product": "Keyweaver",
   "releases": [
     {
+      "version": "1.0.7",
+      "date": "2026-07-30",
+      "panel": [
+        "All Keyweaver panels refreshed with Adobe-native charcoal UI styling",
+        "Trillian and Tamborine show a progress bar while generations are running"
+      ],
+      "website": [
+        "Manager catalog updated for Cuemark 1.0.5, Ludo 0.3.4, Superconductor 0.1.4, Trillian/Tamborine 0.1.5"
+      ]
+    },
+    {
       "version": "1.0.6",
       "date": "2026-07-29",
       "panel": [
