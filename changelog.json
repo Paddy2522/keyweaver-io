@@ -2,6 +2,19 @@
   "product": "Keyweaver",
   "releases": [
     {
+      "version": "1.0.8",
+      "date": "2026-07-30",
+      "panel": [
+        "Ludo: faster text split and stagger",
+        "Ludo: split layers stay collapsed in the timeline",
+        "Ludo: animate-on markers move with staggered in-points",
+        "Ludo: stagger reveals characters in reading order"
+      ],
+      "website": [
+        "Manager catalog updated for Ludo 0.3.5"
+      ]
+    },
+    {
       "version": "1.0.7",
       "date": "2026-07-30",
       "panel": [
