@@ -1058,6 +1058,54 @@
 
   var pendingWinExeHref = '';
 
+  // Google Ads download conversion (AW-18266783138).
+  // Windows: only fired after the SmartScreen warning modal confirm (not on first click).
+  // Mac / zip: fired when the download actually starts.
+  function gtag_report_conversion(url) {
+    var callback = function () {
+      if (typeof url !== 'undefined' && url) {
+        window.location = url;
+      }
+    };
+    try {
+      if (typeof gtag === 'function') {
+        gtag('event', 'conversion', {
+          send_to: 'AW-18266783138/4ZcACMWN9NkcEKL7o4ZE',
+          event_callback: callback
+        });
+      } else {
+        callback();
+      }
+    } catch (e) {
+      callback();
+    }
+    return false;
+  }
+  window.gtag_report_conversion = gtag_report_conversion;
+
+  function fireGoogleAdsDownloadConversion(thenFn) {
+    var done = false;
+    var finish = function () {
+      if (done) return;
+      done = true;
+      if (typeof thenFn === 'function') thenFn();
+    };
+    // If gtag is missing (no consent) or callback never runs, still start the download.
+    setTimeout(finish, 2000);
+    try {
+      if (typeof gtag !== 'function') {
+        finish();
+        return;
+      }
+      gtag('event', 'conversion', {
+        send_to: 'AW-18266783138/4ZcACMWN9NkcEKL7o4ZE',
+        event_callback: finish
+      });
+    } catch (e) {
+      finish();
+    }
+  }
+
   function trackCuemarkDownloadClick(key, href) {
     var os = (key === 'winZip' || key === 'winExe') ? 'windows' : 'macos';
     var isInstaller = key === 'winExe' || key === 'macPkg';
@@ -1115,11 +1163,12 @@
   function runDownloadWithTracking(key, href) {
     var tracked = trackCuemarkDownloadClick(key, href);
     var begin = function () { startFileDownload(href); };
+    var start = function () { fireGoogleAdsDownloadConversion(begin); };
     if (tracked && typeof tracked.finally === 'function') {
-      tracked.finally(begin);
+      tracked.finally(start);
       return;
     }
-    setTimeout(begin, 200);
+    setTimeout(start, 200);
   }
 
   function bindDownloadAnalytics(el, key) {
