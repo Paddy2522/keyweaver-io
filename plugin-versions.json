@@ -6,19 +6,19 @@
   },
   "plugins": {
     "cuemark": {
-      "version": "1.0.5"
+      "version": "1.0.6"
     },
     "superconductor": {
-      "version": "0.1.4"
+      "version": "0.1.5"
     },
     "trillian": {
-      "version": "0.1.5"
+      "version": "0.1.6"
     },
     "tamborine": {
-      "version": "0.1.5"
+      "version": "0.1.6"
     },
     "ludo": {
-      "version": "0.3.5"
+      "version": "0.3.6"
     }
   }
 }

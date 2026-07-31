@@ -2,6 +2,17 @@
   "product": "Keyweaver",
   "releases": [
     {
+      "version": "1.0.9",
+      "date": "2026-07-31",
+      "panel": [
+        "Panel UI refresh across the suite — charcoal chrome with text titles instead of header logos",
+        "Tamborine: flatter greyscale UI aimed at aescripts review (no card outlines or decorative logos)"
+      ],
+      "website": [
+        "Manager catalog updated for Cuemark 1.0.6, Ludo 0.3.6, Superconductor 0.1.5, Trillian/Tamborine 0.1.6"
+      ]
+    },
+    {
       "version": "1.0.8",
       "date": "2026-07-30",
       "panel": [
