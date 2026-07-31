@@ -6,6 +6,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="/css/cookie-consent.css" />
   <script src="/js/cookie-consent.js"></script>
+  <!-- Event snippet for Download conversion (Google Ads) -->
+  <script>
+  function gtag_report_conversion(url) {
+    var callback = function () {
+      if (typeof(url) != 'undefined') {
+        window.location = url;
+      }
+    };
+    gtag('event', 'conversion', {
+        'send_to': 'AW-18266783138/4ZcACMWN9NkcEKL7o4ZE',
+        'event_callback': callback
+    });
+    return false;
+  }
+  </script>
   <script src="/js/nav-auth.js" defer></script>
 
 <link rel="stylesheet" href="/css/nav-brand.css" />
@@ -1058,31 +1073,8 @@
 
   var pendingWinExeHref = '';
 
-  // Google Ads download conversion (AW-18266783138).
-  // Windows: only fired after the SmartScreen warning modal confirm (not on first click).
-  // Mac / zip: fired when the download actually starts.
-  function gtag_report_conversion(url) {
-    var callback = function () {
-      if (typeof url !== 'undefined' && url) {
-        window.location = url;
-      }
-    };
-    try {
-      if (typeof gtag === 'function') {
-        gtag('event', 'conversion', {
-          send_to: 'AW-18266783138/4ZcACMWN9NkcEKL7o4ZE',
-          event_callback: callback
-        });
-      } else {
-        callback();
-      }
-    } catch (e) {
-      callback();
-    }
-    return false;
-  }
-  window.gtag_report_conversion = gtag_report_conversion;
-
+  // Google Ads download conversion — fires when download starts.
+  // Windows: only after SmartScreen modal confirm (not on first click).
   function fireGoogleAdsDownloadConversion(thenFn) {
     var done = false;
     var finish = function () {
@@ -1090,13 +1082,13 @@
       done = true;
       if (typeof thenFn === 'function') thenFn();
     };
-    // If gtag is missing (no consent) or callback never runs, still start the download.
     setTimeout(finish, 2000);
     try {
       if (typeof gtag !== 'function') {
         finish();
         return;
       }
+      // Same send_to as gtag_report_conversion in <head>; no navigation — file download uses startFileDownload.
       gtag('event', 'conversion', {
         send_to: 'AW-18266783138/4ZcACMWN9NkcEKL7o4ZE',
         event_callback: finish

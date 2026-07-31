@@ -1,7 +1,9 @@
 /**
  * Keyweaver cookie consent (UK/EU).
  * Strictly necessary storage only by default.
- * Marketing tags (Meta + Google Ads) load only after Accept.
+ * Google Ads gtag loads with Consent Mode denied until Accept (so Tag Assistant
+ * can see AW-…; cookies/ads stay off until granted).
+ * Meta Pixel loads only after Accept.
  */
 (function (global) {
   'use strict';
@@ -9,6 +11,7 @@
   var CONSENT_KEY = 'cuemark_cookie_consent';
   var GOOGLE_ADS_ID = 'AW-18266783138';
   var META_PIXEL_ID = '27322169484089367';
+  var googleAdsLoaded = false;
   var marketingLoaded = false;
   var metaPageViewLoaded = false;
   var bannerEl = null;
@@ -58,17 +61,29 @@
     document.head.appendChild(s);
   }
 
-  function loadGoogleAds() {
+  /** Always load AW base tag (Consent Mode). Required for Tag Assistant / Ads diagnostics. */
+  function loadGoogleAdsBase() {
+    if (googleAdsLoaded) { return; }
+    googleAdsLoaded = true;
     global.dataLayer = global.dataLayer || [];
     global.gtag = global.gtag || function () { global.dataLayer.push(arguments); };
-    gtag('consent', 'update', {
-      ad_storage: 'granted',
-      ad_user_data: 'granted',
-      ad_personalization: 'granted',
-      analytics_storage: 'granted'
-    });
     loadScript('https://www.googletagmanager.com/gtag/js?id=' + GOOGLE_ADS_ID, true);
-    gtag('config', GOOGLE_ADS_ID);
+    try {
+      gtag('js', new Date());
+      gtag('config', GOOGLE_ADS_ID);
+    } catch (e) {}
+  }
+
+  function grantGoogleAdsConsent() {
+    loadGoogleAdsBase();
+    try {
+      gtag('consent', 'update', {
+        ad_storage: 'granted',
+        ad_user_data: 'granted',
+        ad_personalization: 'granted',
+        analytics_storage: 'granted'
+      });
+    } catch (e) {}
   }
 
   function ensureMetaPixelBase() {
@@ -104,7 +119,7 @@
   function loadMarketingTags() {
     if (marketingLoaded) { return; }
     marketingLoaded = true;
-    loadGoogleAds();
+    grantGoogleAdsConsent();
     loadMetaPageView();
     loadScript('/js/meta-pixel-events.js', true);
   }
@@ -127,6 +142,8 @@
   function rejectNonEssential() {
     setConsent(false);
     hideBanner();
+    // Keep Google tag loaded with consent denied (Tag Assistant / Consent Mode).
+    loadGoogleAdsBase();
   }
 
   function buildBanner() {
@@ -173,6 +190,9 @@
 
   function init() {
     setConsentDefaultsDenied();
+    // Load AW base tag immediately so Tag Assistant / Google Ads can detect it.
+    // Cookies stay off until Accept (Consent Mode default = denied).
+    loadGoogleAdsBase();
     var consent = getConsent();
     if (consent && consent.marketing) {
       loadMarketingTags();
@@ -183,7 +203,7 @@
         document.addEventListener('DOMContentLoaded', buildBanner);
       }
     }
-    // Rejected or undecided → no Meta / Google until Accept
+    // Rejected → base tag stays with consent denied; no Meta
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', injectFooterSettingsLink);
     } else {
