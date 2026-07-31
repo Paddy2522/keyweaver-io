@@ -7,7 +7,10 @@ export default {
     }
     const response = await env.ASSETS.fetch(assetRequest);
     const contentType = response.headers.get('content-type') || '';
-    if (!contentType.includes('text/html')) {
+    const path = url.pathname.toLowerCase();
+    const isHtml = contentType.includes('text/html');
+    const isJsOrCss = path.endsWith('.js') || path.endsWith('.css') || path.endsWith('.json');
+    if (!isHtml && !isJsOrCss) {
       return response;
     }
     const headers = new Headers(response.headers);

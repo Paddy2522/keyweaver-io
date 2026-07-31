@@ -131,6 +131,7 @@ jobs:
             "https://keyweaver.io/css/help-widget.css",
             "https://keyweaver.io/css/blog.css",
             "https://keyweaver.io/js/cookie-consent.js",
+            "https://keyweaver.io/js/cookie-consent.js?v=20260731a",
             "https://keyweaver.io/js/nav-auth.js",
             "https://keyweaver.io/js/pricing-currency.js",
             "https://keyweaver.io/js/help-widget.js",
