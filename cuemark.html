@@ -186,44 +186,6 @@
       font-size: 12px; color: var(--muted);
     }
 
-    /* ── CAPTION DEMO ── */
-    .caption-demo {
-      margin: 4rem auto 0;
-      max-width: 720px; width: 100%;
-      background: var(--surface);
-      border: 1px solid var(--edge);
-      border-radius: 12px;
-      overflow: hidden;
-    }
-
-    .caption-demo-bar {
-      display: flex; align-items: center; gap: 6px;
-      padding: 10px 14px;
-      background: var(--lift);
-      border-bottom: 1px solid var(--edge);
-    }
-    .demo-dot { width: 10px; height: 10px; border-radius: 50%; }
-
-    .caption-demo-screen {
-      position: relative;
-      aspect-ratio: 16 / 9;
-      background: #07070D;
-      overflow: hidden;
-    }
-
-    .demo-hero-stream {
-      position: absolute;
-      inset: 0;
-    }
-
-    .demo-hero-stream iframe {
-      width: 100%;
-      height: 100%;
-      border: 0;
-      display: block;
-      pointer-events: none;
-    }
-
     /* ── HOW IT WORKS ── */
     section { padding: 6rem 2rem; }
 
@@ -544,7 +506,7 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .caption-word, .demo-word { transition: none; }
+      .caption-word { transition: none; }
     }
 
     .site-banner {
@@ -630,26 +592,6 @@
     <a href="/pricing" class="btn btn-ghost btn-xl">See pricing</a>
   </div>
   <p class="hero-note">Guest trial in the panel · Sign up free for 40 shared Keyweaver Credits · <a href="#how-it-works" style="color:var(--muted);text-decoration:underline;text-underline-offset:3px;">How it works</a></p>
-
-  <!-- mini demo -->
-  <div class="caption-demo">
-    <div class="caption-demo-bar">
-      <div class="demo-dot" style="background:#FF5F57"></div>
-      <div class="demo-dot" style="background:#FEBC2E"></div>
-      <div class="demo-dot" style="background:#28C840"></div>
-      <span style="margin-left:8px; font-size:11px; color:var(--muted); font-family:'Inter',sans-serif;">Cuemark by Keyweaver · After Effects 2022+</span>
-    </div>
-    <div class="caption-demo-screen">
-      <div class="demo-hero-stream">
-        <iframe
-          src="https://iframe.videodelivery.net/149f0f5621f011060bdbe98844e2b91d?autoplay=true&muted=true&loop=true&controls=false&preload=true"
-          loading="eager"
-          allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
-          allowfullscreen
-          title="Cuemark subtitle demo in After Effects"></iframe>
-      </div>
-    </div>
-  </div>
 </section>
 
 <!-- HOW IT WORKS -->
