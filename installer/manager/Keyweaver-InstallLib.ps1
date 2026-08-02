@@ -10,9 +10,12 @@ try {
 $script:KnownPackageSizes = @{
   cuemark = [int64]50038336
   superconductor = [int64]126271
-  ludo = [int64]302084
+  ludo = [int64]306334
   trillian = [int64]123765
   tamborine = [int64]120657
+  'trillian-premiere' = [int64]120000
+  'tamborine-premiere' = [int64]120000
+  'superconductor-premiere' = [int64]120000
 }
 
 function Ensure-Directory {
@@ -68,6 +71,21 @@ function Get-ProductStatusName {
   $name = Repair-DisplayText ([string]$Product.displayName)
   if ($name.Length) { return $name }
   return 'plugin'
+}
+
+function Get-ProductHostLabel {
+  param($Product)
+  if ($Product.hostLabel) { return Repair-DisplayText ([string]$Product.hostLabel) }
+  $hostCode = ([string]$Product.host).ToUpperInvariant()
+  if ($hostCode -eq 'PPRO') { return 'Premiere Pro' }
+  return 'After Effects'
+}
+
+function Get-ProductHostCode {
+  param($Product)
+  $hostCode = ([string]$Product.host).ToUpperInvariant()
+  if ($hostCode -eq 'PPRO') { return 'PPRO' }
+  return 'AEFT'
 }
 
 function Get-PlatformPackage {
@@ -240,7 +258,8 @@ function Install-KeyweaverProduct {
   $installScript = [string]$plat.installScript
   if (-not $installScript.Length) { $installScript = ($Product.id + '-install-windows.ps1') }
 
-  Send-InstallWorkerProgress -Worker $ProgressWorker -Status ('Installing ' + $productName + ' into After Effects...') -Percent 94
+  $hostLabel = Get-ProductHostLabel $Product
+  Send-InstallWorkerProgress -Worker $ProgressWorker -Status ('Installing ' + $productName + ' into ' + $hostLabel + '...') -Percent 94
   Invoke-ProductInstallScript -ExtractRoot $extractRoot -InstallScriptName $installScript
 
   $statePath = Join-Path $script:StateRoot ('installed-' + $Product.id + '.json')

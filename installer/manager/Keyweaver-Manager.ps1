@@ -593,9 +593,10 @@ function Initialize-InstallWorkerHost {
     try {
       Send-PluginInstallAnalytics -ProductId ([string]$prod.id) -ProductVersion ([string]$prod.version)
     } catch {}
-    Set-Status ($name + ' installed. Quit and reopen After Effects.')
+    $hostLabel = Get-ProductHostLabel $prod
+    Set-Status ($name + ' installed. Quit and reopen ' + $hostLabel + '.')
     [System.Windows.MessageBox]::Show(
-      ($name + " is installed.`n`n1. Quit After Effects completely`n2. Reopen After Effects`n3. " + $prod.menuPath),
+      ($name + " is installed.`n`n1. Quit $hostLabel completely`n2. Reopen $hostLabel`n3. " + $prod.menuPath),
       'Keyweaver',
       'OK',
       'Information'
@@ -667,12 +668,16 @@ function Get-ProductLogoFileName {
   param($Product)
   $id = [string]$Product.id
   # Prefer square icon PNGs (reliable); fall back to wordmark PNGs. WPF cannot render SVG.
+  # Premiere variants reuse the same brand icons as their After Effects counterparts.
   $candidates = @{
     'cuemark' = @('cuemark-icon.png', 'cuemark-logo.png')
     'superconductor' = @('superconductor-icon.png', 'superconductor-logo.png')
+    'superconductor-premiere' = @('superconductor-icon.png', 'superconductor-logo.png')
     'ludo' = @('ludo-icon.png', 'ludo-logo.png')
     'trillian' = @('trillian-icon.png', 'trillian-logo.png')
+    'trillian-premiere' = @('trillian-icon.png', 'trillian-logo.png')
     'tamborine' = @('tamborine-icon.png', 'tamborine-logo.png')
+    'tamborine-premiere' = @('tamborine-icon.png', 'tamborine-logo.png')
   }
   $list = $candidates[$id]
   if (-not $list) { return $null }
@@ -682,6 +687,17 @@ function Get-ProductLogoFileName {
   return $null
 }
 
+function New-HostSectionHeader {
+  param([string]$Text)
+  $tb = New-Object System.Windows.Controls.TextBlock
+  $tb.Text = $Text
+  $tb.FontSize = 13
+  $tb.FontWeight = 'SemiBold'
+  $tb.Foreground = '#7B8BFF'
+  $tb.Margin = New-Object System.Windows.Thickness(0, 4, 0, 8)
+  return $tb
+}
+
 function Get-ProductAccentColor {
   param($Product)
   if ($Product.accent) { return [string]$Product.accent }
@@ -689,8 +705,11 @@ function Get-ProductAccentColor {
   switch ($id) {
     'cuemark' { return '#3D9CF0' }
     'superconductor' { return '#5B6BF8' }
+    'superconductor-premiere' { return '#5B6BF8' }
     'trillian' { return '#B56BFF' }
+    'trillian-premiere' { return '#B56BFF' }
     'tamborine' { return '#E8952F' }
+    'tamborine-premiere' { return '#E8952F' }
     'ludo' { return '#34D399' }
     default { return '#5B6BF8' }
   }
@@ -763,6 +782,30 @@ function New-ProductCard {
   $title.VerticalAlignment = 'Center'
   $title.TextWrapping = 'Wrap'
   $titleRow.Children.Add($title) | Out-Null
+
+  $hostLabel = Get-ProductHostLabel $Product
+  $hostBadge = New-Object System.Windows.Controls.Border
+  $hostBadge.CornerRadius = New-Object System.Windows.CornerRadius(4)
+  $hostBadge.Padding = New-Object System.Windows.Thickness(7, 2, 7, 2)
+  $hostBadge.Margin = New-Object System.Windows.Thickness(10, 0, 0, 0)
+  $hostBadge.VerticalAlignment = 'Center'
+  $hostCode = Get-ProductHostCode $Product
+  if ($hostCode -eq 'PPRO') {
+    $hostBadge.Background = '#2A2438'
+    $hostBadge.BorderBrush = '#6B4A9E'
+  } else {
+    $hostBadge.Background = '#1E2438'
+    $hostBadge.BorderBrush = '#3D4A7A'
+  }
+  $hostBadge.BorderThickness = New-Object System.Windows.Thickness(1)
+  $hostBadgeText = New-Object System.Windows.Controls.TextBlock
+  $hostBadgeText.Text = $hostLabel
+  $hostBadgeText.FontSize = 11
+  $hostBadgeText.FontWeight = 'SemiBold'
+  $hostBadgeText.Foreground = '#C8C8E0'
+  $hostBadge.Child = $hostBadgeText
+  $titleRow.Children.Add($hostBadge) | Out-Null
+
   $stack.Children.Add($titleRow) | Out-Null
 
   if ($Product.description) {
@@ -884,14 +927,36 @@ function Render-ManifestUi {
       $empty.Foreground = '#8989A6'
       $script:UiProductsPanel.Children.Add($empty) | Out-Null
     } else {
+      $aeProducts = @()
+      $pproProducts = @()
       foreach ($product in $products) {
+        if ((Get-ProductHostCode $product) -eq 'PPRO') {
+          $pproProducts += $product
+        } else {
+          $aeProducts += $product
+        }
         if (Test-ProductInstalled $product) {
           $installedVersion = Get-InstalledPanelVersion $product.panelId
           if ($product.version -and ((Compare-Semver $installedVersion ([string]$product.version)) -lt 0)) {
             $pluginUpdateCount++
           }
         }
-        $script:UiProductsPanel.Children.Add((New-ProductCard $product)) | Out-Null
+      }
+      if ($aeProducts.Count) {
+        $script:UiProductsPanel.Children.Add((New-HostSectionHeader 'After Effects')) | Out-Null
+        foreach ($product in $aeProducts) {
+          $script:UiProductsPanel.Children.Add((New-ProductCard $product)) | Out-Null
+        }
+      }
+      if ($pproProducts.Count) {
+        $pproHeader = New-HostSectionHeader 'Premiere Pro'
+        if ($aeProducts.Count) {
+          $pproHeader.Margin = New-Object System.Windows.Thickness(0, 14, 0, 8)
+        }
+        $script:UiProductsPanel.Children.Add($pproHeader) | Out-Null
+        foreach ($product in $pproProducts) {
+          $script:UiProductsPanel.Children.Add((New-ProductCard $product)) | Out-Null
+        }
       }
     }
 
@@ -937,7 +1002,7 @@ function Initialize-KeyweaverManagerUi {
   $xaml = @"
 <Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Keyweaver Manager" Height="580" Width="680" MinHeight="480" MinWidth="560"
+        Title="Keyweaver Manager" Height="680" Width="700" MinHeight="520" MinWidth="580"
         Background="#12121A" WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip">
   <Window.Resources>
     <Style x:Key="ToolbarButtonStyle" TargetType="Button">
@@ -1097,7 +1162,6 @@ function Initialize-KeyweaverManagerUi {
         <Border Name="UpdateAlert" Visibility="Collapsed" Background="#2B2418" BorderBrush="#8A6729" BorderThickness="1" CornerRadius="8" Padding="12" Margin="0,0,0,12">
           <TextBlock Name="UpdateAlertText" Foreground="#F5C46B" FontWeight="SemiBold" TextWrapping="Wrap"/>
         </Border>
-        <TextBlock Text="Plugins" FontSize="13" FontWeight="SemiBold" Foreground="#7B8BFF" Margin="0,0,0,8"/>
         <StackPanel Name="ProductsPanel"/>
         <StackPanel Name="PromotionsSection" Margin="0,18,0,0">
           <TextBlock Text="From Keyweaver" FontSize="13" FontWeight="SemiBold" Foreground="#7B8BFF" Margin="0,0,0,8"/>
