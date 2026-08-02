@@ -164,20 +164,20 @@
                          "displayName":  "Trillian for Premiere",
                          "description":  "AI voiceover and narration for Adobe Premiere Pro.",
                          "panelId":  "com.keyweaver.trillian.premiere.panel",
-                         "version":  "0.1.6",
+                         "version":  "0.1.7",
                          "host":  "PPRO",
                          "hostLabel":  "Premiere Pro",
                          "platforms":  {
                                            "win":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Trillian-Premiere-Install-win-v0.1.6.zip",
-                                                       "sha256":  "42eee2a6b1a31c33def04f5fe95de2e8ed78c1b6cf60d9875384fd9695aac0b4",
-                                                       "sizeBytes":  126705,
+                                                       "packageUrl":  "https://keyweaver.io/downloads/Trillian-Premiere-Install-win-v0.1.7.zip",
+                                                       "sha256":  "5587ab19158055dd8abf3ad185c9f538195e5c2a48be1571e4afeec6abf94a7d",
+                                                       "sizeBytes":  126577,
                                                        "installScript":  "trillian-premiere-install-windows.ps1"
                                                    },
                                            "mac":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Trillian-Premiere-Install-mac-v0.1.6.zip",
-                                                       "sha256":  "fb4b1fa301266341408bd6f65502c7a5fce19a556873c4090d306651cb82bc19",
-                                                       "sizeBytes":  126185,
+                                                       "packageUrl":  "https://keyweaver.io/downloads/Trillian-Premiere-Install-mac-v0.1.7.zip",
+                                                       "sha256":  "d9aa1e58c5585e4d64af4033bd969ce115e9d37cdae1505aff6a7c0486601fb2",
+                                                       "sizeBytes":  126057,
                                                        "installScript":  "trillian-premiere-install-macos.sh"
                                                    }
                                        },
@@ -190,20 +190,20 @@
                          "displayName":  "Tamborine for Premiere",
                          "description":  "Generate music beds and sound effects in Premiere Pro.",
                          "panelId":  "com.keyweaver.tamborine.premiere.panel",
-                         "version":  "0.1.6",
+                         "version":  "0.1.7",
                          "host":  "PPRO",
                          "hostLabel":  "Premiere Pro",
                          "platforms":  {
                                            "win":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Tamborine-Premiere-Install-win-v0.1.6.zip",
-                                                       "sha256":  "b50afd906037ab8039208e244052393245d17f30da79fe6100a50ffb6cb08cfe",
-                                                       "sizeBytes":  125482,
+                                                       "packageUrl":  "https://keyweaver.io/downloads/Tamborine-Premiere-Install-win-v0.1.7.zip",
+                                                       "sha256":  "56d09c4f1336596b9a1898c3ecde6c30c3eca4987c8070d8b8c0641c44f656d1",
+                                                       "sizeBytes":  125355,
                                                        "installScript":  "tamborine-premiere-install-windows.ps1"
                                                    },
                                            "mac":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Tamborine-Premiere-Install-mac-v0.1.6.zip",
-                                                       "sha256":  "90d0c5827718897b199b0a15e737c10c212e32d686fcc96b7af282b3580b3b58",
-                                                       "sizeBytes":  124961,
+                                                       "packageUrl":  "https://keyweaver.io/downloads/Tamborine-Premiere-Install-mac-v0.1.7.zip",
+                                                       "sha256":  "9d8a2294cb0f90853a72ce18e8145a416bf79e9603a8022f5e7cb08c31fbf314",
+                                                       "sizeBytes":  124834,
                                                        "installScript":  "tamborine-premiere-install-macos.sh"
                                                    }
                                        },
@@ -216,20 +216,20 @@
                          "displayName":  "Superconductor for Premiere",
                          "description":  "AI video shots and motion plates for Premiere Pro.",
                          "panelId":  "com.keyweaver.superconductor.premiere.panel",
-                         "version":  "0.1.5",
+                         "version":  "0.1.6",
                          "host":  "PPRO",
                          "hostLabel":  "Premiere Pro",
                          "platforms":  {
                                            "win":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Superconductor-Premiere-Install-win-v0.1.5.zip",
-                                                       "sha256":  "49d0e23ecc060dacb58c897af2f445f220cfca02d4393f91dfa0e63735271ccd",
-                                                       "sizeBytes":  127424,
+                                                       "packageUrl":  "https://keyweaver.io/downloads/Superconductor-Premiere-Install-win-v0.1.6.zip",
+                                                       "sha256":  "e8ec646a6e58e8c11467df3f3bc10e741dd48d1580c30f50de926dfd92b13e9d",
+                                                       "sizeBytes":  127305,
                                                        "installScript":  "superconductor-premiere-install-windows.ps1"
                                                    },
                                            "mac":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Superconductor-Premiere-Install-mac-v0.1.5.zip",
-                                                       "sha256":  "4f7e231b419b8ea54deb65ce33acefd857eb80a2407f827baaeea8ef59e064a6",
-                                                       "sizeBytes":  126905,
+                                                       "packageUrl":  "https://keyweaver.io/downloads/Superconductor-Premiere-Install-mac-v0.1.6.zip",
+                                                       "sha256":  "300bff00556a2b66be10c3ec46a61b235a368f90ae97b8299c41e498186a1235",
+                                                       "sizeBytes":  126786,
                                                        "installScript":  "superconductor-premiere-install-macos.sh"
                                                    }
                                        },

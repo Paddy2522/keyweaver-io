@@ -19,6 +19,15 @@
     },
     "ludo": {
       "version": "0.3.6"
+    },
+    "trillian-premiere": {
+      "version": "0.1.7"
+    },
+    "tamborine-premiere": {
+      "version": "0.1.7"
+    },
+    "superconductor-premiere": {
+      "version": "0.1.6"
     }
   }
 }
