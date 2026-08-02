@@ -2,6 +2,19 @@
   "product": "Keyweaver",
   "releases": [
     {
+      "version": "1.0.10",
+      "date": "2026-08-02",
+      "panel": [
+        "Premiere Pro companions for Trillian, Tamborine, and Superconductor",
+        "Keyweaver Manager adds After Effects and Premiere Pro host tabs"
+      ],
+      "website": [
+        "Catalog: five After Effects plugins and three Premiere Pro plugins (no Cuemark for Premiere)",
+        "Download and help copy updated for Manager host tabs and Premiere installs",
+        "Manager runtime 1.0.23 with Premiere catalog filtering"
+      ]
+    },
+    {
       "version": "1.0.9",
       "date": "2026-07-31",
       "panel": [
