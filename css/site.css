@@ -248,13 +248,33 @@ body {
   top: calc(100% + 12px);
   left: 50%;
   transform: translateX(-50%);
-  min-width: 240px;
+  min-width: 260px;
   background: var(--surface);
   border: 1px solid var(--edge);
   border-radius: 10px;
   padding: 0.4rem;
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
   z-index: 120;
+}
+
+.nav-products-label {
+  margin: 0;
+  padding: 0.45rem 0.75rem 0.2rem;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.nav-products-label + a {
+  margin-top: 0.1rem;
+}
+
+.nav-products-label:not(:first-child) {
+  margin-top: 0.35rem;
+  padding-top: 0.55rem;
+  border-top: 1px solid var(--edge);
 }
 
 .nav-products-menu a {
