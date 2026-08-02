@@ -13,9 +13,9 @@ $script:KnownPackageSizes = @{
   ludo = [int64]306334
   trillian = [int64]123765
   tamborine = [int64]120657
-  'trillian-premiere' = [int64]120000
-  'tamborine-premiere' = [int64]120000
-  'superconductor-premiere' = [int64]120000
+  'trillian-premiere' = [int64]126705
+  'tamborine-premiere' = [int64]125482
+  'superconductor-premiere' = [int64]127424
 }
 
 function Ensure-Directory {

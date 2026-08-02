@@ -42,6 +42,8 @@ $script:CepExtensionsRoot = Join-Path $env:APPDATA 'Adobe\CEP\extensions'
 $script:CurrentManifest = $null
 $script:IsBusy = $false
 $script:KwInstallBgWorker = $null
+$script:SelectedHostTab = 'AEFT'
+$script:HostTabPrefPath = Join-Path $script:StateRoot 'host-tab.txt'
 
 $installLibPath = Join-Path $script:ManagerRoot 'Keyweaver-InstallLib.ps1'
 if (-not (Test-Path -LiteralPath $installLibPath)) {
@@ -375,7 +377,7 @@ function Set-ManagerBusyState {
     if ($script:UiWindow) {
       $script:UiWindow.Cursor = if ($Busy) { [System.Windows.Input.Cursors]::Wait } else { [System.Windows.Input.Cursors]::Arrow }
     }
-    foreach ($name in @('RefreshButton', 'WebsiteButton')) {
+    foreach ($name in @('RefreshButton', 'WebsiteButton', 'HostTabAe', 'HostTabPpro')) {
       $btn = $script:UiWindow.FindName($name)
       if (-not $btn) { continue }
       $btn.IsHitTestVisible = -not $Busy
@@ -687,15 +689,61 @@ function Get-ProductLogoFileName {
   return $null
 }
 
-function New-HostSectionHeader {
-  param([string]$Text)
-  $tb = New-Object System.Windows.Controls.TextBlock
-  $tb.Text = $Text
-  $tb.FontSize = 13
-  $tb.FontWeight = 'SemiBold'
-  $tb.Foreground = '#7B8BFF'
-  $tb.Margin = New-Object System.Windows.Thickness(0, 4, 0, 8)
-  return $tb
+function Get-SavedHostTab {
+  try {
+    if (Test-Path -LiteralPath $script:HostTabPrefPath) {
+      $raw = (Get-Content -LiteralPath $script:HostTabPrefPath -ErrorAction SilentlyContinue | Select-Object -First 1)
+      if ($raw) {
+        $code = ([string]$raw).Trim().ToUpperInvariant()
+        if ($code -eq 'PPRO') { return 'PPRO' }
+        if ($code -eq 'AEFT') { return 'AEFT' }
+      }
+    }
+  } catch {}
+  return 'AEFT'
+}
+
+function Save-HostTab {
+  param([string]$HostCode)
+  $code = if (([string]$HostCode).ToUpperInvariant() -eq 'PPRO') { 'PPRO' } else { 'AEFT' }
+  $script:SelectedHostTab = $code
+  try {
+    Ensure-Directory $script:StateRoot
+    Set-Content -LiteralPath $script:HostTabPrefPath -Value $code -Encoding ascii -Force
+  } catch {}
+}
+
+function Update-HostTabAppearance {
+  $aeBtn = $script:UiHostTabAe
+  $pproBtn = $script:UiHostTabPpro
+  if (-not $aeBtn -or -not $pproBtn) { return }
+
+  $selected = if ($script:SelectedHostTab -eq 'PPRO') { 'PPRO' } else { 'AEFT' }
+  foreach ($pair in @(
+      @{ Button = $aeBtn; Active = ($selected -eq 'AEFT') },
+      @{ Button = $pproBtn; Active = ($selected -eq 'PPRO') }
+    )) {
+    $btn = $pair.Button
+    if ($pair.Active) {
+      $btn.Background = '#5B6BF8'
+      $btn.Foreground = '#FFFFFF'
+      $btn.FontWeight = 'SemiBold'
+      $btn.BorderBrush = '#5B6BF8'
+    } else {
+      $btn.Background = '#1B1B28'
+      $btn.Foreground = '#C8C8E0'
+      $btn.FontWeight = 'Normal'
+      $btn.BorderBrush = '#2B2B3D'
+    }
+  }
+}
+
+function Set-SelectedHostTab {
+  param([string]$HostCode)
+  if ($script:IsBusy) { return }
+  Save-HostTab $HostCode
+  Update-HostTabAppearance
+  Render-ManifestUi
 }
 
 function Get-ProductAccentColor {
@@ -921,42 +969,48 @@ function Render-ManifestUi {
 
     $products = @($manifest.products)
     $pluginUpdateCount = 0
-    if (-not $products -or -not $products.Count) {
+    $aeProducts = @()
+    $pproProducts = @()
+    foreach ($product in $products) {
+      if ((Get-ProductHostCode $product) -eq 'PPRO') {
+        $pproProducts += $product
+      } else {
+        $aeProducts += $product
+      }
+      if (Test-ProductInstalled $product) {
+        $installedVersion = Get-InstalledPanelVersion $product.panelId
+        if ($product.version -and ((Compare-Semver $installedVersion ([string]$product.version)) -lt 0)) {
+          $pluginUpdateCount++
+        }
+      }
+    }
+
+    if ($script:UiHostTabAe) {
+      $script:UiHostTabAe.Content = ('After Effects (' + $aeProducts.Count + ')')
+    }
+    if ($script:UiHostTabPpro) {
+      $script:UiHostTabPpro.Content = ('Premiere Pro (' + $pproProducts.Count + ')')
+    }
+    Update-HostTabAppearance
+
+    $selectedHost = if ($script:SelectedHostTab -eq 'PPRO') { 'PPRO' } else { 'AEFT' }
+    $visibleProducts = @(if ($selectedHost -eq 'PPRO') { $pproProducts } else { $aeProducts })
+    $emptyHostLabel = if ($selectedHost -eq 'PPRO') { 'Premiere Pro' } else { 'After Effects' }
+
+    if (-not $products -or @($products).Count -eq 0) {
       $empty = New-Object System.Windows.Controls.TextBlock
       $empty.Text = 'No plugins are available in the catalog yet.'
       $empty.Foreground = '#8989A6'
       $script:UiProductsPanel.Children.Add($empty) | Out-Null
+    } elseif ($visibleProducts.Count -eq 0) {
+      $empty = New-Object System.Windows.Controls.TextBlock
+      $empty.Text = ('No ' + $emptyHostLabel + ' plugins in the catalog yet.')
+      $empty.Foreground = '#8989A6'
+      $empty.Margin = New-Object System.Windows.Thickness(0, 4, 0, 0)
+      $script:UiProductsPanel.Children.Add($empty) | Out-Null
     } else {
-      $aeProducts = @()
-      $pproProducts = @()
-      foreach ($product in $products) {
-        if ((Get-ProductHostCode $product) -eq 'PPRO') {
-          $pproProducts += $product
-        } else {
-          $aeProducts += $product
-        }
-        if (Test-ProductInstalled $product) {
-          $installedVersion = Get-InstalledPanelVersion $product.panelId
-          if ($product.version -and ((Compare-Semver $installedVersion ([string]$product.version)) -lt 0)) {
-            $pluginUpdateCount++
-          }
-        }
-      }
-      if ($aeProducts.Count) {
-        $script:UiProductsPanel.Children.Add((New-HostSectionHeader 'After Effects')) | Out-Null
-        foreach ($product in $aeProducts) {
-          $script:UiProductsPanel.Children.Add((New-ProductCard $product)) | Out-Null
-        }
-      }
-      if ($pproProducts.Count) {
-        $pproHeader = New-HostSectionHeader 'Premiere Pro'
-        if ($aeProducts.Count) {
-          $pproHeader.Margin = New-Object System.Windows.Thickness(0, 14, 0, 8)
-        }
-        $script:UiProductsPanel.Children.Add($pproHeader) | Out-Null
-        foreach ($product in $pproProducts) {
-          $script:UiProductsPanel.Children.Add((New-ProductCard $product)) | Out-Null
-        }
+      foreach ($product in $visibleProducts) {
+        $script:UiProductsPanel.Children.Add((New-ProductCard $product)) | Out-Null
       }
     }
 
@@ -970,7 +1024,7 @@ function Render-ManifestUi {
       $alerts += ('Keyweaver Manager v' + $managerLatest + ' is available. Close Manager and reopen from the Start Menu to sync.')
     }
     if ($pluginUpdateCount -gt 0) {
-      $alerts += ($pluginUpdateCount.ToString() + $(if ($pluginUpdateCount -eq 1) { ' plugin update is' } else { ' plugin updates are' }) + ' available below.')
+      $alerts += ($pluginUpdateCount.ToString() + $(if ($pluginUpdateCount -eq 1) { ' plugin update is' } else { ' plugin updates are' }) + ' available.')
     }
     if ($alerts.Count -gt 0) {
       $script:UiUpdateAlertText.Text = ($alerts -join '  ')
@@ -1153,9 +1207,41 @@ function Initialize-KeyweaverManagerUi {
       <Image Name="HeaderLogo" Height="40" HorizontalAlignment="Left" Stretch="Uniform" Visibility="Collapsed"/>
       <TextBlock Name="SubtitleText" Text="keyweaver.io" Margin="0,6,0,0" Foreground="#8989A6"/>
     </StackPanel>
-    <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,16,0,8">
-      <Button Name="RefreshButton" Content="Refresh catalog" Style="{StaticResource ToolbarButtonStyle}"/>
-      <Button Name="WebsiteButton" Content="keyweaver.io" Margin="8,0,0,0" Style="{StaticResource ToolbarButtonStyle}"/>
+    <StackPanel Grid.Row="1" Margin="0,16,0,8">
+      <StackPanel Orientation="Horizontal">
+        <Button Name="RefreshButton" Content="Refresh catalog" Style="{StaticResource ToolbarButtonStyle}"/>
+        <Button Name="WebsiteButton" Content="keyweaver.io" Margin="8,0,0,0" Style="{StaticResource ToolbarButtonStyle}"/>
+      </StackPanel>
+      <Border Margin="0,12,0,0" Background="#151522" BorderBrush="#2B2B3D" BorderThickness="1" CornerRadius="8" Padding="3">
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+          </Grid.ColumnDefinitions>
+          <Button Name="HostTabAe" Grid.Column="0" Content="After Effects" Cursor="Hand" Padding="12,8" Margin="0,0,2,0"
+                  Background="#5B6BF8" Foreground="#FFFFFF" FontWeight="SemiBold" BorderBrush="#5B6BF8" BorderThickness="1">
+            <Button.Template>
+              <ControlTemplate TargetType="Button">
+                <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="6" Padding="{TemplateBinding Padding}">
+                  <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+              </ControlTemplate>
+            </Button.Template>
+          </Button>
+          <Button Name="HostTabPpro" Grid.Column="1" Content="Premiere Pro" Cursor="Hand" Padding="12,8" Margin="2,0,0,0"
+                  Background="#1B1B28" Foreground="#C8C8E0" BorderBrush="#2B2B3D" BorderThickness="1">
+            <Button.Template>
+              <ControlTemplate TargetType="Button">
+                <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="6" Padding="{TemplateBinding Padding}">
+                  <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+              </ControlTemplate>
+            </Button.Template>
+          </Button>
+        </Grid>
+      </Border>
     </StackPanel>
     <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" Style="{StaticResource CuemarkScrollViewer}">
       <StackPanel>
@@ -1193,8 +1279,12 @@ function Initialize-KeyweaverManagerUi {
   $script:UiSubtitle = $window.FindName('SubtitleText')
   $script:UiUpdateAlert = $window.FindName('UpdateAlert')
   $script:UiUpdateAlertText = $window.FindName('UpdateAlertText')
+  $script:UiHostTabAe = $window.FindName('HostTabAe')
+  $script:UiHostTabPpro = $window.FindName('HostTabPpro')
   $script:ToolbarButtonStyle = $window.FindResource('ToolbarButtonStyle')
   $script:PrimaryButtonStyle = $window.FindResource('PrimaryButtonStyle')
+  $script:SelectedHostTab = Get-SavedHostTab
+  Update-HostTabAppearance
   Set-ManagerHeaderLogo $window
 
   $refreshBtn = $window.FindName('RefreshButton')
@@ -1212,10 +1302,14 @@ function Initialize-KeyweaverManagerUi {
   $websiteBtn = $window.FindName('WebsiteButton')
   $websiteBtn.Add_Click({ Open-ExternalUrl 'https://keyweaver.io' })
 
+  $script:UiHostTabAe.Add_Click({ Set-SelectedHostTab 'AEFT' })
+  $script:UiHostTabPpro.Add_Click({ Set-SelectedHostTab 'PPRO' })
+
   $window.Add_Loaded({
     try {
       Ensure-Directory $script:CacheRoot
       Ensure-Directory $script:StateRoot
+      $script:SelectedHostTab = Get-SavedHostTab
       Fetch-Manifest | Out-Null
       Render-ManifestUi
       Set-Status 'Ready. Choose a plugin to install.'

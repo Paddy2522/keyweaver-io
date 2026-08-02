@@ -4,14 +4,14 @@
     "publisher":  "Keyweaver Ltd",
     "catalogUrl":  "https://keyweaver.io/installer/manifest.json",
     "manager":  {
-                    "version":  "1.0.22",
+                    "version":  "1.0.23",
                     "baseUrl":  "https://keyweaver.io/installer/manager/",
                     "files":  {
-                                  "Keyweaver-Manager.ps1":  "1057e4064c2090fc879702b5c85dc0715b6bc5170e2b7e3d78b4631ae45f998d",
-                                  "Keyweaver-InstallLib.ps1":  "35b1bcb16a1aa7100fabe360f320a5b022b260c2ddbf585ec38b955cfdb793ec",
+                                  "Keyweaver-Manager.ps1":  "b80a83b76a58a5b7a3d4ac6a678c32386b6853bc2cd09349626941e48627e721",
+                                  "Keyweaver-InstallLib.ps1":  "0a23bbac8fcacabd871f261fc51a55261ab52ca93ecd48266f6ba7e24d36fcff",
                                   "Keyweaver-Manager-Launcher.ps1":  "9167c5fcf3dfd8c849ef38d2118079cddffcf1187b3bb7bac281eb2f9ba934df",
                                   "Sync-KeyweaverManagerRuntime.ps1":  "21230c134a1daaf901971817d14d317c53cd34f3df1daf54f6605885712c57bb",
-                                  "Keyweaver-Manager.exe":  "2eabe1e8be6a2a090b8d19f56122b0e23f2ed5bf83331f3cdbb071b00f716f5f",
+                                  "Keyweaver-Manager.exe":  "0ccd91d845d8c60e2344a29987eff29d38c83c93218e88d1acecc710c48e5f30",
                                   "Keyweaver-Manager.cmd":  "56add36ae43a1dab56844b8fbb589815554900005008275d83b60a2c3f8ed7bd",
                                   "Keyweaver-Manager.vbs":  "a27d0a42064c2d38cc548a317ae4701d56e9526d42bd014be40690e15733058c",
                                   "keyweaver.ico":  "a2133d99221ac192cb3e42b008e7edb59d1ef8ad539168785189b1de191e1d4f",
