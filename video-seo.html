@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" href="/images/favicon.svg" type="image/svg+xml" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/css/cookie-consent.css" />
+  <script src="/js/cookie-consent.js?v=20260731a"></script>
+  <script src="/js/nav-auth.js" defer></script>
+  <link rel="stylesheet" href="/css/nav-brand.css" />
+  <link rel="stylesheet" href="/css/chrome.css" />
+  <link rel="stylesheet" href="/css/site.css" />
+  <link rel="stylesheet" href="/css/video-seo.css" />
+  <link rel="stylesheet" href="/css/help-widget.css" />
+  <title>Video SEO - Free titles, descriptions &amp; tags | Keyweaver</title>
+  <meta name="description" content="Free Video SEO tool from Keyweaver. Turn a video brief into YouTube, TikTok, Instagram, and Facebook titles, descriptions, tags, and hashtags — structured copy, not live SERP research." />
+  <link rel="canonical" href="https://keyweaver.io/video-seo" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Keyweaver" />
+  <meta property="og:title" content="Video SEO - Keyweaver Tools" />
+  <meta property="og:description" content="Describe your video once. Get platform-ready titles, descriptions, tags, and hashtags for YouTube, TikTok, Instagram, and Facebook." />
+  <meta property="og:url" content="https://keyweaver.io/video-seo" />
+  <meta property="og:image" content="https://keyweaver.io/images/keyweaver-logo.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cal+Sans&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<nav class="site-nav" aria-label="Primary">
+  <a href="/" class="nav-brand" aria-label="Keyweaver"><img src="/images/keyweaver-logo.svg" alt="" width="162" height="28" /></a>
+  <ul class="nav-links">
+    <li>
+      <details class="nav-products">
+        <summary>Plugins</summary>
+        <div class="nav-products-menu" role="menu">
+          <p class="nav-products-label">After Effects</p>
+          <a href="/cuemark" role="menuitem">Cuemark<span>AI Captions</span></a>
+          <a href="/trillian" role="menuitem">Trillian<span>AI Voiceover</span></a>
+          <a href="/tamborine" role="menuitem">Tamborine<span>AI Music &amp; SFX</span></a>
+          <a href="/superconductor" role="menuitem">Superconductor<span>AI Video</span></a>
+          <a href="/ludo" role="menuitem">Ludo<span>Motion Toolkit</span></a>
+          <p class="nav-products-label">Premiere Pro</p>
+          <a href="/trillian" role="menuitem">Trillian<span>AI Voiceover</span></a>
+          <a href="/tamborine" role="menuitem">Tamborine<span>AI Music &amp; SFX</span></a>
+          <a href="/superconductor" role="menuitem">Superconductor<span>AI Video</span></a>
+        </div>
+      </details>
+    </li>
+    <li>
+      <details class="nav-products">
+        <summary>Tools</summary>
+        <div class="nav-products-menu" role="menu">
+          <a href="/video-seo" role="menuitem" aria-current="page">Video SEO<span>Titles, descriptions &amp; tags</span></a>
+        </div>
+      </details>
+    </li>
+    <li><a href="/pricing">Pricing</a></li>
+    <li><a href="/download">Download</a></li>
+    <li><a href="/help">Help</a></li>
+  </ul>
+  <div class="nav-cta">
+    <a href="/login" class="btn btn-ghost">Sign in</a>
+    <a href="/download" class="btn btn-primary">Download free</a>
+  </div>
+</nav>
+
+<main class="vseo-page">
+  <header class="vseo-hero">
+    <p class="section-label">Tools</p>
+    <h1>Video SEO</h1>
+    <p>Describe the video once. Generate platform-ready titles, descriptions, tags, and hashtags for the channels you actually post to.</p>
+    <div class="vseo-note" role="note">
+      <strong>Free tier:</strong> structured copy from your brief and optional seed keywords — not live keyword or SERP research. Use it as a strong first draft, then edit for your voice.
+    </div>
+  </header>
+
+  <form id="vseo-form" class="vseo-form" novalidate>
+    <div class="vseo-field">
+      <label for="vseo-brief">Video brief</label>
+      <p class="hint">What the video is about, who it’s for, and what viewers should take away. One or two paragraphs is plenty.</p>
+      <textarea id="vseo-brief" name="brief" required placeholder="Example: A 8-minute After Effects tutorial showing how to build clean kinetic type titles for client social ads. Aimed at motion designers who want faster setups without messy expressions."></textarea>
+    </div>
+
+    <div class="vseo-field">
+      <label for="vseo-keywords">Seed keywords <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
+      <p class="hint">Comma-separated phrases you already know matter — we weave them in without stuffing.</p>
+      <input id="vseo-keywords" name="keywords" type="text" placeholder="after effects titles, kinetic typography, social ads" autocomplete="off" />
+    </div>
+
+    <div class="vseo-row">
+      <div class="vseo-field">
+        <label for="vseo-tone">Tone</label>
+        <select id="vseo-tone" name="tone">
+          <option value="clear" selected>Clear</option>
+          <option value="professional">Professional</option>
+          <option value="casual">Casual</option>
+          <option value="energetic">Energetic</option>
+          <option value="educational">Educational</option>
+        </select>
+      </div>
+      <div class="vseo-field">
+        <label for="vseo-cta">Call to action</label>
+        <select id="vseo-cta" name="cta">
+          <option value="none" selected>None</option>
+          <option value="subscribe">Subscribe</option>
+          <option value="comment">Ask for comments</option>
+          <option value="link">Point to link / bio</option>
+          <option value="follow">Follow</option>
+          <option value="share">Share</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="vseo-field">
+      <label for="vseo-outline">Chapter / beat outline <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
+      <p class="hint">One beat per line. We’ll turn these into YouTube chapter placeholders with rough timestamps.</p>
+      <textarea id="vseo-outline" name="outline" rows="4" placeholder="Setup&#10;Build the type&#10;Animate on&#10;Export tips"></textarea>
+    </div>
+
+    <div class="vseo-field">
+      <label>Platforms</label>
+      <p class="hint">Defaults to all on. Uncheck anything you don’t need.</p>
+      <div class="vseo-platforms">
+        <label class="vseo-platform"><input type="checkbox" id="plat-youtube" checked /> YouTube</label>
+        <label class="vseo-platform"><input type="checkbox" id="plat-tiktok" checked /> TikTok</label>
+        <label class="vseo-platform"><input type="checkbox" id="plat-instagram" checked /> Instagram</label>
+        <label class="vseo-platform"><input type="checkbox" id="plat-facebook" checked /> Facebook</label>
+      </div>
+    </div>
+
+    <p class="vseo-error" id="vseo-error" role="alert"></p>
+
+    <div class="vseo-actions">
+      <button type="submit" class="btn btn-primary btn-lg">Generate</button>
+      <button type="button" class="btn btn-ghost" id="vseo-clear">Clear</button>
+    </div>
+  </form>
+
+  <div class="vseo-results" id="vseo-results">
+    <div class="vseo-results-head">
+      <h2>Results</h2>
+      <p>Edit anything, then copy field-by-field or copy all per platform.</p>
+    </div>
+    <nav class="vseo-jump" id="vseo-jump" aria-label="Jump to platform"></nav>
+    <div id="vseo-results-body"></div>
+
+    <aside class="vseo-extras" aria-label="Extras">
+      <h3>Extras</h3>
+      <p>Thumbnail text ideas, a pinned-comment draft, and chapter placeholders from your outline.</p>
+      <div id="vseo-extras-body"></div>
+    </aside>
+  </div>
+
+  <p class="vseo-pro">
+    Coming later: Video SEO Pro with upload, transcript-aware copy, and thumbnail helpers — billed in Keyweaver credits.
+    For timeline tools, see <a href="/download">Keyweaver plugins</a>.
+  </p>
+</main>
+
+<footer class="site-footer">
+  <p>© 2026 Keyweaver Ltd. All rights reserved.</p>
+  <p class="footer-entity">Registered in England &amp; Wales · Company no. 17283644 · 20 Wenlock Road, London, N1 7GU</p>
+  <ul class="footer-products">
+    <li><a href="/cuemark">Cuemark</a></li>
+    <li><a href="/superconductor">Superconductor</a></li>
+    <li><a href="/trillian">Trillian</a></li>
+    <li><a href="/tamborine">Tamborine</a></li>
+    <li><a href="/ludo">Ludo</a></li>
+  </ul>
+  <ul class="footer-links">
+    <li><a href="/video-seo">Video SEO</a></li>
+    <li><a href="/legal/privacy">Privacy</a></li>
+    <li><a href="/legal/terms">Terms</a></li>
+    <li><a href="/legal/cookies">Cookies</a></li>
+    <li><a href="/changelog">Release notes</a></li>
+    <li><a href="/help">Help</a></li>
+    <li><a href="/about">About</a></li>
+  </ul>
+</footer>
+
+<script src="/js/video-seo.js" defer></script>
+<script src="/js/help-widget.js" defer></script>
+<script src="/js/cuemark-turnstile.js"></script>
+</body>
+</html>

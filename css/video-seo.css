@@ -1,0 +1,402 @@
+/* Video SEO tool — Keyweaver charcoal UI */
+
+.vseo-page {
+  padding: 5.5rem 1.5rem 5rem;
+  max-width: 920px;
+  margin: 0 auto;
+}
+
+.vseo-hero {
+  margin-bottom: 2rem;
+}
+
+.vseo-hero .section-label {
+  margin-bottom: 0.65rem;
+}
+
+.vseo-hero h1 {
+  font-family: 'Cal Sans', sans-serif;
+  font-size: clamp(1.85rem, 4.5vw, 2.6rem);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: var(--text);
+  margin-bottom: 0.65rem;
+  line-height: 1.15;
+}
+
+.vseo-hero p {
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.7;
+  max-width: 38rem;
+}
+
+.vseo-note {
+  margin-top: 1rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--edge);
+  border-left: 3px solid rgba(var(--accent-rgb), 0.65);
+  background: var(--surface);
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.vseo-note strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.vseo-form {
+  display: grid;
+  gap: 1.25rem;
+  padding: 1.5rem;
+  background: var(--surface);
+  border: 1px solid var(--edge);
+  border-radius: 14px;
+}
+
+.vseo-field {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.vseo-field label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.vseo-field .hint {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.vseo-field textarea,
+.vseo-field input,
+.vseo-field select {
+  width: 100%;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  background: var(--ink);
+  border: 1px solid var(--edge);
+  border-radius: 8px;
+  padding: 0.75rem 0.9rem;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.vseo-field textarea {
+  min-height: 120px;
+  resize: vertical;
+  line-height: 1.55;
+}
+
+.vseo-field textarea:focus,
+.vseo-field input:focus,
+.vseo-field select:focus {
+  border-color: rgba(var(--accent-rgb), 0.55);
+}
+
+.vseo-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.vseo-platforms {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.vseo-platform {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.75rem;
+  border: 1px solid var(--edge);
+  border-radius: 8px;
+  background: var(--ink);
+  font-size: 13px;
+  color: var(--muted);
+  cursor: pointer;
+  user-select: none;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+
+.vseo-platform:hover {
+  color: var(--text);
+  border-color: var(--subtle);
+}
+
+.vseo-platform:has(input:checked) {
+  color: var(--text);
+  border-color: rgba(var(--accent-rgb), 0.5);
+  background: rgba(var(--accent-rgb), 0.1);
+}
+
+.vseo-platform input {
+  accent-color: var(--accent);
+  width: 14px;
+  height: 14px;
+  margin: 0;
+}
+
+.vseo-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.vseo-actions .btn-lg {
+  height: 42px;
+  padding: 0 1.35rem;
+  font-size: 14px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+.vseo-actions .btn-ghost {
+  height: 42px;
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--edge);
+}
+
+.vseo-actions .btn-ghost:hover {
+  color: var(--text);
+  background: var(--lift);
+}
+
+.vseo-error {
+  display: none;
+  font-size: 13px;
+  color: #e88a8a;
+}
+
+.vseo-error.is-visible {
+  display: block;
+}
+
+.vseo-results {
+  display: none;
+  margin-top: 2.5rem;
+}
+
+.vseo-results.is-visible {
+  display: block;
+}
+
+.vseo-results-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.vseo-results-head h2 {
+  font-family: 'Cal Sans', sans-serif;
+  font-size: 1.45rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.vseo-results-head p {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.vseo-jump {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1.5rem;
+}
+
+.vseo-jump a {
+  font-size: 12px;
+  color: var(--muted);
+  text-decoration: none;
+  padding: 0.35rem 0.65rem;
+  border: 1px solid var(--edge);
+  border-radius: 999px;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.vseo-jump a:hover {
+  color: var(--text);
+  border-color: var(--subtle);
+}
+
+.vseo-platform-block {
+  margin-bottom: 1.5rem;
+  padding: 1.35rem 1.4rem 1.2rem;
+  background: var(--surface);
+  border: 1px solid var(--edge);
+  border-radius: 14px;
+  scroll-margin-top: 5rem;
+}
+
+.vseo-platform-block h3 {
+  font-family: 'Cal Sans', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.25rem;
+}
+
+.vseo-platform-block .plat-sub {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 1.1rem;
+}
+
+.vseo-field-out {
+  margin-bottom: 1rem;
+}
+
+.vseo-field-out:last-child {
+  margin-bottom: 0;
+}
+
+.vseo-field-out-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.4rem;
+}
+
+.vseo-field-out-head label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.vseo-meter {
+  font-size: 11px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.vseo-meter.is-warn {
+  color: #e0b45a;
+}
+
+.vseo-meter.is-over {
+  color: #e88a8a;
+}
+
+.vseo-copy-row {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.vseo-copy {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--muted);
+  background: var(--ink);
+  border: 1px solid var(--edge);
+  border-radius: 6px;
+  padding: 0.25rem 0.55rem;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+
+.vseo-copy:hover {
+  color: var(--text);
+  border-color: var(--subtle);
+}
+
+.vseo-copy.is-done {
+  color: #9fd9bc;
+  border-color: rgba(76, 175, 131, 0.45);
+}
+
+.vseo-field-out textarea,
+.vseo-field-out input {
+  width: 100%;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 13.5px;
+  color: var(--text);
+  background: var(--ink);
+  border: 1px solid var(--edge);
+  border-radius: 8px;
+  padding: 0.7rem 0.85rem;
+  line-height: 1.55;
+  resize: vertical;
+}
+
+.vseo-field-out textarea:focus,
+.vseo-field-out input:focus {
+  outline: none;
+  border-color: rgba(var(--accent-rgb), 0.55);
+}
+
+.vseo-extras {
+  margin-top: 1.5rem;
+  padding: 1.35rem 1.4rem;
+  border: 1px dashed var(--edge);
+  border-radius: 14px;
+  background: rgba(19, 19, 26, 0.65);
+}
+
+.vseo-extras h3 {
+  font-family: 'Cal Sans', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.35rem;
+}
+
+.vseo-extras > p {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 1rem;
+}
+
+.vseo-pro {
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--edge);
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.vseo-pro a {
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.vseo-pro a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 700px) {
+  .vseo-row {
+    grid-template-columns: 1fr;
+  }
+
+  .vseo-form {
+    padding: 1.15rem;
+  }
+
+  .vseo-platform-block,
+  .vseo-extras {
+    padding: 1.1rem;
+  }
+}
