@@ -14,32 +14,37 @@
   /** @type {'standard' | 'premium'} */
   var imageQuality = 'standard';
 
-  var PRODUCTS = {
-    none: { label: 'Custom / general', blurb: '' },
-    cuemark: {
-      label: 'Cuemark',
-      blurb: 'Cuemark AI captions for After Effects - kinetic subtitles, highlighter bars, clean social caption look.'
+  var VIDEO_TYPES = {
+    tutorial: {
+      label: 'Tutorial',
+      vibe: 'clear step-by-step teaching energy, readable UI or hands-on demo, trustworthy creator look'
     },
-    trillian: {
-      label: 'Trillian',
-      blurb: 'Trillian AI voiceover - waveform + timeline UI, voice generation for editors.'
+    product_review: {
+      label: 'Product review',
+      vibe: 'honest review energy, product hero + human reaction, before/after friendly framing'
     },
-    ludo: {
-      label: 'Ludo',
-      blurb: 'Ludo motion toolkit - text split, stagger, cloner layout, animation controls in After Effects.'
+    vlog: {
+      label: 'Vlog',
+      vibe: 'personal day-in-the-life energy, natural light, candid creator presence'
     },
-    superconductor: {
-      label: 'Superconductor',
-      blurb: 'Superconductor AI video - generate short clips inside After Effects / Premiere.'
+    talking_head: {
+      label: 'Talking head',
+      vibe: 'direct-to-camera host, clean background, strong eye contact, simple set'
     },
-    tamborine: {
-      label: 'Tamborine',
-      blurb: 'Tamborine AI music and SFX - cue beds and hits without leaving the NLE.'
+    short_hook: {
+      label: 'Short-form hook',
+      vibe: 'scroll-stopping first frame, big expression or bold prop, phone-native vertical energy'
     },
-    keyweaver: {
-      label: 'Keyweaver suite',
-      blurb: 'Keyweaver suite for motion and video editors - Manager, plugins, and free web tools.'
+    launch_trailer: {
+      label: 'Launch trailer',
+      vibe: 'cinematic launch energy, high contrast, dramatic lighting, trailer-poster composition'
     }
+  };
+
+  var TONES = {
+    educational: 'calm educational tone, helpful and clear',
+    hype: 'high-energy hype tone, bold and urgent without looking spammy',
+    calm: 'calm premium tone, soft light, uncluttered, quiet confidence'
   };
 
   var ASPECT = {
@@ -77,14 +82,14 @@
     return sentenceCase(first);
   }
 
-  function shortTitles(brief, product) {
+  function shortTitles(brief, videoType) {
     var hook = firstHook(brief);
     var words = hook.split(/\s+/).slice(0, 5).join(' ');
-    var brand = product !== 'none' && PRODUCTS[product] ? PRODUCTS[product].label : 'Creator';
+    var typeLabel = VIDEO_TYPES[videoType] ? VIDEO_TYPES[videoType].label : 'Creator';
     return [
       words.toUpperCase(),
       sentenceCase(words),
-      brand.toUpperCase() + ' TIP',
+      typeLabel.toUpperCase() + ' TIP',
       'BEFORE → AFTER'
     ];
   }
@@ -110,7 +115,8 @@
     });
     return {
       brief: cleanText($('ckit-brief').value),
-      product: $('ckit-product').value || 'none',
+      videoType: ($('ckit-video-type') && $('ckit-video-type').value) || 'tutorial',
+      tone: ($('ckit-tone') && $('ckit-tone').value) || 'educational',
       cta: $('ckit-cta').value || 'none',
       platforms: platforms,
       assets: assets
@@ -138,8 +144,9 @@
         if (vseo && vseo.brief) {
           data = {
             brief: vseo.brief,
-            product: 'none',
-            cta: vseo.cta || 'none',
+            videoType: 'tutorial',
+            tone: vseo.tone === 'energetic' ? 'hype' : (vseo.tone === 'educational' ? 'educational' : 'calm'),
+            cta: vseo.cta === 'link' ? 'link' : (vseo.cta === 'subscribe' || vseo.cta === 'follow' ? 'subscribe' : 'none'),
             platforms: vseo.platforms || ['youtube', 'tiktok', 'instagram', 'facebook'],
             assets: ['youtube_thumb', 'vertical', 'quote_card']
           };
@@ -147,7 +154,8 @@
         } else if (shot && shot.concept) {
           data = {
             brief: shot.concept,
-            product: 'none',
+            videoType: mapShotType(shot.type),
+            tone: 'educational',
             cta: 'none',
             platforms: ['youtube', 'tiktok', 'instagram', 'facebook'],
             assets: ['youtube_thumb', 'vertical', 'quote_card']
@@ -158,11 +166,11 @@
           var banner = $('ckit-vseo-banner');
           if (banner) {
             banner.innerHTML =
-              'Prefilling from your last <a href="/' +
+              'Continuing with your last <a href="/' +
               (source === 'Shot List' ? 'shot-list' : 'video-seo') +
               '">' +
               source +
-              '</a> brief. Build pack is free - AI render needs purchased credits.';
+              '</a> brief. Free pack first - AI render needs purchased credits.';
             banner.classList.add('is-visible');
           }
         }
@@ -170,8 +178,15 @@
     }
     if (!data) return;
     $('ckit-brief').value = data.brief || '';
-    if (data.product && $('ckit-product')) $('ckit-product').value = data.product;
-    if (data.cta && $('ckit-cta')) $('ckit-cta').value = data.cta;
+    if ($('ckit-video-type')) {
+      $('ckit-video-type').value = data.videoType || mapLegacyProduct(data.product) || 'tutorial';
+    }
+    if ($('ckit-tone')) $('ckit-tone').value = data.tone || 'educational';
+    if (data.cta && $('ckit-cta')) {
+      var cta = data.cta;
+      if (cta === 'download' || cta === 'try') cta = 'subscribe';
+      $('ckit-cta').value = cta;
+    }
     ['youtube', 'tiktok', 'instagram', 'facebook'].forEach(function (p) {
       var el = $('plat-' + p);
       if (el) el.checked = !data.platforms || data.platforms.indexOf(p) !== -1;
@@ -183,6 +198,26 @@
     });
   }
 
+  function mapShotType(t) {
+    var map = {
+      talking_head: 'talking_head',
+      product: 'product_review',
+      product_review: 'product_review',
+      tutorial: 'tutorial',
+      vlog: 'vlog',
+      short_hook: 'short_hook',
+      launch_trailer: 'launch_trailer',
+      event: 'vlog',
+      custom: 'talking_head'
+    };
+    return map[t] || 'tutorial';
+  }
+
+  /** Old localStorage may still have Keyweaver product presets - ignore them. */
+  function mapLegacyProduct() {
+    return 'tutorial';
+  }
+
   function imageCreditsNeed() {
     return imageQuality === 'premium' ? IMAGE_PREMIUM_CREDITS : IMAGE_CREDITS;
   }
@@ -190,23 +225,24 @@
   function ctaLine(cta) {
     var map = {
       none: '',
-      download: 'CTA text idea: Download free',
-      try: 'CTA text idea: Try it free',
-      watch: 'CTA text idea: Watch the walkthrough',
-      link: 'CTA text idea: Link in bio'
+      subscribe: 'CTA text idea: Subscribe for more',
+      link: 'CTA text idea: Link in bio',
+      watch: 'CTA text idea: Watch the full video',
+      comment: 'CTA text idea: Drop your question below'
     };
     return map[cta] || '';
   }
 
   function buildPack(data) {
-    var product = PRODUCTS[data.product] || PRODUCTS.none;
-    var productLine = product.blurb ? product.blurb + ' ' : '';
+    var type = VIDEO_TYPES[data.videoType] || VIDEO_TYPES.tutorial;
+    var toneLine = TONES[data.tone] || TONES.educational;
+    var vibeLine = type.vibe + ', ' + toneLine + '. ';
     var hook = firstHook(data.brief);
-    var titles = shortTitles(data.brief, data.product);
+    var titles = shortTitles(data.brief, data.videoType);
     var cta = ctaLine(data.cta);
     var platformNote =
       data.platforms.length
-        ? 'Platforms: ' + data.platforms.map(function (p) { return p; }).join(', ')
+        ? 'Platforms: ' + data.platforms.join(', ')
         : 'Platforms: (none selected)';
 
     var items = [];
@@ -214,14 +250,14 @@
       'Lock one message from the brief (not five)',
       'Keep burned-in text under ~6 words for thumbs',
       'Export masters at listed pixel sizes before upload compress',
-      'Pair with Video SEO copy: https://keyweaver.io/video-seo'
+      'Write publish titles next in Video SEO: https://keyweaver.io/video-seo'
     ];
 
     if (data.assets.indexOf('youtube_thumb') !== -1) {
       items.push({
         id: 'youtube_thumb',
         kind: 'image',
-        title: 'YouTube thumb concepts',
+        title: 'YouTube thumb (paste prompt into any image tool)',
         meta:
           ASPECT.youtube_thumb.ratio +
           ' · ' +
@@ -229,7 +265,7 @@
           ' · ' +
           platformNote,
         prompt:
-          productLine +
+          vibeLine +
           'YouTube thumbnail still, 16:9 framing, high contrast subject, large readable title text space for "' +
           titles[0] +
           '". Scene from brief: ' +
@@ -237,7 +273,7 @@
           '. Clean modern creator aesthetic, soft studio light, no watermark, no cluttered UI chrome.',
         titles: titles.slice(0, 3),
         aspect: ASPECT.youtube_thumb.fal,
-        recipe: 'Render 1280×720 (or crop 16:9). Leave safe margin for YouTube UI. Prefer faces / product UI large.'
+        recipe: 'Render 1280×720 (or crop 16:9). Leave safe margin for YouTube UI. Prefer faces / hero subject large.'
       });
     }
 
@@ -245,18 +281,18 @@
       items.push({
         id: 'vertical',
         kind: 'image',
-        title: 'Vertical teaser stills',
+        title: 'TikTok / Reels cover (9:16)',
         meta: ASPECT.vertical.ratio + ' · ' + ASPECT.vertical.pixels + ' · Reels / Shorts / TikTok',
         prompt:
-          productLine +
-          'Vertical 9:16 teaser still for short-form video. Hook: "' +
+          vibeLine +
+          'Vertical 9:16 cover / teaser still for short-form video. Hook: "' +
           hook +
           '". Brief: ' +
           data.brief +
-          '. Phone-native composition, subject in upper two-thirds, room for caption bar at bottom, clean high-contrast look, sharp product detail if shown.',
+          '. Phone-native composition, subject in upper two-thirds, room for caption bar at bottom, clean high-contrast look.',
         titles: [titles[1], titles[3]],
         aspect: ASPECT.vertical.fal,
-        recipe: '1080×1920. Keep faces/UI above the lower 20% (caption/UI safe zone).'
+        recipe: '1080×1920. Keep faces/subject above the lower 20% (caption/UI safe zone).'
       });
     }
 
@@ -264,18 +300,18 @@
       items.push({
         id: 'quote_card',
         kind: 'image',
-        title: 'Quote / title card',
-        meta: '1:1 or 16:9 · Burned-in preset text',
+        title: 'IG square / title card (1:1)',
+        meta: '1:1 · Burned-in text options below',
         prompt:
-          productLine +
+          vibeLine +
           'Minimal title card, bold centered type reading "' +
           titles[0] +
-          '", charcoal background, subtle soft gradient, generous negative space, premium SaaS ad aesthetic. Optional small subtitle: ' +
+          '", charcoal or soft gradient background, generous negative space, creator-social look. Optional small subtitle: ' +
           (cta || hook) +
-          '. No fake app store badges.',
+          '. No fake app-store badges, no brand logos unless in the brief.',
         titles: [titles[0], titles[2]],
         aspect: '1:1',
-        recipe: 'Square for feed; duplicate 16:9 if needed. Type should remain legible at 320px wide.'
+        recipe: 'Square for Instagram feed; duplicate 16:9 if needed. Type should stay legible at 320px wide.'
       });
     }
 
@@ -283,24 +319,24 @@
       items.push({
         id: 'motion',
         kind: 'video',
-        title: 'Short motion teaser (Seedance Fast)',
+        title: 'Short motion teaser (optional paid render)',
         meta: '4s · 16:9 or 9:16 · add-on · ' + VIDEO_CREDITS + ' purchased credits',
         prompt:
-          productLine +
-          '4-second cinematic product teaser. Slow push-in, subtle UI motion, captions or waveform animating on. Hook: "' +
+          vibeLine +
+          '4-second cinematic social teaser. Slow push-in, subtle motion, room for a title overlay. Hook: "' +
           hook +
           '". Brief: ' +
           data.brief +
-          '. Smooth camera, soft lighting, no rapid cuts, no logos of other brands. End on a clean frame ready for a title overlay.',
+          '. Smooth camera, soft lighting, no rapid cuts, no logos of other brands. End on a clean frame ready for text.',
         titles: [],
         aspect: data.platforms.indexOf('youtube') !== -1 && data.platforms.length === 1 ? '16:9' : '9:16',
         recipe:
-          'Seedance Fast 720p, duration 4 (max 5). Prefer stills first - video is a costly add-on. Not a music-license substitute.'
+          '4s motion, 720p. Prefer stills first - video is a costly purchased-credit add-on. Not a music-license substitute.'
       });
       checklist.push('Motion: render stills first; video is an expensive purchased-credit add-on');
     }
 
-    return { items: items, checklist: checklist, titles: titles, cta: cta, product: product.label };
+    return { items: items, checklist: checklist, titles: titles, cta: cta, videoType: type.label };
   }
 
   function copyText(text, btn) {
@@ -435,7 +471,7 @@
         if (x.res.status === 503 && x.data && x.data.reason === 'provider_not_configured') {
           setStatus(
             statusEl,
-            'AI render is temporarily unavailable on the server. Your free Build pack still works - try render again later.',
+            'AI render is temporarily unavailable on the server. Your free pack still works - try render again later.',
             'err'
           );
           syncRenderButtons();
@@ -565,7 +601,7 @@
       if (item.titles && item.titles.length) {
         var tmeta = document.createElement('p');
         tmeta.className = 'ckit-meta';
-        tmeta.textContent = 'Title / burn-in options: ' + item.titles.join(' · ');
+        tmeta.textContent = 'Burn-in / title text options: ' + item.titles.join(' · ');
         card.appendChild(tmeta);
       }
 
@@ -671,7 +707,6 @@
     if (buy) {
       buy.hidden = false;
       buy.textContent = 'Buy credits';
-      // Primary when signed in with 0 purchased credits; otherwise ghost next to Sign in
       buy.className = zeroPaid ? 'btn btn-primary' : 'btn btn-ghost';
     }
     if (account) account.hidden = !token;
@@ -730,7 +765,7 @@
       if (bal) {
         bal.className = 'tools-credit-status is-warn';
         bal.textContent =
-          'Sign in to see purchased credits and unlock AI render. Build pack above stays free forever.';
+          'Sign in to see purchased credits and unlock AI render. Free pack above stays free forever.';
       }
       syncRenderButtons();
       return;
@@ -803,7 +838,7 @@
     err.textContent = '';
     var data = readForm();
     if (!data.brief || data.brief.length < 12) {
-      err.textContent = 'Add a short campaign brief (at least a sentence) so we can shape asset prompts.';
+      err.textContent = 'Add a short video brief (at least a sentence) so we can shape asset prompts.';
       err.classList.add('is-visible');
       $('ckit-brief').focus();
       return;
@@ -816,7 +851,6 @@
     var submit = $('ckit-submit');
     setBusy(submit, true, 'Building pack…');
     saveForm(data);
-    // Yield so the busy label paints before DOM work
     setTimeout(function () {
       renderResults(data);
       setBusy(submit, false);
@@ -829,7 +863,8 @@
 
   function clearAll() {
     $('ckit-brief').value = '';
-    $('ckit-product').value = 'none';
+    if ($('ckit-video-type')) $('ckit-video-type').value = 'tutorial';
+    if ($('ckit-tone')) $('ckit-tone').value = 'educational';
     $('ckit-cta').value = 'none';
     ['youtube', 'tiktok', 'instagram', 'facebook'].forEach(function (p) {
       var el = $('plat-' + p);

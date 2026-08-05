@@ -20,26 +20,37 @@
   };
 
   var TONE_MAP = {
-    clear: { yt: '', short: '', fb: '' },
-    professional: {
-      yt: 'Clear, practical walkthrough.',
-      short: 'Straight talk, no fluff.',
-      fb: 'A clear look at'
+    educational: {
+      yt: 'Step-by-step teaching focus.',
+      short: 'Learn this.',
+      fb: 'A practical guide to'
+    },
+    hype: {
+      yt: 'Fast, high-energy breakdown.',
+      short: 'Let’s go.',
+      fb: 'An energetic take on'
+    },
+    calm: {
+      yt: 'Calm, clear walkthrough.',
+      short: 'Quiet, useful take.',
+      fb: 'A calm look at'
     },
     casual: {
       yt: 'Friendly, no-jargon take.',
       short: 'Real talk.',
       fb: 'A casual look at'
     },
+    professional: {
+      yt: 'Clear, practical walkthrough.',
+      short: 'Straight talk, no fluff.',
+      fb: 'A clear look at'
+    },
+    // Legacy saved values
+    clear: { yt: '', short: '', fb: '' },
     energetic: {
       yt: 'Fast, high-energy breakdown.',
       short: 'Let’s go.',
       fb: 'An energetic take on'
-    },
-    educational: {
-      yt: 'Step-by-step teaching focus.',
-      short: 'Learn this.',
-      fb: 'A practical guide to'
     }
   };
 
@@ -359,7 +370,7 @@
     return {
       brief: cleanText($('vseo-brief').value),
       keywords: cleanText($('vseo-keywords').value),
-      tone: $('vseo-tone').value || 'clear',
+      tone: $('vseo-tone').value || 'educational',
       cta: $('vseo-cta').value || 'none',
       outline: cleanText($('vseo-outline').value),
       platforms: selectedPlatforms()
@@ -578,14 +589,14 @@
         yt = buildYoutube(data.brief, keywords, data.tone, data.cta, outlineItems);
         host.appendChild(platformSection(
           'youtube',
-          'YouTube',
+          'YouTube - paste into upload details',
           'Aim for a clear title under ~70 characters. Description can be longer; front-load the hook.',
           [
-            { label: 'Title A', value: yt.titles[0], limit: 70, soft: 60 },
-            { label: 'Title B', value: yt.titles[1], limit: 70, soft: 60 },
-            { label: 'Title C', value: yt.titles[2], limit: 70, soft: 60 },
-            { label: 'Description', value: yt.description, multiline: true, rows: 10, limit: 5000, soft: 3000 },
-            { label: 'Tags', value: yt.tags, multiline: true, rows: 2, limit: 500, soft: 400 }
+            { label: 'Paste into Title (option A)', value: yt.titles[0], limit: 70, soft: 60 },
+            { label: 'Paste into Title (option B)', value: yt.titles[1], limit: 70, soft: 60 },
+            { label: 'Paste into Title (option C)', value: yt.titles[2], limit: 70, soft: 60 },
+            { label: 'Paste into Description', value: yt.description, multiline: true, rows: 10, limit: 5000, soft: 3000 },
+            { label: 'Paste into Tags', value: yt.tags, multiline: true, rows: 2, limit: 500, soft: 400 }
           ],
           function (blocks) {
             return [
@@ -605,11 +616,11 @@
         var tt = buildShortDesc(data.brief, keywords, data.tone, data.cta, 'tiktok');
         host.appendChild(platformSection(
           'tiktok',
-          'TikTok',
+          'TikTok - paste into post caption',
           'Lead with the hook. Keep hashtags relevant - a handful beats a wall of spam.',
           [
-            { label: 'Description', value: tt.description, multiline: true, rows: 6, limit: 2200, soft: 300 },
-            { label: 'Hashtags', value: tt.hashtags, multiline: true, rows: 2, limit: 200, soft: 150 }
+            { label: 'Paste into Caption', value: tt.description, multiline: true, rows: 6, limit: 2200, soft: 300 },
+            { label: 'Paste into Hashtags', value: tt.hashtags, multiline: true, rows: 2, limit: 200, soft: 150 }
           ],
           function (blocks) {
             return blocks[0]._getValue() + '\n\n' + blocks[1]._getValue();
@@ -621,11 +632,11 @@
         var ig = buildShortDesc(data.brief, keywords, data.tone, data.cta, 'instagram');
         host.appendChild(platformSection(
           'instagram',
-          'Instagram',
+          'Instagram - paste into Reel / post',
           'Caption first, hashtags after a break. Soft limit around a short scroll for mobile.',
           [
-            { label: 'Description', value: ig.description, multiline: true, rows: 6, limit: 2100, soft: 400 },
-            { label: 'Hashtags', value: ig.hashtags, multiline: true, rows: 2, limit: 300, soft: 220 }
+            { label: 'Paste into Caption', value: ig.description, multiline: true, rows: 6, limit: 2100, soft: 400 },
+            { label: 'Paste into Hashtags', value: ig.hashtags, multiline: true, rows: 2, limit: 300, soft: 220 }
           ],
           function (blocks) {
             return blocks[0]._getValue() + '\n\n' + blocks[1]._getValue();
@@ -637,10 +648,10 @@
         var fb = buildFacebook(data.brief, keywords, data.tone, data.cta);
         host.appendChild(platformSection(
           'facebook',
-          'Facebook',
+          'Facebook - paste into post',
           'Conversational and skimmable. Native posts usually perform better than link dumps.',
           [
-            { label: 'Description', value: fb, multiline: true, rows: 7, limit: 1800, soft: 500 }
+            { label: 'Paste into Post text', value: fb, multiline: true, rows: 7, limit: 1800, soft: 500 }
           ],
           function (blocks) { return blocks[0]._getValue(); }
         ));
@@ -653,7 +664,7 @@
     }
 
     extras.appendChild(fieldBlock({
-      label: 'Thumbnail text ideas',
+      label: 'Thumbnail burn-in text ideas (use with Campaign Kit)',
       value: yt.thumbs.join('\n'),
       multiline: true,
       rows: 3,
@@ -661,7 +672,7 @@
       soft: 70
     }));
     extras.appendChild(fieldBlock({
-      label: 'YouTube pinned comment',
+      label: 'Paste into YouTube pinned comment',
       value: yt.pinned,
       multiline: true,
       rows: 3,
@@ -669,7 +680,7 @@
       soft: 280
     }));
     extras.appendChild(fieldBlock({
-      label: 'Chapter placeholders',
+      label: 'Paste into YouTube chapters (description)',
       value: yt.chapters,
       multiline: true,
       rows: Math.min(8, 2 + outlineItems.length),
@@ -724,7 +735,7 @@
     $('vseo-brief').value = '';
     $('vseo-keywords').value = '';
     $('vseo-outline').value = '';
-    $('vseo-tone').value = 'clear';
+    $('vseo-tone').value = 'educational';
     $('vseo-cta').value = 'none';
     ['youtube', 'tiktok', 'instagram', 'facebook'].forEach(function (p) {
       var el = $('plat-' + p);

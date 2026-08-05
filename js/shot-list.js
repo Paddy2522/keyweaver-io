@@ -27,6 +27,42 @@
       { framing: 'Packaging / UI / unbox detail', movement: 'Top-down locked or slow pan', audio: 'Foley; short VO', w: 0.1, tag: 'detail' },
       { framing: 'Hero close + CTA / logo hold', movement: 'Locked beauty; end card safe', audio: 'VO CTA; music resolve', w: 0.14, tag: 'cta' }
     ],
+    product_review: [
+      { framing: 'Cold open - honest first impression', movement: 'Locked or quick push', audio: 'Hook VO; music hit', w: 0.08, tag: 'hook' },
+      { framing: 'Medium - host to camera (who this is for)', movement: 'Locked A-roll', audio: 'Lav; agenda VO', w: 0.12, tag: 'agenda' },
+      { framing: 'Hero product + hands unbox / setup', movement: 'Top-down or medium', audio: 'Foley; short VO', w: 0.12, tag: 'unbox' },
+      { framing: 'Use case A - real environment', movement: 'Follow or locked', audio: 'VO benefit; ambient', w: 0.14, tag: 'use' },
+      { framing: 'Close insert - key feature / flaw', movement: 'Macro locked', audio: 'VO honesty beat', w: 0.12, tag: 'feature' },
+      { framing: 'Use case B - contrast / comparison', movement: 'Locked split-friendly', audio: 'VO compare', w: 0.12, tag: 'compare' },
+      { framing: 'Medium - who should buy / skip', movement: 'Locked', audio: 'Lav; music soft', w: 0.14, tag: 'verdict' },
+      { framing: 'Close + CTA / where to learn more', movement: 'Gentle push-in', audio: 'VO CTA; music out', w: 0.16, tag: 'cta' }
+    ],
+    vlog: [
+      { framing: 'Wide establishing - day / place', movement: 'Handheld walk-in or locked wide', audio: 'Ambience; soft bed', w: 0.1, tag: 'est' },
+      { framing: 'Medium - host to camera (today’s plan)', movement: 'Locked or settle', audio: 'Lav; VO intro', w: 0.14, tag: 'intro' },
+      { framing: 'Action beat - main activity', movement: 'Follow handheld / gimbal', audio: 'Dialogue / VO; ambient', w: 0.16, tag: 'action' },
+      { framing: 'Detail cutaway - hands, food, screen, prop', movement: 'Locked or macro', audio: 'Foley; bed under', w: 0.1, tag: 'detail' },
+      { framing: 'Travel / transition beat', movement: 'Gimbal or whip-ready', audio: 'Bridge music', w: 0.1, tag: 'bridge' },
+      { framing: 'Medium - reflection / lesson', movement: 'Locked talking', audio: 'Lav; quieter bed', w: 0.14, tag: 'reflect' },
+      { framing: 'B-roll montage picks', movement: 'Varied; cut-friendly', audio: 'Music lift', w: 0.12, tag: 'montage' },
+      { framing: 'Close / medium - wrap + CTA', movement: 'Soft push or locked', audio: 'VO CTA; music resolve', w: 0.14, tag: 'cta' }
+    ],
+    short_hook: [
+      { framing: '0-2s hook - face / result / bold prop', movement: 'Locked punch-in ready', audio: 'Cold open line; music hit', w: 0.18, tag: 'hook' },
+      { framing: 'Problem beat - what hurts', movement: 'Locked or whip', audio: 'Tension bed; short VO', w: 0.16, tag: 'problem' },
+      { framing: 'Demo / proof - hands or screen', movement: 'Locked; phone-safe framing', audio: 'VO tip; UI SFX', w: 0.22, tag: 'proof' },
+      { framing: 'Payoff - after / result', movement: 'Reveal push', audio: 'Music lift; VO payoff', w: 0.2, tag: 'payoff' },
+      { framing: 'CTA - follow / comment / watch longer', movement: 'Locked close', audio: 'Lav CTA; sting out', w: 0.24, tag: 'cta' }
+    ],
+    launch_trailer: [
+      { framing: 'Teaser wide - world / mood', movement: 'Slow push or crane-feel', audio: 'Bed open; no VO yet', w: 0.12, tag: 'mood' },
+      { framing: 'Hero subject silhouette / logo-safe frame', movement: 'Locked beauty', audio: 'Sting; sparse VO', w: 0.12, tag: 'hero' },
+      { framing: 'Feature flash 1 - bold visual', movement: 'Whip or smash cut-ready', audio: 'Hit; short VO', w: 0.14, tag: 'feature' },
+      { framing: 'Feature flash 2 - human reaction', movement: 'Close locked', audio: 'Music build', w: 0.12, tag: 'react' },
+      { framing: 'Montage - three quick beats', movement: 'Varied; trailer pace', audio: 'Music peak; VO optional', w: 0.18, tag: 'montage' },
+      { framing: 'Title card safe - name / date / CTA', movement: 'Locked end card', audio: 'Resolve; VO CTA', w: 0.2, tag: 'title' },
+      { framing: 'Logo / end hold', movement: 'Locked', audio: 'Music out', w: 0.12, tag: 'outro' }
+    ],
     tutorial: [
       { framing: 'Cold open - finished result flash', movement: 'Locked or quick push', audio: 'Hook line VO; music hit', w: 0.08, tag: 'hook' },
       { framing: 'Medium talking - what you’ll learn', movement: 'Locked A-roll', audio: 'Lav; agenda VO', w: 0.12, tag: 'agenda' },
@@ -63,8 +99,12 @@
 
   var TYPE_LABELS = {
     talking_head: 'Talking head',
-    product: 'Product',
+    product: 'Product review',
+    product_review: 'Product review',
     tutorial: 'Tutorial',
+    vlog: 'Vlog',
+    short_hook: 'Short-form hook',
+    launch_trailer: 'Launch trailer',
     event: 'Event',
     custom: 'Custom / mixed'
   };
@@ -146,7 +186,13 @@
     return Math.min(baseLen + 3, 14);
   }
 
+  function normalizeType(type) {
+    if (type === 'product') return 'product_review';
+    return type || 'tutorial';
+  }
+
   function expandTemplate(type, targetSec) {
+    type = normalizeType(type);
     var base = TEMPLATES[type] || TEMPLATES.custom;
     var count = shotCountForDuration(targetSec, base.length);
     var picks = base.slice(0, Math.min(count, base.length));
@@ -379,7 +425,7 @@
     if (saved && saved.concept) {
       $('slist-concept').value = saved.concept || '';
       if (saved.duration) $('slist-duration').value = String(saved.duration);
-      if (saved.type) $('slist-type').value = saved.type;
+      if (saved.type) $('slist-type').value = normalizeType(saved.type);
       if (saved.locations) $('slist-locations').value = Array.isArray(saved.locations) ? saved.locations.join(', ') : saved.locations;
       if (saved.talent) $('slist-talent').value = saved.talent;
       return 'saved';
@@ -440,7 +486,7 @@
       return;
     }
     var duration = parseInt($('slist-duration').value, 10) || 60;
-    var type = $('slist-type').value || 'custom';
+    var type = normalizeType($('slist-type').value || 'tutorial');
     var locations = parseList($('slist-locations').value);
     var talent = cleanText($('slist-talent').value);
 

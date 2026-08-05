@@ -13,13 +13,13 @@
   <link rel="stylesheet" href="/css/tools-shared.css" />
   <link rel="stylesheet" href="/css/shot-list.css" />
   <link rel="stylesheet" href="/css/help-widget.css" />
-  <title>Shot List - Free video shot planner | Keyweaver</title>
-  <meta name="description" content="Free Keyweaver Shot List tool. Turn a concept into an ordered shot list with framing, camera movement, audio notes, and rough timings - templates by video type, $0 in your browser." />
+  <title>Shot List - Free shoot plan for creators | Keyweaver</title>
+  <meta name="description" content="Free Shot List for creators and editors. One brief → ordered shots with framing, camera move, audio notes, and rough timings. Templates by video type - $0 in your browser." />
   <link rel="canonical" href="https://keyweaver.io/shot-list" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Keyweaver" />
   <meta property="og:title" content="Shot List - Keyweaver Tools" />
-  <meta property="og:description" content="Describe the video once. Get an ordered shot list with setup, framing, movement, audio, and rough time - free, client-side templates." />
+  <meta property="og:description" content="For creators: one video brief → an ordered shoot plan with framing, movement, audio, and rough timings. Free forever." />
   <meta property="og:url" content="https://keyweaver.io/shot-list" />
   <meta property="og:image" content="https://keyweaver.io/images/keyweaver-logo.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -52,9 +52,9 @@
       <details class="nav-products">
         <summary>Tools</summary>
         <div class="nav-products-menu" role="menu">
-          <a href="/video-seo" role="menuitem">Video SEO<span>Titles, descriptions &amp; tags</span></a>
-          <a href="/campaign-kit" role="menuitem">Campaign Kit<span>Thumbs, teasers &amp; packs</span></a>
-          <a href="/shot-list" role="menuitem" aria-current="page">Shot List<span>Ordered shots &amp; timings</span></a>
+          <a href="/video-seo" role="menuitem">Video SEO<span>One brief → platform copy</span></a>
+          <a href="/campaign-kit" role="menuitem">Campaign Kit<span>One brief → asset recipes</span></a>
+          <a href="/shot-list" role="menuitem" aria-current="page">Shot List<span>One brief → shoot plan</span></a>
         </div>
       </details>
     </li>
@@ -70,16 +70,16 @@
 
 <main class="slist-page">
   <header class="slist-hero">
-    <p class="section-label">Tools</p>
+    <p class="section-label">Tools · Pre-publish</p>
     <h1>Shot List</h1>
-    <p>Turn a concept into an ordered shoot list: framing, camera move, audio notes, and rough timings - sized to your target duration and video type.</p>
+    <p>For creators and editors: one video brief → an ordered shoot plan with framing, camera move, audio notes, and rough timings - sized to your duration and video type.</p>
     <div class="tools-badges" aria-label="Pricing">
       <span class="tools-badge tools-badge-free">Free forever</span>
       <span class="tools-badge">No credits · runs in browser</span>
     </div>
     <div class="tools-tier" role="note">
-      <p><strong>What you get:</strong> an ordered shot list with setup, movement, audio notes, and rough timings from templates (talking head, product, tutorial, event, or mixed).</p>
-      <p><strong>Credits:</strong> never used. Edit freely, then copy or download .txt / .csv.</p>
+      <p><strong>Free forever:</strong> ordered coverage from templates (tutorial, product review, vlog, talking head, short-form hook, launch trailer, and more).</p>
+      <p><strong>Credits:</strong> never used. Edit freely, then copy or download .txt / .csv for set or edit.</p>
     </div>
     <div class="slist-note" id="slist-handoff-banner" role="status" style="display:none;margin-top:0.75rem"></div>
   </header>
@@ -88,7 +88,7 @@
     <div class="slist-field">
       <label for="slist-concept">Concept / brief</label>
       <p class="hint">What the video is about, who it’s for, and the story beats. One or two paragraphs is plenty.</p>
-      <textarea id="slist-concept" name="concept" required placeholder="Example: 90-second product review for a wireless mic - noisy cafe vs clean VO, pocketable size, battery life. Host on sofa, street B-roll, close-ups of the case. Aimed at YouTube and TikTok creators."></textarea>
+      <textarea id="slist-concept" name="concept" required placeholder="Example: 90-second product review of a wireless mic - noisy cafe vs clean VO, pocketable size, battery life. Host on sofa, street B-roll, close-ups of the case. For YouTube + TikTok."></textarea>
     </div>
 
     <div class="slist-row">
@@ -106,9 +106,12 @@
       <div class="slist-field">
         <label for="slist-type">Video type</label>
         <select id="slist-type" name="type">
-          <option value="talking_head" selected>Talking head</option>
-          <option value="product">Product</option>
-          <option value="tutorial">Tutorial</option>
+          <option value="tutorial" selected>Tutorial</option>
+          <option value="product_review">Product review</option>
+          <option value="vlog">Vlog</option>
+          <option value="talking_head">Talking head</option>
+          <option value="short_hook">Short-form hook</option>
+          <option value="launch_trailer">Launch trailer</option>
           <option value="event">Event</option>
           <option value="custom">Custom / mixed</option>
         </select>
@@ -138,14 +141,14 @@
   </form>
 
   <div class="tools-empty" id="slist-empty">
-    <h2>Your shot list appears here</h2>
-    <p>Add a concept and click <strong>Generate free shot list</strong>. You’ll get ordered coverage you can copy or download - no sign-in, no credits.</p>
+    <h2>Your shoot plan appears here</h2>
+    <p>Add a concept and click <strong>Generate free shot list</strong>. You’ll get ordered coverage to shoot or hand to an editor - no sign-in, no credits.</p>
   </div>
 
   <div class="slist-results" id="slist-results">
     <div class="slist-results-head">
-      <h2>Shot list</h2>
-      <p id="slist-summary">Ordered for coverage. Edit freely, then copy or download.</p>
+      <h2>Shoot plan</h2>
+      <p id="slist-summary">Ordered for coverage. Use on set or in the edit. Copy or download when ready.</p>
     </div>
 
     <div class="slist-toolbar">
@@ -170,17 +173,17 @@
     </div>
 
     <aside class="tools-handoff" aria-label="Next steps">
-      <h3>Next with this brief</h3>
-      <p>Carry the same concept into publish copy or campaign assets. Campaign Kit’s Build pack is free; AI render needs purchased credits.</p>
+      <h3>Continue with this brief</h3>
+      <p>Same concept → publish copy (free) or thumb/teaser recipes (free; optional paid AI render).</p>
       <div class="tools-handoff-actions">
-        <a href="/video-seo" class="btn btn-ghost">Use brief in Video SEO</a>
-        <a href="/campaign-kit" class="btn btn-primary">Use brief in Campaign Kit</a>
+        <a href="/video-seo" class="btn btn-ghost">Continue in Video SEO</a>
+        <a href="/campaign-kit" class="btn btn-primary">Continue in Campaign Kit</a>
       </div>
     </aside>
   </div>
 
   <p class="slist-footer-note">
-    Free forever - no credits. For captions and timeline tools, see <a href="/download">Keyweaver plugins</a>.
+    Free forever - no credits. Part of the pre-publish toolkit with <a href="/video-seo">Video SEO</a> and <a href="/campaign-kit">Campaign Kit</a>. For timeline plugins, see <a href="/download">Download</a>.
   </p>
 </main>
 

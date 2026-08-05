@@ -13,13 +13,13 @@
   <link rel="stylesheet" href="/css/tools-shared.css" />
   <link rel="stylesheet" href="/css/campaign-kit.css" />
   <link rel="stylesheet" href="/css/help-widget.css" />
-  <title>Campaign Kit - Platform packs for editors | Keyweaver</title>
-  <meta name="description" content="Free Keyweaver Campaign Kit: turn one editor brief into YouTube thumbs, vertical teasers, title cards, and Seedance motion prompts. Build pack is free; optional AI render uses purchased credits only." />
+  <title>Campaign Kit - Free thumb &amp; teaser recipes | Keyweaver</title>
+  <meta name="description" content="Free Campaign Kit for creators: one video brief → YouTube thumbs, TikTok covers, IG squares, burn-in text, and motion prompts. Optional AI render uses purchased credits only." />
   <link rel="canonical" href="https://keyweaver.io/campaign-kit" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Keyweaver" />
   <meta property="og:title" content="Campaign Kit - Keyweaver Tools" />
-  <meta property="og:description" content="One brief → platform asset pack for editors. Prompt recipes free forever; AI render uses purchased Keyweaver credits only." />
+  <meta property="og:description" content="For creators and editors: turn one brief into social asset recipes. Free pack forever; optional AI stills/video use purchased credits only." />
   <meta property="og:url" content="https://keyweaver.io/campaign-kit" />
   <meta property="og:image" content="https://keyweaver.io/images/keyweaver-logo.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -52,9 +52,9 @@
       <details class="nav-products">
         <summary>Tools</summary>
         <div class="nav-products-menu" role="menu">
-          <a href="/video-seo" role="menuitem">Video SEO<span>Titles, descriptions &amp; tags</span></a>
-          <a href="/campaign-kit" role="menuitem" aria-current="page">Campaign Kit<span>Thumbs, teasers &amp; packs</span></a>
-          <a href="/shot-list" role="menuitem">Shot List<span>Ordered shots &amp; timings</span></a>
+          <a href="/video-seo" role="menuitem">Video SEO<span>One brief → platform copy</span></a>
+          <a href="/campaign-kit" role="menuitem" aria-current="page">Campaign Kit<span>One brief → asset recipes</span></a>
+          <a href="/shot-list" role="menuitem">Shot List<span>One brief → shoot plan</span></a>
         </div>
       </details>
     </li>
@@ -70,52 +70,61 @@
 
 <main class="ckit-page">
   <header class="ckit-hero">
-    <p class="section-label">Tools</p>
+    <p class="section-label">Tools · Pre-publish</p>
     <h1>Campaign Kit</h1>
-    <p>One editor brief → a platform pack: YouTube thumbs, vertical teasers, title cards, and short motion prompts. Not an unbounded image chat - recipes sized for real social specs.</p>
+    <p>For creators and editors: one video brief → ready-to-use recipes for thumbs, covers, title cards, and short teasers. Free pack in your browser; AI render is optional.</p>
     <div class="tools-badges" aria-label="Pricing">
-      <span class="tools-badge tools-badge-free">Free pack</span>
+      <span class="tools-badge tools-badge-free">Free recipes</span>
       <span class="tools-badge tools-badge-paid">AI render · purchased credits</span>
     </div>
     <div class="tools-tier" role="note">
-      <p><strong>Free forever:</strong> build the pack in your browser - prompts, burn-in ideas, and aspect recipes. No account, no credits.</p>
-      <p><strong>Optional AI render:</strong> image 4 credits · premium image 8 · 4s video 25. Uses <em>purchased</em> credits only (free signup credits cannot run AI render).</p>
+      <p><strong>Free forever:</strong> prompts, burn-in text ideas, aspect recipes, and a publish checklist - no account, no credits.</p>
+      <p><strong>Optional upgrade:</strong> render stills or a 4s motion clip from those prompts. Image 4 credits · premium 8 · video 25. <em>Purchased</em> credits only (free signup credits cannot run AI render).</p>
     </div>
     <div class="ckit-note" id="ckit-vseo-banner" role="status" style="display:none;margin-top:0.75rem">
-      Prefilling from your last <a href="/video-seo">Video SEO</a> brief. Build the pack below, then use it in <a href="/shot-list">Shot List</a> if you need coverage.
+      Continuing with your last <a href="/video-seo">Video SEO</a> brief. Build the free pack below, then optionally render with purchased credits.
     </div>
   </header>
 
   <form id="ckit-form" class="ckit-form" novalidate>
     <div class="ckit-field">
-      <label for="ckit-brief">Campaign brief</label>
-      <p class="hint">Video topic, product, who it’s for, and the takeaway. Same spirit as Video SEO - we’ll turn it into asset prompts, not platform copy.</p>
-      <textarea id="ckit-brief" name="brief" required placeholder="Example: 60-second TikTok for lifestyle creators - desk setup upgrade that actually helps focus. CTA: link in bio. Mood: warm daylight, clean desk, no clutter."></textarea>
+      <label for="ckit-brief">Video brief</label>
+      <p class="hint">What the video is about, who it’s for, and the one message you want the thumb or teaser to sell. We’ll turn this into asset prompts - not platform publish copy.</p>
+      <textarea id="ckit-brief" name="brief" required placeholder="Example: 60-second TikTok for creators upgrading their desk setup for focus. Hook: the one cable mess fix that actually stuck. Mood: warm daylight, clean desk. CTA: link in bio."></textarea>
     </div>
 
     <div class="ckit-row">
       <div class="ckit-field">
-        <label for="ckit-product">Product preset</label>
-        <select id="ckit-product" name="product">
-          <option value="none" selected>Custom / general</option>
-          <option value="cuemark">Cuemark</option>
-          <option value="trillian">Trillian</option>
-          <option value="ludo">Ludo</option>
-          <option value="superconductor">Superconductor</option>
-          <option value="tamborine">Tamborine</option>
-          <option value="keyweaver">Keyweaver suite</option>
+        <label for="ckit-video-type">Video type</label>
+        <select id="ckit-video-type" name="videoType">
+          <option value="tutorial" selected>Tutorial</option>
+          <option value="product_review">Product review</option>
+          <option value="vlog">Vlog</option>
+          <option value="talking_head">Talking head</option>
+          <option value="short_hook">Short-form hook</option>
+          <option value="launch_trailer">Launch trailer</option>
         </select>
       </div>
       <div class="ckit-field">
-        <label for="ckit-cta">Call to action</label>
-        <select id="ckit-cta" name="cta">
-          <option value="none" selected>None</option>
-          <option value="download">Download free</option>
-          <option value="try">Try it free</option>
-          <option value="watch">Watch walkthrough</option>
-          <option value="link">Link in bio</option>
+        <label for="ckit-tone">Tone</label>
+        <select id="ckit-tone" name="tone">
+          <option value="educational" selected>Educational</option>
+          <option value="hype">Hype</option>
+          <option value="calm">Calm</option>
         </select>
       </div>
+    </div>
+
+    <div class="ckit-field">
+      <label for="ckit-cta">On-screen / end CTA</label>
+      <p class="hint">Optional burn-in or end-card line for the assets (not Keyweaver marketing).</p>
+      <select id="ckit-cta" name="cta">
+        <option value="none" selected>None</option>
+        <option value="subscribe">Subscribe / follow</option>
+        <option value="link">Link in bio</option>
+        <option value="watch">Watch the full video</option>
+        <option value="comment">Ask a question / comment</option>
+      </select>
     </div>
 
     <div class="ckit-field">
@@ -131,37 +140,37 @@
 
     <div class="ckit-field">
       <label>Asset types</label>
-      <p class="hint">Defaults to stills. Motion video is an optional add-on (costs more purchased credits to render).</p>
+      <p class="hint">Defaults to stills. Motion prompts are free to generate; rendering video costs purchased credits.</p>
       <div class="ckit-assets">
-        <label class="ckit-asset"><input type="checkbox" id="asset-youtube_thumb" checked /> YouTube thumbs (16:9)</label>
-        <label class="ckit-asset"><input type="checkbox" id="asset-vertical" checked /> Vertical teasers (9:16)</label>
-        <label class="ckit-asset"><input type="checkbox" id="asset-quote_card" checked /> Quote / title card</label>
-        <label class="ckit-asset"><input type="checkbox" id="asset-motion" /> Motion teaser prompts (video add-on)</label>
+        <label class="ckit-asset"><input type="checkbox" id="asset-youtube_thumb" checked /> YouTube thumb (16:9)</label>
+        <label class="ckit-asset"><input type="checkbox" id="asset-vertical" checked /> TikTok / Reels cover (9:16)</label>
+        <label class="ckit-asset"><input type="checkbox" id="asset-quote_card" checked /> IG square / title card (1:1)</label>
+        <label class="ckit-asset"><input type="checkbox" id="asset-motion" /> Motion teaser prompts (optional paid render)</label>
       </div>
     </div>
 
     <p class="ckit-error" id="ckit-error" role="alert"></p>
 
     <div class="ckit-actions">
-      <button type="submit" class="btn btn-primary btn-lg" id="ckit-submit">Build pack - free</button>
+      <button type="submit" class="btn btn-primary btn-lg" id="ckit-submit">Generate free pack</button>
       <button type="button" class="btn btn-ghost" id="ckit-clear">Clear</button>
-      <p class="tools-form-note">Build pack never uses credits. AI render is optional below the results.</p>
+      <p class="tools-form-note">Free pack never uses credits. AI render is optional under each recipe.</p>
     </div>
   </form>
 
   <div class="tools-empty" id="ckit-empty">
-    <h2>Your pack appears here</h2>
-    <p>Add a brief and click <strong>Build pack - free</strong>. You’ll get editable prompts and a checklist. Sign in and buy credits only if you want optional AI stills or a short video render.</p>
+    <h2>Your asset pack appears here</h2>
+    <p>Add a brief and click <strong>Generate free pack</strong>. You’ll get editable prompts, burn-in text, aspect recipes, and a checklist. Sign in and buy credits only if you want optional AI stills or a short video render.</p>
   </div>
 
   <div class="ckit-results" id="ckit-results">
     <div class="ckit-results-head">
-      <h2>Platform pack</h2>
-      <p>Edit and copy prompts for free. Optional AI render below uses purchased credits only.</p>
+      <h2>Your asset recipes</h2>
+      <p>Copy a prompt into any image tool, or render below with purchased credits. Each card is one asset to make.</p>
     </div>
 
     <div class="ckit-card" style="margin-bottom:1rem">
-      <h3>Asset checklist</h3>
+      <h3>Publish checklist</h3>
       <ul class="ckit-checklist" id="ckit-checklist"></ul>
       <div class="ckit-card-actions">
         <button type="button" class="btn btn-ghost" id="ckit-copy-all">Copy all prompts</button>
@@ -171,8 +180,8 @@
     <div class="ckit-pack" id="ckit-results-body"></div>
 
     <aside class="tools-credit-panel ckit-credits" id="ckit-credits" aria-label="AI render credits">
-      <h3>AI render</h3>
-      <p class="tools-credit-status" id="ckit-balance">Sign in to see purchased credits and unlock AI render. Build pack above stays free.</p>
+      <h3>Optional AI render</h3>
+      <p class="tools-credit-status" id="ckit-balance">Sign in to see purchased credits and unlock AI render. The free pack above stays free.</p>
       <div class="tools-credit-meter" id="ckit-credit-meter" hidden>
         <div class="tools-credit-row">
           <span class="label">Purchased credits (for AI render)</span>
@@ -193,7 +202,7 @@
         <li data-cost="video"><span>4s motion video</span><span class="cost">25 credits</span></li>
       </ul>
       <p class="tools-credit-help" id="ckit-credit-help">
-        How credits work: AI render spends <strong>purchased</strong> credits only. Free signup / promo credits never cover fal generation. The free Build pack never charges.
+        AI render spends <strong>purchased</strong> credits only. Free signup / promo credits never cover generation. The free pack never charges.
         Buy packs on <a href="/pricing">Pricing</a> or manage balance in <a href="/account">Account</a>.
       </p>
       <div class="tools-credit-actions">
@@ -204,19 +213,18 @@
     </aside>
 
     <aside class="tools-handoff" aria-label="Next steps">
-      <h3>Use this brief elsewhere</h3>
-      <p>Your brief is saved in this browser. Carry it into publish copy or a shoot list without retyping.</p>
+      <h3>Continue with this brief</h3>
+      <p>Your brief is saved in this browser. Write publish copy next, or plan the shoot - both free.</p>
       <div class="tools-handoff-actions">
-        <a href="/video-seo" class="btn btn-ghost">Use brief in Video SEO</a>
-        <a href="/shot-list" class="btn btn-ghost">Use brief in Shot List</a>
+        <a href="/video-seo" class="btn btn-ghost">Continue in Video SEO</a>
+        <a href="/shot-list" class="btn btn-ghost">Continue in Shot List</a>
       </div>
     </aside>
   </div>
 
   <p class="ckit-footer-note">
-    Tied to <a href="/video-seo">Video SEO</a> briefs, product presets, and editor aspect ratios - one brief to a multi-asset pack.
-    Need ordered coverage first? Try free <a href="/shot-list">Shot List</a>.
-    For timeline tools, see <a href="/download">Keyweaver plugins</a>.
+    Part of Keyweaver’s free pre-publish toolkit with <a href="/video-seo">Video SEO</a> and <a href="/shot-list">Shot List</a>.
+    For captions and timeline plugins, see <a href="/download">Download</a>.
   </p>
 </main>
 
