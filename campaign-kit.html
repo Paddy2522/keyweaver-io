@@ -13,12 +13,12 @@
   <link rel="stylesheet" href="/css/campaign-kit.css" />
   <link rel="stylesheet" href="/css/help-widget.css" />
   <title>Campaign Kit - Platform packs for editors | Keyweaver</title>
-  <meta name="description" content="Free Keyweaver Campaign Kit: turn one editor brief into YouTube thumbs, vertical teasers, title cards, and Seedance motion prompts — with optional credit render." />
+  <meta name="description" content="Free Keyweaver Campaign Kit: turn one editor brief into YouTube thumbs, vertical teasers, title cards, and Seedance motion prompts. Build pack is free; optional AI render uses purchased credits only." />
   <link rel="canonical" href="https://keyweaver.io/campaign-kit" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Keyweaver" />
   <meta property="og:title" content="Campaign Kit - Keyweaver Tools" />
-  <meta property="og:description" content="One brief → platform asset pack for editors. Prompt recipes free; render selected items with Keyweaver credits." />
+  <meta property="og:description" content="One brief → platform asset pack for editors. Prompt recipes free forever; AI render uses purchased Keyweaver credits only." />
   <meta property="og:url" content="https://keyweaver.io/campaign-kit" />
   <meta property="og:image" content="https://keyweaver.io/images/keyweaver-logo.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -146,7 +146,7 @@
   <div class="ckit-results" id="ckit-results">
     <div class="ckit-results-head">
       <h2>Platform pack</h2>
-      <p>Edit prompts, copy them into your own fal/Replicate tooling, or render with Keyweaver credits when available.</p>
+      <p>Edit and copy prompts for free (no API key). Optional AI render uses <strong>purchased</strong> credits only — free signup credits cannot run fal.</p>
     </div>
 
     <div class="ckit-card" style="margin-bottom:1rem">
@@ -160,12 +160,13 @@
     <div class="ckit-pack" id="ckit-results-body"></div>
 
     <aside class="ckit-credits" id="ckit-credits" aria-label="Credits render">
-      <h3>Render with Keyweaver credits</h3>
-      <p id="ckit-balance">Sign in to see your credit balance and enable render.</p>
-      <p class="ckit-credit-costs">Costs: image = 5 credits · short Seedance clip (5s) = 20 credits. Shared pool with Cuemark / other Keyweaver tools.</p>
+      <h3>AI render (purchased credits only)</h3>
+      <p id="ckit-balance">Sign in and buy credits to enable AI render. Build pack above stays free forever.</p>
+      <p class="ckit-credit-costs">Costs: image = 5 purchased credits · 5s Seedance = 20 purchased credits. Free signup / promo credits cannot be used for fal generation (covers real generation cost).</p>
       <div class="ckit-actions">
-        <a href="/login" class="btn btn-primary">Sign in</a>
-        <a href="/account" class="btn btn-ghost">Account / credits</a>
+        <a href="/login" class="btn btn-primary" id="ckit-credits-signin">Sign in</a>
+        <a href="/pricing" class="btn btn-primary" id="ckit-credits-buy">Buy credits</a>
+        <a href="/account" class="btn btn-ghost">Account</a>
         <a href="/video-seo" class="btn btn-ghost">Video SEO</a>
       </div>
     </aside>

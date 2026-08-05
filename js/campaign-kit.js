@@ -6,6 +6,8 @@
   var BACKEND = 'https://keyweaver-backend.vercel.app';
   var IMAGE_CREDITS = 5;
   var VIDEO_CREDITS = 20;
+  /** @type {{ remaining: number, total: number, paidRemaining: number, hasPaid: boolean } | null} */
+  var creditsState = null;
 
   var PRODUCTS = {
     none: { label: 'Custom / general', blurb: '' },
@@ -251,7 +253,7 @@
         id: 'motion',
         kind: 'video',
         title: 'Short motion teaser (Seedance)',
-        meta: '5s · 16:9 or 9:16 · optional credit render',
+        meta: '5s · 16:9 or 9:16 · optional purchased-credit render',
         prompt:
           productLine +
           '5-second cinematic product teaser. Slow push-in, subtle UI motion, captions or waveform animating on. Hook: "' +
@@ -307,7 +309,24 @@
   function renderSelected(item, textarea, statusEl, previewHost) {
     var token = getToken();
     if (!token) {
-      setStatus(statusEl, 'Sign in to render with credits.', 'err');
+      setStatus(statusEl, 'Sign in and buy credits to render (purchased credits only).', 'err');
+      return;
+    }
+    var need = item.kind === 'video' ? VIDEO_CREDITS : IMAGE_CREDITS;
+    if (creditsState && !creditsState.hasPaid) {
+      setStatus(
+        statusEl,
+        'AI render needs purchased credits (free signup credits cannot run fal). Buy a pack on Pricing.',
+        'err'
+      );
+      return;
+    }
+    if (creditsState && creditsState.paidRemaining < need) {
+      setStatus(
+        statusEl,
+        'Need ' + need + ' purchased credits (have ' + creditsState.paidRemaining + ').',
+        'err'
+      );
       return;
     }
     setStatus(statusEl, 'Rendering… (may take a minute)', null);
@@ -344,6 +363,19 @@
           return;
         }
         if (x.res.status === 402) {
+          if (x.data && x.data.reason === 'paid_credits_required') {
+            setStatus(
+              statusEl,
+              'Purchased credits required (need ' +
+                (x.data.credits_required || '?') +
+                ', paid remaining ' +
+                (x.data.paid_credits_remaining != null ? x.data.paid_credits_remaining : 0) +
+                '). Free signup credits cannot run AI render.',
+              'err'
+            );
+            updateCreditsPanel();
+            return;
+          }
           setStatus(
             statusEl,
             'Not enough credits (need ' +
@@ -353,6 +385,7 @@
               ').',
             'err'
           );
+          updateCreditsPanel();
           return;
         }
         if (!x.res.ok) {
@@ -362,9 +395,17 @@
         var url = x.data.url;
         setStatus(
           statusEl,
-          'Done · ' + (x.data.credits_charged || 0) + ' credits · ' + (x.data.credits_remaining != null ? x.data.credits_remaining + ' left' : ''),
+          'Done · ' +
+            (x.data.credits_charged || 0) +
+            ' purchased credits · ' +
+            (x.data.paid_credits_remaining != null
+              ? x.data.paid_credits_remaining + ' paid left'
+              : x.data.credits_remaining != null
+                ? x.data.credits_remaining + ' left'
+                : ''),
           'ok'
         );
+        updateCreditsPanel();
         if (url && previewHost) {
           previewHost.innerHTML = '';
           if (item.kind === 'video') {
@@ -451,8 +492,15 @@
       renderBtn.className = 'btn btn-primary';
       renderBtn.textContent =
         item.kind === 'video'
-          ? 'Render video (' + VIDEO_CREDITS + ' cr)'
-          : 'Render image (' + IMAGE_CREDITS + ' cr)';
+          ? 'Render video (' + VIDEO_CREDITS + ' purchased cr)'
+          : 'Render image (' + IMAGE_CREDITS + ' purchased cr)';
+      var need = item.kind === 'video' ? VIDEO_CREDITS : IMAGE_CREDITS;
+      if (!getToken() || !creditsState || creditsState.paidRemaining < need) {
+        renderBtn.disabled = true;
+        renderBtn.classList.add('is-disabled');
+        renderBtn.title =
+          'Requires purchased Keyweaver credits (not free signup). Buy a pack, then render.';
+      }
       actions.appendChild(renderBtn);
 
       var status = document.createElement('span');
@@ -482,10 +530,14 @@
     var token = getToken();
     if (!panel) return;
     if (!token) {
-      if (bal) bal.textContent = 'Sign in to see your credit balance and enable render.';
+      creditsState = null;
+      if (bal) {
+        bal.textContent =
+          'Sign in and buy credits to enable AI render. Build pack stays free — no API key needed.';
+      }
       return;
     }
-    if (bal) bal.textContent = 'Checking balance…';
+    if (bal) bal.textContent = 'Checking purchased credit balance…';
     fetch(BACKEND + '/api/captio/credits', {
       headers: { Authorization: 'Bearer ' + token }
     })
@@ -495,21 +547,51 @@
       .then(function (data) {
         if (!bal) return;
         if (!data) {
+          creditsState = null;
           bal.textContent = 'Could not load credits — try Account.';
           return;
         }
-        bal.textContent =
-          'Balance: ' +
-          data.credits_remaining +
-          ' / ' +
-          data.credits_total +
-          ' · Image = ' +
-          IMAGE_CREDITS +
-          ' cr · 5s video = ' +
-          VIDEO_CREDITS +
-          ' cr';
+        var paid = Number(data.paid_credits_remaining != null ? data.paid_credits_remaining : 0);
+        creditsState = {
+          remaining: Number(data.credits_remaining || 0),
+          total: Number(data.credits_total || 0),
+          paidRemaining: paid,
+          hasPaid: paid > 0 || !!data.has_paid_credits
+        };
+        if (paid <= 0) {
+          bal.textContent =
+            'Pool: ' +
+            creditsState.remaining +
+            ' / ' +
+            creditsState.total +
+            ' · Purchased for AI render: 0. Buy credits to render with fal (free signup credits cannot cover generation cost).';
+        } else {
+          bal.textContent =
+            'Purchased for AI render: ' +
+            paid +
+            ' · Pool: ' +
+            creditsState.remaining +
+            ' / ' +
+            creditsState.total +
+            ' · Image = ' +
+            IMAGE_CREDITS +
+            ' · 5s video = ' +
+            VIDEO_CREDITS;
+        }
+        // Refresh disabled state on existing render buttons
+        document.querySelectorAll('#ckit-results-body .ckit-card').forEach(function (card) {
+          var btn = card.querySelector('.btn-primary');
+          if (!btn) return;
+          var kind = card.dataset.kind === 'video' ? 'video' : 'image';
+          var need = kind === 'video' ? VIDEO_CREDITS : IMAGE_CREDITS;
+          var ok = creditsState.paidRemaining >= need;
+          btn.disabled = !ok;
+          if (ok) btn.classList.remove('is-disabled');
+          else btn.classList.add('is-disabled');
+        });
       })
       .catch(function () {
+        creditsState = null;
         if (bal) bal.textContent = 'Could not load credits.';
       });
   }
