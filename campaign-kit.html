@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" href="/images/favicon.svg" type="image/svg+xml" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/css/cookie-consent.css" />
+  <script src="/js/cookie-consent.js?v=20260731a"></script>
+  <script src="/js/nav-auth.js" defer></script>
+  <link rel="stylesheet" href="/css/nav-brand.css" />
+  <link rel="stylesheet" href="/css/chrome.css" />
+  <link rel="stylesheet" href="/css/site.css" />
+  <link rel="stylesheet" href="/css/campaign-kit.css" />
+  <link rel="stylesheet" href="/css/help-widget.css" />
+  <title>Campaign Kit - Platform packs for editors | Keyweaver</title>
+  <meta name="description" content="Free Keyweaver Campaign Kit: turn one editor brief into YouTube thumbs, vertical teasers, title cards, and Seedance motion prompts — with optional credit render." />
+  <link rel="canonical" href="https://keyweaver.io/campaign-kit" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Keyweaver" />
+  <meta property="og:title" content="Campaign Kit - Keyweaver Tools" />
+  <meta property="og:description" content="One brief → platform asset pack for editors. Prompt recipes free; render selected items with Keyweaver credits." />
+  <meta property="og:url" content="https://keyweaver.io/campaign-kit" />
+  <meta property="og:image" content="https://keyweaver.io/images/keyweaver-logo.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cal+Sans&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<nav class="site-nav" aria-label="Primary">
+  <a href="/" class="nav-brand" aria-label="Keyweaver"><img src="/images/keyweaver-logo.svg" alt="" width="162" height="28" /></a>
+  <ul class="nav-links">
+    <li>
+      <details class="nav-products">
+        <summary>Plugins</summary>
+        <div class="nav-products-menu" role="menu">
+          <p class="nav-products-label">After Effects</p>
+          <a href="/cuemark" role="menuitem">Cuemark<span>AI Captions</span></a>
+          <a href="/trillian" role="menuitem">Trillian<span>AI Voiceover</span></a>
+          <a href="/tamborine" role="menuitem">Tamborine<span>AI Music &amp; SFX</span></a>
+          <a href="/superconductor" role="menuitem">Superconductor<span>AI Video</span></a>
+          <a href="/ludo" role="menuitem">Ludo<span>Motion Toolkit</span></a>
+          <p class="nav-products-label">Premiere Pro</p>
+          <a href="/trillian" role="menuitem">Trillian<span>AI Voiceover</span></a>
+          <a href="/tamborine" role="menuitem">Tamborine<span>AI Music &amp; SFX</span></a>
+          <a href="/superconductor" role="menuitem">Superconductor<span>AI Video</span></a>
+        </div>
+      </details>
+    </li>
+    <li>
+      <details class="nav-products">
+        <summary>Tools</summary>
+        <div class="nav-products-menu" role="menu">
+          <a href="/video-seo" role="menuitem">Video SEO<span>Titles, descriptions &amp; tags</span></a>
+          <a href="/campaign-kit" role="menuitem" aria-current="page">Campaign Kit<span>Thumbs, teasers &amp; packs</span></a>
+        </div>
+      </details>
+    </li>
+    <li><a href="/pricing">Pricing</a></li>
+    <li><a href="/download">Download</a></li>
+    <li><a href="/help">Help</a></li>
+  </ul>
+  <div class="nav-cta">
+    <a href="/login" class="btn btn-ghost">Sign in</a>
+    <a href="/download" class="btn btn-primary">Download free</a>
+  </div>
+</nav>
+
+<main class="ckit-page">
+  <header class="ckit-hero">
+    <p class="section-label">Tools</p>
+    <h1>Campaign Kit</h1>
+    <p>One editor brief → a platform pack: YouTube thumbs, vertical teasers, title cards, and short motion prompts. Not an unbounded image chat — recipes sized for real social specs.</p>
+    <div class="ckit-note" role="note">
+      <strong>Free tier:</strong> prompt packs, burn-in title ideas, and aspect recipes — $0, in your browser.
+      <strong>Credits:</strong> render selected stills (Nano Banana Pro) or a short Seedance clip when signed in.
+    </div>
+    <div class="ckit-note" id="ckit-vseo-banner" role="status" style="display:none;margin-top:0.75rem">
+      Prefilling from your last <a href="/video-seo">Video SEO</a> brief.
+    </div>
+  </header>
+
+  <form id="ckit-form" class="ckit-form" novalidate>
+    <div class="ckit-field">
+      <label for="ckit-brief">Campaign brief</label>
+      <p class="hint">Video topic, product, who it’s for, and the takeaway. Same spirit as Video SEO — we’ll turn it into asset prompts, not platform copy.</p>
+      <textarea id="ckit-brief" name="brief" required placeholder="Example: 60-second Cuemark demo for motion designers — show messy captions becoming clean kinetic subtitles. CTA: download free. Mood: charcoal UI, sharp type, no fluff."></textarea>
+    </div>
+
+    <div class="ckit-row">
+      <div class="ckit-field">
+        <label for="ckit-product">Product preset</label>
+        <select id="ckit-product" name="product">
+          <option value="none" selected>Custom / general</option>
+          <option value="cuemark">Cuemark</option>
+          <option value="trillian">Trillian</option>
+          <option value="ludo">Ludo</option>
+          <option value="superconductor">Superconductor</option>
+          <option value="tamborine">Tamborine</option>
+          <option value="keyweaver">Keyweaver suite</option>
+        </select>
+      </div>
+      <div class="ckit-field">
+        <label for="ckit-cta">Call to action</label>
+        <select id="ckit-cta" name="cta">
+          <option value="none" selected>None</option>
+          <option value="download">Download free</option>
+          <option value="try">Try it free</option>
+          <option value="watch">Watch walkthrough</option>
+          <option value="link">Link in bio</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ckit-field">
+      <label>Platforms</label>
+      <p class="hint">Shapes framing notes (e.g. YouTube-only → prefer 16:9 motion).</p>
+      <div class="ckit-platforms">
+        <label class="ckit-platform"><input type="checkbox" id="plat-youtube" checked /> YouTube</label>
+        <label class="ckit-platform"><input type="checkbox" id="plat-tiktok" checked /> TikTok</label>
+        <label class="ckit-platform"><input type="checkbox" id="plat-instagram" checked /> Instagram</label>
+        <label class="ckit-platform"><input type="checkbox" id="plat-facebook" checked /> Facebook</label>
+      </div>
+    </div>
+
+    <div class="ckit-field">
+      <label>Asset types</label>
+      <p class="hint">Defaults to a full pack. Uncheck what you don’t need.</p>
+      <div class="ckit-assets">
+        <label class="ckit-asset"><input type="checkbox" id="asset-youtube_thumb" checked /> YouTube thumbs (16:9)</label>
+        <label class="ckit-asset"><input type="checkbox" id="asset-vertical" checked /> Vertical teasers (9:16)</label>
+        <label class="ckit-asset"><input type="checkbox" id="asset-quote_card" checked /> Quote / title card</label>
+        <label class="ckit-asset"><input type="checkbox" id="asset-motion" checked /> Motion teaser prompts</label>
+      </div>
+    </div>
+
+    <p class="ckit-error" id="ckit-error" role="alert"></p>
+
+    <div class="ckit-actions">
+      <button type="submit" class="btn btn-primary btn-lg">Build pack</button>
+      <button type="button" class="btn btn-ghost" id="ckit-clear">Clear</button>
+    </div>
+  </form>
+
+  <div class="ckit-results" id="ckit-results">
+    <div class="ckit-results-head">
+      <h2>Platform pack</h2>
+      <p>Edit prompts, copy them into your own fal/Replicate tooling, or render with Keyweaver credits when available.</p>
+    </div>
+
+    <div class="ckit-card" style="margin-bottom:1rem">
+      <h3>Asset checklist</h3>
+      <ul class="ckit-checklist" id="ckit-checklist"></ul>
+      <div class="ckit-card-actions">
+        <button type="button" class="btn btn-ghost" id="ckit-copy-all">Copy all prompts</button>
+      </div>
+    </div>
+
+    <div class="ckit-pack" id="ckit-results-body"></div>
+
+    <aside class="ckit-credits" id="ckit-credits" aria-label="Credits render">
+      <h3>Render with Keyweaver credits</h3>
+      <p id="ckit-balance">Sign in to see your credit balance and enable render.</p>
+      <p class="ckit-credit-costs">Costs: image = 5 credits · short Seedance clip (5s) = 20 credits. Shared pool with Cuemark / other Keyweaver tools.</p>
+      <div class="ckit-actions">
+        <a href="/login" class="btn btn-primary">Sign in</a>
+        <a href="/account" class="btn btn-ghost">Account / credits</a>
+        <a href="/video-seo" class="btn btn-ghost">Video SEO</a>
+      </div>
+    </aside>
+  </div>
+
+  <p class="ckit-footer-note">
+    Differentiator: tied to <a href="/video-seo">Video SEO</a> briefs, Keyweaver product presets, and editor aspect ratios — one brief to a multi-asset pack, not a generic Midjourney playground.
+    For timeline tools, see <a href="/download">Keyweaver plugins</a>.
+  </p>
+</main>
+
+<footer class="site-footer">
+  <p>© 2026 Keyweaver Ltd. All rights reserved.</p>
+  <p class="footer-entity">Registered in England &amp; Wales · Company no. 17283644 · 20 Wenlock Road, London, N1 7GU</p>
+  <ul class="footer-products">
+    <li><a href="/cuemark">Cuemark</a></li>
+    <li><a href="/superconductor">Superconductor</a></li>
+    <li><a href="/trillian">Trillian</a></li>
+    <li><a href="/tamborine">Tamborine</a></li>
+    <li><a href="/ludo">Ludo</a></li>
+  </ul>
+  <ul class="footer-links">
+    <li><a href="/video-seo">Video SEO</a></li>
+    <li><a href="/campaign-kit">Campaign Kit</a></li>
+    <li><a href="/legal/privacy">Privacy</a></li>
+    <li><a href="/legal/terms">Terms</a></li>
+    <li><a href="/legal/cookies">Cookies</a></li>
+    <li><a href="/changelog">Release notes</a></li>
+    <li><a href="/help">Help</a></li>
+    <li><a href="/about">About</a></li>
+  </ul>
+</footer>
+
+<script src="/js/campaign-kit.js" defer></script>
+<script src="/js/help-widget.js" defer></script>
+<script src="/js/cuemark-turnstile.js"></script>
+</body>
+</html>

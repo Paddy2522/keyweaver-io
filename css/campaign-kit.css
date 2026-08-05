@@ -1,0 +1,311 @@
+/* Campaign Kit — Keyweaver charcoal UI (mirrors Video SEO tool patterns) */
+
+.ckit-page {
+  padding: 5.5rem 1.5rem 5rem;
+  max-width: 920px;
+  margin: 0 auto;
+}
+
+.ckit-hero {
+  margin-bottom: 2rem;
+}
+
+.ckit-hero .section-label {
+  margin-bottom: 0.65rem;
+}
+
+.ckit-hero h1 {
+  font-family: 'Cal Sans', sans-serif;
+  font-size: clamp(1.85rem, 4.5vw, 2.6rem);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: var(--text);
+  margin-bottom: 0.65rem;
+  line-height: 1.15;
+}
+
+.ckit-hero p {
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.7;
+  max-width: 40rem;
+}
+
+.ckit-note {
+  margin-top: 1rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--edge);
+  border-left: 3px solid rgba(var(--accent-rgb), 0.65);
+  background: var(--surface);
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.ckit-note strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.ckit-form {
+  display: grid;
+  gap: 1.25rem;
+  padding: 1.5rem;
+  background: var(--surface);
+  border: 1px solid var(--edge);
+  border-radius: 14px;
+}
+
+.ckit-field {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.ckit-field label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.ckit-field .hint {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.ckit-field textarea,
+.ckit-field input,
+.ckit-field select {
+  width: 100%;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  background: var(--ink);
+  border: 1px solid var(--edge);
+  border-radius: 8px;
+  padding: 0.75rem 0.9rem;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.ckit-field textarea {
+  min-height: 120px;
+  resize: vertical;
+  line-height: 1.55;
+}
+
+.ckit-field textarea:focus,
+.ckit-field input:focus,
+.ckit-field select:focus {
+  border-color: rgba(var(--accent-rgb), 0.55);
+}
+
+.ckit-row {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr 1fr;
+}
+
+@media (max-width: 640px) {
+  .ckit-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ckit-platforms,
+.ckit-assets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem 1rem;
+}
+
+.ckit-platform,
+.ckit-asset {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 13px;
+  color: var(--text);
+  cursor: pointer;
+  user-select: none;
+}
+
+.ckit-platform input,
+.ckit-asset input {
+  accent-color: rgb(var(--accent-rgb));
+}
+
+.ckit-error {
+  display: none;
+  font-size: 13px;
+  color: #e8a0a0;
+  margin: 0;
+}
+
+.ckit-error.is-visible {
+  display: block;
+}
+
+.ckit-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  align-items: center;
+}
+
+.ckit-results {
+  display: none;
+  margin-top: 2.5rem;
+}
+
+.ckit-results.is-visible {
+  display: block;
+}
+
+.ckit-results-head h2 {
+  font-family: 'Cal Sans', sans-serif;
+  font-size: 1.45rem;
+  letter-spacing: 0.03em;
+  margin-bottom: 0.35rem;
+}
+
+.ckit-results-head p {
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 1.25rem;
+}
+
+.ckit-pack {
+  display: grid;
+  gap: 1rem;
+}
+
+.ckit-card {
+  border: 1px solid var(--edge);
+  border-radius: 12px;
+  background: var(--surface);
+  padding: 1.1rem 1.2rem;
+}
+
+.ckit-card h3 {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0 0 0.35rem;
+  color: var(--text);
+}
+
+.ckit-meta {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 0.75rem;
+  line-height: 1.45;
+}
+
+.ckit-card textarea {
+  width: 100%;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 13px;
+  color: var(--text);
+  background: var(--ink);
+  border: 1px solid var(--edge);
+  border-radius: 8px;
+  padding: 0.7rem 0.85rem;
+  line-height: 1.5;
+  resize: vertical;
+  min-height: 88px;
+}
+
+.ckit-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.65rem;
+  align-items: center;
+}
+
+.ckit-card-actions .btn {
+  font-size: 12px;
+  padding: 0.4rem 0.75rem;
+}
+
+.ckit-render-status {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.ckit-render-status.is-ok {
+  color: #8fd4a8;
+}
+
+.ckit-render-status.is-err {
+  color: #e8a0a0;
+}
+
+.ckit-preview {
+  margin-top: 0.75rem;
+  max-width: 100%;
+  border-radius: 8px;
+  border: 1px solid var(--edge);
+}
+
+.ckit-checklist {
+  margin: 0;
+  padding-left: 1.1rem;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.ckit-checklist li {
+  margin-bottom: 0.25rem;
+}
+
+.ckit-credits {
+  margin-top: 1.75rem;
+  padding: 1.1rem 1.2rem;
+  border: 1px solid var(--edge);
+  border-radius: 12px;
+  background: var(--surface);
+}
+
+.ckit-credits h3 {
+  font-size: 14px;
+  margin: 0 0 0.4rem;
+}
+
+.ckit-credits p {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin: 0 0 0.75rem;
+}
+
+.ckit-credits .ckit-credit-costs {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 0.85rem;
+}
+
+.ckit-footer-note {
+  margin-top: 2.5rem;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.ckit-footer-note a {
+  color: var(--text);
+}
+
+#ckit-vseo-banner {
+  display: none;
+}
+
+#ckit-vseo-banner.is-visible {
+  display: block !important;
+}
+
+#ckit-vseo-banner a {
+  color: var(--text);
+}
