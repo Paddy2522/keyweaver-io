@@ -1,10 +1,42 @@
 /**
  * Swap nav Sign in → Account when a Keyweaver session token is present.
  * Checkout already uses localStorage cc_token; the header should match.
- * Also injects a mobile nav toggle for .site-nav / primary navs.
+ * Also injects a mobile nav toggle for .site-nav / primary navs,
+ * and keeps Plugins/Tools <details> dropdowns mutually exclusive.
  */
 (function () {
   'use strict';
+
+  function closeNavProducts(except) {
+    var open = document.querySelectorAll('details.nav-products[open]');
+    for (var i = 0; i < open.length; i++) {
+      if (except && open[i] === except) continue;
+      open[i].removeAttribute('open');
+    }
+  }
+
+  function setupNavDropdowns() {
+    var menus = document.querySelectorAll('details.nav-products');
+    if (!menus.length) return;
+
+    Array.prototype.forEach.call(menus, function (details) {
+      details.addEventListener('toggle', function () {
+        if (!details.open) return;
+        closeNavProducts(details);
+      });
+    });
+
+    document.addEventListener('click', function (e) {
+      var t = e.target;
+      if (t && t.closest && t.closest('details.nav-products')) return;
+      closeNavProducts(null);
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape' && e.keyCode !== 27) return;
+      closeNavProducts(null);
+    });
+  }
 
   function applyNavAuth() {
     var token = null;
@@ -98,6 +130,7 @@
   function boot() {
     applyNavAuth();
     setupMobileNav();
+    setupNavDropdowns();
   }
 
   if (document.readyState === 'loading') {
