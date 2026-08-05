@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="/css/nav-brand.css" />
   <link rel="stylesheet" href="/css/chrome.css" />
   <link rel="stylesheet" href="/css/site.css" />
+  <link rel="stylesheet" href="/css/tools-shared.css" />
   <link rel="stylesheet" href="/css/campaign-kit.css" />
   <link rel="stylesheet" href="/css/help-widget.css" />
   <title>Campaign Kit - Platform packs for editors | Keyweaver</title>
@@ -72,12 +73,16 @@
     <p class="section-label">Tools</p>
     <h1>Campaign Kit</h1>
     <p>One editor brief → a platform pack: YouTube thumbs, vertical teasers, title cards, and short motion prompts. Not an unbounded image chat - recipes sized for real social specs.</p>
-    <div class="ckit-note" role="note">
-      <strong>Free tier:</strong> prompt packs, burn-in title ideas, and aspect recipes - $0, in your browser.
-      <strong>Credits:</strong> render selected stills (Nano Banana Pro) or a short Seedance clip when signed in.
+    <div class="tools-badges" aria-label="Pricing">
+      <span class="tools-badge tools-badge-free">Free pack</span>
+      <span class="tools-badge tools-badge-paid">AI render · purchased credits</span>
+    </div>
+    <div class="tools-tier" role="note">
+      <p><strong>Free forever:</strong> build the pack in your browser - prompts, burn-in ideas, and aspect recipes. No account, no credits.</p>
+      <p><strong>Optional AI render:</strong> image 4 credits · premium image 8 · 4s video 25. Uses <em>purchased</em> credits only (free signup credits cannot run AI render).</p>
     </div>
     <div class="ckit-note" id="ckit-vseo-banner" role="status" style="display:none;margin-top:0.75rem">
-      Prefilling from your last <a href="/video-seo">Video SEO</a> brief.
+      Prefilling from your last <a href="/video-seo">Video SEO</a> brief. Build the pack below, then use it in <a href="/shot-list">Shot List</a> if you need coverage.
     </div>
   </header>
 
@@ -138,15 +143,21 @@
     <p class="ckit-error" id="ckit-error" role="alert"></p>
 
     <div class="ckit-actions">
-      <button type="submit" class="btn btn-primary btn-lg">Build pack</button>
+      <button type="submit" class="btn btn-primary btn-lg" id="ckit-submit">Build pack - free</button>
       <button type="button" class="btn btn-ghost" id="ckit-clear">Clear</button>
+      <p class="tools-form-note">Build pack never uses credits. AI render is optional below the results.</p>
     </div>
   </form>
+
+  <div class="tools-empty" id="ckit-empty">
+    <h2>Your pack appears here</h2>
+    <p>Add a brief and click <strong>Build pack - free</strong>. You’ll get editable prompts and a checklist. Sign in and buy credits only if you want optional AI stills or a short video render.</p>
+  </div>
 
   <div class="ckit-results" id="ckit-results">
     <div class="ckit-results-head">
       <h2>Platform pack</h2>
-      <p>Edit and copy prompts for free (no API key). Optional AI render uses <strong>purchased</strong> credits only - free signup credits cannot run fal.</p>
+      <p>Edit and copy prompts for free. Optional AI render below uses purchased credits only.</p>
     </div>
 
     <div class="ckit-card" style="margin-bottom:1rem">
@@ -159,22 +170,52 @@
 
     <div class="ckit-pack" id="ckit-results-body"></div>
 
-    <aside class="ckit-credits" id="ckit-credits" aria-label="Credits render">
-      <h3>AI render (purchased credits only)</h3>
-      <p id="ckit-balance">Sign in and buy credits to enable AI render. Build pack above stays free forever.</p>
-      <p class="ckit-credit-costs" id="ckit-credit-costs">Costs (purchased credits only): image = 4 (Nano Banana) · premium image = 8 (Nano Banana Pro) · 4s Seedance Fast video = 25. Free signup / promo credits cannot run fal.</p>
-      <div class="ckit-actions">
-        <a href="/login" class="btn btn-primary" id="ckit-credits-signin">Sign in</a>
-        <a href="/pricing" class="btn btn-primary" id="ckit-credits-buy">Buy credits</a>
-        <a href="/account" class="btn btn-ghost">Account</a>
-        <a href="/video-seo" class="btn btn-ghost">Video SEO</a>
+    <aside class="tools-credit-panel ckit-credits" id="ckit-credits" aria-label="AI render credits">
+      <h3>AI render</h3>
+      <p class="tools-credit-status" id="ckit-balance">Sign in to see purchased credits and unlock AI render. Build pack above stays free.</p>
+      <div class="tools-credit-meter" id="ckit-credit-meter" hidden>
+        <div class="tools-credit-row">
+          <span class="label">Purchased credits (for AI render)</span>
+          <span class="value" id="ckit-paid-value">-</span>
+        </div>
+        <div class="tools-credit-row">
+          <span class="label">Total pool (plugins + tools)</span>
+          <span class="value" id="ckit-pool-value">-</span>
+        </div>
+        <div class="tools-credit-row">
+          <span class="label">Next image render cost</span>
+          <span class="value" id="ckit-next-cost">4 credits</span>
+        </div>
+      </div>
+      <ul class="tools-credit-costs" id="ckit-credit-costs" aria-label="Credit costs">
+        <li data-cost="image"><span>Image (default)</span><span class="cost">4 credits</span></li>
+        <li data-cost="premium"><span>Premium image</span><span class="cost">8 credits</span></li>
+        <li data-cost="video"><span>4s motion video</span><span class="cost">25 credits</span></li>
+      </ul>
+      <p class="tools-credit-help" id="ckit-credit-help">
+        How credits work: AI render spends <strong>purchased</strong> credits only. Free signup / promo credits never cover fal generation. The free Build pack never charges.
+        Buy packs on <a href="/pricing">Pricing</a> or manage balance in <a href="/account">Account</a>.
+      </p>
+      <div class="tools-credit-actions">
+        <a href="/login?next=/campaign-kit" class="btn btn-primary" id="ckit-credits-signin">Sign in to render</a>
+        <a href="/pricing" class="btn btn-primary" id="ckit-credits-buy" hidden>Buy credits</a>
+        <a href="/account" class="btn btn-ghost" id="ckit-credits-account" hidden>Account</a>
+      </div>
+    </aside>
+
+    <aside class="tools-handoff" aria-label="Next steps">
+      <h3>Use this brief elsewhere</h3>
+      <p>Your brief is saved in this browser. Carry it into publish copy or a shoot list without retyping.</p>
+      <div class="tools-handoff-actions">
+        <a href="/video-seo" class="btn btn-ghost">Use brief in Video SEO</a>
+        <a href="/shot-list" class="btn btn-ghost">Use brief in Shot List</a>
       </div>
     </aside>
   </div>
 
   <p class="ckit-footer-note">
-    Differentiator: tied to <a href="/video-seo">Video SEO</a> briefs, Keyweaver product presets, and editor aspect ratios - one brief to a multi-asset pack, not a generic Midjourney playground.
-    Need ordered coverage before assets? Try <a href="/shot-list">Shot List</a>.
+    Tied to <a href="/video-seo">Video SEO</a> briefs, product presets, and editor aspect ratios - one brief to a multi-asset pack.
+    Need ordered coverage first? Try free <a href="/shot-list">Shot List</a>.
     For timeline tools, see <a href="/download">Keyweaver plugins</a>.
   </p>
 </main>

@@ -3,6 +3,7 @@
 
   var STORAGE_KEY = 'keyweaver.campaignKit.lastBrief';
   var VSEO_KEY = 'keyweaver.videoSeo.lastBrief';
+  var SHOT_KEY = 'keyweaver.shotList.lastBrief';
   var BACKEND = 'https://keyweaver-backend.vercel.app';
   /** Must match .backend-checkout/lib/campaign-kit-policy.ts */
   var IMAGE_CREDITS = 4;
@@ -132,6 +133,8 @@
     if (!data || !data.brief) {
       try {
         var vseo = JSON.parse(localStorage.getItem(VSEO_KEY) || 'null');
+        var shot = JSON.parse(localStorage.getItem(SHOT_KEY) || 'null');
+        var source = '';
         if (vseo && vseo.brief) {
           data = {
             brief: vseo.brief,
@@ -140,8 +143,28 @@
             platforms: vseo.platforms || ['youtube', 'tiktok', 'instagram', 'facebook'],
             assets: ['youtube_thumb', 'vertical', 'quote_card']
           };
+          source = 'Video SEO';
+        } else if (shot && shot.concept) {
+          data = {
+            brief: shot.concept,
+            product: 'none',
+            cta: 'none',
+            platforms: ['youtube', 'tiktok', 'instagram', 'facebook'],
+            assets: ['youtube_thumb', 'vertical', 'quote_card']
+          };
+          source = 'Shot List';
+        }
+        if (source) {
           var banner = $('ckit-vseo-banner');
-          if (banner) banner.classList.add('is-visible');
+          if (banner) {
+            banner.innerHTML =
+              'Prefilling from your last <a href="/' +
+              (source === 'Shot List' ? 'shot-list' : 'video-seo') +
+              '">' +
+              source +
+              '</a> brief. Build pack is free - AI render needs purchased credits.';
+            banner.classList.add('is-visible');
+          }
         }
       } catch (e2) { /* ignore */ }
     }
@@ -307,37 +330,86 @@
     document.body.removeChild(ta);
   }
 
-  function setStatus(el, msg, kind) {
+  function purchaseLinksHtml() {
+    return (
+      '<span class="tools-inline-cta">' +
+      '<a href="/pricing">Buy credits</a>' +
+      '<a href="/account">Account</a>' +
+      '</span>'
+    );
+  }
+
+  function setStatus(el, msg, kind, allowHtml) {
     if (!el) return;
-    el.textContent = msg || '';
+    if (allowHtml) el.innerHTML = msg || '';
+    else el.textContent = msg || '';
     el.classList.remove('is-ok', 'is-err');
     if (kind) el.classList.add(kind === 'ok' ? 'is-ok' : 'is-err');
   }
 
-  function renderSelected(item, textarea, statusEl, previewHost) {
+  function renderGateReason(need) {
+    if (!getToken()) {
+      return {
+        ok: false,
+        reason:
+          'Sign in to render. AI render needs purchased credits - <a href="/login?next=/campaign-kit">Sign in</a> · <a href="/pricing">Buy credits</a>'
+      };
+    }
+    if (!creditsState) {
+      return { ok: false, reason: 'Checking purchased credit balance…' };
+    }
+    if (!creditsState.hasPaid || creditsState.paidRemaining <= 0) {
+      return {
+        ok: false,
+        reason:
+          'You have 0 purchased credits for AI render. Free signup credits cannot cover generation. ' +
+          purchaseLinksHtml()
+      };
+    }
+    if (creditsState.paidRemaining < need) {
+      return {
+        ok: false,
+        reason:
+          'Need ' +
+          need +
+          ' purchased credits (you have ' +
+          creditsState.paidRemaining +
+          '). ' +
+          purchaseLinksHtml()
+      };
+    }
+    return { ok: true, reason: 'Will charge ' + need + ' purchased credits for this render.' };
+  }
+
+  function setBusy(btn, busy, label) {
+    if (!btn) return;
+    if (busy) {
+      btn.dataset.prevLabel = btn.textContent;
+      btn.textContent = label || 'Working…';
+      btn.classList.add('is-busy');
+      btn.disabled = true;
+    } else {
+      if (btn.dataset.prevLabel) btn.textContent = btn.dataset.prevLabel;
+      delete btn.dataset.prevLabel;
+      btn.classList.remove('is-busy');
+      btn.disabled = false;
+    }
+  }
+
+  function renderSelected(item, textarea, statusEl, previewHost, renderBtn, hintEl) {
     var token = getToken();
-    if (!token) {
-      setStatus(statusEl, 'Sign in and buy credits to render (purchased credits only).', 'err');
-      return;
-    }
     var need = item.kind === 'video' ? VIDEO_CREDITS : imageCreditsNeed();
-    if (creditsState && !creditsState.hasPaid) {
-      setStatus(
-        statusEl,
-        'AI render needs purchased credits (free signup credits cannot run fal). Buy a pack on Pricing.',
-        'err'
-      );
+    var gate = renderGateReason(need);
+    if (!gate.ok) {
+      setStatus(statusEl, gate.reason, 'err', true);
+      if (hintEl) {
+        hintEl.innerHTML = gate.reason;
+        hintEl.classList.add('is-err');
+      }
       return;
     }
-    if (creditsState && creditsState.paidRemaining < need) {
-      setStatus(
-        statusEl,
-        'Need ' + need + ' purchased credits (have ' + creditsState.paidRemaining + ').',
-        'err'
-      );
-      return;
-    }
-    setStatus(statusEl, 'Rendering… (may take a minute)', null);
+    setBusy(renderBtn, true, 'Rendering…');
+    setStatus(statusEl, 'Rendering… this can take up to a minute.', null);
     var body = {
       kind: item.kind,
       prompt: textarea.value,
@@ -359,60 +431,73 @@
         });
       })
       .then(function (x) {
+        setBusy(renderBtn, false);
         if (x.res.status === 503 && x.data && x.data.reason === 'provider_not_configured') {
           setStatus(
             statusEl,
-            'AI render provider is not configured on the server. Build pack still works; try again later.',
+            'AI render is temporarily unavailable on the server. Your free Build pack still works - try render again later.',
             'err'
           );
+          syncRenderButtons();
           return;
         }
         if (x.res.status === 401) {
-          setStatus(statusEl, 'Session expired - sign in again.', 'err');
+          setStatus(
+            statusEl,
+            'Session expired. <a href="/login?next=/campaign-kit">Sign in</a> again to render.',
+            'err',
+            true
+          );
+          syncRenderButtons();
           return;
         }
         if (x.res.status === 402) {
+          var needCr = x.data && x.data.credits_required != null ? x.data.credits_required : need;
+          var paidLeft =
+            x.data && x.data.paid_credits_remaining != null ? x.data.paid_credits_remaining : 0;
           if (x.data && x.data.reason === 'paid_credits_required') {
             setStatus(
               statusEl,
               'Purchased credits required (need ' +
-                (x.data.credits_required || '?') +
-                ', paid remaining ' +
-                (x.data.paid_credits_remaining != null ? x.data.paid_credits_remaining : 0) +
-                '). Free signup credits cannot run AI render.',
-              'err'
+                needCr +
+                ', you have ' +
+                paidLeft +
+                '). Free signup credits cannot run AI render. ' +
+                purchaseLinksHtml(),
+              'err',
+              true
             );
-            updateCreditsPanel();
-            return;
+          } else {
+            setStatus(
+              statusEl,
+              'Not enough credits (need ' +
+                needCr +
+                '). ' +
+                purchaseLinksHtml(),
+              'err',
+              true
+            );
           }
-          setStatus(
-            statusEl,
-            'Not enough credits (need ' +
-              (x.data.credits_required || '?') +
-              ', have ' +
-              (x.data.credits_remaining || 0) +
-              ').',
-            'err'
-          );
           updateCreditsPanel();
           return;
         }
         if (!x.res.ok) {
-          setStatus(statusEl, (x.data && x.data.error) || 'Render failed.', 'err');
+          setStatus(statusEl, (x.data && x.data.error) || 'Render failed. No charge if the provider failed.', 'err');
+          syncRenderButtons();
           return;
         }
         var url = x.data.url;
+        var charged = x.data.credits_charged != null ? x.data.credits_charged : need;
+        var paidRemain =
+          x.data.paid_credits_remaining != null ? x.data.paid_credits_remaining : null;
         setStatus(
           statusEl,
-          'Done · ' +
-            (x.data.credits_charged || 0) +
-            ' purchased credits · ' +
-            (x.data.model ? x.data.model + ' · ' : '') +
-            (x.data.paid_credits_remaining != null
-              ? x.data.paid_credits_remaining + ' paid left'
-              : x.data.credits_remaining != null
-                ? x.data.credits_remaining + ' left'
-                : ''),
+          'Done - charged ' +
+            charged +
+            ' purchased credit' +
+            (charged === 1 ? '' : 's') +
+            (paidRemain != null ? ' · ' + paidRemain + ' purchased remaining' : '') +
+            '.',
           'ok'
         );
         updateCreditsPanel();
@@ -442,7 +527,9 @@
         }
       })
       .catch(function () {
-        setStatus(statusEl, 'Network error talking to Keyweaver backend.', 'err');
+        setBusy(renderBtn, false);
+        setStatus(statusEl, 'Network error talking to Keyweaver. Try again in a moment.', 'err');
+        syncRenderButtons();
       });
   }
 
@@ -450,8 +537,10 @@
     var pack = buildPack(data);
     var host = $('ckit-results-body');
     var list = $('ckit-checklist');
+    var empty = $('ckit-empty');
     host.innerHTML = '';
     list.innerHTML = '';
+    if (empty) empty.classList.add('is-hidden');
 
     pack.checklist.forEach(function (line) {
       var li = document.createElement('li');
@@ -483,6 +572,7 @@
       var ta = document.createElement('textarea');
       ta.rows = 5;
       ta.value = item.prompt;
+      ta.setAttribute('aria-label', item.title + ' prompt');
       card.appendChild(ta);
 
       var actions = document.createElement('div');
@@ -510,9 +600,7 @@
         qualWrap.appendChild(qualCheck);
         qualWrap.appendChild(
           document.createTextNode(
-            ' Premium (+' +
-              (IMAGE_PREMIUM_CREDITS - IMAGE_CREDITS) +
-              ' cr · Nano Banana Pro)'
+            ' Premium (' + IMAGE_PREMIUM_CREDITS + ' credits · higher quality)'
           )
         );
         actions.appendChild(qualWrap);
@@ -522,22 +610,16 @@
       renderBtn.type = 'button';
       renderBtn.className = 'btn btn-primary';
       renderBtn.dataset.role = 'render';
-      renderBtn.textContent =
-        item.kind === 'video'
-          ? 'Render video (' + VIDEO_CREDITS + ' purchased cr)'
-          : 'Render image (' + imageCreditsNeed() + ' purchased cr)';
-      var need = item.kind === 'video' ? VIDEO_CREDITS : imageCreditsNeed();
-      if (!getToken() || !creditsState || creditsState.paidRemaining < need) {
-        renderBtn.disabled = true;
-        renderBtn.classList.add('is-disabled');
-        renderBtn.title =
-          'Requires purchased Keyweaver credits (not free signup). Buy a pack, then render.';
-      }
       actions.appendChild(renderBtn);
 
       var status = document.createElement('span');
       status.className = 'ckit-render-status';
       actions.appendChild(status);
+
+      var hint = document.createElement('p');
+      hint.className = 'tools-render-hint';
+      hint.dataset.role = 'render-hint';
+      actions.appendChild(hint);
 
       card.appendChild(actions);
 
@@ -545,60 +627,118 @@
       card.appendChild(preview);
 
       renderBtn.addEventListener('click', function () {
-        renderSelected(item, ta, status, preview);
+        renderSelected(item, ta, status, preview, renderBtn, hint);
       });
 
       host.appendChild(card);
     });
 
+    syncImageQualityUI();
     updateCreditsPanel();
     $('ckit-results').classList.add('is-visible');
     $('ckit-results').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
-  function syncImageQualityUI() {
-    var costs = $('ckit-credit-costs');
-    if (costs) {
-      costs.textContent =
-        'Costs (purchased credits only): image = ' +
-        IMAGE_CREDITS +
-        ' (Nano Banana) · premium image = ' +
-        IMAGE_PREMIUM_CREDITS +
-        ' (Nano Banana Pro) · 4s Seedance Fast video = ' +
-        VIDEO_CREDITS +
-        '. Free signup / promo credits cannot run fal.';
+  function syncCreditCostHighlights() {
+    var list = $('ckit-credit-costs');
+    if (!list) return;
+    list.querySelectorAll('li').forEach(function (li) {
+      li.classList.remove('is-active');
+    });
+    var active =
+      imageQuality === 'premium'
+        ? list.querySelector('[data-cost="premium"]')
+        : list.querySelector('[data-cost="image"]');
+    if (active) active.classList.add('is-active');
+    var next = $('ckit-next-cost');
+    if (next) {
+      next.textContent = imageCreditsNeed() + ' credits';
+      next.classList.toggle('is-zero', false);
+      next.classList.add('is-ok');
     }
+  }
+
+  function syncCreditActions() {
+    var signin = $('ckit-credits-signin');
+    var buy = $('ckit-credits-buy');
+    var account = $('ckit-credits-account');
+    var token = getToken();
+    var zeroPaid = !!(token && creditsState && creditsState.paidRemaining <= 0);
+    if (signin) {
+      signin.hidden = !!token;
+      signin.className = 'btn btn-primary';
+    }
+    if (buy) {
+      buy.hidden = false;
+      buy.textContent = 'Buy credits';
+      // Primary when signed in with 0 purchased credits; otherwise ghost next to Sign in
+      buy.className = zeroPaid ? 'btn btn-primary' : 'btn btn-ghost';
+    }
+    if (account) account.hidden = !token;
+  }
+
+  function syncRenderButtons() {
+    syncCreditCostHighlights();
     document.querySelectorAll('#ckit-results-body .ckit-card').forEach(function (card) {
       var btn = card.querySelector('button[data-role="render"]');
-      if (!btn) return;
+      var hint = card.querySelector('[data-role="render-hint"]');
+      if (!btn || btn.classList.contains('is-busy')) return;
       var kind = card.dataset.kind === 'video' ? 'video' : 'image';
       var need = kind === 'video' ? VIDEO_CREDITS : imageCreditsNeed();
-      if (kind === 'image') {
-        btn.textContent = 'Render image (' + need + ' purchased cr)';
+      if (kind === 'video') {
+        btn.textContent = 'Render video - ' + VIDEO_CREDITS + ' credits';
+      } else {
+        btn.textContent =
+          'Render image - ' +
+          need +
+          ' credit' +
+          (need === 1 ? '' : 's') +
+          (imageQuality === 'premium' ? ' (premium)' : '');
       }
-      var ok = !!(creditsState && creditsState.paidRemaining >= need && getToken());
-      btn.disabled = !ok;
-      if (ok) btn.classList.remove('is-disabled');
+      var gate = renderGateReason(need);
+      btn.disabled = !gate.ok;
+      if (gate.ok) btn.classList.remove('is-disabled');
       else btn.classList.add('is-disabled');
+      btn.title = gate.ok
+        ? 'Charges ' + need + ' purchased credits'
+        : 'Purchased credits required - see Pricing';
+      if (hint) {
+        hint.innerHTML = gate.reason;
+        hint.classList.toggle('is-err', !gate.ok);
+      }
       var qual = card.querySelector('.ckit-quality input[type="checkbox"]');
       if (qual) qual.checked = imageQuality === 'premium';
     });
   }
 
+  function syncImageQualityUI() {
+    syncRenderButtons();
+  }
+
   function updateCreditsPanel() {
     var panel = $('ckit-credits');
     var bal = $('ckit-balance');
+    var meter = $('ckit-credit-meter');
+    var paidEl = $('ckit-paid-value');
+    var poolEl = $('ckit-pool-value');
     var token = getToken();
     if (!panel) return;
+    syncCreditActions();
     if (!token) {
       creditsState = null;
+      if (meter) meter.hidden = true;
       if (bal) {
+        bal.className = 'tools-credit-status is-warn';
         bal.textContent =
-          'Sign in and buy credits to enable AI render. Build pack stays free - no API key needed.';
+          'Sign in to see purchased credits and unlock AI render. Build pack above stays free forever.';
       }
+      syncRenderButtons();
       return;
     }
-    if (bal) bal.textContent = 'Checking purchased credit balance…';
+    if (bal) {
+      bal.className = 'tools-credit-status';
+      bal.textContent = 'Checking purchased credit balance…';
+    }
     fetch(BACKEND + '/api/captio/credits', {
       headers: { Authorization: 'Bearer ' + token }
     })
@@ -609,7 +749,11 @@
         if (!bal) return;
         if (!data) {
           creditsState = null;
-          bal.textContent = 'Could not load credits - try Account.';
+          if (meter) meter.hidden = true;
+          bal.className = 'tools-credit-status is-err';
+          bal.innerHTML =
+            'Could not load credits. Try <a href="/account">Account</a> or refresh.';
+          syncRenderButtons();
           return;
         }
         var paid = Number(data.paid_credits_remaining != null ? data.paid_credits_remaining : 0);
@@ -619,33 +763,37 @@
           paidRemaining: paid,
           hasPaid: paid > 0 || !!data.has_paid_credits
         };
-        if (paid <= 0) {
-          bal.textContent =
-            'Pool: ' +
-            creditsState.remaining +
-            ' / ' +
-            creditsState.total +
-            ' · Purchased for AI render: 0. Buy credits to render with fal (free signup credits cannot cover generation cost).';
-        } else {
-          bal.textContent =
-            'Purchased for AI render: ' +
-            paid +
-            ' · Pool: ' +
-            creditsState.remaining +
-            ' / ' +
-            creditsState.total +
-            ' · Image = ' +
-            IMAGE_CREDITS +
-            ' (premium ' +
-            IMAGE_PREMIUM_CREDITS +
-            ') · 4s video = ' +
-            VIDEO_CREDITS;
+        if (meter) meter.hidden = false;
+        if (paidEl) {
+          paidEl.textContent = String(paid);
+          paidEl.classList.toggle('is-zero', paid <= 0);
+          paidEl.classList.toggle('is-ok', paid > 0);
         }
-        syncImageQualityUI();
+        if (poolEl) {
+          poolEl.textContent = creditsState.remaining + ' / ' + creditsState.total;
+        }
+        if (paid <= 0) {
+          bal.className = 'tools-credit-status is-warn';
+          bal.innerHTML =
+            'Signed in, but you have <strong>0 purchased credits</strong> for AI render. Free signup credits cannot run fal. ' +
+            purchaseLinksHtml();
+        } else {
+          bal.className = 'tools-credit-status is-ok';
+          bal.textContent =
+            'Ready to render. Purchased credits available: ' +
+            paid +
+            '. Toggle Premium on an image card to preview the 8-credit cost.';
+        }
+        syncRenderButtons();
       })
       .catch(function () {
         creditsState = null;
-        if (bal) bal.textContent = 'Could not load credits.';
+        if (meter) meter.hidden = true;
+        if (bal) {
+          bal.className = 'tools-credit-status is-err';
+          bal.textContent = 'Could not load credits.';
+        }
+        syncRenderButtons();
       });
   }
 
@@ -655,7 +803,7 @@
     err.textContent = '';
     var data = readForm();
     if (!data.brief || data.brief.length < 12) {
-      err.textContent = 'Add a short campaign brief (at least a sentence).';
+      err.textContent = 'Add a short campaign brief (at least a sentence) so we can shape asset prompts.';
       err.classList.add('is-visible');
       $('ckit-brief').focus();
       return;
@@ -665,8 +813,18 @@
       err.classList.add('is-visible');
       return;
     }
+    var submit = $('ckit-submit');
+    setBusy(submit, true, 'Building pack…');
     saveForm(data);
-    renderResults(data);
+    // Yield so the busy label paints before DOM work
+    setTimeout(function () {
+      renderResults(data);
+      setBusy(submit, false);
+      if (submit) {
+        submit.disabled = false;
+        submit.classList.remove('is-disabled');
+      }
+    }, 10);
   }
 
   function clearAll() {
@@ -687,14 +845,33 @@
     $('ckit-results').classList.remove('is-visible');
     $('ckit-results-body').innerHTML = '';
     $('ckit-checklist').innerHTML = '';
+    var empty = $('ckit-empty');
+    if (empty) empty.classList.remove('is-hidden');
     var banner = $('ckit-vseo-banner');
     if (banner) banner.classList.remove('is-visible');
     try { localStorage.removeItem(STORAGE_KEY); } catch (e) { /* ignore */ }
     $('ckit-brief').focus();
   }
 
+  function hydrateCostLabels() {
+    var list = $('ckit-credit-costs');
+    if (!list) return;
+    var map = {
+      image: IMAGE_CREDITS + ' credits',
+      premium: IMAGE_PREMIUM_CREDITS + ' credits',
+      video: VIDEO_CREDITS + ' credits'
+    };
+    list.querySelectorAll('li[data-cost]').forEach(function (li) {
+      var key = li.getAttribute('data-cost');
+      var cost = li.querySelector('.cost');
+      if (cost && map[key]) cost.textContent = map[key];
+    });
+    syncCreditCostHighlights();
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
     loadForm();
+    hydrateCostLabels();
     var form = $('ckit-form');
     if (form) {
       form.addEventListener('submit', function (e) {

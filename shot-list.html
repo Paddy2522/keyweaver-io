@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="/css/nav-brand.css" />
   <link rel="stylesheet" href="/css/chrome.css" />
   <link rel="stylesheet" href="/css/site.css" />
+  <link rel="stylesheet" href="/css/tools-shared.css" />
   <link rel="stylesheet" href="/css/shot-list.css" />
   <link rel="stylesheet" href="/css/help-widget.css" />
   <title>Shot List - Free video shot planner | Keyweaver</title>
@@ -72,8 +73,13 @@
     <p class="section-label">Tools</p>
     <h1>Shot List</h1>
     <p>Turn a concept into an ordered shoot list: framing, camera move, audio notes, and rough timings - sized to your target duration and video type.</p>
-    <div class="slist-note" role="note">
-      <strong>Free tier:</strong> template-based shot lists in your browser - $0, no account. Useful first draft for talking-head, product, tutorial, or event shoots; edit for your voice and locations.
+    <div class="tools-badges" aria-label="Pricing">
+      <span class="tools-badge tools-badge-free">Free forever</span>
+      <span class="tools-badge">No credits · runs in browser</span>
+    </div>
+    <div class="tools-tier" role="note">
+      <p><strong>What you get:</strong> an ordered shot list with setup, movement, audio notes, and rough timings from templates (talking head, product, tutorial, event, or mixed).</p>
+      <p><strong>Credits:</strong> never used. Edit freely, then copy or download .txt / .csv.</p>
     </div>
     <div class="slist-note" id="slist-handoff-banner" role="status" style="display:none;margin-top:0.75rem"></div>
   </header>
@@ -125,10 +131,16 @@
     <p class="slist-error" id="slist-error" role="alert"></p>
 
     <div class="slist-actions">
-      <button type="submit" class="btn btn-primary btn-lg">Generate shot list</button>
+      <button type="submit" class="btn btn-primary btn-lg" id="slist-submit">Generate free shot list</button>
       <button type="button" class="btn btn-ghost" id="slist-clear">Clear</button>
+      <p class="tools-form-note">Runs in your browser. No account or credits required.</p>
     </div>
   </form>
+
+  <div class="tools-empty" id="slist-empty">
+    <h2>Your shot list appears here</h2>
+    <p>Add a concept and click <strong>Generate free shot list</strong>. You’ll get ordered coverage you can copy or download - no sign-in, no credits.</p>
+  </div>
 
   <div class="slist-results" id="slist-results">
     <div class="slist-results-head">
@@ -156,11 +168,19 @@
         <tbody id="slist-body"></tbody>
       </table>
     </div>
+
+    <aside class="tools-handoff" aria-label="Next steps">
+      <h3>Next with this brief</h3>
+      <p>Carry the same concept into publish copy or campaign assets. Campaign Kit’s Build pack is free; AI render needs purchased credits.</p>
+      <div class="tools-handoff-actions">
+        <a href="/video-seo" class="btn btn-ghost">Use brief in Video SEO</a>
+        <a href="/campaign-kit" class="btn btn-primary">Use brief in Campaign Kit</a>
+      </div>
+    </aside>
   </div>
 
   <p class="slist-footer-note">
-    Pair with <a href="/video-seo">Video SEO</a> for publish copy or <a href="/campaign-kit">Campaign Kit</a> for thumbs and teaser prompts from the same brief.
-    For captions and timeline tools, see <a href="/download">Keyweaver plugins</a>.
+    Free forever - no credits. For captions and timeline tools, see <a href="/download">Keyweaver plugins</a>.
   </p>
 </main>
 

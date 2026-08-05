@@ -135,6 +135,10 @@
   align-items: center;
 }
 
+.slist-actions .tools-form-note {
+  flex: 1 1 100%;
+}
+
 .slist-results {
   display: none;
   margin-top: 2rem;

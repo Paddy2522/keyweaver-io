@@ -154,6 +154,10 @@
   margin-top: 0.25rem;
 }
 
+.vseo-actions .tools-form-note {
+  flex: 1 1 100%;
+}
+
 .vseo-actions .btn-lg {
   height: 42px;
   padding: 0 1.35rem;

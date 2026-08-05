@@ -273,6 +273,8 @@
       ' · ' + shots.length + ' shots · ~' + formatTime(total).replace(/^~/, '') +
       ' total (target ' + formatTime(meta.duration).replace(/^~/, '') + '). Edit freely, then copy or download.';
 
+    var empty = $('slist-empty');
+    if (empty) empty.classList.add('is-hidden');
     $('slist-results').classList.add('is-visible');
     lastShots = shots;
     lastMeta = meta;
@@ -401,9 +403,11 @@
       var banner = $('slist-handoff-banner');
       banner.style.display = 'block';
       banner.innerHTML =
-        'Prefilling concept from your last <a href="/' +
+        'Using your last <a href="/' +
         (source === 'Campaign Kit' ? 'campaign-kit' : 'video-seo') +
-        '">' + source + '</a> brief.';
+        '">' +
+        source +
+        '</a> brief in this shot list. Edit freely, then generate - still free, no credits.';
       return 'handoff';
     }
     return null;
@@ -432,6 +436,7 @@
     var concept = cleanText($('slist-concept').value);
     if (concept.length < 12) {
       showError('Add a short concept (at least a sentence) so the shot list has something to hang on.');
+      $('slist-concept').focus();
       return;
     }
     var duration = parseInt($('slist-duration').value, 10) || 60;
@@ -449,9 +454,24 @@
       savedAt: Date.now()
     });
 
-    var shots = generate(opts);
-    render(shots, opts);
-    $('slist-results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    var submit = $('slist-submit');
+    if (submit) {
+      submit.classList.add('is-busy');
+      submit.disabled = true;
+      submit.dataset.prevLabel = submit.textContent;
+      submit.textContent = 'Generating…';
+    }
+    setTimeout(function () {
+      var shots = generate(opts);
+      render(shots, opts);
+      $('slist-results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (submit) {
+        submit.classList.remove('is-busy');
+        submit.disabled = false;
+        if (submit.dataset.prevLabel) submit.textContent = submit.dataset.prevLabel;
+        delete submit.dataset.prevLabel;
+      }
+    }, 10);
   }
 
   function onClear() {
@@ -461,6 +481,8 @@
     showError('');
     $('slist-results').classList.remove('is-visible');
     $('slist-body').innerHTML = '';
+    var empty = $('slist-empty');
+    if (empty) empty.classList.remove('is-hidden');
     $('slist-handoff-banner').style.display = 'none';
     lastShots = [];
     lastMeta = null;

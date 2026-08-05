@@ -2,6 +2,8 @@
   'use strict';
 
   var STORAGE_KEY = 'keyweaver.videoSeo.lastBrief';
+  var CKIT_KEY = 'keyweaver.campaignKit.lastBrief';
+  var SHOT_KEY = 'keyweaver.shotList.lastBrief';
 
   var STOP = {
     a: 1, an: 1, the: 1, and: 1, or: 1, but: 1, in: 1, on: 1, at: 1, to: 1, for: 1,
@@ -380,18 +382,46 @@
   function loadForm() {
     try {
       var raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return;
-      var data = JSON.parse(raw);
-      if (data.brief) $('vseo-brief').value = data.brief;
-      if (data.keywords) $('vseo-keywords').value = data.keywords;
-      if (data.tone) $('vseo-tone').value = data.tone;
-      if (data.cta) $('vseo-cta').value = data.cta;
-      if (data.outline) $('vseo-outline').value = data.outline;
-      if (Array.isArray(data.platforms) && data.platforms.length) {
-        ['youtube', 'tiktok', 'instagram', 'facebook'].forEach(function (p) {
-          var el = $('plat-' + p);
-          if (el) el.checked = data.platforms.indexOf(p) !== -1;
-        });
+      if (raw) {
+        var data = JSON.parse(raw);
+        if (data.brief) $('vseo-brief').value = data.brief;
+        if (data.keywords) $('vseo-keywords').value = data.keywords;
+        if (data.tone) $('vseo-tone').value = data.tone;
+        if (data.cta) $('vseo-cta').value = data.cta;
+        if (data.outline) $('vseo-outline').value = data.outline;
+        if (Array.isArray(data.platforms) && data.platforms.length) {
+          ['youtube', 'tiktok', 'instagram', 'facebook'].forEach(function (p) {
+            var el = $('plat-' + p);
+            if (el) el.checked = data.platforms.indexOf(p) !== -1;
+          });
+        }
+        return;
+      }
+      var ckit = JSON.parse(localStorage.getItem(CKIT_KEY) || 'null');
+      var shot = JSON.parse(localStorage.getItem(SHOT_KEY) || 'null');
+      var handoff = '';
+      var source = '';
+      if (ckit && ckit.brief) {
+        handoff = ckit.brief;
+        source = 'Campaign Kit';
+      } else if (shot && shot.concept) {
+        handoff = shot.concept;
+        source = 'Shot List';
+      }
+      if (handoff) {
+        $('vseo-brief').value = handoff;
+        var note = document.createElement('div');
+        note.className = 'vseo-note';
+        note.setAttribute('role', 'status');
+        note.style.marginTop = '0.75rem';
+        note.innerHTML =
+          'Prefilling from your last <a href="/' +
+          (source === 'Shot List' ? 'shot-list' : 'campaign-kit') +
+          '">' +
+          source +
+          '</a> brief. Generate is still free - no credits.';
+        var hero = document.querySelector('.vseo-hero');
+        if (hero) hero.appendChild(note);
       }
     } catch (e) { /* ignore */ }
   }
@@ -647,6 +677,8 @@
       soft: 600
     }));
 
+    var empty = $('vseo-empty');
+    if (empty) empty.classList.add('is-hidden');
     $('vseo-results').classList.add('is-visible');
     $('vseo-results').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
@@ -669,8 +701,23 @@
       return;
     }
 
+    var submit = $('vseo-submit');
+    if (submit) {
+      submit.classList.add('is-busy');
+      submit.disabled = true;
+      submit.dataset.prevLabel = submit.textContent;
+      submit.textContent = 'Generating…';
+    }
     saveForm(data);
-    renderResults(data);
+    setTimeout(function () {
+      renderResults(data);
+      if (submit) {
+        submit.classList.remove('is-busy');
+        submit.disabled = false;
+        if (submit.dataset.prevLabel) submit.textContent = submit.dataset.prevLabel;
+        delete submit.dataset.prevLabel;
+      }
+    }, 10);
   }
 
   function clearAll() {
@@ -687,6 +734,8 @@
     $('vseo-results-body').innerHTML = '';
     $('vseo-extras-body').innerHTML = '';
     $('vseo-jump').innerHTML = '';
+    var empty = $('vseo-empty');
+    if (empty) empty.classList.remove('is-hidden');
     try { localStorage.removeItem(STORAGE_KEY); } catch (e) { /* ignore */ }
     $('vseo-brief').focus();
   }
