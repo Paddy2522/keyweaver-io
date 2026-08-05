@@ -64,14 +64,14 @@
       { framing: 'Logo / end hold', movement: 'Locked', audio: 'Music out', w: 0.12, tag: 'outro' }
     ],
     tutorial: [
-      { framing: 'Cold open - finished result flash', movement: 'Locked or quick push', audio: 'Hook line VO; music hit', w: 0.08, tag: 'hook' },
-      { framing: 'Medium talking - what you’ll learn', movement: 'Locked A-roll', audio: 'Lav; agenda VO', w: 0.12, tag: 'agenda' },
-      { framing: 'Screen / work surface - step 1', movement: 'Locked; cursor-safe framing', audio: 'VO step 1; quiet bed', w: 0.16, tag: 'step' },
-      { framing: 'Close insert - critical click / tool', movement: 'Locked or slight zoom', audio: 'UI SFX; VO tip', w: 0.1, tag: 'insert' },
+      { framing: 'Cold open - show the finished result first', movement: 'Locked or quick push', audio: 'One-line hook VO; music hit', w: 0.08, tag: 'hook' },
+      { framing: 'Medium to camera - who this is for + promise', movement: 'Locked A-roll', audio: 'Lav; short agenda', w: 0.12, tag: 'agenda' },
+      { framing: 'Screen / bench - step 1 (slow enough to follow)', movement: 'Locked; cursor-safe', audio: 'VO step 1; quiet bed', w: 0.16, tag: 'step' },
+      { framing: 'Close insert - the click / tool people miss', movement: 'Locked or slight zoom', audio: 'UI SFX; tip VO', w: 0.1, tag: 'insert' },
       { framing: 'Screen / bench - step 2', movement: 'Locked', audio: 'VO step 2', w: 0.14, tag: 'step' },
-      { framing: 'Over-shoulder - hands-on step 3', movement: 'Gentle follow', audio: 'VO step 3; ambient', w: 0.14, tag: 'step' },
-      { framing: 'Side-by-side / before-after', movement: 'Locked split-friendly', audio: 'VO compare; music lift', w: 0.1, tag: 'compare' },
-      { framing: 'Medium - recap + next step CTA', movement: 'Locked or soft push', audio: 'Lav CTA; music out', w: 0.16, tag: 'cta' }
+      { framing: 'Over-shoulder - hands-on step 3', movement: 'Gentle follow', audio: 'VO step 3; light ambient', w: 0.14, tag: 'step' },
+      { framing: 'Before / after or side-by-side proof', movement: 'Locked split-friendly', audio: 'VO compare; music lift', w: 0.1, tag: 'compare' },
+      { framing: 'Medium - recap in 3 bullets + CTA', movement: 'Locked or soft push', audio: 'Lav CTA; music out', w: 0.16, tag: 'cta' }
     ],
     event: [
       { framing: 'Arrival / venue wide establishing', movement: 'Handheld walk-in or locked wide', audio: 'Crowd bed; music under', w: 0.1, tag: 'est' },

@@ -4,67 +4,37 @@
   var STORAGE_KEY = 'keyweaver.videoSeo.lastBrief';
   var CKIT_KEY = 'keyweaver.campaignKit.lastBrief';
   var SHOT_KEY = 'keyweaver.shotList.lastBrief';
+  var Auth = window.KeyweaverToolsAuth;
+  var BACKEND = (Auth && Auth.BACKEND) || 'https://keyweaver-backend.vercel.app';
+  /** Must match .backend-checkout/lib/video-seo-policy.ts */
+  var AI_CREDITS = 2;
+  /** @type {{ remaining: number, total: number, paidRemaining: number, hasPaid: boolean } | null} */
+  var creditsState = null;
 
-  var STOP = {
-    a: 1, an: 1, the: 1, and: 1, or: 1, but: 1, in: 1, on: 1, at: 1, to: 1, for: 1,
-    of: 1, with: 1, by: 1, from: 1, as: 1, is: 1, are: 1, was: 1, were: 1, be: 1,
-    been: 1, being: 1, this: 1, that: 1, these: 1, those: 1, it: 1, its: 1, we: 1,
-    you: 1, your: 1, our: 1, they: 1, their: 1, i: 1, my: 1, me: 1, he: 1, she: 1,
-    his: 1, her: 1, how: 1, what: 1, when: 1, where: 1, why: 1, who: 1, which: 1,
-    will: 1, can: 1, could: 1, should: 1, would: 1, about: 1, into: 1, over: 1,
-    under: 1, than: 1, then: 1, so: 1, if: 1, not: 1, no: 1, yes: 1, just: 1,
-    also: 1, very: 1, more: 1, most: 1, some: 1, any: 1, all: 1, each: 1, every: 1,
-    video: 1, videos: 1, watch: 1, today: 1, here: 1, there: 1, like: 1, get: 1,
-    got: 1, make: 1, made: 1, using: 1, use: 1, used: 1, show: 1, shows: 1,
-    showing: 1, explain: 1, explains: 1, tutorial: 1
-  };
-
-  var TONE_MAP = {
-    educational: {
-      yt: 'Step-by-step teaching focus.',
-      short: 'Learn this.',
-      fb: 'A practical guide to'
-    },
-    hype: {
-      yt: 'Fast, high-energy breakdown.',
-      short: 'Let’s go.',
-      fb: 'An energetic take on'
-    },
-    calm: {
-      yt: 'Calm, clear walkthrough.',
-      short: 'Quiet, useful take.',
-      fb: 'A calm look at'
-    },
-    casual: {
-      yt: 'Friendly, no-jargon take.',
-      short: 'Real talk.',
-      fb: 'A casual look at'
-    },
-    professional: {
-      yt: 'Clear, practical walkthrough.',
-      short: 'Straight talk, no fluff.',
-      fb: 'A clear look at'
-    },
-    // Legacy saved values
-    clear: { yt: '', short: '', fb: '' },
-    energetic: {
-      yt: 'Fast, high-energy breakdown.',
-      short: 'Let’s go.',
-      fb: 'An energetic take on'
-    }
-  };
-
-  var CTA_MAP = {
+  var CTA_HINTS = {
     none: '',
-    subscribe: 'If this helped, subscribe for more.',
-    comment: 'Drop your question in the comments.',
-    link: 'Link in the description / bio.',
-    follow: 'Follow for more like this.',
-    share: 'Share this with someone who needs it.'
+    subscribe: 'Ask viewers to subscribe if this helped.',
+    comment: 'Ask one specific question in the comments.',
+    link: 'Point to the link in description / bio.',
+    follow: 'Ask them to follow for more like this.',
+    share: 'Ask them to share with someone who needs it.'
   };
 
   function $(id) {
     return document.getElementById(id);
+  }
+
+  function getToken() {
+    if (Auth && Auth.getToken) return Auth.getToken();
+    try {
+      return localStorage.getItem('cc_token') || '';
+    } catch (e) {
+      return '';
+    }
+  }
+
+  function loginHref() {
+    return Auth && Auth.loginUrl ? Auth.loginUrl('/video-seo') : '/login?next=/video-seo';
   }
 
   function cleanText(s) {
@@ -75,99 +45,12 @@
       .trim();
   }
 
-  function sentenceCase(s) {
-    s = cleanText(s);
-    if (!s) return '';
-    return s.charAt(0).toUpperCase() + s.slice(1);
-  }
-
-  function titleCaseWord(w) {
-    if (!w) return w;
-    if (/^[A-Z0-9]{2,}$/.test(w)) return w;
-    return w.charAt(0).toUpperCase() + w.slice(1);
-  }
-
-  function toTitleCase(s) {
-    var small = { and: 1, or: 1, the: 1, a: 1, an: 1, of: 1, in: 1, on: 1, for: 1, to: 1, with: 1 };
-    return cleanText(s)
-      .split(/\s+/)
-      .map(function (w, i) {
-        var lower = w.toLowerCase();
-        if (i > 0 && small[lower]) return lower;
-        return titleCaseWord(w);
-      })
-      .join(' ');
-  }
-
-  function splitSentences(text) {
-    return cleanText(text)
-      .replace(/([.!?])\s+/g, '$1\n')
-      .split(/\n+/)
-      .map(function (s) { return s.replace(/^[\u2022\-\*]\s*/, '').trim(); })
-      .filter(Boolean);
-  }
-
-  function extractKeywords(brief, seeds) {
-    var bag = {};
-    var words = cleanText(brief).toLowerCase().replace(/[^a-z0-9\s\-']/g, ' ').split(/\s+/);
-    words.forEach(function (w) {
-      if (w.length < 3 || STOP[w]) return;
-      bag[w] = (bag[w] || 0) + 1;
-    });
-
-    // Prefer bigrams that appear
-    var bigrams = [];
-    for (var i = 0; i < words.length - 1; i++) {
-      var a = words[i];
-      var b = words[i + 1];
-      if (STOP[a] || STOP[b] || a.length < 3 || b.length < 3) continue;
-      bigrams.push(a + ' ' + b);
-    }
-    var biCount = {};
-    bigrams.forEach(function (bg) { biCount[bg] = (biCount[bg] || 0) + 1; });
-
-    var ranked = Object.keys(bag)
-      .sort(function (x, y) { return bag[y] - bag[x] || y.length - x.length; });
-
-    var biRanked = Object.keys(biCount)
-      .sort(function (x, y) { return biCount[y] - biCount[x] || y.length - x.length; });
-
-    var seedList = cleanText(seeds)
+  function parseSeeds(raw) {
+    return cleanText(raw)
       .split(/[,;\n]+/)
-      .map(function (s) { return s.trim().toLowerCase(); })
-      .filter(function (s) { return s.length > 1; });
-
-    var out = [];
-    seedList.forEach(function (s) {
-      if (out.indexOf(s) === -1) out.push(s);
-    });
-    biRanked.slice(0, 4).forEach(function (s) {
-      if (out.indexOf(s) === -1) out.push(s);
-    });
-    ranked.slice(0, 10).forEach(function (s) {
-      if (out.indexOf(s) === -1) out.push(s);
-    });
-    return out.slice(0, 14);
-  }
-
-  function firstHook(brief) {
-    var sents = splitSentences(brief);
-    var first = sents[0] || brief;
-    first = first.replace(/[.!?]+$/, '');
-    if (first.length > 90) first = first.slice(0, 87).replace(/\s+\S*$/, '') + '…';
-    return sentenceCase(first);
-  }
-
-  function topicPhrase(keywords, brief) {
-    if (keywords[0]) return toTitleCase(keywords[0]);
-    var hook = firstHook(brief);
-    return hook.length > 48 ? hook.slice(0, 45).replace(/\s+\S*$/, '') : hook;
-  }
-
-  function clip(s, max) {
-    s = cleanText(s);
-    if (s.length <= max) return s;
-    return s.slice(0, max - 1).replace(/\s+\S*$/, '').replace(/[,;:.\-]+$/, '') + '…';
+      .map(function (s) { return s.trim(); })
+      .filter(function (s) { return s.length > 1; })
+      .slice(0, 12);
   }
 
   function parseOutline(outline) {
@@ -178,185 +61,6 @@
       })
       .filter(Boolean)
       .slice(0, 12);
-  }
-
-  function formatChapters(items) {
-    if (!items.length) return '';
-    var lines = ['0:00 Intro'];
-    var t = 45;
-    items.forEach(function (item, idx) {
-      var m = Math.floor(t / 60);
-      var s = t % 60;
-      var stamp = m + ':' + String(s).padStart(2, '0');
-      lines.push(stamp + ' ' + sentenceCase(item));
-      t += 40 + (idx % 3) * 15;
-    });
-    return lines.join('\n');
-  }
-
-  function hashtagify(keywords, limit, style) {
-    var tags = [];
-    keywords.forEach(function (k) {
-      var tag = '#' + k.replace(/[^a-z0-9]+/gi, '').replace(/^\d+/, '');
-      if (tag.length < 3 || tag.length > 28) return;
-      if (tags.indexOf(tag) === -1) tags.push(tag);
-    });
-    if (style === 'tiktok') {
-      ['#fyp', '#foryou', '#viral'].forEach(function (t) {
-        if (tags.indexOf(t) === -1) tags.push(t);
-      });
-    } else if (style === 'ig') {
-      ['#reels', '#creators', '#contentcreator'].forEach(function (t) {
-        if (tags.indexOf(t) === -1) tags.push(t);
-      });
-    }
-    return tags.slice(0, limit);
-  }
-
-  function ytTags(keywords) {
-    var tags = keywords.slice();
-    ['video', 'tutorial', 'how to', 'tips', 'guide'].forEach(function (t) {
-      if (tags.indexOf(t) === -1) tags.push(t);
-    });
-    return tags.slice(0, 18).join(', ');
-  }
-
-  function buildCta(ctaKey, platform) {
-    var base = CTA_MAP[ctaKey] || '';
-    if (!base) return '';
-    if (platform === 'youtube' && ctaKey === 'subscribe') {
-      return 'If this was useful, subscribe for more practical video workflows.';
-    }
-    if (platform === 'tiktok' && ctaKey === 'follow') {
-      return 'Follow for more short tips.';
-    }
-    if (platform === 'instagram' && ctaKey === 'link') {
-      return 'Link in bio.';
-    }
-    return base;
-  }
-
-  function buildYoutube(brief, keywords, tone, cta, outlineItems) {
-    var topic = topicPhrase(keywords, brief);
-    var hook = firstHook(brief);
-    var sents = splitSentences(brief);
-    var bodyBits = sents.slice(0, 4).map(sentenceCase);
-    var toneBit = (TONE_MAP[tone] || TONE_MAP.clear).yt;
-    var ctaLine = buildCta(cta, 'youtube');
-
-    var titles = [
-      clip(topic + (keywords[1] ? ' - ' + toTitleCase(keywords[1]) : ''), 70),
-      clip('How to ' + topic.replace(/^How To /i, ''), 70),
-      clip(hook.replace(/\.$/, '') + (topic ? ' | ' + topic : ''), 70)
-    ];
-    // Deduplicate similar titles
-    var uniq = [];
-    titles.forEach(function (t) {
-      var key = t.toLowerCase();
-      if (uniq.every(function (u) { return u.toLowerCase() !== key; })) uniq.push(t);
-    });
-    while (uniq.length < 3) {
-      uniq.push(clip(topic + ' Tips That Actually Help', 70));
-    }
-
-    var desc = [];
-    desc.push(hook + (hook.slice(-1).match(/[.!?]/) ? '' : '.'));
-    desc.push('');
-    if (toneBit) desc.push(toneBit);
-    if (bodyBits.length) {
-      desc.push('');
-      desc.push('In this video:');
-      bodyBits.forEach(function (b) {
-        desc.push('• ' + clip(b.replace(/[.!?]+$/, ''), 110));
-      });
-    }
-    if (keywords.length) {
-      desc.push('');
-      desc.push('Topics: ' + keywords.slice(0, 6).map(toTitleCase).join(' · '));
-    }
-    if (ctaLine) {
-      desc.push('');
-      desc.push(ctaLine);
-    }
-    var chapters = formatChapters(outlineItems);
-    if (chapters) {
-      desc.push('');
-      desc.push('Chapters');
-      desc.push(chapters);
-    }
-    desc.push('');
-    desc.push(hashtagify(keywords, 5, 'yt').join(' '));
-
-    var pinned = [
-      'Thanks for watching.',
-      keywords[0] ? 'Biggest takeaway: ' + sentenceCase(keywords[0]) + '.' : '',
-      ctaLine || 'What should I cover next? Tell me below.',
-      outlineItems[0] ? 'Chapter tip: start at “' + sentenceCase(outlineItems[0]) + '” if you’re short on time.' : ''
-    ].filter(Boolean).join(' ');
-
-    var thumbs = [
-      clip(toTitleCase(keywords[0] || topic).toUpperCase(), 28),
-      clip((keywords[1] ? toTitleCase(keywords[1]) : 'WATCH THIS').toUpperCase(), 24),
-      clip(('HOW TO ' + (keywords[0] || 'DO THIS')).toUpperCase(), 26)
-    ];
-
-    return {
-      titles: uniq.slice(0, 3),
-      description: desc.join('\n').replace(/\n{3,}/g, '\n\n').trim(),
-      tags: ytTags(keywords),
-      pinned: pinned,
-      chapters: chapters || 'Add an outline above to generate chapter placeholders.',
-      thumbs: thumbs
-    };
-  }
-
-  function buildShortDesc(brief, keywords, tone, cta, platform) {
-    var hook = firstHook(brief);
-    var sents = splitSentences(brief);
-    var second = sents[1] ? sentenceCase(sents[1].replace(/[.!?]+$/, '')) : '';
-    var toneBit = (TONE_MAP[tone] || TONE_MAP.clear).short;
-    var ctaLine = buildCta(cta, platform);
-    var tags = hashtagify(keywords, platform === 'tiktok' ? 6 : 8, platform === 'tiktok' ? 'tiktok' : 'ig');
-
-    var parts = [hook + (hook.slice(-1).match(/[.!?]/) ? '' : '.')];
-    if (second) parts.push(clip(second, 120) + (second.slice(-1).match(/[.!?]/) ? '' : '.'));
-    if (toneBit) parts.push(toneBit);
-    if (ctaLine) parts.push(ctaLine);
-    parts.push('');
-    parts.push(tags.join(' '));
-
-    var text = parts.join(' ').replace(/\s+\n/g, '\n').replace(/\n /g, '\n');
-    // Soft platform limits
-    var limit = platform === 'tiktok' ? 2200 : 2100;
-    return {
-      description: clip(text, limit),
-      hashtags: tags.join(' ')
-    };
-  }
-
-  function buildFacebook(brief, keywords, tone, cta) {
-    var hook = firstHook(brief);
-    var sents = splitSentences(brief);
-    var lead = (TONE_MAP[tone] || TONE_MAP.clear).fb;
-    var topic = topicPhrase(keywords, brief);
-    var ctaLine = buildCta(cta, 'facebook');
-    var lines = [];
-    lines.push((lead ? lead + ' ' : '') + topic.toLowerCase() + '.');
-    lines.push('');
-    lines.push(hook + (hook.slice(-1).match(/[.!?]/) ? '' : '.'));
-    if (sents[1]) {
-      lines.push('');
-      lines.push(sentenceCase(sents[1]));
-    }
-    if (keywords.length) {
-      lines.push('');
-      lines.push(keywords.slice(0, 4).map(toTitleCase).join(' · '));
-    }
-    if (ctaLine) {
-      lines.push('');
-      lines.push(ctaLine);
-    }
-    return clip(lines.join('\n'), 1800);
   }
 
   function selectedPlatforms() {
@@ -430,11 +134,253 @@
           (source === 'Shot List' ? 'shot-list' : 'campaign-kit') +
           '">' +
           source +
-          '</a> brief. Generate is still free - no credits.';
+          '</a> brief. Use AI write for paste-ready copy, or Free structure for empty fields.';
         var hero = document.querySelector('.vseo-hero');
         if (hero) hero.appendChild(note);
       }
     } catch (e) { /* ignore */ }
+  }
+
+  function purchaseLinksHtml() {
+    return (
+      '<span class="tools-inline-cta">' +
+      '<a href="/pricing">Buy credits</a>' +
+      '<a href="/account">Account</a>' +
+      '</span>'
+    );
+  }
+
+  function setFormError(msg, allowHtml, kind) {
+    var err = $('vseo-error');
+    if (!err) return;
+    if (allowHtml) err.innerHTML = msg || '';
+    else err.textContent = msg || '';
+    err.classList.toggle('is-visible', !!msg);
+    err.classList.toggle('is-ok', kind === 'ok');
+  }
+
+  function setBusy(btn, busy, label) {
+    if (!btn) return;
+    if (busy) {
+      btn.dataset.prevLabel = btn.textContent;
+      btn.textContent = label || 'Working…';
+      btn.classList.add('is-busy');
+      btn.disabled = true;
+    } else {
+      if (btn.dataset.prevLabel) btn.textContent = btn.dataset.prevLabel;
+      delete btn.dataset.prevLabel;
+      btn.classList.remove('is-busy');
+      btn.disabled = false;
+    }
+  }
+
+  function syncCreditActions() {
+    var token = getToken();
+    var paidRemaining =
+      token && creditsState ? creditsState.paidRemaining : token ? null : 0;
+    if (Auth && Auth.syncCreditActions) {
+      Auth.syncCreditActions({
+        signin: $('vseo-credits-signin'),
+        buy: $('vseo-credits-buy'),
+        account: $('vseo-credits-account'),
+        nextPath: '/video-seo',
+        signedIn: !!token,
+        paidRemaining: paidRemaining,
+        signinLabel: 'Sign in'
+      });
+      return;
+    }
+    var signin = $('vseo-credits-signin');
+    var buy = $('vseo-credits-buy');
+    var account = $('vseo-credits-account');
+    var zeroPaid = !!(token && creditsState && creditsState.paidRemaining <= 0);
+    if (signin) {
+      signin.hidden = !!token;
+      if (!token) {
+        signin.href = loginHref();
+        signin.className = 'btn btn-primary';
+      }
+    }
+    if (buy) {
+      buy.hidden = false;
+      buy.className = zeroPaid ? 'btn btn-primary' : 'btn btn-ghost';
+    }
+    if (account) account.hidden = !token;
+  }
+
+  function aiGateReason() {
+    if (!getToken()) {
+      return {
+        ok: false,
+        reason:
+          'Sign in to use AI write. Needs purchased credits - <a href="' +
+          loginHref() +
+          '">Sign in</a> · <a href="/pricing">Buy credits</a>'
+      };
+    }
+    if (!creditsState) {
+      return { ok: false, reason: 'Checking purchased credit balance…' };
+    }
+    if (!creditsState.hasPaid || creditsState.paidRemaining <= 0) {
+      return {
+        ok: false,
+        reason:
+          'Signed in with 0 purchased credits. Free signup credits cannot cover AI write. ' +
+          purchaseLinksHtml()
+      };
+    }
+    if (creditsState.paidRemaining < AI_CREDITS) {
+      return {
+        ok: false,
+        reason:
+          'Need ' +
+          AI_CREDITS +
+          ' purchased credits (you have ' +
+          creditsState.paidRemaining +
+          '). ' +
+          purchaseLinksHtml()
+      };
+    }
+    return {
+      ok: true,
+      reason: 'Will charge ' + AI_CREDITS + ' purchased credits for a full multi-platform write.'
+    };
+  }
+
+  function syncAiButton() {
+    var btn = $('vseo-ai');
+    var note = $('vseo-cost-note');
+    var gate = aiGateReason();
+    if (btn && !btn.classList.contains('is-busy')) {
+      btn.disabled = !gate.ok;
+      btn.classList.toggle('is-disabled', !gate.ok);
+      btn.title = gate.ok
+        ? 'Charges ' + AI_CREDITS + ' purchased credits'
+        : 'Purchased credits required - see Pricing';
+    }
+    if (note) {
+      if (!getToken()) {
+        note.innerHTML =
+          'AI write needs sign-in + purchased credits. <a href="' +
+          loginHref() +
+          '">Sign in</a> · Free structure never charges.';
+      } else if (!creditsState) {
+        note.textContent = 'Checking purchased credit balance…';
+      } else if (!gate.ok) {
+        note.innerHTML =
+          'Signed in · need purchased credits for AI write. ' + purchaseLinksHtml();
+      } else {
+        note.textContent =
+          'AI write charges ' +
+          AI_CREDITS +
+          ' purchased credits (you have ' +
+          creditsState.paidRemaining +
+          '). Free structure never charges.';
+      }
+    }
+  }
+
+  function updateCreditsPanel() {
+    var bal = $('vseo-balance');
+    var meter = $('vseo-credit-meter');
+    var paidEl = $('vseo-paid-value');
+    var poolEl = $('vseo-pool-value');
+    var token = getToken();
+    syncCreditActions();
+    if (!token) {
+      creditsState = null;
+      if (meter) meter.hidden = true;
+      if (bal) {
+        bal.className = 'tools-credit-status is-warn';
+        bal.textContent =
+          'Sign in to see purchased credits and unlock AI write. Free structure stays free.';
+      }
+      syncAiButton();
+      return;
+    }
+    if (bal) {
+      bal.className = 'tools-credit-status';
+      bal.textContent = 'Checking purchased credit balance…';
+    }
+
+    function apply(snap) {
+      if (!bal) return;
+      if (!snap || !snap.ok) {
+        creditsState = null;
+        if (meter) meter.hidden = true;
+        if (snap && snap.unauthorized) {
+          bal.className = 'tools-credit-status is-warn';
+          bal.innerHTML =
+            'Session expired. <a href="' + loginHref() + '">Sign in</a> to unlock AI write.';
+        } else {
+          bal.className = 'tools-credit-status is-err';
+          bal.innerHTML =
+            'Could not load credits. Try <a href="/account">Account</a> or refresh.';
+        }
+        syncCreditActions();
+        syncAiButton();
+        return;
+      }
+      creditsState = {
+        remaining: snap.remaining,
+        total: snap.total,
+        paidRemaining: snap.paidRemaining,
+        hasPaid: snap.hasPaid
+      };
+      if (meter) meter.hidden = false;
+      if (paidEl) {
+        paidEl.textContent = String(snap.paidRemaining);
+        paidEl.classList.toggle('is-zero', snap.paidRemaining <= 0);
+        paidEl.classList.toggle('is-ok', snap.paidRemaining > 0);
+      }
+      if (poolEl) poolEl.textContent = snap.remaining + ' / ' + snap.total;
+      if (snap.paidRemaining <= 0) {
+        bal.className = 'tools-credit-status is-warn';
+        bal.innerHTML =
+          'Signed in with <strong>0 purchased credits</strong>. Free signup credits cannot run AI write. ' +
+          purchaseLinksHtml();
+      } else {
+        bal.className = 'tools-credit-status is-ok';
+        bal.textContent =
+          'Ready for AI write. Purchased credits: ' +
+          snap.paidRemaining +
+          ' (cost ' +
+          AI_CREDITS +
+          ' per generate).';
+      }
+      syncCreditActions();
+      syncAiButton();
+    }
+
+    if (Auth && Auth.fetchCredits) {
+      Auth.fetchCredits().then(apply);
+      return;
+    }
+    fetch(BACKEND + '/api/captio/credits', {
+      headers: { Authorization: 'Bearer ' + token }
+    })
+      .then(function (r) {
+        if (r.status === 401) {
+          try { localStorage.removeItem('cc_token'); } catch (e) { /* ignore */ }
+          return { ok: false, unauthorized: true };
+        }
+        return r.ok
+          ? r.json().then(function (data) {
+              var paid = Number(data.paid_credits_remaining != null ? data.paid_credits_remaining : 0);
+              return {
+                ok: true,
+                remaining: Number(data.credits_remaining || 0),
+                total: Number(data.credits_total || 0),
+                paidRemaining: paid,
+                hasPaid: paid > 0 || !!data.has_paid_credits
+              };
+            })
+          : { ok: false, unauthorized: false };
+      })
+      .then(apply)
+      .catch(function () {
+        apply({ ok: false, unauthorized: false });
+      });
   }
 
   function meterClass(len, soft, hard) {
@@ -472,6 +418,7 @@
       input.type = 'text';
     }
     input.value = opts.value || '';
+    if (opts.placeholder) input.placeholder = opts.placeholder;
     input.setAttribute('aria-label', opts.label);
 
     function updateMeter() {
@@ -487,9 +434,14 @@
     });
 
     wrap.appendChild(head);
+    if (opts.tip) {
+      var tip = document.createElement('p');
+      tip.className = 'vseo-field-tip';
+      tip.textContent = opts.tip;
+      wrap.appendChild(tip);
+    }
     wrap.appendChild(input);
     wrap._getValue = function () { return input.value; };
-    wrap._copyBtn = btn;
     return wrap;
   }
 
@@ -562,17 +514,123 @@
     return sec;
   }
 
-  function renderResults(data) {
+  function showResultsShell(mode) {
+    var empty = $('vseo-empty');
+    if (empty) empty.classList.add('is-hidden');
+    $('vseo-results').classList.add('is-visible');
+    var title = $('vseo-results-title');
+    var sub = $('vseo-results-sub');
+    if (mode === 'structure') {
+      if (title) title.textContent = 'Free structure pack';
+      if (sub) {
+        sub.textContent =
+          'Empty fields with length tips. Fill these yourself - or run AI write for draft copy.';
+      }
+    } else {
+      if (title) title.textContent = 'AI copy to paste';
+      if (sub) {
+        sub.textContent =
+          'Generated for your platforms. Edit freely, then copy field-by-field or copy all.';
+      }
+    }
+  }
+
+  function renderChecklist(items) {
+    var host = $('vseo-checklist');
+    if (!host) return;
+    host.innerHTML = '';
+    if (!items || !items.length) {
+      host.hidden = true;
+      return;
+    }
+    host.hidden = false;
+    var h = document.createElement('h3');
+    h.textContent = 'Before you publish';
+    host.appendChild(h);
+    var ul = document.createElement('ul');
+    items.forEach(function (item) {
+      var li = document.createElement('li');
+      li.textContent = item;
+      ul.appendChild(li);
+    });
+    host.appendChild(ul);
+  }
+
+  function structurePlaceholders(seeds, outlineItems, cta) {
+    var seedHint = seeds.length
+      ? 'Try weaving: ' + seeds.slice(0, 4).join(', ')
+      : 'Add a searchable phrase + a benefit (under ~70 chars).';
+    var ctaHint = CTA_HINTS[cta] || '';
+    return {
+      youtube: {
+        titles: ['', '', ''],
+        titleTips: [
+          'Curiosity + benefit. Not “A video where…”.',
+          'Alternate angle or keyword-forward option.',
+          'Shorter punchy option for mobile truncation.'
+        ],
+        description: '',
+        descriptionTip:
+          'Hook in line 1. Then what they learn, who it’s for, timestamps if you have them. ' +
+          seedHint +
+          (ctaHint ? ' ' + ctaHint : ''),
+        tags: seeds.slice(0, 8).join(', '),
+        tagsTip: 'Comma-separated. Mix broad + specific. Seeds prefilled when you provided them.',
+        chapters: outlineItems.length
+          ? outlineItems
+              .map(function (item, i) {
+                var t = i === 0 ? '0:00' : String(Math.floor((45 + i * 50) / 60)) + ':' + String((45 + i * 50) % 60).padStart(2, '0');
+                return t + ' ' + item;
+              })
+              .join('\n')
+          : '',
+        thumbs: ['', ''],
+        pinned: ctaHint
+      },
+      short: {
+        caption: '',
+        captionTip:
+          'First line is the hook. Keep it skimmable. ' + seedHint + (ctaHint ? ' ' + ctaHint : ''),
+        hashtags: seeds
+          .slice(0, 5)
+          .map(function (s) {
+            return '#' + s.replace(/[^a-z0-9]+/gi, '');
+          })
+          .filter(function (t) {
+            return t.length > 2;
+          })
+          .join(' ')
+      },
+      facebook: {
+        post: '',
+        tip: 'Lead with the outcome, then one detail from the brief. ' + (ctaHint || '')
+      }
+    };
+  }
+
+  function renderStructure(data) {
     var host = $('vseo-results-body');
     var jump = $('vseo-jump');
     var extras = $('vseo-extras-body');
+    var extrasWrap = $('vseo-extras');
     host.innerHTML = '';
     jump.innerHTML = '';
-    extras.innerHTML = '';
+    if (extras) extras.innerHTML = '';
 
-    var keywords = extractKeywords(data.brief, data.keywords);
+    var seeds = parseSeeds(data.keywords);
     var outlineItems = parseOutline(data.outline);
-    var yt = null;
+    var pack = structurePlaceholders(seeds, outlineItems, data.cta);
+
+    renderChecklist([
+      'Write titles under ~70 characters - benefit + topic, not a synopsis',
+      'Put the hook in the first two lines of every description',
+      'Use 3–8 real tags/hashtags people search - skip #fyp spam walls',
+      'Match tone to the platform (YouTube can be longer; Shorts/Reels stay punchy)',
+      'Preview the title truncated on mobile before you publish'
+    ]);
+
+    showResultsShell('structure');
+    if (extrasWrap) extrasWrap.hidden = data.platforms.indexOf('youtube') === -1;
 
     data.platforms.forEach(function (p) {
       var a = document.createElement('a');
@@ -586,149 +644,464 @@
       jump.appendChild(a);
 
       if (p === 'youtube') {
-        yt = buildYoutube(data.brief, keywords, data.tone, data.cta, outlineItems);
-        host.appendChild(platformSection(
-          'youtube',
-          'YouTube - paste into upload details',
-          'Aim for a clear title under ~70 characters. Description can be longer; front-load the hook.',
-          [
-            { label: 'Paste into Title (option A)', value: yt.titles[0], limit: 70, soft: 60 },
-            { label: 'Paste into Title (option B)', value: yt.titles[1], limit: 70, soft: 60 },
-            { label: 'Paste into Title (option C)', value: yt.titles[2], limit: 70, soft: 60 },
-            { label: 'Paste into Description', value: yt.description, multiline: true, rows: 10, limit: 5000, soft: 3000 },
-            { label: 'Paste into Tags', value: yt.tags, multiline: true, rows: 2, limit: 500, soft: 400 }
-          ],
-          function (blocks) {
-            return [
-              'Title A: ' + blocks[0]._getValue(),
-              'Title B: ' + blocks[1]._getValue(),
-              'Title C: ' + blocks[2]._getValue(),
-              '',
-              blocks[3]._getValue(),
-              '',
-              'Tags: ' + blocks[4]._getValue()
-            ].join('\n');
-          }
-        ));
-      }
-
-      if (p === 'tiktok') {
-        var tt = buildShortDesc(data.brief, keywords, data.tone, data.cta, 'tiktok');
-        host.appendChild(platformSection(
-          'tiktok',
-          'TikTok - paste into post caption',
-          'Lead with the hook. Keep hashtags relevant - a handful beats a wall of spam.',
-          [
-            { label: 'Paste into Caption', value: tt.description, multiline: true, rows: 6, limit: 2200, soft: 300 },
-            { label: 'Paste into Hashtags', value: tt.hashtags, multiline: true, rows: 2, limit: 200, soft: 150 }
-          ],
-          function (blocks) {
-            return blocks[0]._getValue() + '\n\n' + blocks[1]._getValue();
-          }
-        ));
-      }
-
-      if (p === 'instagram') {
-        var ig = buildShortDesc(data.brief, keywords, data.tone, data.cta, 'instagram');
-        host.appendChild(platformSection(
-          'instagram',
-          'Instagram - paste into Reel / post',
-          'Caption first, hashtags after a break. Soft limit around a short scroll for mobile.',
-          [
-            { label: 'Paste into Caption', value: ig.description, multiline: true, rows: 6, limit: 2100, soft: 400 },
-            { label: 'Paste into Hashtags', value: ig.hashtags, multiline: true, rows: 2, limit: 300, soft: 220 }
-          ],
-          function (blocks) {
-            return blocks[0]._getValue() + '\n\n' + blocks[1]._getValue();
-          }
-        ));
-      }
-
-      if (p === 'facebook') {
-        var fb = buildFacebook(data.brief, keywords, data.tone, data.cta);
-        host.appendChild(platformSection(
-          'facebook',
-          'Facebook - paste into post',
-          'Conversational and skimmable. Native posts usually perform better than link dumps.',
-          [
-            { label: 'Paste into Post text', value: fb, multiline: true, rows: 7, limit: 1800, soft: 500 }
-          ],
-          function (blocks) { return blocks[0]._getValue(); }
-        ));
+        host.appendChild(
+          platformSection(
+            'youtube',
+            'YouTube - fill upload details',
+            'Empty fields on purpose. AI write fills these if you want a draft.',
+            [
+              {
+                label: 'Title option A',
+                value: '',
+                placeholder: 'e.g. CapCut Text Tricks That Keep Viewers Watching',
+                tip: pack.youtube.titleTips[0],
+                limit: 70,
+                soft: 60
+              },
+              {
+                label: 'Title option B',
+                value: '',
+                placeholder: 'e.g. How I Edit TikToks Faster in CapCut',
+                tip: pack.youtube.titleTips[1],
+                limit: 70,
+                soft: 60
+              },
+              {
+                label: 'Title option C',
+                value: '',
+                placeholder: 'e.g. Stop Making CapCut Look Amateur',
+                tip: pack.youtube.titleTips[2],
+                limit: 70,
+                soft: 60
+              },
+              {
+                label: 'Description',
+                value: '',
+                tip: pack.youtube.descriptionTip,
+                multiline: true,
+                rows: 10,
+                limit: 5000,
+                soft: 3000
+              },
+              {
+                label: 'Tags',
+                value: pack.youtube.tags,
+                tip: pack.youtube.tagsTip,
+                multiline: true,
+                rows: 2,
+                limit: 500,
+                soft: 400
+              }
+            ],
+            function (blocks) {
+              return blocks
+                .map(function (b) {
+                  return b._getValue();
+                })
+                .filter(Boolean)
+                .join('\n\n');
+            }
+          )
+        );
+        if (extras) {
+          extras.appendChild(
+            fieldBlock({
+              label: 'Pinned comment draft',
+              value: pack.youtube.pinned,
+              tip: 'Optional. One clear CTA or question.',
+              multiline: true,
+              rows: 3,
+              limit: 400,
+              soft: 280
+            })
+          );
+          extras.appendChild(
+            fieldBlock({
+              label: 'Chapter placeholders',
+              value: pack.youtube.chapters,
+              tip: outlineItems.length
+                ? 'From your outline - adjust timestamps after you edit.'
+                : 'Add outline beats above, or write chapters after the cut.',
+              multiline: true,
+              rows: 6,
+              limit: 2000,
+              soft: 1200
+            })
+          );
+          extras.appendChild(
+            fieldBlock({
+              label: 'Thumb text idea A',
+              value: '',
+              placeholder: '3–5 BIG WORDS',
+              tip: 'Keep under ~6 words for readability.',
+              limit: 28,
+              soft: 22
+            })
+          );
+          extras.appendChild(
+            fieldBlock({
+              label: 'Thumb text idea B',
+              value: '',
+              placeholder: 'RESULT / MISTAKE / TIP',
+              limit: 24,
+              soft: 20
+            })
+          );
+        }
+      } else if (p === 'tiktok' || p === 'instagram') {
+        var label = p === 'tiktok' ? 'TikTok' : 'Instagram';
+        host.appendChild(
+          platformSection(
+            p,
+            label + ' - caption',
+            'Write a hook first. Hashtags optional and light.',
+            [
+              {
+                label: 'Caption',
+                value: '',
+                tip: pack.short.captionTip,
+                multiline: true,
+                rows: 6,
+                limit: p === 'tiktok' ? 2200 : 2100,
+                soft: 400
+              },
+              {
+                label: 'Hashtags',
+                value: pack.short.hashtags,
+                tip: 'Seeds converted when provided. Trim to what fits the niche.',
+                multiline: true,
+                rows: 2,
+                limit: 300,
+                soft: 200
+              }
+            ],
+            function (blocks) {
+              return blocks
+                .map(function (b) {
+                  return b._getValue();
+                })
+                .filter(Boolean)
+                .join('\n\n');
+            }
+          )
+        );
+      } else if (p === 'facebook') {
+        host.appendChild(
+          platformSection(
+            'facebook',
+            'Facebook - post',
+            'Lead with the outcome for people skimming the feed.',
+            [
+              {
+                label: 'Post text',
+                value: '',
+                tip: pack.facebook.tip,
+                multiline: true,
+                rows: 7,
+                limit: 1800,
+                soft: 600
+              }
+            ],
+            function (blocks) {
+              return blocks[0] ? blocks[0]._getValue() : '';
+            }
+          )
+        );
       }
     });
 
-    // Extras from YouTube (or generic if YT not selected)
-    if (!yt) {
-      yt = buildYoutube(data.brief, keywords, data.tone, data.cta, outlineItems);
-    }
-
-    extras.appendChild(fieldBlock({
-      label: 'Thumbnail burn-in text ideas (use with Campaign Kit)',
-      value: yt.thumbs.join('\n'),
-      multiline: true,
-      rows: 3,
-      limit: 90,
-      soft: 70
-    }));
-    extras.appendChild(fieldBlock({
-      label: 'Paste into YouTube pinned comment',
-      value: yt.pinned,
-      multiline: true,
-      rows: 3,
-      limit: 400,
-      soft: 280
-    }));
-    extras.appendChild(fieldBlock({
-      label: 'Paste into YouTube chapters (description)',
-      value: yt.chapters,
-      multiline: true,
-      rows: Math.min(8, 2 + outlineItems.length),
-      limit: 800,
-      soft: 600
-    }));
-
-    var empty = $('vseo-empty');
-    if (empty) empty.classList.add('is-hidden');
-    $('vseo-results').classList.add('is-visible');
     $('vseo-results').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
-  function generate() {
-    var err = $('vseo-error');
-    err.classList.remove('is-visible');
-    err.textContent = '';
+  function renderAiCopy(data, copy) {
+    var host = $('vseo-results-body');
+    var jump = $('vseo-jump');
+    var extras = $('vseo-extras-body');
+    var extrasWrap = $('vseo-extras');
+    host.innerHTML = '';
+    jump.innerHTML = '';
+    if (extras) extras.innerHTML = '';
+    renderChecklist([]);
+    showResultsShell('ai');
+    if (extrasWrap) extrasWrap.hidden = !(copy.youtube && data.platforms.indexOf('youtube') !== -1);
 
-    var data = readForm();
+    data.platforms.forEach(function (p) {
+      var a = document.createElement('a');
+      a.href = '#result-' + p;
+      a.textContent = ({
+        youtube: 'YouTube',
+        tiktok: 'TikTok',
+        instagram: 'Instagram',
+        facebook: 'Facebook'
+      })[p];
+      jump.appendChild(a);
+
+      if (p === 'youtube' && copy.youtube) {
+        var yt = copy.youtube;
+        var titles = yt.titles && yt.titles.length ? yt.titles.slice(0, 3) : [''];
+        while (titles.length < 3) titles.push('');
+        host.appendChild(
+          platformSection(
+            'youtube',
+            'YouTube - paste into upload details',
+            'Aim under ~70 characters. Front-load the description hook.',
+            [
+              { label: 'Title option A', value: titles[0], limit: 70, soft: 60 },
+              { label: 'Title option B', value: titles[1], limit: 70, soft: 60 },
+              { label: 'Title option C', value: titles[2], limit: 70, soft: 60 },
+              {
+                label: 'Description',
+                value: yt.description || '',
+                multiline: true,
+                rows: 10,
+                limit: 5000,
+                soft: 3000
+              },
+              {
+                label: 'Tags',
+                value: yt.tags || '',
+                multiline: true,
+                rows: 2,
+                limit: 500,
+                soft: 400
+              }
+            ],
+            function (blocks) {
+              return blocks
+                .map(function (b) {
+                  return b._getValue();
+                })
+                .filter(Boolean)
+                .join('\n\n');
+            }
+          )
+        );
+        if (extras) {
+          if (yt.pinned) {
+            extras.appendChild(
+              fieldBlock({
+                label: 'Pinned comment draft',
+                value: yt.pinned,
+                multiline: true,
+                rows: 3,
+                limit: 400,
+                soft: 280
+              })
+            );
+          }
+          if (yt.chapters) {
+            extras.appendChild(
+              fieldBlock({
+                label: 'Chapters',
+                value: yt.chapters,
+                multiline: true,
+                rows: 6,
+                limit: 2000,
+                soft: 1200
+              })
+            );
+          }
+          (yt.thumbs || []).slice(0, 3).forEach(function (t, i) {
+            extras.appendChild(
+              fieldBlock({
+                label: 'Thumb text idea ' + String.fromCharCode(65 + i),
+                value: t,
+                limit: 28,
+                soft: 22
+              })
+            );
+          });
+        }
+      } else if ((p === 'tiktok' || p === 'instagram') && copy[p]) {
+        var short = copy[p];
+        var label = p === 'tiktok' ? 'TikTok' : 'Instagram';
+        host.appendChild(
+          platformSection(
+            p,
+            label + ' - caption',
+            'Hook first. Trim hashtags if they feel spammy.',
+            [
+              {
+                label: 'Caption',
+                value: short.caption || '',
+                multiline: true,
+                rows: 6,
+                limit: p === 'tiktok' ? 2200 : 2100,
+                soft: 400
+              },
+              {
+                label: 'Hashtags',
+                value: short.hashtags || '',
+                multiline: true,
+                rows: 2,
+                limit: 300,
+                soft: 200
+              }
+            ],
+            function (blocks) {
+              return blocks
+                .map(function (b) {
+                  return b._getValue();
+                })
+                .filter(Boolean)
+                .join('\n\n');
+            }
+          )
+        );
+      } else if (p === 'facebook' && copy.facebook) {
+        host.appendChild(
+          platformSection(
+            'facebook',
+            'Facebook - post',
+            'Skimmable first line wins.',
+            [
+              {
+                label: 'Post text',
+                value: copy.facebook.post || '',
+                multiline: true,
+                rows: 7,
+                limit: 1800,
+                soft: 600
+              }
+            ],
+            function (blocks) {
+              return blocks[0] ? blocks[0]._getValue() : '';
+            }
+          )
+        );
+      }
+    });
+
+    $('vseo-results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function validateForm(data) {
     if (!data.brief || data.brief.length < 12) {
-      err.textContent = 'Add a short video brief (at least a sentence) so we can shape titles and descriptions.';
-      err.classList.add('is-visible');
+      setFormError('Add a short video brief (at least a sentence).');
       $('vseo-brief').focus();
-      return;
+      return false;
     }
     if (!data.platforms.length) {
-      err.textContent = 'Select at least one platform.';
-      err.classList.add('is-visible');
+      setFormError('Select at least one platform.');
+      return false;
+    }
+    setFormError('');
+    return true;
+  }
+
+  function generateStructure() {
+    var data = readForm();
+    if (!validateForm(data)) return;
+    saveForm(data);
+    renderStructure(data);
+  }
+
+  function generateAi() {
+    var data = readForm();
+    if (!validateForm(data)) return;
+    var gate = aiGateReason();
+    if (!gate.ok) {
+      setFormError(gate.reason, true);
+      updateCreditsPanel();
       return;
     }
 
-    var submit = $('vseo-submit');
-    if (submit) {
-      submit.classList.add('is-busy');
-      submit.disabled = true;
-      submit.dataset.prevLabel = submit.textContent;
-      submit.textContent = 'Generating…';
-    }
+    var btn = $('vseo-ai');
+    setBusy(btn, true, 'Writing…');
+    setFormError('');
     saveForm(data);
-    setTimeout(function () {
-      renderResults(data);
-      if (submit) {
-        submit.classList.remove('is-busy');
-        submit.disabled = false;
-        if (submit.dataset.prevLabel) submit.textContent = submit.dataset.prevLabel;
-        delete submit.dataset.prevLabel;
-      }
-    }, 10);
+
+    fetch(BACKEND + '/api/video-seo/generate', {
+      method: 'POST',
+      headers: Auth && Auth.authHeaders
+        ? Auth.authHeaders()
+        : {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + getToken()
+          },
+      body: JSON.stringify({
+        brief: data.brief,
+        keywords: data.keywords,
+        tone: data.tone,
+        cta: data.cta,
+        outline: data.outline,
+        platforms: data.platforms
+      })
+    })
+      .then(function (res) {
+        return res.json().then(function (body) {
+          return { res: res, data: body };
+        });
+      })
+      .then(function (x) {
+        setBusy(btn, false);
+        if (x.res.status === 503 && x.data && x.data.reason === 'provider_not_configured') {
+          setFormError(
+            'AI write is temporarily unavailable on the server. Use Free structure for now, or try again later.',
+            false
+          );
+          syncAiButton();
+          return;
+        }
+        if (x.res.status === 401) {
+          if (Auth && Auth.clearToken) Auth.clearToken();
+          creditsState = null;
+          setFormError(
+            'Session expired. <a href="' + loginHref() + '">Sign in</a> again.',
+            true
+          );
+          updateCreditsPanel();
+          return;
+        }
+        if (x.res.status === 402) {
+          var need = x.data && x.data.credits_required != null ? x.data.credits_required : AI_CREDITS;
+          var paidLeft =
+            x.data && x.data.paid_credits_remaining != null ? x.data.paid_credits_remaining : 0;
+          if (x.data && x.data.reason === 'paid_credits_required') {
+            setFormError(
+              'Purchased credits required (need ' +
+                need +
+                ', you have ' +
+                paidLeft +
+                '). Free signup credits cannot run AI write. ' +
+                purchaseLinksHtml(),
+              true
+            );
+          } else {
+            setFormError(
+              'Not enough credits (need ' + need + '). ' + purchaseLinksHtml(),
+              true
+            );
+          }
+          updateCreditsPanel();
+          return;
+        }
+        if (!x.res.ok || !x.data || !x.data.copy) {
+          setFormError((x.data && x.data.error) || 'AI write failed. No charge if generation failed.');
+          syncAiButton();
+          return;
+        }
+        renderAiCopy(data, x.data.copy);
+        var charged = x.data.credits_charged != null ? x.data.credits_charged : AI_CREDITS;
+        var remain =
+          x.data.paid_credits_remaining != null ? x.data.paid_credits_remaining : null;
+        setFormError(
+          'Done - charged ' +
+            charged +
+            ' purchased credit' +
+            (charged === 1 ? '' : 's') +
+            (remain != null ? ' · ' + remain + ' purchased remaining' : '') +
+            '.',
+          false,
+          'ok'
+        );
+        updateCreditsPanel();
+      })
+      .catch(function () {
+        setBusy(btn, false);
+        setFormError('Could not reach the server. Try again.');
+        syncAiButton();
+      });
   }
 
   function clearAll() {
@@ -745,25 +1118,32 @@
     $('vseo-results-body').innerHTML = '';
     $('vseo-extras-body').innerHTML = '';
     $('vseo-jump').innerHTML = '';
+    renderChecklist([]);
+    var extras = $('vseo-extras');
+    if (extras) extras.hidden = true;
     var empty = $('vseo-empty');
     if (empty) empty.classList.remove('is-hidden');
+    setFormError('');
     try { localStorage.removeItem(STORAGE_KEY); } catch (e) { /* ignore */ }
     $('vseo-brief').focus();
   }
 
   document.addEventListener('DOMContentLoaded', function () {
     loadForm();
+    updateCreditsPanel();
+
     var form = $('vseo-form');
     if (form) {
       form.addEventListener('submit', function (e) {
         e.preventDefault();
-        generate();
+        generateStructure();
       });
     }
+    var aiBtn = $('vseo-ai');
+    if (aiBtn) aiBtn.addEventListener('click', generateAi);
     var clearBtn = $('vseo-clear');
     if (clearBtn) clearBtn.addEventListener('click', clearAll);
 
-    // Close nav dropdowns on outside click (shared pattern safety)
     document.addEventListener('click', function (e) {
       document.querySelectorAll('.nav-products[open]').forEach(function (d) {
         if (!d.contains(e.target)) d.removeAttribute('open');

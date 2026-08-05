@@ -13,13 +13,13 @@
   <link rel="stylesheet" href="/css/tools-shared.css" />
   <link rel="stylesheet" href="/css/video-seo.css" />
   <link rel="stylesheet" href="/css/help-widget.css" />
-  <title>Video SEO - Free platform copy for creators | Keyweaver</title>
-  <meta name="description" content="Free Video SEO for creators and editors. One brief → titles, descriptions, tags, and hashtags for YouTube, TikTok, Instagram, and Facebook. Runs in your browser - no credits." />
+  <title>Video SEO - Titles &amp; captions for creators | Keyweaver</title>
+  <meta name="description" content="Video SEO for creators: free upload checklist and field structure, plus AI write (purchased credits) for YouTube, TikTok, Instagram, and Facebook copy you’d actually paste." />
   <link rel="canonical" href="https://keyweaver.io/video-seo" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Keyweaver" />
   <meta property="og:title" content="Video SEO - Keyweaver Tools" />
-  <meta property="og:description" content="For creators: one video brief → platform-ready titles, descriptions, tags, and hashtags. Free forever in your browser." />
+  <meta property="og:description" content="Free structure pack + AI write for platform titles, descriptions, tags, and hashtags. AI uses purchased credits only." />
   <meta property="og:url" content="https://keyweaver.io/video-seo" />
   <meta property="og:image" content="https://keyweaver.io/images/keyweaver-logo.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -72,28 +72,28 @@
   <header class="vseo-hero">
     <p class="section-label">Tools · Pre-publish</p>
     <h1>Video SEO</h1>
-    <p>For creators and editors: one video brief → titles, descriptions, tags, and hashtags ready to paste into YouTube, TikTok, Instagram, and Facebook.</p>
+    <p>For creators and editors: turn one video brief into paste-ready titles, descriptions, tags, and hashtags for YouTube, TikTok, Instagram, and Facebook.</p>
     <div class="tools-badges" aria-label="Pricing">
-      <span class="tools-badge tools-badge-free">Free forever</span>
-      <span class="tools-badge">No credits · runs in browser</span>
+      <span class="tools-badge tools-badge-free">Free structure</span>
+      <span class="tools-badge">AI write · 2 purchased credits</span>
     </div>
     <div class="tools-tier" role="note">
-      <p><strong>Free forever:</strong> structured publish copy from your brief and optional seed keywords. A strong first draft sized per platform - not live SERP research.</p>
-      <p><strong>Paid later (optional):</strong> a future Video SEO Pro (upload / transcript) would use purchased credits only. Free generate never charges.</p>
+      <p><strong>Free structure:</strong> checklist, field labels, length tips, and empty fields to fill yourself. No fake auto-titles.</p>
+      <p><strong>AI write (primary):</strong> real platform copy from your brief. Costs <strong>2 purchased credits</strong>. Free signup credits never cover it.</p>
     </div>
   </header>
 
   <form id="vseo-form" class="vseo-form" novalidate>
     <div class="vseo-field">
       <label for="vseo-brief">Video brief</label>
-      <p class="hint">What the video is about, who it’s for, and what viewers should take away. One or two paragraphs is plenty.</p>
-      <textarea id="vseo-brief" name="brief" required placeholder="Example: An 8-minute YouTube tutorial for beginner creators on filming an honest product review - not a sales pitch. Aimed at TikTok and IG creators who want better watch time and a clear CTA."></textarea>
+      <p class="hint">What the video is about, who it’s for, and the outcome. Write notes for yourself - don’t paste a synopsis as a title.</p>
+      <textarea id="vseo-brief" name="brief" required placeholder="Example: 8-minute CapCut tutorial for TikTok creators who want cleaner cuts and on-screen text. Honest walkthrough, no fluff. CTA: subscribe for weekly editing tips."></textarea>
     </div>
 
     <div class="vseo-field">
       <label for="vseo-keywords">Seed keywords <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
-      <p class="hint">Comma-separated phrases you already know matter - we weave them in without stuffing.</p>
-      <input id="vseo-keywords" name="keywords" type="text" placeholder="product review tips, youtube tutorial, creator workflow" autocomplete="off" />
+      <p class="hint">Comma-separated phrases you already care about. AI weaves these in; free structure shows them as prompts.</p>
+      <input id="vseo-keywords" name="keywords" type="text" placeholder="capcut tutorial, tiktok editing, on screen text" autocomplete="off" />
     </div>
 
     <div class="vseo-row">
@@ -122,8 +122,8 @@
 
     <div class="vseo-field">
       <label for="vseo-outline">Chapter / beat outline <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
-      <p class="hint">One beat per line. We’ll turn these into YouTube chapter placeholders with rough timestamps.</p>
-      <textarea id="vseo-outline" name="outline" rows="4" placeholder="Hook&#10;Unbox / first look&#10;Honest pros and cons&#10;Who should buy"></textarea>
+      <p class="hint">One beat per line. AI can turn these into YouTube chapter placeholders.</p>
+      <textarea id="vseo-outline" name="outline" rows="4" placeholder="Hook&#10;Setup in CapCut&#10;Text + captions tip&#10;Export settings&#10;CTA"></textarea>
     </div>
 
     <div class="vseo-field">
@@ -140,34 +140,64 @@
     <p class="vseo-error" id="vseo-error" role="alert"></p>
 
     <div class="vseo-actions">
-      <button type="submit" class="btn btn-primary btn-lg" id="vseo-submit">Generate free</button>
+      <button type="button" class="btn btn-primary btn-lg" id="vseo-ai">AI write · 2 credits</button>
+      <button type="submit" class="btn btn-ghost" id="vseo-structure">Free structure</button>
       <button type="button" class="btn btn-ghost" id="vseo-clear">Clear</button>
-      <p class="tools-form-note">Runs in your browser. No account or credits required.</p>
+      <p class="tools-form-note" id="vseo-cost-note">AI write charges 2 purchased credits. Free structure never charges.</p>
     </div>
   </form>
 
+  <aside class="tools-credit-panel vseo-credits" id="vseo-credits" aria-label="AI write credits">
+    <h3>AI write credits</h3>
+    <p class="tools-credit-status" id="vseo-balance">Sign in to see purchased credits and unlock AI write. Free structure stays free.</p>
+    <div class="tools-credit-meter" id="vseo-credit-meter" hidden>
+      <div class="tools-credit-row">
+        <span class="label">Purchased credits (for AI write)</span>
+        <span class="value" id="vseo-paid-value">-</span>
+      </div>
+      <div class="tools-credit-row">
+        <span class="label">Total pool (plugins + tools)</span>
+        <span class="value" id="vseo-pool-value">-</span>
+      </div>
+      <div class="tools-credit-row">
+        <span class="label">AI write cost</span>
+        <span class="value is-ok" id="vseo-next-cost">2 credits</span>
+      </div>
+    </div>
+    <p class="tools-credit-help">
+      AI write spends <strong>purchased</strong> credits only. Free signup / promo credits never cover generation.
+      Buy packs on <a href="/pricing">Pricing</a> or manage balance in <a href="/account">Account</a>.
+    </p>
+    <div class="tools-credit-actions">
+      <a href="/login?next=/video-seo" class="btn btn-primary" id="vseo-credits-signin">Sign in</a>
+      <a href="/pricing" class="btn btn-primary" id="vseo-credits-buy" hidden>Buy credits</a>
+      <a href="/account" class="btn btn-ghost" id="vseo-credits-account" hidden>Account</a>
+    </div>
+  </aside>
+
   <div class="tools-empty" id="vseo-empty">
     <h2>Platform copy appears here</h2>
-    <p>Add a short video brief and click <strong>Generate free</strong>. You’ll get editable fields labeled for where to paste on each platform.</p>
+    <p>Use <strong>AI write</strong> for paste-ready titles and captions (2 purchased credits), or <strong>Free structure</strong> for empty labeled fields and a checklist.</p>
   </div>
 
   <div class="vseo-results" id="vseo-results">
     <div class="vseo-results-head">
-      <h2>Copy to paste</h2>
-      <p>Each field is labeled for the platform upload form. Edit freely, then copy field-by-field or copy all per platform.</p>
+      <h2 id="vseo-results-title">Copy to paste</h2>
+      <p id="vseo-results-sub">Each field is labeled for the platform upload form. Edit freely, then copy.</p>
     </div>
+    <div class="vseo-checklist" id="vseo-checklist" hidden></div>
     <nav class="vseo-jump" id="vseo-jump" aria-label="Jump to platform"></nav>
     <div id="vseo-results-body"></div>
 
-    <aside class="vseo-extras" aria-label="Extras">
+    <aside class="vseo-extras" id="vseo-extras" aria-label="Extras" hidden>
       <h3>Extras</h3>
-      <p>Thumbnail text ideas, a pinned-comment draft, and chapter placeholders from your outline.</p>
+      <p>Thumbnail text ideas, a pinned-comment draft, and chapter placeholders.</p>
       <div id="vseo-extras-body"></div>
     </aside>
 
     <aside class="tools-handoff" aria-label="Next steps">
       <h3>Continue with this brief</h3>
-      <p>Your brief is saved in this browser. Next: free thumb/teaser recipes, or a free shoot plan. Campaign Kit AI render is optional and paid.</p>
+      <p>Your brief is saved in this browser. Next: free thumb/teaser recipes, or a free shoot plan.</p>
       <div class="tools-handoff-actions">
         <a href="/campaign-kit" class="btn btn-primary">Continue in Campaign Kit</a>
         <a href="/shot-list" class="btn btn-ghost">Continue in Shot List</a>
@@ -176,7 +206,7 @@
   </div>
 
   <p class="vseo-pro">
-    Free forever - no credits. Coming later: Video SEO Pro (upload / transcript) billed in <em>purchased</em> credits only.
+    Free structure never charges. AI write uses purchased credits only.
     Part of the pre-publish toolkit with <a href="/campaign-kit">Campaign Kit</a> and <a href="/shot-list">Shot List</a>. For timeline plugins, see <a href="/download">Download</a>.
   </p>
 </main>
@@ -204,6 +234,7 @@
   </ul>
 </footer>
 
+<script src="/js/tools-auth.js"></script>
 <script src="/js/video-seo.js" defer></script>
 <script src="/js/help-widget.js" defer></script>
 <script src="/js/cuemark-turnstile.js"></script>

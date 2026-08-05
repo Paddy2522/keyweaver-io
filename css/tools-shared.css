@@ -237,6 +237,13 @@
   color: #8fd4a8;
 }
 
+/* .btn sets display:inline-flex which overrides the HTML hidden attribute — force hide. */
+[hidden],
+.tools-credit-actions [hidden],
+.tools-credit-meter[hidden] {
+  display: none !important;
+}
+
 .tools-credit-actions {
   display: flex;
   flex-wrap: wrap;

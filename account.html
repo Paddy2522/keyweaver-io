@@ -648,12 +648,14 @@
   }
 
   function absorbTokenFromHash() {
+    let absorbed = false;
     const hash = window.location.hash.replace(/^#/, '');
     if (hash) {
       const params = new URLSearchParams(hash);
       const token = params.get('token');
       if (token) {
         localStorage.setItem('cc_token', token);
+        absorbed = true;
         history.replaceState(null, '', window.location.pathname + window.location.search);
       }
     }
@@ -662,9 +664,21 @@
     const auth = query.get('auth');
     if (auth) {
       localStorage.setItem('cc_token', auth);
+      absorbed = true;
       query.delete('auth');
       const qs = query.toString();
       history.replaceState(null, '', window.location.pathname + (qs ? '?' + qs : '') + window.location.hash);
+    }
+
+    // Magic-link / verify often lands on /account; honor Tools return path if present.
+    if (absorbed) {
+      try {
+        const next = sessionStorage.getItem('cc_login_next');
+        if (next && next.startsWith('/') && !next.startsWith('//') && next !== '/account') {
+          sessionStorage.removeItem('cc_login_next');
+          window.location.replace(next);
+        }
+      } catch (e) { /* ignore */ }
     }
   }
 

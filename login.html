@@ -308,8 +308,21 @@
 
   function loginRedirectTarget() {
     const next = new URLSearchParams(window.location.search).get('next');
-    if (!next || !next.startsWith('/') || next.startsWith('//')) return '/account';
+    if (!next || !next.startsWith('/') || next.startsWith('//')) {
+      try {
+        const stored = sessionStorage.getItem('cc_login_next');
+        if (stored && stored.startsWith('/') && !stored.startsWith('//')) return stored;
+      } catch (e) { /* ignore */ }
+      return '/account';
+    }
+    try { sessionStorage.setItem('cc_login_next', next); } catch (e) { /* ignore */ }
     return next;
+  }
+
+  function consumeLoginNext() {
+    const target = loginRedirectTarget();
+    try { sessionStorage.removeItem('cc_login_next'); } catch (e) { /* ignore */ }
+    return target;
   }
 
   const loginErrors = {
@@ -419,7 +432,7 @@
       // Store token - same key the panel uses
       localStorage.setItem('cc_token', data.token);
 
-      window.location.href = loginRedirectTarget();
+      window.location.href = consumeLoginNext();
 
     } catch (err) {
       showAlert('Could not reach the server. Please try again.', 'error');
@@ -456,13 +469,18 @@
       const res = await fetch(BACKEND + '/api/captio/magic-link', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, turnstile_token: turnstileToken || undefined })
+        body: JSON.stringify({
+          email,
+          turnstile_token: turnstileToken || undefined,
+          next: loginRedirectTarget()
+        })
       });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
         showAlert(data.error || 'Could not send sign-in link. Try your password instead.', 'error');
         if (window.CuemarkTurnstile) CuemarkTurnstile.reset('login-turnstile');
       } else {
+        try { sessionStorage.setItem('cc_login_next', loginRedirectTarget()); } catch (e) { /* ignore */ }
         document.getElementById('magic-sent').style.display = 'block';
         showAlert('', '');
         document.getElementById('alert').className = 'alert';
@@ -475,9 +493,23 @@
     btn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> Email me a sign-in link';
   });
 
-  if (localStorage.getItem('cc_token')) {
-    window.location.href = loginRedirectTarget();
-  }
+  // Only bounce away if the existing token is still valid (avoids login↔tools loops).
+  (async function redirectIfSessionValid() {
+    const token = localStorage.getItem('cc_token');
+    if (!token) return;
+    try {
+      const res = await fetch(BACKEND + '/api/captio/account', {
+        headers: { Authorization: 'Bearer ' + token }
+      });
+      if (res.ok) {
+        window.location.href = consumeLoginNext();
+        return;
+      }
+      if (res.status === 401) localStorage.removeItem('cc_token');
+    } catch (e) {
+      // Keep the form usable if the network blips.
+    }
+  })();
 </script>
   <script src="/js/help-widget.js" defer></script>
 </body>

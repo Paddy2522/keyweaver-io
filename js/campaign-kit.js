@@ -4,7 +4,8 @@
   var STORAGE_KEY = 'keyweaver.campaignKit.lastBrief';
   var VSEO_KEY = 'keyweaver.videoSeo.lastBrief';
   var SHOT_KEY = 'keyweaver.shotList.lastBrief';
-  var BACKEND = 'https://keyweaver-backend.vercel.app';
+  var Auth = window.KeyweaverToolsAuth;
+  var BACKEND = (Auth && Auth.BACKEND) || 'https://keyweaver-backend.vercel.app';
   /** Must match .backend-checkout/lib/campaign-kit-policy.ts */
   var IMAGE_CREDITS = 4;
   var IMAGE_PREMIUM_CREDITS = 8;
@@ -84,7 +85,16 @@
 
   function shortTitles(brief, videoType) {
     var hook = firstHook(brief);
-    var words = hook.split(/\s+/).slice(0, 5).join(' ');
+    // Prefer short burn-in phrases - never dump a long synopsis onto a thumb.
+    var words = hook
+      .replace(/^(a|an|the)\s+video\s+(where|about|of|on)\s+/i, '')
+      .replace(/^(this\s+)?(video|tutorial|guide)\s+(is\s+about|shows|explains)\s+/i, '')
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 4)
+      .join(' ');
+    if (!words || words.length < 3) words = 'WATCH THIS';
+    if (words.length > 28) words = words.slice(0, 26).replace(/\s+\S*$/, '');
     var typeLabel = VIDEO_TYPES[videoType] ? VIDEO_TYPES[videoType].label : 'Creator';
     return [
       words.toUpperCase(),
@@ -95,11 +105,16 @@
   }
 
   function getToken() {
+    if (Auth && Auth.getToken) return Auth.getToken();
     try {
       return localStorage.getItem('cc_token') || '';
     } catch (e) {
       return '';
     }
+  }
+
+  function loginHref() {
+    return Auth && Auth.loginUrl ? Auth.loginUrl('/campaign-kit') : '/login?next=/campaign-kit';
   }
 
   function readForm() {
@@ -266,11 +281,11 @@
           platformNote,
         prompt:
           vibeLine +
-          'YouTube thumbnail still, 16:9 framing, high contrast subject, large readable title text space for "' +
+          'YouTube thumbnail still, 16:9, high-contrast subject filling the frame, big readable title space for "' +
           titles[0] +
-          '". Scene from brief: ' +
-          data.brief +
-          '. Clean modern creator aesthetic, soft studio light, no watermark, no cluttered UI chrome.',
+          '". Mood from brief (do not put the whole brief on screen): ' +
+          hook +
+          '. Clean creator look, soft studio light, face or hero product large, no watermark, no cluttered UI chrome.',
         titles: titles.slice(0, 3),
         aspect: ASPECT.youtube_thumb.fal,
         recipe: 'Render 1280×720 (or crop 16:9). Leave safe margin for YouTube UI. Prefer faces / hero subject large.'
@@ -388,7 +403,9 @@
       return {
         ok: false,
         reason:
-          'Sign in to render. AI render needs purchased credits - <a href="/login?next=/campaign-kit">Sign in</a> · <a href="/pricing">Buy credits</a>'
+          'Sign in to render. AI render needs purchased credits - <a href="' +
+          loginHref() +
+          '">Sign in</a> · <a href="/pricing">Buy credits</a>'
       };
     }
     if (!creditsState) {
@@ -398,7 +415,7 @@
       return {
         ok: false,
         reason:
-          'You have 0 purchased credits for AI render. Free signup credits cannot cover generation. ' +
+          'Signed in with 0 purchased credits. Free signup credits cannot cover AI render. ' +
           purchaseLinksHtml()
       };
     }
@@ -478,13 +495,15 @@
           return;
         }
         if (x.res.status === 401) {
+          if (Auth && Auth.clearToken) Auth.clearToken();
+          creditsState = null;
           setStatus(
             statusEl,
-            'Session expired. <a href="/login?next=/campaign-kit">Sign in</a> again to render.',
+            'Session expired. <a href="' + loginHref() + '">Sign in</a> again to render.',
             'err',
             true
           );
-          syncRenderButtons();
+          updateCreditsPanel();
           return;
         }
         if (x.res.status === 402) {
@@ -699,17 +718,39 @@
     var buy = $('ckit-credits-buy');
     var account = $('ckit-credits-account');
     var token = getToken();
+    var paidRemaining =
+      token && creditsState ? creditsState.paidRemaining : token ? null : 0;
+    if (Auth && Auth.syncCreditActions) {
+      Auth.syncCreditActions({
+        signin: signin,
+        buy: buy,
+        account: account,
+        nextPath: '/campaign-kit',
+        signedIn: !!token,
+        paidRemaining: paidRemaining,
+        signinLabel: 'Sign in to render'
+      });
+      return;
+    }
     var zeroPaid = !!(token && creditsState && creditsState.paidRemaining <= 0);
     if (signin) {
       signin.hidden = !!token;
-      signin.className = 'btn btn-primary';
+      signin.setAttribute('aria-hidden', token ? 'true' : 'false');
+      if (!token) {
+        signin.href = loginHref();
+        signin.textContent = 'Sign in to render';
+        signin.className = 'btn btn-primary';
+      }
     }
     if (buy) {
       buy.hidden = false;
       buy.textContent = 'Buy credits';
       buy.className = zeroPaid ? 'btn btn-primary' : 'btn btn-ghost';
     }
-    if (account) account.hidden = !token;
+    if (account) {
+      account.hidden = !token;
+      account.setAttribute('aria-hidden', token ? 'false' : 'true');
+    }
   }
 
   function syncRenderButtons() {
@@ -774,61 +815,85 @@
       bal.className = 'tools-credit-status';
       bal.textContent = 'Checking purchased credit balance…';
     }
+
+    function applyCredits(snap) {
+      if (!bal) return;
+      if (!snap || !snap.ok) {
+        creditsState = null;
+        if (meter) meter.hidden = true;
+        if (snap && snap.unauthorized) {
+          bal.className = 'tools-credit-status is-warn';
+          bal.innerHTML =
+            'Session expired. <a href="' + loginHref() + '">Sign in</a> to unlock AI render.';
+        } else {
+          bal.className = 'tools-credit-status is-err';
+          bal.innerHTML =
+            'Could not load credits. Try <a href="/account">Account</a> or refresh.';
+        }
+        syncCreditActions();
+        syncRenderButtons();
+        return;
+      }
+      creditsState = {
+        remaining: snap.remaining,
+        total: snap.total,
+        paidRemaining: snap.paidRemaining,
+        hasPaid: snap.hasPaid
+      };
+      if (meter) meter.hidden = false;
+      if (paidEl) {
+        paidEl.textContent = String(snap.paidRemaining);
+        paidEl.classList.toggle('is-zero', snap.paidRemaining <= 0);
+        paidEl.classList.toggle('is-ok', snap.paidRemaining > 0);
+      }
+      if (poolEl) {
+        poolEl.textContent = snap.remaining + ' / ' + snap.total;
+      }
+      if (snap.paidRemaining <= 0) {
+        bal.className = 'tools-credit-status is-warn';
+        bal.innerHTML =
+          'Signed in with <strong>0 purchased credits</strong>. Free signup credits cannot run AI render. ' +
+          purchaseLinksHtml();
+      } else {
+        bal.className = 'tools-credit-status is-ok';
+        bal.textContent =
+          'Ready to render. Purchased credits: ' +
+          snap.paidRemaining +
+          '. Toggle Premium on an image card to preview the 8-credit cost.';
+      }
+      syncCreditActions();
+      syncRenderButtons();
+    }
+
+    if (Auth && Auth.fetchCredits) {
+      Auth.fetchCredits().then(applyCredits);
+      return;
+    }
+
     fetch(BACKEND + '/api/captio/credits', {
       headers: { Authorization: 'Bearer ' + token }
     })
       .then(function (r) {
-        return r.ok ? r.json() : null;
+        if (r.status === 401) {
+          try { localStorage.removeItem('cc_token'); } catch (e) { /* ignore */ }
+          return { ok: false, unauthorized: true };
+        }
+        return r.ok
+          ? r.json().then(function (data) {
+              var paid = Number(data.paid_credits_remaining != null ? data.paid_credits_remaining : 0);
+              return {
+                ok: true,
+                remaining: Number(data.credits_remaining || 0),
+                total: Number(data.credits_total || 0),
+                paidRemaining: paid,
+                hasPaid: paid > 0 || !!data.has_paid_credits
+              };
+            })
+          : { ok: false, unauthorized: false };
       })
-      .then(function (data) {
-        if (!bal) return;
-        if (!data) {
-          creditsState = null;
-          if (meter) meter.hidden = true;
-          bal.className = 'tools-credit-status is-err';
-          bal.innerHTML =
-            'Could not load credits. Try <a href="/account">Account</a> or refresh.';
-          syncRenderButtons();
-          return;
-        }
-        var paid = Number(data.paid_credits_remaining != null ? data.paid_credits_remaining : 0);
-        creditsState = {
-          remaining: Number(data.credits_remaining || 0),
-          total: Number(data.credits_total || 0),
-          paidRemaining: paid,
-          hasPaid: paid > 0 || !!data.has_paid_credits
-        };
-        if (meter) meter.hidden = false;
-        if (paidEl) {
-          paidEl.textContent = String(paid);
-          paidEl.classList.toggle('is-zero', paid <= 0);
-          paidEl.classList.toggle('is-ok', paid > 0);
-        }
-        if (poolEl) {
-          poolEl.textContent = creditsState.remaining + ' / ' + creditsState.total;
-        }
-        if (paid <= 0) {
-          bal.className = 'tools-credit-status is-warn';
-          bal.innerHTML =
-            'Signed in, but you have <strong>0 purchased credits</strong> for AI render. Free signup credits cannot run fal. ' +
-            purchaseLinksHtml();
-        } else {
-          bal.className = 'tools-credit-status is-ok';
-          bal.textContent =
-            'Ready to render. Purchased credits available: ' +
-            paid +
-            '. Toggle Premium on an image card to preview the 8-credit cost.';
-        }
-        syncRenderButtons();
-      })
+      .then(applyCredits)
       .catch(function () {
-        creditsState = null;
-        if (meter) meter.hidden = true;
-        if (bal) {
-          bal.className = 'tools-credit-status is-err';
-          bal.textContent = 'Could not load credits.';
-        }
-        syncRenderButtons();
+        applyCredits({ ok: false, unauthorized: false });
       });
   }
 
