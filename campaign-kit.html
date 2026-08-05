@@ -126,12 +126,12 @@
 
     <div class="ckit-field">
       <label>Asset types</label>
-      <p class="hint">Defaults to a full pack. Uncheck what you don’t need.</p>
+      <p class="hint">Defaults to stills. Motion video is an optional add-on (costs more purchased credits to render).</p>
       <div class="ckit-assets">
         <label class="ckit-asset"><input type="checkbox" id="asset-youtube_thumb" checked /> YouTube thumbs (16:9)</label>
         <label class="ckit-asset"><input type="checkbox" id="asset-vertical" checked /> Vertical teasers (9:16)</label>
         <label class="ckit-asset"><input type="checkbox" id="asset-quote_card" checked /> Quote / title card</label>
-        <label class="ckit-asset"><input type="checkbox" id="asset-motion" checked /> Motion teaser prompts</label>
+        <label class="ckit-asset"><input type="checkbox" id="asset-motion" /> Motion teaser prompts (video add-on)</label>
       </div>
     </div>
 
@@ -162,7 +162,7 @@
     <aside class="ckit-credits" id="ckit-credits" aria-label="Credits render">
       <h3>AI render (purchased credits only)</h3>
       <p id="ckit-balance">Sign in and buy credits to enable AI render. Build pack above stays free forever.</p>
-      <p class="ckit-credit-costs">Costs: image = 5 purchased credits · 5s Seedance = 20 purchased credits. Free signup / promo credits cannot be used for fal generation (covers real generation cost).</p>
+      <p class="ckit-credit-costs" id="ckit-credit-costs">Costs (purchased credits only): image = 4 (Nano Banana) · premium image = 8 (Nano Banana Pro) · 4s Seedance Fast video = 25. Free signup / promo credits cannot run fal.</p>
       <div class="ckit-actions">
         <a href="/login" class="btn btn-primary" id="ckit-credits-signin">Sign in</a>
         <a href="/pricing" class="btn btn-primary" id="ckit-credits-buy">Buy credits</a>

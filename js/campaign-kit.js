@@ -4,10 +4,14 @@
   var STORAGE_KEY = 'keyweaver.campaignKit.lastBrief';
   var VSEO_KEY = 'keyweaver.videoSeo.lastBrief';
   var BACKEND = 'https://keyweaver-backend.vercel.app';
-  var IMAGE_CREDITS = 5;
-  var VIDEO_CREDITS = 20;
+  /** Must match .backend-checkout/lib/campaign-kit-policy.ts */
+  var IMAGE_CREDITS = 4;
+  var IMAGE_PREMIUM_CREDITS = 8;
+  var VIDEO_CREDITS = 25;
   /** @type {{ remaining: number, total: number, paidRemaining: number, hasPaid: boolean } | null} */
   var creditsState = null;
+  /** @type {'standard' | 'premium'} */
+  var imageQuality = 'standard';
 
   var PRODUCTS = {
     none: { label: 'Custom / general', blurb: '' },
@@ -134,7 +138,7 @@
             product: 'none',
             cta: vseo.cta || 'none',
             platforms: vseo.platforms || ['youtube', 'tiktok', 'instagram', 'facebook'],
-            assets: ['youtube_thumb', 'vertical', 'quote_card', 'motion']
+            assets: ['youtube_thumb', 'vertical', 'quote_card']
           };
           var banner = $('ckit-vseo-banner');
           if (banner) banner.classList.add('is-visible');
@@ -149,11 +153,15 @@
       var el = $('plat-' + p);
       if (el) el.checked = !data.platforms || data.platforms.indexOf(p) !== -1;
     });
-    var assets = data.assets || ['youtube_thumb', 'vertical', 'quote_card', 'motion'];
+    var assets = data.assets || ['youtube_thumb', 'vertical', 'quote_card'];
     ['youtube_thumb', 'vertical', 'quote_card', 'motion'].forEach(function (a) {
       var el = $('asset-' + a);
       if (el) el.checked = assets.indexOf(a) !== -1;
     });
+  }
+
+  function imageCreditsNeed() {
+    return imageQuality === 'premium' ? IMAGE_PREMIUM_CREDITS : IMAGE_CREDITS;
   }
 
   function ctaLine(cta) {
@@ -252,11 +260,11 @@
       items.push({
         id: 'motion',
         kind: 'video',
-        title: 'Short motion teaser (Seedance)',
-        meta: '5s · 16:9 or 9:16 · optional purchased-credit render',
+        title: 'Short motion teaser (Seedance Fast)',
+        meta: '4s · 16:9 or 9:16 · add-on · ' + VIDEO_CREDITS + ' purchased credits',
         prompt:
           productLine +
-          '5-second cinematic product teaser. Slow push-in, subtle UI motion, captions or waveform animating on. Hook: "' +
+          '4-second cinematic product teaser. Slow push-in, subtle UI motion, captions or waveform animating on. Hook: "' +
           hook +
           '". Brief: ' +
           data.brief +
@@ -264,9 +272,9 @@
         titles: [],
         aspect: data.platforms.indexOf('youtube') !== -1 && data.platforms.length === 1 ? '16:9' : '9:16',
         recipe:
-          'Seedance Fast 720p, duration 5. Prefer image→video later if you nail a still first. Not a music-license substitute.'
+          'Seedance Fast 720p, duration 4 (max 5). Prefer stills first — video is a costly add-on. Not a music-license substitute.'
       });
-      checklist.push('Motion: generate still first, then animate the winner (cheaper iteration)');
+      checklist.push('Motion: render stills first; video is an expensive purchased-credit add-on');
     }
 
     return { items: items, checklist: checklist, titles: titles, cta: cta, product: product.label };
@@ -312,7 +320,7 @@
       setStatus(statusEl, 'Sign in and buy credits to render (purchased credits only).', 'err');
       return;
     }
-    var need = item.kind === 'video' ? VIDEO_CREDITS : IMAGE_CREDITS;
+    var need = item.kind === 'video' ? VIDEO_CREDITS : imageCreditsNeed();
     if (creditsState && !creditsState.hasPaid) {
       setStatus(
         statusEl,
@@ -334,7 +342,8 @@
       kind: item.kind,
       prompt: textarea.value,
       aspect_ratio: item.aspect || '16:9',
-      duration: item.kind === 'video' ? '5' : undefined
+      quality: item.kind === 'image' ? imageQuality : undefined,
+      duration: item.kind === 'video' ? '4' : undefined
     };
     fetch(BACKEND + '/api/campaign-kit/render', {
       method: 'POST',
@@ -353,7 +362,7 @@
         if (x.res.status === 503 && x.data && x.data.reason === 'provider_not_configured') {
           setStatus(
             statusEl,
-            'Credit render is stubbed until FAL_KEY is set on the backend. Use personal scripts for now.',
+            'AI render provider is not configured on the server. Build pack still works; try again later.',
             'err'
           );
           return;
@@ -398,6 +407,7 @@
           'Done · ' +
             (x.data.credits_charged || 0) +
             ' purchased credits · ' +
+            (x.data.model ? x.data.model + ' · ' : '') +
             (x.data.paid_credits_remaining != null
               ? x.data.paid_credits_remaining + ' paid left'
               : x.data.credits_remaining != null
@@ -487,14 +497,36 @@
       });
       actions.appendChild(copyBtn);
 
+      if (item.kind === 'image') {
+        var qualWrap = document.createElement('label');
+        qualWrap.className = 'ckit-quality';
+        var qualCheck = document.createElement('input');
+        qualCheck.type = 'checkbox';
+        qualCheck.checked = imageQuality === 'premium';
+        qualCheck.addEventListener('change', function () {
+          imageQuality = qualCheck.checked ? 'premium' : 'standard';
+          syncImageQualityUI();
+        });
+        qualWrap.appendChild(qualCheck);
+        qualWrap.appendChild(
+          document.createTextNode(
+            ' Premium (+' +
+              (IMAGE_PREMIUM_CREDITS - IMAGE_CREDITS) +
+              ' cr · Nano Banana Pro)'
+          )
+        );
+        actions.appendChild(qualWrap);
+      }
+
       var renderBtn = document.createElement('button');
       renderBtn.type = 'button';
       renderBtn.className = 'btn btn-primary';
+      renderBtn.dataset.role = 'render';
       renderBtn.textContent =
         item.kind === 'video'
           ? 'Render video (' + VIDEO_CREDITS + ' purchased cr)'
-          : 'Render image (' + IMAGE_CREDITS + ' purchased cr)';
-      var need = item.kind === 'video' ? VIDEO_CREDITS : IMAGE_CREDITS;
+          : 'Render image (' + imageCreditsNeed() + ' purchased cr)';
+      var need = item.kind === 'video' ? VIDEO_CREDITS : imageCreditsNeed();
       if (!getToken() || !creditsState || creditsState.paidRemaining < need) {
         renderBtn.disabled = true;
         renderBtn.classList.add('is-disabled');
@@ -522,6 +554,35 @@
     updateCreditsPanel();
     $('ckit-results').classList.add('is-visible');
     $('ckit-results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function syncImageQualityUI() {
+    var costs = $('ckit-credit-costs');
+    if (costs) {
+      costs.textContent =
+        'Costs (purchased credits only): image = ' +
+        IMAGE_CREDITS +
+        ' (Nano Banana) · premium image = ' +
+        IMAGE_PREMIUM_CREDITS +
+        ' (Nano Banana Pro) · 4s Seedance Fast video = ' +
+        VIDEO_CREDITS +
+        '. Free signup / promo credits cannot run fal.';
+    }
+    document.querySelectorAll('#ckit-results-body .ckit-card').forEach(function (card) {
+      var btn = card.querySelector('button[data-role="render"]');
+      if (!btn) return;
+      var kind = card.dataset.kind === 'video' ? 'video' : 'image';
+      var need = kind === 'video' ? VIDEO_CREDITS : imageCreditsNeed();
+      if (kind === 'image') {
+        btn.textContent = 'Render image (' + need + ' purchased cr)';
+      }
+      var ok = !!(creditsState && creditsState.paidRemaining >= need && getToken());
+      btn.disabled = !ok;
+      if (ok) btn.classList.remove('is-disabled');
+      else btn.classList.add('is-disabled');
+      var qual = card.querySelector('.ckit-quality input[type="checkbox"]');
+      if (qual) qual.checked = imageQuality === 'premium';
+    });
   }
 
   function updateCreditsPanel() {
@@ -575,20 +636,12 @@
             creditsState.total +
             ' · Image = ' +
             IMAGE_CREDITS +
-            ' · 5s video = ' +
+            ' (premium ' +
+            IMAGE_PREMIUM_CREDITS +
+            ') · 4s video = ' +
             VIDEO_CREDITS;
         }
-        // Refresh disabled state on existing render buttons
-        document.querySelectorAll('#ckit-results-body .ckit-card').forEach(function (card) {
-          var btn = card.querySelector('.btn-primary');
-          if (!btn) return;
-          var kind = card.dataset.kind === 'video' ? 'video' : 'image';
-          var need = kind === 'video' ? VIDEO_CREDITS : IMAGE_CREDITS;
-          var ok = creditsState.paidRemaining >= need;
-          btn.disabled = !ok;
-          if (ok) btn.classList.remove('is-disabled');
-          else btn.classList.add('is-disabled');
-        });
+        syncImageQualityUI();
       })
       .catch(function () {
         creditsState = null;
@@ -624,10 +677,13 @@
       var el = $('plat-' + p);
       if (el) el.checked = true;
     });
-    ['youtube_thumb', 'vertical', 'quote_card', 'motion'].forEach(function (a) {
+    ;['youtube_thumb', 'vertical', 'quote_card'].forEach(function (a) {
       var el = $('asset-' + a);
       if (el) el.checked = true;
     });
+    var motionEl = $('asset-motion');
+    if (motionEl) motionEl.checked = false;
+    imageQuality = 'standard';
     $('ckit-results').classList.remove('is-visible');
     $('ckit-results-body').innerHTML = '';
     $('ckit-checklist').innerHTML = '';

@@ -294,6 +294,21 @@
   pointer-events: none;
 }
 
+.ckit-quality {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 12px;
+  color: var(--muted);
+  margin-right: 0.5rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.ckit-quality input {
+  margin: 0;
+}
+
 .ckit-footer-note {
   margin-top: 2.5rem;
   font-size: 13px;
