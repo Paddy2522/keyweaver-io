@@ -232,7 +232,7 @@
     var ctaLine = buildCta(cta, 'youtube');
 
     var titles = [
-      clip(topic + (keywords[1] ? ' — ' + toTitleCase(keywords[1]) : ''), 70),
+      clip(topic + (keywords[1] ? ' - ' + toTitleCase(keywords[1]) : ''), 70),
       clip('How to ' + topic.replace(/^How To /i, ''), 70),
       clip(hook.replace(/\.$/, '') + (topic ? ' | ' + topic : ''), 70)
     ];
@@ -576,7 +576,7 @@
         host.appendChild(platformSection(
           'tiktok',
           'TikTok',
-          'Lead with the hook. Keep hashtags relevant — a handful beats a wall of spam.',
+          'Lead with the hook. Keep hashtags relevant - a handful beats a wall of spam.',
           [
             { label: 'Description', value: tt.description, multiline: true, rows: 6, limit: 2200, soft: 300 },
             { label: 'Hashtags', value: tt.hashtags, multiline: true, rows: 2, limit: 200, soft: 150 }

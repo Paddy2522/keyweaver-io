@@ -1040,14 +1040,14 @@
         return;
       }
       box.innerHTML = customers.map((c) => {
-        const devices = (c.devices || []).map((d) => escapeHtml(d.device_name || 'device') + (d.last_seen_at ? ' (' + formatShortDate(d.last_seen_at) + ')' : '')).join(', ') || '—';
+        const devices = (c.devices || []).map((d) => escapeHtml(d.device_name || 'device') + (d.last_seen_at ? ' (' + formatShortDate(d.last_seen_at) + ')' : '')).join(', ') || '-';
         return '<div class="admin-customer-card"><h4><a href="mailto:' + encodeURIComponent(c.email) + '">' + escapeHtml(c.email) + '</a> ' + consentBadge(c.marketing_consent) + '</h4><div class="admin-customer-meta">' +
-          '<span>Name: ' + escapeHtml(c.name || '—') + '</span>' +
+          '<span>Name: ' + escapeHtml(c.name || '-') + '</span>' +
           '<span>Plan: ' + escapeHtml((c.tier || '-') + (c.billing_cycle ? ' / ' + c.billing_cycle : '')) + '</span>' +
           '<span>Status: ' + escapeHtml(c.subscription_status || '-') + '</span>' +
-          '<span>Credits: ' + (c.credits_remaining == null ? '—' : c.credits_remaining + ' / ' + (c.credits_total || 0)) + '</span>' +
-          '<span>Stripe: ' + escapeHtml(c.stripe_customer_id || '—') + '</span>' +
-          '<span>Sub: ' + escapeHtml(c.stripe_subscription_id || '—') + '</span>' +
+          '<span>Credits: ' + (c.credits_remaining == null ? '-' : c.credits_remaining + ' / ' + (c.credits_total || 0)) + '</span>' +
+          '<span>Stripe: ' + escapeHtml(c.stripe_customer_id || '-') + '</span>' +
+          '<span>Sub: ' + escapeHtml(c.stripe_subscription_id || '-') + '</span>' +
           '<span>Joined: ' + formatShortDate(c.created_at) + '</span>' +
           '<span>Devices: ' + devices + '</span>' +
           '</div></div>';

@@ -1,4 +1,4 @@
-# Mac Manager — GitHub Actions signing (no personal Mac required)
+# Mac Manager - GitHub Actions signing (no personal Mac required)
 
 Yes: GitHub-hosted `macos-14` runners build, sign, and notarize `Keyweaver-Manager.pkg`.
 
@@ -15,7 +15,7 @@ Create an **App Store Connect API key** for notarization:
 2. Click **Generate API Key** (or +)
 3. Name: `Keyweaver Notary`
 4. Access: **Developer** (or Admin)
-5. Download the `.p8` file once — you cannot download it again
+5. Download the `.p8` file once - you cannot download it again
 6. Note **Key ID** and **Issuer ID** shown on that page
 
 ## GitHub secrets (repo `Paddy2522/keyweaver-io`)

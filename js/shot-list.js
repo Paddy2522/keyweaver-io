@@ -8,34 +8,34 @@
   /** Base beat templates: weight shares sum ~1; scaled to target duration. */
   var TEMPLATES = {
     talking_head: [
-      { framing: 'Wide establishing — talent + space', movement: 'Locked or very slow push-in', audio: 'Room tone bed; soft music under', w: 0.08, tag: 'open' },
-      { framing: 'Medium — talent to camera (A-roll)', movement: 'Locked; slight settle', audio: 'Lav primary; clean dialogue', w: 0.22, tag: 'a_roll' },
-      { framing: 'Close-up — eyes / emphasis moment', movement: 'Locked or micro push', audio: 'Same lav; hold music low', w: 0.1, tag: 'emphasis' },
+      { framing: 'Wide establishing - talent + space', movement: 'Locked or very slow push-in', audio: 'Room tone bed; soft music under', w: 0.08, tag: 'open' },
+      { framing: 'Medium - talent to camera (A-roll)', movement: 'Locked; slight settle', audio: 'Lav primary; clean dialogue', w: 0.22, tag: 'a_roll' },
+      { framing: 'Close-up - eyes / emphasis moment', movement: 'Locked or micro push', audio: 'Same lav; hold music low', w: 0.1, tag: 'emphasis' },
       { framing: 'Over-shoulder / screen / prop insert', movement: 'Slow pan or locked', audio: 'SFX hits; dialogue continues', w: 0.12, tag: 'b_roll' },
-      { framing: 'Medium — continue point / story beat', movement: 'Locked', audio: 'Lav; music bed', w: 0.18, tag: 'a_roll' },
-      { framing: 'Detail cutaway — hands, UI, object', movement: 'Macro drift or locked', audio: 'Foley / UI ticks', w: 0.1, tag: 'detail' },
-      { framing: 'Medium-close — CTA / takeaway', movement: 'Gentle push-in', audio: 'Lav; music lift', w: 0.12, tag: 'cta' },
-      { framing: 'Wide outro — hold for end card', movement: 'Locked or pull-back', audio: 'Music resolve; VO optional', w: 0.08, tag: 'outro' }
+      { framing: 'Medium - continue point / story beat', movement: 'Locked', audio: 'Lav; music bed', w: 0.18, tag: 'a_roll' },
+      { framing: 'Detail cutaway - hands, UI, object', movement: 'Macro drift or locked', audio: 'Foley / UI ticks', w: 0.1, tag: 'detail' },
+      { framing: 'Medium-close - CTA / takeaway', movement: 'Gentle push-in', audio: 'Lav; music lift', w: 0.12, tag: 'cta' },
+      { framing: 'Wide outro - hold for end card', movement: 'Locked or pull-back', audio: 'Music resolve; VO optional', w: 0.08, tag: 'outro' }
     ],
     product: [
-      { framing: 'Hero wide — product in context', movement: 'Slow orbit or locked beauty', audio: 'Music sting open; no VO yet', w: 0.1, tag: 'hero' },
-      { framing: 'Medium — product + talent / hands', movement: 'Slider or gimbal pass', audio: 'VO intro; soft bed', w: 0.14, tag: 'context' },
-      { framing: 'Macro — key feature / texture', movement: 'Macro push or rack focus', audio: 'Design SFX; VO feature 1', w: 0.14, tag: 'feature' },
-      { framing: 'Lifestyle use — product in action', movement: 'Follow action; medium', audio: 'VO benefit; ambient', w: 0.16, tag: 'use' },
+      { framing: 'Hero wide - product in context', movement: 'Slow orbit or locked beauty', audio: 'Music sting open; no VO yet', w: 0.1, tag: 'hero' },
+      { framing: 'Medium - product + talent / hands', movement: 'Slider or gimbal pass', audio: 'VO intro; soft bed', w: 0.14, tag: 'context' },
+      { framing: 'Macro - key feature / texture', movement: 'Macro push or rack focus', audio: 'Design SFX; VO feature 1', w: 0.14, tag: 'feature' },
+      { framing: 'Lifestyle use - product in action', movement: 'Follow action; medium', audio: 'VO benefit; ambient', w: 0.16, tag: 'use' },
       { framing: 'Before / problem insert', movement: 'Locked or whip cut-ready', audio: 'Tension bed dip', w: 0.1, tag: 'problem' },
-      { framing: 'After / reveal — product solves it', movement: 'Reveal tilt or push', audio: 'Music lift; VO payoff', w: 0.12, tag: 'reveal' },
+      { framing: 'After / reveal - product solves it', movement: 'Reveal tilt or push', audio: 'Music lift; VO payoff', w: 0.12, tag: 'reveal' },
       { framing: 'Packaging / UI / unbox detail', movement: 'Top-down locked or slow pan', audio: 'Foley; short VO', w: 0.1, tag: 'detail' },
       { framing: 'Hero close + CTA / logo hold', movement: 'Locked beauty; end card safe', audio: 'VO CTA; music resolve', w: 0.14, tag: 'cta' }
     ],
     tutorial: [
-      { framing: 'Cold open — finished result flash', movement: 'Locked or quick push', audio: 'Hook line VO; music hit', w: 0.08, tag: 'hook' },
-      { framing: 'Medium talking — what you’ll learn', movement: 'Locked A-roll', audio: 'Lav; agenda VO', w: 0.12, tag: 'agenda' },
-      { framing: 'Screen / work surface — step 1', movement: 'Locked; cursor-safe framing', audio: 'VO step 1; quiet bed', w: 0.16, tag: 'step' },
-      { framing: 'Close insert — critical click / tool', movement: 'Locked or slight zoom', audio: 'UI SFX; VO tip', w: 0.1, tag: 'insert' },
-      { framing: 'Screen / bench — step 2', movement: 'Locked', audio: 'VO step 2', w: 0.14, tag: 'step' },
-      { framing: 'Over-shoulder — hands-on step 3', movement: 'Gentle follow', audio: 'VO step 3; ambient', w: 0.14, tag: 'step' },
+      { framing: 'Cold open - finished result flash', movement: 'Locked or quick push', audio: 'Hook line VO; music hit', w: 0.08, tag: 'hook' },
+      { framing: 'Medium talking - what you’ll learn', movement: 'Locked A-roll', audio: 'Lav; agenda VO', w: 0.12, tag: 'agenda' },
+      { framing: 'Screen / work surface - step 1', movement: 'Locked; cursor-safe framing', audio: 'VO step 1; quiet bed', w: 0.16, tag: 'step' },
+      { framing: 'Close insert - critical click / tool', movement: 'Locked or slight zoom', audio: 'UI SFX; VO tip', w: 0.1, tag: 'insert' },
+      { framing: 'Screen / bench - step 2', movement: 'Locked', audio: 'VO step 2', w: 0.14, tag: 'step' },
+      { framing: 'Over-shoulder - hands-on step 3', movement: 'Gentle follow', audio: 'VO step 3; ambient', w: 0.14, tag: 'step' },
       { framing: 'Side-by-side / before-after', movement: 'Locked split-friendly', audio: 'VO compare; music lift', w: 0.1, tag: 'compare' },
-      { framing: 'Medium — recap + next step CTA', movement: 'Locked or soft push', audio: 'Lav CTA; music out', w: 0.16, tag: 'cta' }
+      { framing: 'Medium - recap + next step CTA', movement: 'Locked or soft push', audio: 'Lav CTA; music out', w: 0.16, tag: 'cta' }
     ],
     event: [
       { framing: 'Arrival / venue wide establishing', movement: 'Handheld walk-in or locked wide', audio: 'Crowd bed; music under', w: 0.1, tag: 'est' },
@@ -43,17 +43,17 @@
       { framing: 'Speaker / stage wide', movement: 'Locked or slow pan', audio: 'Board / PA feed if available', w: 0.12, tag: 'stage' },
       { framing: 'Speaker medium / close', movement: 'Locked; follow if needed', audio: 'Lav or board; isolate voice', w: 0.14, tag: 'speech' },
       { framing: 'Audience reaction cutaways', movement: 'Locked or quick handheld', audio: 'Room tone; soft bed', w: 0.1, tag: 'react' },
-      { framing: 'Detail — signage, product, hands', movement: 'Macro / locked', audio: 'Foley; music continue', w: 0.1, tag: 'detail' },
+      { framing: 'Detail - signage, product, hands', movement: 'Macro / locked', audio: 'Foley; music continue', w: 0.1, tag: 'detail' },
       { framing: 'Networking / candid moments', movement: 'Observational handheld', audio: 'Ambience; sparse VO', w: 0.12, tag: 'candid' },
       { framing: 'Highlight montage picks', movement: 'Varied; cut-friendly', audio: 'Music peak; VO optional', w: 0.12, tag: 'montage' },
       { framing: 'Outro wide + logo / CTA hold', movement: 'Pull-back or locked', audio: 'Music resolve; VO CTA', w: 0.1, tag: 'outro' }
     ],
     custom: [
-      { framing: 'Establishing — world / location', movement: 'Slow push or locked wide', audio: 'Bed open; room tone', w: 0.1, tag: 'est' },
+      { framing: 'Establishing - world / location', movement: 'Slow push or locked wide', audio: 'Bed open; room tone', w: 0.1, tag: 'est' },
       { framing: 'Character / subject introduce', movement: 'Medium locked or settle', audio: 'VO / dialogue start', w: 0.14, tag: 'intro' },
-      { framing: 'Core action — main beat A', movement: 'Follow or locked coverage', audio: 'Primary dialogue / VO', w: 0.16, tag: 'beat_a' },
+      { framing: 'Core action - main beat A', movement: 'Follow or locked coverage', audio: 'Primary dialogue / VO', w: 0.16, tag: 'beat_a' },
       { framing: 'Insert / evidence cutaway', movement: 'Locked detail', audio: 'SFX; bed under', w: 0.1, tag: 'insert' },
-      { framing: 'Core action — main beat B', movement: 'Alternate angle', audio: 'Continue VO / dialogue', w: 0.14, tag: 'beat_b' },
+      { framing: 'Core action - main beat B', movement: 'Alternate angle', audio: 'Continue VO / dialogue', w: 0.14, tag: 'beat_b' },
       { framing: 'Reaction / emotional beat', movement: 'Close locked', audio: 'Music swell or silence', w: 0.1, tag: 'react' },
       { framing: 'Transition / travel / process', movement: 'Gimbal or whip-ready', audio: 'Bridge music / whoosh', w: 0.1, tag: 'bridge' },
       { framing: 'Climax / payoff moment', movement: 'Push-in or reveal', audio: 'Music peak; clear VO', w: 0.1, tag: 'payoff' },

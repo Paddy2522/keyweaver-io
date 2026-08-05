@@ -899,12 +899,12 @@
       </thead>
       <tbody>
         <tr>
-          <td>After Effects 2022–2025</td>
+          <td>After Effects 2022-2025</td>
           <td><span class="badge badge-green">✓ Supported</span></td>
           <td><span class="badge badge-green">✓ Supported</span></td>
         </tr>
         <tr>
-          <td>Premiere Pro 2022–2025</td>
+          <td>Premiere Pro 2022-2025</td>
           <td><span class="badge badge-green">✓ Supported</span></td>
           <td><span class="badge badge-green">✓ Supported</span></td>
         </tr>
@@ -1079,7 +1079,7 @@
 
   var pendingWinExeHref = '';
 
-  // Google Ads download conversion — fires when download starts.
+  // Google Ads download conversion - fires when download starts.
   // Windows: only after SmartScreen modal confirm (not on first click).
   function fireGoogleAdsDownloadConversion(thenFn) {
     var done = false;
@@ -1094,7 +1094,7 @@
         finish();
         return;
       }
-      // Same send_to as gtag_report_conversion in <head>; no navigation — file download uses startFileDownload.
+      // Same send_to as gtag_report_conversion in <head>; no navigation - file download uses startFileDownload.
       gtag('event', 'conversion', {
         send_to: 'AW-18266783138/4ZcACMWN9NkcEKL7o4ZE',
         event_callback: finish
@@ -1149,7 +1149,7 @@
 
   function startFileDownload(url) {
     if (!url || url === '#') return;
-    // Direct <a> click — do not use an iframe (CSP frame-src blocks download redirects).
+    // Direct <a> click - do not use an iframe (CSP frame-src blocks download redirects).
     var link = document.createElement('a');
     link.href = url;
     link.rel = 'noopener';

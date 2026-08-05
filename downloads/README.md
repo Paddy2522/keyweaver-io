@@ -6,9 +6,9 @@ Installer packages total **~150 MB** (Keyweaver bootstrap ~2.5 MB, Windows zip ~
 
 1. **Website** (`download.html`) loads `/downloads.json`, which lists **keyweaver.io** download URLs.
 2. **Cloudflare redirects** (`_redirects`) map `/downloads/*` to **GitHub Releases** (binaries are not in the site deploy).
-3. **Primary Windows download:** signed `Keyweaver-Setup-<bootstrapVersion>.exe` (Keyweaver Ltd) — installs **Keyweaver Manager**, then plugins install from Manager.
-4. **Primary macOS download:** notarized `Keyweaver-Manager-<bootstrapVersion>.pkg` — same Manager + catalog flow (no public per-plugin zip CTAs).
-5. **Remote catalog:** `installer/manifest.json` on keyweaver.io — Manager fetches product versions, package URLs, and sizes (including Mac packages used only by Manager).
+3. **Primary Windows download:** signed `Keyweaver-Setup-<bootstrapVersion>.exe` (Keyweaver Ltd) - installs **Keyweaver Manager**, then plugins install from Manager.
+4. **Primary macOS download:** notarized `Keyweaver-Manager-<bootstrapVersion>.pkg` - same Manager + catalog flow (no public per-plugin zip CTAs).
+5. **Remote catalog:** `installer/manifest.json` on keyweaver.io - Manager fetches product versions, package URLs, and sizes (including Mac packages used only by Manager).
 6. **Windows zip fallback:** zip + `Install-Cuemark.cmd` (Cuemark only).
 7. **GitHub Releases** hosts the actual files (CDN-backed). Publish scripts sync `downloads.json` and `_redirects` after upload.
 
@@ -40,7 +40,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts\publish-keyweaver-in
 
 ## Publish Manager runtime (common)
 
-Manager UI and install logic — **does not** replace `Keyweaver-Setup.exe`:
+Manager UI and install logic - **does not** replace `Keyweaver-Setup.exe`:
 
 ```powershell
 # Bump installer/manager/VERSION first
@@ -53,12 +53,12 @@ Push `Captio/Website`. Manager self-updates on next launch.
 
 | File | Role |
 |------|------|
-| `Keyweaver-Setup-1.0.0.exe` | Signed bootstrap — primary Windows CTA on download page |
-| `Keyweaver-Manager-1.0.0.pkg` | Notarized Mac Manager — primary (only) macOS CTA on download page |
-| `Cuemark-Install-win-v1.0.1.zip` | Zip fallback — extract, run `Install-Cuemark.cmd` |
+| `Keyweaver-Setup-1.0.0.exe` | Signed bootstrap - primary Windows CTA on download page |
+| `Keyweaver-Manager-1.0.0.pkg` | Notarized Mac Manager - primary (only) macOS CTA on download page |
+| `Cuemark-Install-win-v1.0.1.zip` | Zip fallback - extract, run `Install-Cuemark.cmd` |
 | `*-Install-mac-*.zip` | Used by Mac Manager catalog installs (not linked on the download page) |
 | `installer/manifest.json` | Manager product catalog (hosted on site, not redirected) |
 
 ## Local / fallback
 
-`download.html` falls back to `/downloads/<filename>` if `downloads.json` cannot be loaded — useful when testing with files in this folder on a local static server.
+`download.html` falls back to `/downloads/<filename>` if `downloads.json` cannot be loaded - useful when testing with files in this folder on a local static server.

@@ -17,27 +17,27 @@
     none: { label: 'Custom / general', blurb: '' },
     cuemark: {
       label: 'Cuemark',
-      blurb: 'Cuemark AI captions for After Effects — kinetic subtitles, highlighter bars, clean social caption look.'
+      blurb: 'Cuemark AI captions for After Effects - kinetic subtitles, highlighter bars, clean social caption look.'
     },
     trillian: {
       label: 'Trillian',
-      blurb: 'Trillian AI voiceover — waveform + timeline UI, voice generation for editors.'
+      blurb: 'Trillian AI voiceover - waveform + timeline UI, voice generation for editors.'
     },
     ludo: {
       label: 'Ludo',
-      blurb: 'Ludo motion toolkit — text split, stagger, cloner layout, animation controls in After Effects.'
+      blurb: 'Ludo motion toolkit - text split, stagger, cloner layout, animation controls in After Effects.'
     },
     superconductor: {
       label: 'Superconductor',
-      blurb: 'Superconductor AI video — generate short clips inside After Effects / Premiere.'
+      blurb: 'Superconductor AI video - generate short clips inside After Effects / Premiere.'
     },
     tamborine: {
       label: 'Tamborine',
-      blurb: 'Tamborine AI music and SFX — cue beds and hits without leaving the NLE.'
+      blurb: 'Tamborine AI music and SFX - cue beds and hits without leaving the NLE.'
     },
     keyweaver: {
       label: 'Keyweaver suite',
-      blurb: 'Keyweaver suite for motion and video editors — Manager, plugins, and free web tools.'
+      blurb: 'Keyweaver suite for motion and video editors - Manager, plugins, and free web tools.'
     }
   };
 
@@ -79,7 +79,7 @@
   function shortTitles(brief, product) {
     var hook = firstHook(brief);
     var words = hook.split(/\s+/).slice(0, 5).join(' ');
-    var brand = product !== 'none' && PRODUCTS[product] ? PRODUCTS[product].label : 'Keyweaver';
+    var brand = product !== 'none' && PRODUCTS[product] ? PRODUCTS[product].label : 'Creator';
     return [
       words.toUpperCase(),
       sentenceCase(words),
@@ -211,7 +211,7 @@
           titles[0] +
           '". Scene from brief: ' +
           data.brief +
-          '. Clean charcoal Keyweaver aesthetic, soft studio light, no watermark, no cluttered UI chrome.',
+          '. Clean modern creator aesthetic, soft studio light, no watermark, no cluttered UI chrome.',
         titles: titles.slice(0, 3),
         aspect: ASPECT.youtube_thumb.fal,
         recipe: 'Render 1280×720 (or crop 16:9). Leave safe margin for YouTube UI. Prefer faces / product UI large.'
@@ -230,7 +230,7 @@
           hook +
           '". Brief: ' +
           data.brief +
-          '. Phone-native composition, subject in upper two-thirds, room for caption bar at bottom, Keyweaver charcoal look, sharp product UI if shown.',
+          '. Phone-native composition, subject in upper two-thirds, room for caption bar at bottom, clean high-contrast look, sharp product detail if shown.',
         titles: [titles[1], titles[3]],
         aspect: ASPECT.vertical.fal,
         recipe: '1080×1920. Keep faces/UI above the lower 20% (caption/UI safe zone).'
@@ -272,7 +272,7 @@
         titles: [],
         aspect: data.platforms.indexOf('youtube') !== -1 && data.platforms.length === 1 ? '16:9' : '9:16',
         recipe:
-          'Seedance Fast 720p, duration 4 (max 5). Prefer stills first — video is a costly add-on. Not a music-license substitute.'
+          'Seedance Fast 720p, duration 4 (max 5). Prefer stills first - video is a costly add-on. Not a music-license substitute.'
       });
       checklist.push('Motion: render stills first; video is an expensive purchased-credit add-on');
     }
@@ -368,7 +368,7 @@
           return;
         }
         if (x.res.status === 401) {
-          setStatus(statusEl, 'Session expired — sign in again.', 'err');
+          setStatus(statusEl, 'Session expired - sign in again.', 'err');
           return;
         }
         if (x.res.status === 402) {
@@ -594,7 +594,7 @@
       creditsState = null;
       if (bal) {
         bal.textContent =
-          'Sign in and buy credits to enable AI render. Build pack stays free — no API key needed.';
+          'Sign in and buy credits to enable AI render. Build pack stays free - no API key needed.';
       }
       return;
     }
@@ -609,7 +609,7 @@
         if (!bal) return;
         if (!data) {
           creditsState = null;
-          bal.textContent = 'Could not load credits — try Account.';
+          bal.textContent = 'Could not load credits - try Account.';
           return;
         }
         var paid = Number(data.paid_credits_remaining != null ? data.paid_credits_remaining : 0);

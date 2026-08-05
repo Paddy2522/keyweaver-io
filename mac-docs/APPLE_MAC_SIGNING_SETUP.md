@@ -1,6 +1,6 @@
 # Apple Developer ID signing + notarization for Keyweaver Manager (macOS)
 
-**Goal:** Ship a signed, notarized `Keyweaver-Manager-1.0.0.pkg` that installs **Keyweaver Manager.app** — same role as Windows `Keyweaver-Setup.exe`.
+**Goal:** Ship a signed, notarized `Keyweaver-Manager-1.0.0.pkg` that installs **Keyweaver Manager.app** - same role as Windows `Keyweaver-Setup.exe`.
 
 You do **not** need a personal Mac day-to-day. Build/sign on a **cloud Mac** or **GitHub Actions `macos-14`** runner once certs are set up.
 
@@ -120,4 +120,4 @@ Plugin updates = **manifest + zip only** (same rule as Windows).
 1. On Apple Developer, create the two **Developer ID** certificates.  
 2. Export a `.p12` (or install certs on a cloud Mac).  
 3. Create App Store Connect API key for notarization.  
-4. Tell me when secrets are ready — we can run the first CI build / cloud Mac package and then wire the download page.
+4. Tell me when secrets are ready - we can run the first CI build / cloud Mac package and then wire the download page.

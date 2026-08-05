@@ -1,10 +1,10 @@
-# Cuemark billing — Vercel env vars (keyweaver-backend)
+# Cuemark billing - Vercel env vars (keyweaver-backend)
 # Dashboard → Settings → Environment Variables → redeploy after changes
 
 NEXT_PUBLIC_SITE_URL=https://keyweaver.io
 STRIPE_SECRET_KEY=sk_live_...
 
-# Resend (transactional email) — improve inbox placement:
+# Resend (transactional email) - improve inbox placement:
 # 1. Resend dashboard → Domains → keyweaver.io must show Verified (SPF + DKIM)
 # 2. Add DMARC in Cloudflare DNS (Resend shows the record)
 # 3. Optional overrides (defaults: Cuemark <accounts@keyweaver.io>, reply-to hello@keyweaver.io):
