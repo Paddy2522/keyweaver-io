@@ -51,6 +51,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://keyweaver.io/shot-list</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://keyweaver.io/help</loc>
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>

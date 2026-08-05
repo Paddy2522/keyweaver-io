@@ -1,0 +1,245 @@
+/* Shot List — Keyweaver charcoal UI (mirrors Video SEO / Campaign Kit) */
+
+.slist-page {
+  padding: 5.5rem 1.5rem 5rem;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.slist-hero {
+  margin-bottom: 2rem;
+}
+
+.slist-hero .section-label {
+  margin-bottom: 0.65rem;
+}
+
+.slist-hero h1 {
+  font-family: 'Cal Sans', sans-serif;
+  font-size: clamp(1.85rem, 4.5vw, 2.6rem);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: var(--text);
+  margin-bottom: 0.65rem;
+  line-height: 1.15;
+}
+
+.slist-hero p {
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.7;
+  max-width: 40rem;
+}
+
+.slist-note {
+  margin-top: 1rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--edge);
+  border-left: 3px solid rgba(var(--accent-rgb), 0.65);
+  background: var(--surface);
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.slist-note strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.slist-note a {
+  color: var(--accent);
+}
+
+.slist-form {
+  display: grid;
+  gap: 1.25rem;
+  padding: 1.5rem;
+  background: var(--surface);
+  border: 1px solid var(--edge);
+  border-radius: 14px;
+}
+
+.slist-field {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.slist-field label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.slist-field .hint {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.slist-field textarea,
+.slist-field input,
+.slist-field select {
+  width: 100%;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  background: var(--ink);
+  border: 1px solid var(--edge);
+  border-radius: 8px;
+  padding: 0.75rem 0.9rem;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.slist-field textarea {
+  min-height: 120px;
+  resize: vertical;
+  line-height: 1.55;
+}
+
+.slist-field textarea:focus,
+.slist-field input:focus,
+.slist-field select:focus {
+  border-color: rgba(var(--accent-rgb), 0.55);
+}
+
+.slist-row {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr 1fr;
+}
+
+@media (max-width: 640px) {
+  .slist-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.slist-error {
+  display: none;
+  margin: 0;
+  font-size: 13px;
+  color: #f07178;
+}
+
+.slist-error.is-visible {
+  display: block;
+}
+
+.slist-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  align-items: center;
+}
+
+.slist-results {
+  display: none;
+  margin-top: 2rem;
+}
+
+.slist-results.is-visible {
+  display: block;
+}
+
+.slist-results-head {
+  margin-bottom: 1rem;
+}
+
+.slist-results-head h2 {
+  font-family: 'Cal Sans', sans-serif;
+  font-size: 1.45rem;
+  letter-spacing: 0.03em;
+  color: var(--text);
+  margin-bottom: 0.35rem;
+}
+
+.slist-results-head p {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.slist-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-bottom: 1rem;
+}
+
+.slist-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--edge);
+  border-radius: 12px;
+  background: var(--surface);
+}
+
+.slist-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  min-width: 720px;
+}
+
+.slist-table th,
+.slist-table td {
+  padding: 0.75rem 0.85rem;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--edge);
+  line-height: 1.5;
+}
+
+.slist-table th {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  background: rgba(0, 0, 0, 0.18);
+  white-space: nowrap;
+}
+
+.slist-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.slist-table td:first-child {
+  font-weight: 600;
+  color: var(--accent);
+  width: 2.5rem;
+  white-space: nowrap;
+}
+
+.slist-table td:last-child {
+  white-space: nowrap;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.slist-table .slist-setup {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.slist-table .slist-detail {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.slist-footer-note {
+  margin-top: 2.5rem;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.65;
+  max-width: 40rem;
+}
+
+.slist-footer-note a {
+  color: var(--accent);
+}
