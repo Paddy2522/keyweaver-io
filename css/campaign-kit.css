@@ -1,13 +1,13 @@
-/* Campaign Kit - Keyweaver charcoal UI (mirrors Video SEO tool patterns) */
+/* Campaign Kit - Keyweaver charcoal UI (aligned with Video SEO) */
 
 .ckit-page {
   padding: 5.5rem 1.5rem 5rem;
-  max-width: 920px;
+  max-width: 720px;
   margin: 0 auto;
 }
 
 .ckit-hero {
-  margin-bottom: 2rem;
+  margin-bottom: 1.75rem;
 }
 
 .ckit-hero .section-label {
@@ -24,11 +24,18 @@
   line-height: 1.15;
 }
 
-.ckit-hero p {
+.ckit-hero > p {
   color: var(--muted);
   font-size: 15px;
   line-height: 1.7;
-  max-width: 40rem;
+  max-width: 34rem;
+}
+
+.ckit-optional {
+  font-weight: 400;
+  color: var(--muted);
+  text-transform: none;
+  letter-spacing: 0;
 }
 
 .ckit-note {
@@ -43,15 +50,18 @@
   line-height: 1.6;
 }
 
-.ckit-note strong {
-  color: var(--text);
-  font-weight: 600;
+.ckit-note[hidden] {
+  display: none !important;
+}
+
+.ckit-note a {
+  color: var(--accent2);
 }
 
 .ckit-form {
   display: grid;
-  gap: 1.25rem;
-  padding: 1.5rem;
+  gap: 1.15rem;
+  padding: 1.4rem 1.45rem;
   background: var(--surface);
   border: 1px solid var(--edge);
   border-radius: 14px;
@@ -59,7 +69,7 @@
 
 .ckit-field {
   display: grid;
-  gap: 0.45rem;
+  gap: 0.4rem;
 }
 
 .ckit-field label {
@@ -68,7 +78,8 @@
   color: var(--text);
 }
 
-.ckit-field .hint {
+.ckit-field .hint,
+.ckit-advanced .hint {
   font-size: 12px;
   color: var(--muted);
   line-height: 1.45;
@@ -90,7 +101,7 @@
 }
 
 .ckit-field textarea {
-  min-height: 120px;
+  min-height: 110px;
   resize: vertical;
   line-height: 1.55;
 }
@@ -103,139 +114,459 @@
 
 .ckit-row {
   display: grid;
-  gap: 1rem;
   grid-template-columns: 1fr 1fr;
+  gap: 1rem;
 }
 
-@media (max-width: 640px) {
-  .ckit-row {
-    grid-template-columns: 1fr;
-  }
+.ckit-advanced {
+  border: 1px solid var(--edge);
+  border-radius: 8px;
+  padding: 0.65rem 0.85rem;
+  background: var(--ink);
+}
+
+.ckit-advanced summary {
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  list-style: none;
+  user-select: none;
+}
+
+.ckit-advanced summary::-webkit-details-marker {
+  display: none;
+}
+
+.ckit-advanced[open] summary {
+  color: var(--text);
 }
 
 .ckit-platforms,
 .ckit-assets {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.55rem 1rem;
+  gap: 0.5rem;
 }
 
-.ckit-platform,
-.ckit-asset {
+.ckit-chip {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
+  padding: 0.45rem 0.75rem;
+  border: 1px solid var(--edge);
+  border-radius: 8px;
+  background: var(--ink);
   font-size: 13px;
-  color: var(--text);
+  color: var(--muted);
   cursor: pointer;
   user-select: none;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
 }
 
-.ckit-platform input,
-.ckit-asset input {
-  accent-color: rgb(var(--accent-rgb));
+.ckit-chip:hover {
+  color: var(--text);
+  border-color: var(--subtle);
+}
+
+.ckit-chip:has(input:checked) {
+  color: var(--text);
+  border-color: rgba(var(--accent-rgb), 0.5);
+  background: rgba(var(--accent-rgb), 0.1);
+}
+
+.ckit-chip input {
+  accent-color: var(--accent);
+  width: 14px;
+  height: 14px;
+  margin: 0;
 }
 
 .ckit-error {
   display: none;
   font-size: 13px;
-  color: #e8a0a0;
-  margin: 0;
+  color: #e88a8a;
+  line-height: 1.5;
 }
 
 .ckit-error.is-visible {
   display: block;
 }
 
+.ckit-error a {
+  color: var(--accent2);
+}
+
 .ckit-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.65rem;
   align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.15rem;
 }
 
 .ckit-actions .tools-form-note {
   flex: 1 1 100%;
+  margin: 0;
+}
+
+.ckit-actions .btn-lg {
+  height: 44px;
+  padding: 0 1.5rem;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  min-width: 9.5rem;
+}
+
+.ckit-actions .btn-ghost {
+  height: 44px;
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--edge);
+}
+
+.ckit-actions .btn-ghost:hover {
+  color: var(--text);
+  background: var(--lift);
+}
+
+.ckit-credits {
+  margin: 1.25rem 0 0;
+}
+
+.cuemark-turnstile-wrap {
+  min-height: 0;
+  margin-bottom: 0.85rem;
+}
+
+.cuemark-turnstile-wrap:not([hidden]):not([style*="display: none"]) {
+  min-height: 68px;
+}
+
+.ckit-paywall {
+  margin-top: 1.5rem;
+  padding: 1.35rem 1.4rem;
+  border: 1px solid rgba(var(--accent-rgb), 0.35);
+  border-radius: 14px;
+  background: rgba(var(--accent-rgb), 0.08);
+}
+
+.ckit-paywall[hidden] {
+  display: none !important;
+}
+
+.ckit-paywall h2 {
+  font-family: 'Cal Sans', sans-serif;
+  font-size: 1.2rem;
+  letter-spacing: 0.03em;
+  margin: 0 0 0.4rem;
+}
+
+.ckit-paywall p {
+  margin: 0 0 1rem;
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.ckit-paywall-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.ckit-loading {
+  margin-top: 1.75rem;
+  padding: 1.5rem 1.25rem;
+  border: 1px solid var(--edge);
+  border-radius: 14px;
+  background: var(--surface);
+  text-align: center;
+}
+
+.ckit-loading[hidden] {
+  display: none !important;
+}
+
+.ckit-loading p {
+  margin: 0.85rem 0 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.ckit-loading-bar {
+  height: 3px;
+  width: 100%;
+  max-width: 220px;
+  margin: 0 auto;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(var(--accent-rgb), 0.85),
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: ckit-shimmer 1.1s ease-in-out infinite;
+}
+
+@keyframes ckit-shimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
 }
 
 .ckit-results {
   display: none;
-  margin-top: 2.5rem;
+  margin-top: 2.25rem;
 }
 
 .ckit-results.is-visible {
   display: block;
 }
 
+.ckit-results-head {
+  margin-bottom: 1rem;
+}
+
 .ckit-results-head h2 {
   font-family: 'Cal Sans', sans-serif;
-  font-size: 1.45rem;
-  letter-spacing: 0.03em;
-  margin-bottom: 0.35rem;
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  margin: 0 0 0.3rem;
 }
 
 .ckit-results-head p {
-  color: var(--muted);
   font-size: 13px;
-  margin-bottom: 1.25rem;
-}
-
-.ckit-pack {
-  display: grid;
-  gap: 1rem;
-}
-
-.ckit-card {
-  border: 1px solid var(--edge);
-  border-radius: 12px;
-  background: var(--surface);
-  padding: 1.1rem 1.2rem;
-}
-
-.ckit-card h3 {
-  font-size: 15px;
-  font-weight: 600;
-  margin: 0 0 0.35rem;
-  color: var(--text);
-}
-
-.ckit-meta {
-  font-size: 12px;
   color: var(--muted);
-  margin-bottom: 0.75rem;
-  line-height: 1.45;
+  margin: 0 0 0.85rem;
 }
 
-.ckit-card textarea {
-  width: 100%;
+.ckit-results-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.ckit-results-actions .btn {
+  font-size: 12px;
+  padding: 0.4rem 0.75rem;
+}
+
+.ckit-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 1.1rem;
+  padding: 0.3rem;
+  border: 1px solid var(--edge);
+  border-radius: 10px;
+  background: var(--surface);
+}
+
+.ckit-tab {
   font-family: 'Inter', system-ui, sans-serif;
   font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+  background: transparent;
+  border: none;
+  border-radius: 7px;
+  padding: 0.55rem 0.9rem;
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s;
+}
+
+.ckit-tab:hover {
+  color: var(--text);
+  background: var(--lift);
+}
+
+.ckit-tab[aria-selected="true"] {
+  color: var(--text);
+  background: rgba(var(--accent-rgb), 0.16);
+}
+
+.ckit-panel {
+  display: none;
+  padding: 1.25rem 1.3rem 1.15rem;
+  background: var(--surface);
+  border: 1px solid var(--edge);
+  border-radius: 14px;
+}
+
+.ckit-panel.is-active {
+  display: block;
+}
+
+.ckit-panel-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.35rem;
+}
+
+.ckit-panel-head h3 {
+  font-family: 'Cal Sans', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  margin: 0;
+}
+
+.ckit-panel .plat-sub {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 0 0 1rem;
+  line-height: 1.5;
+}
+
+.ckit-burnins {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0 0 1rem;
+}
+
+.ckit-burnin {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text);
+  background: var(--ink);
+  border: 1px solid var(--edge);
+  border-radius: 6px;
+  padding: 0.35rem 0.6rem;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.ckit-burnin:hover {
+  border-color: var(--subtle);
+  background: var(--lift);
+}
+
+.ckit-burnin.is-done {
+  color: #9fd9bc;
+  border-color: rgba(76, 175, 131, 0.45);
+}
+
+.ckit-recipe {
+  margin: 0 0 0.85rem;
+  padding: 0.7rem 0.85rem;
+  border-radius: 8px;
+  background: var(--ink);
+  border: 1px solid var(--edge);
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.ckit-recipe strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.ckit-field-out {
+  margin-bottom: 0.85rem;
+}
+
+.ckit-field-out-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.4rem;
+}
+
+.ckit-field-out-head label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.ckit-copy {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--muted);
+  background: var(--ink);
+  border: 1px solid var(--edge);
+  border-radius: 6px;
+  padding: 0.25rem 0.55rem;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+
+.ckit-copy:hover {
+  color: var(--text);
+  border-color: var(--subtle);
+}
+
+.ckit-copy.is-done {
+  color: #9fd9bc;
+  border-color: rgba(76, 175, 131, 0.45);
+}
+
+.ckit-field-out textarea {
+  width: 100%;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 13.5px;
   color: var(--text);
   background: var(--ink);
   border: 1px solid var(--edge);
   border-radius: 8px;
   padding: 0.7rem 0.85rem;
-  line-height: 1.5;
+  line-height: 1.55;
   resize: vertical;
-  min-height: 88px;
+  min-height: 110px;
+}
+
+.ckit-field-out textarea:focus {
+  outline: none;
+  border-color: rgba(var(--accent-rgb), 0.55);
 }
 
 .ckit-card-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-  margin-top: 0.65rem;
   align-items: center;
+  margin-top: 0.25rem;
 }
 
 .ckit-card-actions .btn {
   font-size: 12px;
-  padding: 0.4rem 0.75rem;
+  padding: 0.45rem 0.85rem;
+}
+
+.ckit-quality {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 12px;
+  color: var(--muted);
+  cursor: pointer;
+  user-select: none;
+}
+
+.ckit-quality input {
+  margin: 0;
+  accent-color: var(--accent);
 }
 
 .ckit-render-status {
+  flex: 1 1 100%;
   font-size: 12px;
   color: var(--muted);
+  line-height: 1.45;
+  margin: 0.15rem 0 0;
 }
 
 .ckit-render-status.is-ok {
@@ -246,11 +577,25 @@
   color: #e8a0a0;
 }
 
+.ckit-render-status a {
+  color: var(--accent2);
+}
+
+.ckit-preview-host {
+  margin-top: 0.85rem;
+}
+
 .ckit-preview {
-  margin-top: 0.75rem;
+  display: block;
   max-width: 100%;
   border-radius: 8px;
   border: 1px solid var(--edge);
+}
+
+.ckit-preview-host .btn {
+  margin-top: 0.55rem;
+  font-size: 12px;
+  padding: 0.4rem 0.75rem;
 }
 
 .ckit-checklist {
@@ -258,55 +603,56 @@
   padding-left: 1.1rem;
   color: var(--muted);
   font-size: 13px;
-  line-height: 1.65;
+  line-height: 1.7;
 }
 
 .ckit-checklist li {
-  margin-bottom: 0.25rem;
-}
-
-.ckit-credits.tools-credit-panel {
-  margin-top: 1.75rem;
-}
-
-.ckit-card-actions .tools-render-hint {
-  flex: 1 1 100%;
-}
-
-.ckit-quality {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  font-size: 12px;
-  color: var(--muted);
-  margin-right: 0.5rem;
-  cursor: pointer;
-  user-select: none;
-}
-
-.ckit-quality input {
-  margin: 0;
+  margin-bottom: 0.35rem;
 }
 
 .ckit-footer-note {
   margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--edge);
   font-size: 13px;
   color: var(--muted);
   line-height: 1.65;
 }
 
 .ckit-footer-note a {
-  color: var(--text);
+  color: var(--accent2);
+  text-decoration: none;
 }
 
-#ckit-vseo-banner {
-  display: none;
+.ckit-footer-note a:hover {
+  text-decoration: underline;
 }
 
-#ckit-vseo-banner.is-visible {
-  display: block !important;
-}
+@media (max-width: 700px) {
+  .ckit-row {
+    grid-template-columns: 1fr;
+  }
 
-#ckit-vseo-banner a {
-  color: var(--text);
+  .ckit-form {
+    padding: 1.15rem;
+  }
+
+  .ckit-panel {
+    padding: 1.1rem;
+  }
+
+  .ckit-tabs {
+    gap: 0.25rem;
+  }
+
+  .ckit-tab {
+    flex: 1 1 auto;
+    text-align: center;
+    padding: 0.5rem 0.55rem;
+    font-size: 12px;
+  }
+
+  .ckit-panel-head {
+    flex-direction: column;
+  }
 }
