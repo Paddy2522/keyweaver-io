@@ -142,6 +142,36 @@
         border-radius: 12px;
       }
     }
+    .tools-section {
+      position: relative;
+      overflow: hidden;
+    }
+    .tools-atmos {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .tools-atmos picture,
+    .tools-atmos img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 42%;
+    }
+    .tools-atmos::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(10, 10, 15, 0.72) 0%, rgba(10, 10, 15, 0.88) 55%, rgba(10, 10, 15, 0.96) 100%),
+        radial-gradient(ellipse 55% 50% at 78% 30%, rgba(91, 107, 248, 0.16) 0%, transparent 70%);
+    }
+    .tools-section > .container {
+      position: relative;
+      z-index: 1;
+    }
     .credits-strip {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -326,7 +356,20 @@
 
 <hr class="divider" />
 
-<section class="section" id="tools">
+<section class="section tools-section" id="tools">
+  <div class="tools-atmos" aria-hidden="true">
+    <picture>
+      <source srcset="/images/tools-atmosphere.webp" type="image/webp" />
+      <img
+        src="/images/tools-atmosphere.png"
+        alt=""
+        width="1344"
+        height="768"
+        decoding="async"
+        loading="lazy"
+      />
+    </picture>
+  </div>
   <div class="container">
     <p class="section-label">Tools</p>
     <h2 class="section-title">Free pre-publish toolkit</h2>
