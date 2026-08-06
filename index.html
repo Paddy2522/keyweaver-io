@@ -155,12 +155,18 @@
       z-index: 0;
     }
     .tools-atmos picture,
-    .tools-atmos img {
+    .tools-atmos img,
+    .tools-atmos video {
       display: block;
       width: 100%;
       height: 100%;
       object-fit: cover;
       object-position: center 42%;
+    }
+    .tools-atmos video {
+      position: absolute;
+      inset: 0;
+      opacity: 0.55;
     }
     .tools-atmos::after {
       content: '';
@@ -173,6 +179,11 @@
     .tools-section > .container {
       position: relative;
       z-index: 1;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .tools-atmos video {
+        display: none;
+      }
     }
     .credits-strip {
       display: grid;
@@ -374,6 +385,22 @@
         loading="lazy"
       />
     </picture>
+    <video
+      class="tools-atmos-video"
+      muted
+      playsinline
+      autoplay
+      loop
+      preload="metadata"
+      poster="/images/tools-atmosphere.png"
+      disablepictureinpicture
+      disableRemotePlayback
+    >
+      <source
+        src="https://customer-2vnlyvi12yb7n8s2.cloudflarestream.com/9cdcb735b022d9dc1081d7cc474298a3/downloads/default.mp4"
+        type="video/mp4"
+      />
+    </video>
   </div>
   <div class="container">
     <p class="section-label">Tools</p>
