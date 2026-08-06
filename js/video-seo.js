@@ -8,16 +8,16 @@
   var BACKEND = (Auth && Auth.BACKEND) || 'https://keyweaver-backend.vercel.app';
   /** Must match .backend-checkout/lib/video-seo-policy.ts */
   var AI_CREDITS = 2;
-  /** @type {{ remaining: number, total: number, paidRemaining: number, hasPaid: boolean } | null} */
+  var FREE_LIMIT = 2;
+  /** @type {{ remaining: number, total: number, paidRemaining: number, hasPaid: boolean, freeRemaining: number, freeUsed: number } | null} */
   var creditsState = null;
+  var activeTab = '';
 
-  var CTA_HINTS = {
-    none: '',
-    subscribe: 'Ask viewers to subscribe if this helped.',
-    comment: 'Ask one specific question in the comments.',
-    link: 'Point to the link in description / bio.',
-    follow: 'Ask them to follow for more like this.',
-    share: 'Ask them to share with someone who needs it.'
+  var PLATFORM_META = {
+    youtube: { label: 'YouTube', sub: 'Titles under ~70 chars. Hook the description in the first two lines.' },
+    tiktok: { label: 'TikTok', sub: 'Hook first. Keep hashtags light and relevant.' },
+    instagram: { label: 'Instagram', sub: 'Skimmable caption. Hashtags optional.' },
+    facebook: { label: 'Facebook', sub: 'Lead with the outcome for people skimming the feed.' }
   };
 
   function $(id) {
@@ -43,24 +43,6 @@
       .replace(/[ \t]+/g, ' ')
       .replace(/\n{3,}/g, '\n\n')
       .trim();
-  }
-
-  function parseSeeds(raw) {
-    return cleanText(raw)
-      .split(/[,;\n]+/)
-      .map(function (s) { return s.trim(); })
-      .filter(function (s) { return s.length > 1; })
-      .slice(0, 12);
-  }
-
-  function parseOutline(outline) {
-    return cleanText(outline)
-      .split(/\n+/)
-      .map(function (line) {
-        return line.replace(/^\s*(\d+[\.\)]\s*|[-•*]\s*)/, '').trim();
-      })
-      .filter(Boolean)
-      .slice(0, 12);
   }
 
   function selectedPlatforms() {
@@ -128,13 +110,12 @@
         var note = document.createElement('div');
         note.className = 'vseo-note';
         note.setAttribute('role', 'status');
-        note.style.marginTop = '0.75rem';
         note.innerHTML =
           'Prefilling from your last <a href="/' +
           (source === 'Shot List' ? 'shot-list' : 'campaign-kit') +
           '">' +
           source +
-          '</a> brief. Use AI write for paste-ready copy, or Free structure for empty fields.';
+          '</a> brief.';
         var hero = document.querySelector('.vseo-hero');
         if (hero) hero.appendChild(note);
       }
@@ -159,11 +140,18 @@
     err.classList.toggle('is-ok', kind === 'ok');
   }
 
+  function setLoading(on) {
+    var loading = $('vseo-loading');
+    var empty = $('vseo-empty');
+    if (loading) loading.hidden = !on;
+    if (on && empty) empty.classList.add('is-hidden');
+  }
+
   function setBusy(btn, busy, label) {
     if (!btn) return;
     if (busy) {
       btn.dataset.prevLabel = btn.textContent;
-      btn.textContent = label || 'Working…';
+      btn.textContent = label || 'Generating…';
       btn.classList.add('is-busy');
       btn.disabled = true;
     } else {
@@ -171,13 +159,44 @@
       delete btn.dataset.prevLabel;
       btn.classList.remove('is-busy');
       btn.disabled = false;
+      syncGenerateButton();
     }
+  }
+
+  function freeRemaining() {
+    if (!creditsState) return null;
+    return Math.max(0, Number(creditsState.freeRemaining || 0));
+  }
+
+  function nextCostLabel() {
+    var free = freeRemaining();
+    if (free == null) return '…';
+    if (free > 0) {
+      return free + ' free left';
+    }
+    return AI_CREDITS + ' credits';
+  }
+
+  function canGenerate() {
+    if (!getToken()) return { ok: false, reason: 'signin' };
+    if (!creditsState) return { ok: false, reason: 'loading' };
+    var free = freeRemaining();
+    if (free > 0) return { ok: true, reason: 'free' };
+    if (creditsState.paidRemaining >= AI_CREDITS) return { ok: true, reason: 'paid' };
+    return { ok: false, reason: 'paywall' };
   }
 
   function syncCreditActions() {
     var token = getToken();
     var paidRemaining =
       token && creditsState ? creditsState.paidRemaining : token ? null : 0;
+    var free = freeRemaining();
+    var showBuy =
+      !!token &&
+      creditsState &&
+      free === 0 &&
+      creditsState.paidRemaining < AI_CREDITS;
+
     if (Auth && Auth.syncCreditActions) {
       Auth.syncCreditActions({
         signin: $('vseo-credits-signin'),
@@ -185,97 +204,79 @@
         account: $('vseo-credits-account'),
         nextPath: '/video-seo',
         signedIn: !!token,
-        paidRemaining: paidRemaining,
+        paidRemaining: showBuy ? 0 : paidRemaining,
         signinLabel: 'Sign in'
       });
-      return;
-    }
-    var signin = $('vseo-credits-signin');
-    var buy = $('vseo-credits-buy');
-    var account = $('vseo-credits-account');
-    var zeroPaid = !!(token && creditsState && creditsState.paidRemaining <= 0);
-    if (signin) {
-      signin.hidden = !!token;
-      if (!token) {
-        signin.href = loginHref();
-        signin.className = 'btn btn-primary';
+    } else {
+      var signin = $('vseo-credits-signin');
+      var buy = $('vseo-credits-buy');
+      var account = $('vseo-credits-account');
+      if (signin) {
+        signin.hidden = !!token;
+        if (!token) signin.href = loginHref();
       }
+      if (buy) {
+        buy.hidden = false;
+        buy.className = showBuy ? 'btn btn-primary' : 'btn btn-ghost';
+      }
+      if (account) account.hidden = !token;
     }
-    if (buy) {
-      buy.hidden = false;
-      buy.className = zeroPaid ? 'btn btn-primary' : 'btn btn-ghost';
+
+    var paywall = $('vseo-paywall');
+    if (paywall) {
+      paywall.hidden = !(token && creditsState && free === 0 && creditsState.paidRemaining < AI_CREDITS);
     }
-    if (account) account.hidden = !token;
   }
 
-  function aiGateReason() {
-    if (!getToken()) {
-      return {
-        ok: false,
-        reason:
-          'Sign in to use AI write. Needs purchased credits - <a href="' +
-          loginHref() +
-          '">Sign in</a> · <a href="/pricing">Buy credits</a>'
-      };
-    }
-    if (!creditsState) {
-      return { ok: false, reason: 'Checking purchased credit balance…' };
-    }
-    if (!creditsState.hasPaid || creditsState.paidRemaining <= 0) {
-      return {
-        ok: false,
-        reason:
-          'Signed in with 0 purchased credits. Free signup credits cannot cover AI write. ' +
-          purchaseLinksHtml()
-      };
-    }
-    if (creditsState.paidRemaining < AI_CREDITS) {
-      return {
-        ok: false,
-        reason:
-          'Need ' +
-          AI_CREDITS +
-          ' purchased credits (you have ' +
-          creditsState.paidRemaining +
-          '). ' +
-          purchaseLinksHtml()
-      };
-    }
-    return {
-      ok: true,
-      reason: 'Will charge ' + AI_CREDITS + ' purchased credits for a full multi-platform write.'
-    };
-  }
-
-  function syncAiButton() {
-    var btn = $('vseo-ai');
+  function syncGenerateButton() {
+    var btn = $('vseo-generate');
     var note = $('vseo-cost-note');
-    var gate = aiGateReason();
+    var gate = canGenerate();
     if (btn && !btn.classList.contains('is-busy')) {
+      var label = 'Generate';
+      if (getToken() && creditsState) {
+        var free = freeRemaining();
+        if (free > 0) {
+          label = 'Generate · ' + free + ' free left';
+        } else if (creditsState.paidRemaining >= AI_CREDITS) {
+          label = 'Generate · ' + AI_CREDITS + ' credits';
+        } else {
+          label = 'Generate · buy credits';
+        }
+      }
+      btn.textContent = label;
       btn.disabled = !gate.ok;
       btn.classList.toggle('is-disabled', !gate.ok);
-      btn.title = gate.ok
-        ? 'Charges ' + AI_CREDITS + ' purchased credits'
-        : 'Purchased credits required - see Pricing';
     }
     if (note) {
       if (!getToken()) {
         note.innerHTML =
-          'AI write needs sign-in + purchased credits. <a href="' +
+          'Sign in for <strong>2 free</strong> AI generations. After that, ' +
+          AI_CREDITS +
+          ' purchased credits each. <a href="' +
           loginHref() +
-          '">Sign in</a> · Free structure never charges.';
+          '">Sign in</a>';
       } else if (!creditsState) {
-        note.textContent = 'Checking purchased credit balance…';
-      } else if (!gate.ok) {
+        note.textContent = 'Checking your free gens and credits…';
+      } else if (gate.reason === 'paywall') {
         note.innerHTML =
-          'Signed in · need purchased credits for AI write. ' + purchaseLinksHtml();
+          'Free gens used. Next generate costs ' +
+          AI_CREDITS +
+          ' purchased credits. ' +
+          purchaseLinksHtml();
+      } else if (gate.reason === 'free') {
+        note.textContent =
+          freeRemaining() +
+          ' free AI generation' +
+          (freeRemaining() === 1 ? '' : 's') +
+          ' left on this account.';
       } else {
         note.textContent =
-          'AI write charges ' +
+          'Next generate: ' +
           AI_CREDITS +
           ' purchased credits (you have ' +
           creditsState.paidRemaining +
-          '). Free structure never charges.';
+          ').';
       }
     }
   }
@@ -283,8 +284,9 @@
   function updateCreditsPanel() {
     var bal = $('vseo-balance');
     var meter = $('vseo-credit-meter');
+    var freeEl = $('vseo-free-value');
     var paidEl = $('vseo-paid-value');
-    var poolEl = $('vseo-pool-value');
+    var nextEl = $('vseo-next-cost');
     var token = getToken();
     syncCreditActions();
     if (!token) {
@@ -292,15 +294,14 @@
       if (meter) meter.hidden = true;
       if (bal) {
         bal.className = 'tools-credit-status is-warn';
-        bal.textContent =
-          'Sign in to see purchased credits and unlock AI write. Free structure stays free.';
+        bal.textContent = 'Sign in to unlock 2 free AI generations.';
       }
-      syncAiButton();
+      syncGenerateButton();
       return;
     }
     if (bal) {
       bal.className = 'tools-credit-status';
-      bal.textContent = 'Checking purchased credit balance…';
+      bal.textContent = 'Checking balance…';
     }
 
     function apply(snap) {
@@ -311,45 +312,76 @@
         if (snap && snap.unauthorized) {
           bal.className = 'tools-credit-status is-warn';
           bal.innerHTML =
-            'Session expired. <a href="' + loginHref() + '">Sign in</a> to unlock AI write.';
+            'Session expired. <a href="' + loginHref() + '">Sign in</a> again.';
         } else {
           bal.className = 'tools-credit-status is-err';
           bal.innerHTML =
             'Could not load credits. Try <a href="/account">Account</a> or refresh.';
         }
         syncCreditActions();
-        syncAiButton();
+        syncGenerateButton();
         return;
       }
+
+      var freeRem =
+        snap.raw && snap.raw.video_seo_free_remaining != null
+          ? Number(snap.raw.video_seo_free_remaining)
+          : FREE_LIMIT;
+      var freeUsed =
+        snap.raw && snap.raw.video_seo_free_used != null
+          ? Number(snap.raw.video_seo_free_used)
+          : Math.max(0, FREE_LIMIT - freeRem);
+
       creditsState = {
         remaining: snap.remaining,
         total: snap.total,
         paidRemaining: snap.paidRemaining,
-        hasPaid: snap.hasPaid
+        hasPaid: snap.hasPaid,
+        freeRemaining: freeRem,
+        freeUsed: freeUsed
       };
+
       if (meter) meter.hidden = false;
+      if (freeEl) {
+        freeEl.textContent = String(freeRem) + ' / ' + FREE_LIMIT;
+        freeEl.classList.toggle('is-zero', freeRem <= 0);
+        freeEl.classList.toggle('is-ok', freeRem > 0);
+      }
       if (paidEl) {
         paidEl.textContent = String(snap.paidRemaining);
         paidEl.classList.toggle('is-zero', snap.paidRemaining <= 0);
         paidEl.classList.toggle('is-ok', snap.paidRemaining > 0);
       }
-      if (poolEl) poolEl.textContent = snap.remaining + ' / ' + snap.total;
-      if (snap.paidRemaining <= 0) {
-        bal.className = 'tools-credit-status is-warn';
-        bal.innerHTML =
-          'Signed in with <strong>0 purchased credits</strong>. Free signup credits cannot run AI write. ' +
-          purchaseLinksHtml();
-      } else {
+      if (nextEl) {
+        nextEl.textContent = nextCostLabel();
+        nextEl.classList.toggle('is-ok', freeRem > 0 || snap.paidRemaining >= AI_CREDITS);
+        nextEl.classList.toggle('is-zero', freeRem <= 0 && snap.paidRemaining < AI_CREDITS);
+      }
+
+      if (freeRem > 0) {
         bal.className = 'tools-credit-status is-ok';
         bal.textContent =
-          'Ready for AI write. Purchased credits: ' +
-          snap.paidRemaining +
-          ' (cost ' +
+          freeRem +
+          ' free AI generation' +
+          (freeRem === 1 ? '' : 's') +
+          ' left. After that, ' +
           AI_CREDITS +
-          ' per generate).';
+          ' purchased credits each.';
+      } else if (snap.paidRemaining >= AI_CREDITS) {
+        bal.className = 'tools-credit-status is-ok';
+        bal.textContent =
+          'Free gens used. Ready to generate for ' +
+          AI_CREDITS +
+          ' purchased credits (' +
+          snap.paidRemaining +
+          ' available).';
+      } else {
+        bal.className = 'tools-credit-status is-warn';
+        bal.innerHTML =
+          'Free gens used and no purchased credits. ' + purchaseLinksHtml();
       }
       syncCreditActions();
-      syncAiButton();
+      syncGenerateButton();
     }
 
     if (Auth && Auth.fetchCredits) {
@@ -372,7 +404,8 @@
                 remaining: Number(data.credits_remaining || 0),
                 total: Number(data.credits_total || 0),
                 paidRemaining: paid,
-                hasPaid: paid > 0 || !!data.has_paid_credits
+                hasPaid: paid > 0 || !!data.has_paid_credits,
+                raw: data
               };
             })
           : { ok: false, unauthorized: false };
@@ -478,380 +511,124 @@
     document.body.removeChild(ta);
   }
 
-  function platformSection(id, title, sub, fields, copyAllText) {
-    var sec = document.createElement('section');
-    sec.className = 'vseo-platform-block';
-    sec.id = 'result-' + id;
+  function selectTab(id) {
+    activeTab = id;
+    document.querySelectorAll('.vseo-tab').forEach(function (tab) {
+      var on = tab.getAttribute('data-platform') === id;
+      tab.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    document.querySelectorAll('.vseo-panel').forEach(function (panel) {
+      panel.classList.toggle('is-active', panel.id === 'panel-' + id);
+    });
+    var extras = $('vseo-extras');
+    if (extras) extras.hidden = id !== 'youtube' || !extras.dataset.hasContent;
+  }
 
-    var headRow = document.createElement('div');
-    headRow.className = 'vseo-field-out-head';
+  function buildPanel(id, fields, copyAllText) {
+    var meta = PLATFORM_META[id];
+    var panel = document.createElement('div');
+    panel.className = 'vseo-panel';
+    panel.id = 'panel-' + id;
+    panel.setAttribute('role', 'tabpanel');
+    panel.setAttribute('aria-labelledby', 'tab-' + id);
+
+    var head = document.createElement('div');
+    head.className = 'vseo-panel-head';
     var h3 = document.createElement('h3');
-    h3.textContent = title;
+    h3.textContent = meta.label;
     var copyAll = document.createElement('button');
     copyAll.type = 'button';
     copyAll.className = 'vseo-copy';
     copyAll.textContent = 'Copy all';
-    headRow.appendChild(h3);
-    headRow.appendChild(copyAll);
-    sec.appendChild(headRow);
+    head.appendChild(h3);
+    head.appendChild(copyAll);
+    panel.appendChild(head);
 
-    var subEl = document.createElement('p');
-    subEl.className = 'plat-sub';
-    subEl.textContent = sub;
-    sec.appendChild(subEl);
+    var sub = document.createElement('p');
+    sub.className = 'plat-sub';
+    sub.textContent = meta.sub;
+    panel.appendChild(sub);
 
     var blocks = [];
     fields.forEach(function (f) {
       var b = fieldBlock(f);
       blocks.push(b);
-      sec.appendChild(b);
+      panel.appendChild(b);
     });
 
     copyAll.addEventListener('click', function () {
       copyText(typeof copyAllText === 'function' ? copyAllText(blocks) : copyAllText, copyAll);
     });
 
-    return sec;
+    return panel;
   }
 
-  function showResultsShell(mode) {
+  function renderResults(data, copy) {
+    var host = $('vseo-results-body');
+    var tabs = $('vseo-tabs');
+    var extras = $('vseo-extras-body');
+    var extrasWrap = $('vseo-extras');
     var empty = $('vseo-empty');
+    host.innerHTML = '';
+    tabs.innerHTML = '';
+    if (extras) extras.innerHTML = '';
     if (empty) empty.classList.add('is-hidden');
     $('vseo-results').classList.add('is-visible');
-    var title = $('vseo-results-title');
-    var sub = $('vseo-results-sub');
-    if (mode === 'structure') {
-      if (title) title.textContent = 'Free structure pack';
-      if (sub) {
-        sub.textContent =
-          'Empty fields with length tips. Fill these yourself - or run AI write for draft copy.';
-      }
-    } else {
-      if (title) title.textContent = 'AI copy to paste';
-      if (sub) {
-        sub.textContent =
-          'Generated for your platforms. Edit freely, then copy field-by-field or copy all.';
-      }
-    }
-  }
 
-  function renderChecklist(items) {
-    var host = $('vseo-checklist');
-    if (!host) return;
-    host.innerHTML = '';
-    if (!items || !items.length) {
-      host.hidden = true;
-      return;
-    }
-    host.hidden = false;
-    var h = document.createElement('h3');
-    h.textContent = 'Before you publish';
-    host.appendChild(h);
-    var ul = document.createElement('ul');
-    items.forEach(function (item) {
-      var li = document.createElement('li');
-      li.textContent = item;
-      ul.appendChild(li);
+    var platforms = data.platforms.filter(function (p) {
+      return !!copy[p];
     });
-    host.appendChild(ul);
-  }
+    if (!platforms.length) platforms = data.platforms.slice();
 
-  function structurePlaceholders(seeds, outlineItems, cta) {
-    var seedHint = seeds.length
-      ? 'Try weaving: ' + seeds.slice(0, 4).join(', ')
-      : 'Add a searchable phrase + a benefit (under ~70 chars).';
-    var ctaHint = CTA_HINTS[cta] || '';
-    return {
-      youtube: {
-        titles: ['', '', ''],
-        titleTips: [
-          'Curiosity + benefit. Not “A video where…”.',
-          'Alternate angle or keyword-forward option.',
-          'Shorter punchy option for mobile truncation.'
-        ],
-        description: '',
-        descriptionTip:
-          'Hook in line 1. Then what they learn, who it’s for, timestamps if you have them. ' +
-          seedHint +
-          (ctaHint ? ' ' + ctaHint : ''),
-        tags: seeds.slice(0, 8).join(', '),
-        tagsTip: 'Comma-separated. Mix broad + specific. Seeds prefilled when you provided them.',
-        chapters: outlineItems.length
-          ? outlineItems
-              .map(function (item, i) {
-                var t = i === 0 ? '0:00' : String(Math.floor((45 + i * 50) / 60)) + ':' + String((45 + i * 50) % 60).padStart(2, '0');
-                return t + ' ' + item;
-              })
-              .join('\n')
-          : '',
-        thumbs: ['', ''],
-        pinned: ctaHint
-      },
-      short: {
-        caption: '',
-        captionTip:
-          'First line is the hook. Keep it skimmable. ' + seedHint + (ctaHint ? ' ' + ctaHint : ''),
-        hashtags: seeds
-          .slice(0, 5)
-          .map(function (s) {
-            return '#' + s.replace(/[^a-z0-9]+/gi, '');
-          })
-          .filter(function (t) {
-            return t.length > 2;
-          })
-          .join(' ')
-      },
-      facebook: {
-        post: '',
-        tip: 'Lead with the outcome, then one detail from the brief. ' + (ctaHint || '')
-      }
-    };
-  }
+    var first = platforms[0] || 'youtube';
+    var hasYtExtras = false;
 
-  function renderStructure(data) {
-    var host = $('vseo-results-body');
-    var jump = $('vseo-jump');
-    var extras = $('vseo-extras-body');
-    var extrasWrap = $('vseo-extras');
-    host.innerHTML = '';
-    jump.innerHTML = '';
-    if (extras) extras.innerHTML = '';
-
-    var seeds = parseSeeds(data.keywords);
-    var outlineItems = parseOutline(data.outline);
-    var pack = structurePlaceholders(seeds, outlineItems, data.cta);
-
-    renderChecklist([
-      'Write titles under ~70 characters - benefit + topic, not a synopsis',
-      'Put the hook in the first two lines of every description',
-      'Use 3–8 real tags/hashtags people search - skip #fyp spam walls',
-      'Match tone to the platform (YouTube can be longer; Shorts/Reels stay punchy)',
-      'Preview the title truncated on mobile before you publish'
-    ]);
-
-    showResultsShell('structure');
-    if (extrasWrap) extrasWrap.hidden = data.platforms.indexOf('youtube') === -1;
-
-    data.platforms.forEach(function (p) {
-      var a = document.createElement('a');
-      a.href = '#result-' + p;
-      a.textContent = ({
-        youtube: 'YouTube',
-        tiktok: 'TikTok',
-        instagram: 'Instagram',
-        facebook: 'Facebook'
-      })[p];
-      jump.appendChild(a);
-
-      if (p === 'youtube') {
-        host.appendChild(
-          platformSection(
-            'youtube',
-            'YouTube - fill upload details',
-            'Empty fields on purpose. AI write fills these if you want a draft.',
-            [
-              {
-                label: 'Title option A',
-                value: '',
-                placeholder: 'e.g. CapCut Text Tricks That Keep Viewers Watching',
-                tip: pack.youtube.titleTips[0],
-                limit: 70,
-                soft: 60
-              },
-              {
-                label: 'Title option B',
-                value: '',
-                placeholder: 'e.g. How I Edit TikToks Faster in CapCut',
-                tip: pack.youtube.titleTips[1],
-                limit: 70,
-                soft: 60
-              },
-              {
-                label: 'Title option C',
-                value: '',
-                placeholder: 'e.g. Stop Making CapCut Look Amateur',
-                tip: pack.youtube.titleTips[2],
-                limit: 70,
-                soft: 60
-              },
-              {
-                label: 'Description',
-                value: '',
-                tip: pack.youtube.descriptionTip,
-                multiline: true,
-                rows: 10,
-                limit: 5000,
-                soft: 3000
-              },
-              {
-                label: 'Tags',
-                value: pack.youtube.tags,
-                tip: pack.youtube.tagsTip,
-                multiline: true,
-                rows: 2,
-                limit: 500,
-                soft: 400
-              }
-            ],
-            function (blocks) {
-              return blocks
-                .map(function (b) {
-                  return b._getValue();
-                })
-                .filter(Boolean)
-                .join('\n\n');
-            }
-          )
-        );
-        if (extras) {
-          extras.appendChild(
-            fieldBlock({
-              label: 'Pinned comment draft',
-              value: pack.youtube.pinned,
-              tip: 'Optional. One clear CTA or question.',
-              multiline: true,
-              rows: 3,
-              limit: 400,
-              soft: 280
-            })
-          );
-          extras.appendChild(
-            fieldBlock({
-              label: 'Chapter placeholders',
-              value: pack.youtube.chapters,
-              tip: outlineItems.length
-                ? 'From your outline - adjust timestamps after you edit.'
-                : 'Add outline beats above, or write chapters after the cut.',
-              multiline: true,
-              rows: 6,
-              limit: 2000,
-              soft: 1200
-            })
-          );
-          extras.appendChild(
-            fieldBlock({
-              label: 'Thumb text idea A',
-              value: '',
-              placeholder: '3–5 BIG WORDS',
-              tip: 'Keep under ~6 words for readability.',
-              limit: 28,
-              soft: 22
-            })
-          );
-          extras.appendChild(
-            fieldBlock({
-              label: 'Thumb text idea B',
-              value: '',
-              placeholder: 'RESULT / MISTAKE / TIP',
-              limit: 24,
-              soft: 20
-            })
-          );
-        }
-      } else if (p === 'tiktok' || p === 'instagram') {
-        var label = p === 'tiktok' ? 'TikTok' : 'Instagram';
-        host.appendChild(
-          platformSection(
-            p,
-            label + ' - caption',
-            'Write a hook first. Hashtags optional and light.',
-            [
-              {
-                label: 'Caption',
-                value: '',
-                tip: pack.short.captionTip,
-                multiline: true,
-                rows: 6,
-                limit: p === 'tiktok' ? 2200 : 2100,
-                soft: 400
-              },
-              {
-                label: 'Hashtags',
-                value: pack.short.hashtags,
-                tip: 'Seeds converted when provided. Trim to what fits the niche.',
-                multiline: true,
-                rows: 2,
-                limit: 300,
-                soft: 200
-              }
-            ],
-            function (blocks) {
-              return blocks
-                .map(function (b) {
-                  return b._getValue();
-                })
-                .filter(Boolean)
-                .join('\n\n');
-            }
-          )
-        );
-      } else if (p === 'facebook') {
-        host.appendChild(
-          platformSection(
-            'facebook',
-            'Facebook - post',
-            'Lead with the outcome for people skimming the feed.',
-            [
-              {
-                label: 'Post text',
-                value: '',
-                tip: pack.facebook.tip,
-                multiline: true,
-                rows: 7,
-                limit: 1800,
-                soft: 600
-              }
-            ],
-            function (blocks) {
-              return blocks[0] ? blocks[0]._getValue() : '';
-            }
-          )
-        );
-      }
-    });
-
-    $('vseo-results').scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
-
-  function renderAiCopy(data, copy) {
-    var host = $('vseo-results-body');
-    var jump = $('vseo-jump');
-    var extras = $('vseo-extras-body');
-    var extrasWrap = $('vseo-extras');
-    host.innerHTML = '';
-    jump.innerHTML = '';
-    if (extras) extras.innerHTML = '';
-    renderChecklist([]);
-    showResultsShell('ai');
-    if (extrasWrap) extrasWrap.hidden = !(copy.youtube && data.platforms.indexOf('youtube') !== -1);
-
-    data.platforms.forEach(function (p) {
-      var a = document.createElement('a');
-      a.href = '#result-' + p;
-      a.textContent = ({
-        youtube: 'YouTube',
-        tiktok: 'TikTok',
-        instagram: 'Instagram',
-        facebook: 'Facebook'
-      })[p];
-      jump.appendChild(a);
+    platforms.forEach(function (p) {
+      var tab = document.createElement('button');
+      tab.type = 'button';
+      tab.className = 'vseo-tab';
+      tab.id = 'tab-' + p;
+      tab.setAttribute('role', 'tab');
+      tab.setAttribute('data-platform', p);
+      tab.textContent = PLATFORM_META[p].label;
+      tab.addEventListener('click', function () {
+        selectTab(p);
+      });
+      tabs.appendChild(tab);
 
       if (p === 'youtube' && copy.youtube) {
         var yt = copy.youtube;
         var titles = yt.titles && yt.titles.length ? yt.titles.slice(0, 3) : [''];
         while (titles.length < 3) titles.push('');
         host.appendChild(
-          platformSection(
+          buildPanel(
             'youtube',
-            'YouTube - paste into upload details',
-            'Aim under ~70 characters. Front-load the description hook.',
             [
-              { label: 'Title option A', value: titles[0], limit: 70, soft: 60 },
-              { label: 'Title option B', value: titles[1], limit: 70, soft: 60 },
-              { label: 'Title option C', value: titles[2], limit: 70, soft: 60 },
+              {
+                label: 'Title option A',
+                value: titles[0],
+                tip: 'Curiosity + benefit. Not a synopsis.',
+                limit: 70,
+                soft: 60
+              },
+              {
+                label: 'Title option B',
+                value: titles[1],
+                tip: 'Alternate angle or keyword-forward option.',
+                limit: 70,
+                soft: 60
+              },
+              {
+                label: 'Title option C',
+                value: titles[2],
+                tip: 'Shorter punchy option for mobile truncation.',
+                limit: 70,
+                soft: 60
+              },
               {
                 label: 'Description',
                 value: yt.description || '',
+                tip: 'Hook in the first 1-2 lines.',
                 multiline: true,
                 rows: 10,
                 limit: 5000,
@@ -860,6 +637,7 @@
               {
                 label: 'Tags',
                 value: yt.tags || '',
+                tip: 'Comma-separated. Mix broad + specific.',
                 multiline: true,
                 rows: 2,
                 limit: 500,
@@ -868,9 +646,7 @@
             ],
             function (blocks) {
               return blocks
-                .map(function (b) {
-                  return b._getValue();
-                })
+                .map(function (b) { return b._getValue(); })
                 .filter(Boolean)
                 .join('\n\n');
             }
@@ -880,7 +656,7 @@
           if (yt.pinned) {
             extras.appendChild(
               fieldBlock({
-                label: 'Pinned comment draft',
+                label: 'Pinned comment',
                 value: yt.pinned,
                 multiline: true,
                 rows: 3,
@@ -888,6 +664,7 @@
                 soft: 280
               })
             );
+            hasYtExtras = true;
           }
           if (yt.chapters) {
             extras.appendChild(
@@ -900,26 +677,26 @@
                 soft: 1200
               })
             );
+            hasYtExtras = true;
           }
           (yt.thumbs || []).slice(0, 3).forEach(function (t, i) {
             extras.appendChild(
               fieldBlock({
-                label: 'Thumb text idea ' + String.fromCharCode(65 + i),
+                label: 'Thumb text ' + String.fromCharCode(65 + i),
                 value: t,
+                tip: 'Keep under ~6 words.',
                 limit: 28,
                 soft: 22
               })
             );
+            hasYtExtras = true;
           });
         }
       } else if ((p === 'tiktok' || p === 'instagram') && copy[p]) {
         var short = copy[p];
-        var label = p === 'tiktok' ? 'TikTok' : 'Instagram';
         host.appendChild(
-          platformSection(
+          buildPanel(
             p,
-            label + ' - caption',
-            'Hook first. Trim hashtags if they feel spammy.',
             [
               {
                 label: 'Caption',
@@ -940,9 +717,7 @@
             ],
             function (blocks) {
               return blocks
-                .map(function (b) {
-                  return b._getValue();
-                })
+                .map(function (b) { return b._getValue(); })
                 .filter(Boolean)
                 .join('\n\n');
             }
@@ -950,10 +725,8 @@
         );
       } else if (p === 'facebook' && copy.facebook) {
         host.appendChild(
-          platformSection(
+          buildPanel(
             'facebook',
-            'Facebook - post',
-            'Skimmable first line wins.',
             [
               {
                 label: 'Post text',
@@ -972,6 +745,12 @@
       }
     });
 
+    if (extrasWrap) {
+      extrasWrap.dataset.hasContent = hasYtExtras ? '1' : '';
+      extrasWrap.hidden = !hasYtExtras || first !== 'youtube';
+    }
+
+    selectTab(first);
     $('vseo-results').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
@@ -989,119 +768,186 @@
     return true;
   }
 
-  function generateStructure() {
-    var data = readForm();
-    if (!validateForm(data)) return;
-    saveForm(data);
-    renderStructure(data);
+  function resetTurnstile() {
+    if (window.CuemarkTurnstile) {
+      CuemarkTurnstile.reset('vseo-turnstile');
+    }
   }
 
-  function generateAi() {
+  function generate() {
     var data = readForm();
     if (!validateForm(data)) return;
-    var gate = aiGateReason();
+
+    var gate = canGenerate();
     if (!gate.ok) {
-      setFormError(gate.reason, true);
+      if (gate.reason === 'signin') {
+        setFormError(
+          'Sign in for 2 free AI generations. <a href="' + loginHref() + '">Sign in</a>',
+          true
+        );
+      } else if (gate.reason === 'paywall') {
+        setFormError(
+          'Free generations used. Next generate costs ' +
+            AI_CREDITS +
+            ' purchased credits. ' +
+            purchaseLinksHtml(),
+          true
+        );
+        var paywall = $('vseo-paywall');
+        if (paywall) paywall.hidden = false;
+      } else {
+        setFormError('Checking your balance…');
+      }
       updateCreditsPanel();
       return;
     }
 
-    var btn = $('vseo-ai');
-    setBusy(btn, true, 'Writing…');
+    var btn = $('vseo-generate');
+    setBusy(btn, true, 'Generating…');
+    setLoading(true);
     setFormError('');
     saveForm(data);
 
-    fetch(BACKEND + '/api/video-seo/generate', {
-      method: 'POST',
-      headers: Auth && Auth.authHeaders
-        ? Auth.authHeaders()
-        : {
-            'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + getToken()
-          },
-      body: JSON.stringify({
-        brief: data.brief,
-        keywords: data.keywords,
-        tone: data.tone,
-        cta: data.cta,
-        outline: data.outline,
-        platforms: data.platforms
+    var run = function (turnstileToken) {
+      fetch(BACKEND + '/api/video-seo/generate', {
+        method: 'POST',
+        headers: Auth && Auth.authHeaders
+          ? Auth.authHeaders()
+          : {
+              'Content-Type': 'application/json',
+              Authorization: 'Bearer ' + getToken()
+            },
+        body: JSON.stringify({
+          brief: data.brief,
+          keywords: data.keywords,
+          tone: data.tone,
+          cta: data.cta,
+          outline: data.outline,
+          platforms: data.platforms,
+          turnstile_token: turnstileToken || undefined
+        })
       })
-    })
-      .then(function (res) {
-        return res.json().then(function (body) {
-          return { res: res, data: body };
-        });
-      })
-      .then(function (x) {
-        setBusy(btn, false);
-        if (x.res.status === 503 && x.data && x.data.reason === 'provider_not_configured') {
-          setFormError(
-            'AI write is temporarily unavailable on the server. Use Free structure for now, or try again later.',
-            false
-          );
-          syncAiButton();
-          return;
-        }
-        if (x.res.status === 401) {
-          if (Auth && Auth.clearToken) Auth.clearToken();
-          creditsState = null;
-          setFormError(
-            'Session expired. <a href="' + loginHref() + '">Sign in</a> again.',
-            true
-          );
-          updateCreditsPanel();
-          return;
-        }
-        if (x.res.status === 402) {
-          var need = x.data && x.data.credits_required != null ? x.data.credits_required : AI_CREDITS;
-          var paidLeft =
-            x.data && x.data.paid_credits_remaining != null ? x.data.paid_credits_remaining : 0;
-          if (x.data && x.data.reason === 'paid_credits_required') {
+        .then(function (res) {
+          return res.json().then(function (body) {
+            return { res: res, data: body };
+          });
+        })
+        .then(function (x) {
+          setBusy(btn, false);
+          setLoading(false);
+          resetTurnstile();
+
+          if (x.res.status === 503 && x.data && x.data.reason === 'provider_not_configured') {
+            setFormError('AI is temporarily unavailable. Try again shortly.');
+            return;
+          }
+          if (x.res.status === 401) {
+            if (Auth && Auth.clearToken) Auth.clearToken();
+            creditsState = null;
             setFormError(
-              'Purchased credits required (need ' +
+              'Session expired. <a href="' + loginHref() + '">Sign in</a> again.',
+              true
+            );
+            updateCreditsPanel();
+            return;
+          }
+          if (x.res.status === 429) {
+            setFormError('Too many requests. Wait a bit and try again.');
+            return;
+          }
+          if (x.res.status === 400) {
+            setFormError((x.data && x.data.error) || 'Security check failed. Refresh and try again.');
+            return;
+          }
+          if (x.res.status === 402) {
+            var need = x.data && x.data.credits_required != null ? x.data.credits_required : AI_CREDITS;
+            var paidLeft =
+              x.data && x.data.paid_credits_remaining != null ? x.data.paid_credits_remaining : 0;
+            setFormError(
+              'Free gens used. Need ' +
                 need +
-                ', you have ' +
+                ' purchased credits (you have ' +
                 paidLeft +
-                '). Free signup credits cannot run AI write. ' +
+                '). ' +
                 purchaseLinksHtml(),
               true
             );
+            var pw = $('vseo-paywall');
+            if (pw) pw.hidden = false;
+            updateCreditsPanel();
+            return;
+          }
+
+          var results = (x.data && (x.data.results || x.data.copy)) || null;
+          if (!x.res.ok || !results) {
+            setFormError((x.data && x.data.error) || 'Generate failed. No charge if it failed.');
+            return;
+          }
+
+          renderResults(data, results);
+
+          if (x.data.free_remaining != null && creditsState) {
+            creditsState.freeRemaining = Number(x.data.free_remaining);
+          }
+          if (x.data.paid_credits_remaining != null && creditsState) {
+            creditsState.paidRemaining = Number(x.data.paid_credits_remaining);
+          }
+
+          var usedFree = !!x.data.used_free;
+          var charged = x.data.credits_charged != null ? x.data.credits_charged : usedFree ? 0 : AI_CREDITS;
+          var freeLeft = x.data.free_remaining != null ? x.data.free_remaining : freeRemaining();
+          if (usedFree || charged === 0) {
+            setFormError(
+              'Done · free generation used · ' +
+                (freeLeft != null ? freeLeft + ' free left' : 'check Your plan'),
+              false,
+              'ok'
+            );
           } else {
             setFormError(
-              'Not enough credits (need ' + need + '). ' + purchaseLinksHtml(),
-              true
+              'Done · charged ' +
+                charged +
+                ' credit' +
+                (charged === 1 ? '' : 's') +
+                (x.data.paid_credits_remaining != null
+                  ? ' · ' + x.data.paid_credits_remaining + ' purchased remaining'
+                  : ''),
+              false,
+              'ok'
             );
           }
           updateCreditsPanel();
-          return;
-        }
-        if (!x.res.ok || !x.data || !x.data.copy) {
-          setFormError((x.data && x.data.error) || 'AI write failed. No charge if generation failed.');
-          syncAiButton();
-          return;
-        }
-        renderAiCopy(data, x.data.copy);
-        var charged = x.data.credits_charged != null ? x.data.credits_charged : AI_CREDITS;
-        var remain =
-          x.data.paid_credits_remaining != null ? x.data.paid_credits_remaining : null;
-        setFormError(
-          'Done - charged ' +
-            charged +
-            ' purchased credit' +
-            (charged === 1 ? '' : 's') +
-            (remain != null ? ' · ' + remain + ' purchased remaining' : '') +
-            '.',
-          false,
-          'ok'
-        );
-        updateCreditsPanel();
-      })
-      .catch(function () {
-        setBusy(btn, false);
-        setFormError('Could not reach the server. Try again.');
-        syncAiButton();
-      });
+        })
+        .catch(function () {
+          setBusy(btn, false);
+          setLoading(false);
+          resetTurnstile();
+          setFormError('Could not reach the server. Try again.');
+        });
+    };
+
+    if (window.CuemarkTurnstile && CuemarkTurnstile.enabled && CuemarkTurnstile.enabled()) {
+      CuemarkTurnstile.requireToken('vseo-turnstile')
+        .then(run)
+        .catch(function (err) {
+          setBusy(btn, false);
+          setLoading(false);
+          setFormError((err && err.message) || 'Complete the security check, then try again.');
+        });
+    } else if (window.CuemarkTurnstile) {
+      CuemarkTurnstile.loadConfig()
+        .then(function () {
+          if (CuemarkTurnstile.enabled()) {
+            return CuemarkTurnstile.requireToken('vseo-turnstile').then(run);
+          }
+          run('');
+        })
+        .catch(function () {
+          run('');
+        });
+    } else {
+      run('');
+    }
   }
 
   function clearAll() {
@@ -1116,13 +962,18 @@
     });
     $('vseo-results').classList.remove('is-visible');
     $('vseo-results-body').innerHTML = '';
+    $('vseo-tabs').innerHTML = '';
     $('vseo-extras-body').innerHTML = '';
-    $('vseo-jump').innerHTML = '';
-    renderChecklist([]);
     var extras = $('vseo-extras');
-    if (extras) extras.hidden = true;
+    if (extras) {
+      extras.hidden = true;
+      extras.dataset.hasContent = '';
+    }
     var empty = $('vseo-empty');
     if (empty) empty.classList.remove('is-hidden');
+    var paywall = $('vseo-paywall');
+    if (paywall) paywall.hidden = true;
+    setLoading(false);
     setFormError('');
     try { localStorage.removeItem(STORAGE_KEY); } catch (e) { /* ignore */ }
     $('vseo-brief').focus();
@@ -1132,15 +983,17 @@
     loadForm();
     updateCreditsPanel();
 
+    if (window.CuemarkTurnstile) {
+      CuemarkTurnstile.prepare('vseo-turnstile-wrap', 'vseo-turnstile').catch(function () {});
+    }
+
     var form = $('vseo-form');
     if (form) {
       form.addEventListener('submit', function (e) {
         e.preventDefault();
-        generateStructure();
+        generate();
       });
     }
-    var aiBtn = $('vseo-ai');
-    if (aiBtn) aiBtn.addEventListener('click', generateAi);
     var clearBtn = $('vseo-clear');
     if (clearBtn) clearBtn.addEventListener('click', clearAll);
 

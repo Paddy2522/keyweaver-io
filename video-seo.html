@@ -13,13 +13,13 @@
   <link rel="stylesheet" href="/css/tools-shared.css" />
   <link rel="stylesheet" href="/css/video-seo.css" />
   <link rel="stylesheet" href="/css/help-widget.css" />
-  <title>Video SEO - Titles &amp; captions for creators | Keyweaver</title>
-  <meta name="description" content="Video SEO for creators: free upload checklist and field structure, plus AI write (purchased credits) for YouTube, TikTok, Instagram, and Facebook copy you’d actually paste." />
+  <title>Video SEO - AI titles &amp; captions | Keyweaver</title>
+  <meta name="description" content="Video SEO for creators: one brief → paste-ready titles, descriptions, tags, and hashtags for YouTube, TikTok, Instagram, and Facebook. 2 free AI generations, then purchased credits." />
   <link rel="canonical" href="https://keyweaver.io/video-seo" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Keyweaver" />
   <meta property="og:title" content="Video SEO - Keyweaver Tools" />
-  <meta property="og:description" content="Free structure pack + AI write for platform titles, descriptions, tags, and hashtags. AI uses purchased credits only." />
+  <meta property="og:description" content="AI write for platform titles, descriptions, tags, and hashtags. 2 free generations with an account, then 2 purchased credits per generate." />
   <meta property="og:url" content="https://keyweaver.io/video-seo" />
   <meta property="og:image" content="https://keyweaver.io/images/keyweaver-logo.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -72,27 +72,22 @@
   <header class="vseo-hero">
     <p class="section-label">Tools · Pre-publish</p>
     <h1>Video SEO</h1>
-    <p>For creators and editors: turn one video brief into paste-ready titles, descriptions, tags, and hashtags for YouTube, TikTok, Instagram, and Facebook.</p>
+    <p>One brief. Paste-ready titles, descriptions, tags, and hashtags for every platform you publish on.</p>
     <div class="tools-badges" aria-label="Pricing">
-      <span class="tools-badge tools-badge-free">Free structure</span>
-      <span class="tools-badge">AI write · 2 purchased credits</span>
-    </div>
-    <div class="tools-tier" role="note">
-      <p><strong>Free structure:</strong> checklist, field labels, length tips, and empty fields to fill yourself. No fake auto-titles.</p>
-      <p><strong>AI write (primary):</strong> real platform copy from your brief. Costs <strong>2 purchased credits</strong>. Free signup credits never cover it.</p>
+      <span class="tools-badge tools-badge-free">2 free AI gens</span>
+      <span class="tools-badge tools-badge-paid">Then 2 credits each</span>
     </div>
   </header>
 
   <form id="vseo-form" class="vseo-form" novalidate>
     <div class="vseo-field">
-      <label for="vseo-brief">Video brief</label>
-      <p class="hint">What the video is about, who it’s for, and the outcome. Write notes for yourself - don’t paste a synopsis as a title.</p>
-      <textarea id="vseo-brief" name="brief" required placeholder="Example: 8-minute CapCut tutorial for TikTok creators who want cleaner cuts and on-screen text. Honest walkthrough, no fluff. CTA: subscribe for weekly editing tips."></textarea>
+      <label for="vseo-brief">What is the video about?</label>
+      <p class="hint">Topic, audience, and the outcome. The better the brief, the sharper the titles.</p>
+      <textarea id="vseo-brief" name="brief" required placeholder="Example: 8-minute CapCut tutorial for TikTok creators who want cleaner cuts and on-screen text. Honest walkthrough. CTA: subscribe for weekly editing tips."></textarea>
     </div>
 
     <div class="vseo-field">
-      <label for="vseo-keywords">Seed keywords <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
-      <p class="hint">Comma-separated phrases you already care about. AI weaves these in; free structure shows them as prompts.</p>
+      <label for="vseo-keywords">Keywords <span class="vseo-optional">optional</span></label>
       <input id="vseo-keywords" name="keywords" type="text" placeholder="capcut tutorial, tiktok editing, on screen text" autocomplete="off" />
     </div>
 
@@ -120,15 +115,16 @@
       </div>
     </div>
 
-    <div class="vseo-field">
-      <label for="vseo-outline">Chapter / beat outline <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
-      <p class="hint">One beat per line. AI can turn these into YouTube chapter placeholders.</p>
-      <textarea id="vseo-outline" name="outline" rows="4" placeholder="Hook&#10;Setup in CapCut&#10;Text + captions tip&#10;Export settings&#10;CTA"></textarea>
-    </div>
+    <details class="vseo-advanced">
+      <summary>Chapter outline <span class="vseo-optional">optional</span></summary>
+      <div class="vseo-field" style="margin-top:0.75rem">
+        <p class="hint">One beat per line. Used for YouTube chapter placeholders.</p>
+        <textarea id="vseo-outline" name="outline" rows="4" placeholder="Hook&#10;Setup in CapCut&#10;Text + captions tip&#10;Export settings&#10;CTA"></textarea>
+      </div>
+    </details>
 
     <div class="vseo-field">
       <label>Platforms</label>
-      <p class="hint">Defaults to all on. Uncheck anything you don’t need.</p>
       <div class="vseo-platforms">
         <label class="vseo-platform"><input type="checkbox" id="plat-youtube" checked /> YouTube</label>
         <label class="vseo-platform"><input type="checkbox" id="plat-tiktok" checked /> TikTok</label>
@@ -137,36 +133,38 @@
       </div>
     </div>
 
+    <div class="cuemark-turnstile-wrap" id="vseo-turnstile-wrap">
+      <div id="vseo-turnstile"></div>
+    </div>
+
     <p class="vseo-error" id="vseo-error" role="alert"></p>
 
     <div class="vseo-actions">
-      <button type="button" class="btn btn-primary btn-lg" id="vseo-ai">AI write · 2 credits</button>
-      <button type="submit" class="btn btn-ghost" id="vseo-structure">Free structure</button>
+      <button type="submit" class="btn btn-primary btn-lg" id="vseo-generate">Generate</button>
       <button type="button" class="btn btn-ghost" id="vseo-clear">Clear</button>
-      <p class="tools-form-note" id="vseo-cost-note">AI write charges 2 purchased credits. Free structure never charges.</p>
+      <p class="tools-form-note" id="vseo-cost-note">Sign in for 2 free AI generations. After that, 2 purchased credits each.</p>
     </div>
   </form>
 
-  <aside class="tools-credit-panel vseo-credits" id="vseo-credits" aria-label="AI write credits">
-    <h3>AI write credits</h3>
-    <p class="tools-credit-status" id="vseo-balance">Sign in to see purchased credits and unlock AI write. Free structure stays free.</p>
+  <aside class="tools-credit-panel vseo-credits" id="vseo-credits" aria-label="Generation credits">
+    <h3>Your plan</h3>
+    <p class="tools-credit-status" id="vseo-balance">Sign in to unlock 2 free AI generations.</p>
     <div class="tools-credit-meter" id="vseo-credit-meter" hidden>
       <div class="tools-credit-row">
-        <span class="label">Purchased credits (for AI write)</span>
+        <span class="label">Free AI left</span>
+        <span class="value" id="vseo-free-value">-</span>
+      </div>
+      <div class="tools-credit-row">
+        <span class="label">Purchased credits</span>
         <span class="value" id="vseo-paid-value">-</span>
       </div>
       <div class="tools-credit-row">
-        <span class="label">Total pool (plugins + tools)</span>
-        <span class="value" id="vseo-pool-value">-</span>
-      </div>
-      <div class="tools-credit-row">
-        <span class="label">AI write cost</span>
-        <span class="value is-ok" id="vseo-next-cost">2 credits</span>
+        <span class="label">Next generate</span>
+        <span class="value is-ok" id="vseo-next-cost">-</span>
       </div>
     </div>
     <p class="tools-credit-help">
-      AI write spends <strong>purchased</strong> credits only. Free signup / promo credits never cover generation.
-      Buy packs on <a href="/pricing">Pricing</a> or manage balance in <a href="/account">Account</a>.
+      Free gens are tied to your account (not this browser). After 2 free, each generate costs <strong>2 purchased credits</strong>. Free signup credits cannot pay for AI.
     </p>
     <div class="tools-credit-actions">
       <a href="/login?next=/video-seo" class="btn btn-primary" id="vseo-credits-signin">Sign in</a>
@@ -175,39 +173,53 @@
     </div>
   </aside>
 
+  <div class="vseo-paywall" id="vseo-paywall" hidden>
+    <h2>Free generations used</h2>
+    <p>You’ve used both free AI writes. Next generate costs <strong>2 purchased credits</strong>.</p>
+    <div class="vseo-paywall-actions">
+      <a href="/pricing" class="btn btn-primary">Buy credits</a>
+      <a href="/account" class="btn btn-ghost">Account</a>
+    </div>
+  </div>
+
+  <div class="vseo-loading" id="vseo-loading" hidden aria-live="polite">
+    <div class="vseo-loading-bar" aria-hidden="true"></div>
+    <p>Writing platform copy…</p>
+  </div>
+
   <div class="tools-empty" id="vseo-empty">
-    <h2>Platform copy appears here</h2>
-    <p>Use <strong>AI write</strong> for paste-ready titles and captions (2 purchased credits), or <strong>Free structure</strong> for empty labeled fields and a checklist.</p>
+    <h2>Results show up here</h2>
+    <p>Hit <strong>Generate</strong> for tabbed copy you can paste into YouTube, TikTok, Instagram, or Facebook.</p>
   </div>
 
   <div class="vseo-results" id="vseo-results">
     <div class="vseo-results-head">
-      <h2 id="vseo-results-title">Copy to paste</h2>
-      <p id="vseo-results-sub">Each field is labeled for the platform upload form. Edit freely, then copy.</p>
+      <h2 id="vseo-results-title">Your copy</h2>
+      <p id="vseo-results-sub">Edit freely, then copy field-by-field.</p>
     </div>
-    <div class="vseo-checklist" id="vseo-checklist" hidden></div>
-    <nav class="vseo-jump" id="vseo-jump" aria-label="Jump to platform"></nav>
+
+    <div class="vseo-tabs" id="vseo-tabs" role="tablist" aria-label="Platform results"></div>
     <div id="vseo-results-body"></div>
 
-    <aside class="vseo-extras" id="vseo-extras" aria-label="Extras" hidden>
-      <h3>Extras</h3>
-      <p>Thumbnail text ideas, a pinned-comment draft, and chapter placeholders.</p>
+    <aside class="vseo-extras" id="vseo-extras" aria-label="YouTube extras" hidden>
+      <h3>YouTube extras</h3>
+      <p>Pinned comment, chapters, and thumb text ideas.</p>
       <div id="vseo-extras-body"></div>
     </aside>
 
     <aside class="tools-handoff" aria-label="Next steps">
       <h3>Continue with this brief</h3>
-      <p>Your brief is saved in this browser. Next: free thumb/teaser recipes, or a free shoot plan.</p>
+      <p>Saved in this browser. Next: thumb recipes or a shoot plan.</p>
       <div class="tools-handoff-actions">
-        <a href="/campaign-kit" class="btn btn-primary">Continue in Campaign Kit</a>
-        <a href="/shot-list" class="btn btn-ghost">Continue in Shot List</a>
+        <a href="/campaign-kit" class="btn btn-primary">Campaign Kit</a>
+        <a href="/shot-list" class="btn btn-ghost">Shot List</a>
       </div>
     </aside>
   </div>
 
   <p class="vseo-pro">
-    Free structure never charges. AI write uses purchased credits only.
-    Part of the pre-publish toolkit with <a href="/campaign-kit">Campaign Kit</a> and <a href="/shot-list">Shot List</a>. For timeline plugins, see <a href="/download">Download</a>.
+    Part of the pre-publish toolkit with <a href="/campaign-kit">Campaign Kit</a> and <a href="/shot-list">Shot List</a>.
+    For timeline plugins, see <a href="/download">Download</a>.
   </p>
 </main>
 
@@ -235,8 +247,8 @@
 </footer>
 
 <script src="/js/tools-auth.js"></script>
+<script src="/js/cuemark-turnstile.js"></script>
 <script src="/js/video-seo.js" defer></script>
 <script src="/js/help-widget.js" defer></script>
-<script src="/js/cuemark-turnstile.js"></script>
 </body>
 </html>
