@@ -44,12 +44,12 @@
     .hub-hero-inner {
       position: relative;
       z-index: 1;
-      max-width: 1180px;
+      max-width: 1240px;
       margin: 0 auto;
-      padding: 0 2rem;
+      padding: 0 1.5rem 0 2rem;
       display: grid;
-      grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.25fr);
-      gap: 2.25rem 2.75rem;
+      grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.4fr);
+      gap: 1.75rem 2rem;
       align-items: center;
     }
     .hub-hero-copy {
@@ -96,17 +96,21 @@
       align-items: center;
       min-width: 0;
     }
+    .hub-hero-visual picture {
+      display: block;
+      width: 100%;
+      min-width: 0;
+    }
     .hub-hero-visual img {
       display: block;
       width: 100%;
-      max-width: 720px;
+      max-width: 860px;
       height: auto;
-      border-radius: 14px;
-      border: 1px solid rgba(42, 42, 61, 0.85);
-      background: #000;
-      box-shadow:
-        0 24px 60px rgba(0, 0, 0, 0.45),
-        0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+      border: 0;
+      outline: none;
+      background: transparent;
+      box-shadow: none;
+      border-radius: 0;
     }
     @media (max-width: 900px) {
       .hub-hero {
@@ -115,6 +119,7 @@
       .hub-hero-inner {
         grid-template-columns: 1fr;
         gap: 2rem;
+        padding: 0 1.5rem;
       }
       .hub-hero-copy {
         max-width: none;
@@ -124,7 +129,7 @@
         order: 2;
       }
       .hub-hero-visual img {
-        max-width: 520px;
+        max-width: 640px;
       }
     }
     @media (max-width: 560px) {
@@ -137,9 +142,6 @@
       }
       .hub-ctas .btn {
         text-align: center;
-      }
-      .hub-hero-visual img {
-        border-radius: 12px;
       }
     }
     .tools-section {
