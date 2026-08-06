@@ -672,6 +672,20 @@ body {
   margin-bottom: 1.5rem;
 }
 
+.cta-band .hub-ctas {
+  justify-content: center;
+}
+
+@media (max-width: 560px) {
+  .cta-band .hub-ctas {
+    align-items: center;
+  }
+
+  .cta-band .hub-ctas .btn {
+    width: min(100%, 20rem);
+  }
+}
+
 /* ── Footer ── */
 .site-footer {
   border-top: 1px solid var(--edge);
