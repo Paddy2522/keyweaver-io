@@ -213,6 +213,16 @@
       background: #07070D;
       pointer-events: none;
     }
+    @media (prefers-reduced-motion: reduce) {
+      .demo-hero-stream video {
+        display: none;
+      }
+      .caption-demo-screen {
+        background:
+          center / cover no-repeat
+          url("https://videodelivery.net/38504b2f91f37f8b0e72b783da3ea06e/thumbnails/thumbnail.jpg?time=8s&height=720");
+      }
+    }
 
     /* How-it-works steps - match Cuemark main page */
     .ludo-steps {
@@ -350,9 +360,13 @@
           loop
           playsinline
           preload="auto"
-          poster="https://videodelivery.net/38504b2f91f37f8b0e72b783da3ea06e/thumbnails/thumbnail.jpg"
+          poster="https://videodelivery.net/38504b2f91f37f8b0e72b783da3ea06e/thumbnails/thumbnail.jpg?time=8s&amp;height=720"
           data-stream-id="38504b2f91f37f8b0e72b783da3ea06e"
-          title="Ludo motion toolkit demo in After Effects"></video>
+          title="Ludo in After Effects — real panel, real timeline">
+          <source
+            src="https://customer-2vnlyvi12yb7n8s2.cloudflarestream.com/38504b2f91f37f8b0e72b783da3ea06e/downloads/default.mp4"
+            type="video/mp4" />
+        </video>
       </div>
     </div>
   </div>
@@ -715,31 +729,45 @@
 (function () {
   var vid = document.getElementById('ludo-hero-video');
   if (!vid) return;
-  var streamId = vid.getAttribute('data-stream-id');
-  if (!streamId) return;
-  var src = 'https://videodelivery.net/' + streamId + '/manifest/video.m3u8';
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    vid.removeAttribute('autoplay');
+    vid.pause();
+    return;
+  }
 
   function tryPlay() {
     var p = vid.play();
     if (p && typeof p.catch === 'function') p.catch(function () {});
   }
 
-  if (vid.canPlayType('application/vnd.apple.mpegurl')) {
-    vid.src = src;
-    vid.addEventListener('canplay', tryPlay, { once: true });
+  // Prefer progressive MP4 <source>; fall back to HLS if it errors.
+  var streamId = vid.getAttribute('data-stream-id');
+  var hlsSrc = streamId ? ('https://videodelivery.net/' + streamId + '/manifest/video.m3u8') : '';
+  var usedHls = false;
+
+  function loadHls() {
+    if (!hlsSrc || usedHls) return;
+    usedHls = true;
+    while (vid.firstChild) vid.removeChild(vid.firstChild);
+    if (vid.canPlayType('application/vnd.apple.mpegurl')) {
+      vid.src = hlsSrc;
+      vid.addEventListener('canplay', tryPlay, { once: true });
+      tryPlay();
+      return;
+    }
+    if (window.Hls && window.Hls.isSupported()) {
+      var hls = new window.Hls({ enableWorker: false, maxBufferLength: 30 });
+      hls.loadSource(hlsSrc);
+      hls.attachMedia(vid);
+      hls.on(window.Hls.Events.MANIFEST_PARSED, tryPlay);
+      return;
+    }
+    vid.src = hlsSrc;
     tryPlay();
-    return;
   }
 
-  if (window.Hls && window.Hls.isSupported()) {
-    var hls = new window.Hls({ enableWorker: false, maxBufferLength: 30 });
-    hls.loadSource(src);
-    hls.attachMedia(vid);
-    hls.on(window.Hls.Events.MANIFEST_PARSED, tryPlay);
-    return;
-  }
-
-  vid.src = src;
+  vid.addEventListener('error', loadHls, { once: true });
+  vid.addEventListener('canplay', tryPlay, { once: true });
   tryPlay();
 })();
 </script>
