@@ -495,8 +495,9 @@ body {
 .product-hero-top {
   position: relative;
   z-index: 1;
-  max-width: 1120px;
-  margin: 0 auto 2.25rem;
+  /* Match site-nav horizontal inset so the wordmark sits under the Keyweaver mark. */
+  width: 100%;
+  margin: 0 0 2.25rem;
   display: flex;
   justify-content: flex-start;
   align-items: center;
