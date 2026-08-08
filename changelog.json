@@ -2,6 +2,16 @@
   "product": "Keyweaver",
   "releases": [
     {
+      "version": "1.0.12",
+      "date": "2026-08-08",
+      "panel": [
+        "Restored original panel look across the suite - Inter type, saturated accents, and branded header washes"
+      ],
+      "website": [
+        "Manager catalog updated for Cuemark 1.0.8, Ludo 0.3.8, Superconductor 0.1.7 / Premiere 0.1.8, Trillian/Tamborine 0.1.8 / Premiere 0.1.9"
+      ]
+    },
+    {
       "version": "1.0.11",
       "date": "2026-08-07",
       "panel": [

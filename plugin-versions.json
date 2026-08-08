@@ -6,28 +6,28 @@
   },
   "plugins": {
     "cuemark": {
-      "version": "1.0.7"
+      "version": "1.0.8"
     },
     "superconductor": {
-      "version": "0.1.6"
+      "version": "0.1.7"
     },
     "trillian": {
-      "version": "0.1.7"
+      "version": "0.1.8"
     },
     "tamborine": {
-      "version": "0.1.7"
+      "version": "0.1.8"
     },
     "ludo": {
-      "version": "0.3.7"
+      "version": "0.3.8"
     },
     "trillian-premiere": {
-      "version": "0.1.8"
+      "version": "0.1.9"
     },
     "tamborine-premiere": {
-      "version": "0.1.8"
+      "version": "0.1.9"
     },
     "superconductor-premiere": {
-      "version": "0.1.7"
+      "version": "0.1.8"
     }
   }
 }

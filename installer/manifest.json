@@ -34,20 +34,20 @@
                          "displayName":  "Cuemark by Keyweaver",
                          "description":  "AI subtitles and captions inside Adobe After Effects.",
                          "panelId":  "com.captioncraft.panel",
-                         "version":  "1.0.7",
+                         "version":  "1.0.8",
                          "host":  "AEFT",
                          "hostLabel":  "After Effects",
                          "platforms":  {
                                            "win":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Cuemark-Install-win-v1.0.7.zip",
-                                                       "sha256":  "63f558679ca66d5caaceebe9a094dac8ed467a70160a8f0f996bcef885ec2c76",
-                                                       "sizeBytes":  50209188,
+                                                       "packageUrl":  "https://keyweaver.io/downloads/Cuemark-Install-win-v1.0.8.zip",
+                                                       "sha256":  "6ec5a3076d99e05af81051921a9b5a7619fc69a12a057597b0afcbb7c0b4f36f",
+                                                       "sizeBytes":  50209752,
                                                        "installScript":  "cuemark-install-windows.ps1"
                                                    },
                                            "mac":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Cuemark-Install-mac-v1.0.7.zip",
-                                                       "sha256":  "6aac859ea1f92e5f73dff862a59432b9d4b0882ed70472ed0cac3afa61f1efb1",
-                                                       "sizeBytes":  67623053,
+                                                       "packageUrl":  "https://keyweaver.io/downloads/Cuemark-Install-mac-v1.0.8.zip",
+                                                       "sha256":  "a3f7c827c3b0ba6a0525840c9f0093dbbe664c75c51736dfc6272f688167374e",
+                                                       "sizeBytes":  67623617,
                                                        "installScript":  "cuemark-install-macos.sh"
                                                    }
                                        },
@@ -60,20 +60,20 @@
                          "displayName":  "Trillian by Keyweaver",
                          "description":  "AI voiceover and narration you can drop into your comp.",
                          "panelId":  "com.keyweaver.trillian.panel",
-                         "version":  "0.1.7",
+                         "version":  "0.1.8",
                          "host":  "AEFT",
                          "hostLabel":  "After Effects",
                          "platforms":  {
                                            "win":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Trillian-Install-win-v0.1.7.zip",
-                                                       "sha256":  "f5a51c7baabd1bdc01167a688e398889fc6b773fdb9d98c078ee6546445424c0",
-                                                       "sizeBytes":  126301,
+                                                       "packageUrl":  "https://keyweaver.io/downloads/Trillian-Install-win-v0.1.8.zip",
+                                                       "sha256":  "ac83c0564a18789da50d84c8525c9a2602a47dfc8beb5fc066810286917619bd",
+                                                       "sizeBytes":  125969,
                                                        "installScript":  "trillian-install-windows.ps1"
                                                    },
                                            "mac":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Trillian-Install-mac-v0.1.7.zip",
-                                                       "sha256":  "9568a3038c4eb2b737b878365eb8b1bf2ad69dc804067dfc811dee7cde2694f5",
-                                                       "sizeBytes":  125765,
+                                                       "packageUrl":  "https://keyweaver.io/downloads/Trillian-Install-mac-v0.1.8.zip",
+                                                       "sha256":  "97031d031d8eafa848c22eede05ac268915de0dc8b1a62a74668d09ff5ac7310",
+                                                       "sizeBytes":  125433,
                                                        "installScript":  "trillian-install-macos.sh"
                                                    }
                                        },
@@ -86,20 +86,20 @@
                          "displayName":  "Tamborine by Keyweaver",
                          "description":  "Generate music beds and sound effects for your edit.",
                          "panelId":  "com.keyweaver.tamborine.panel",
-                         "version":  "0.1.7",
+                         "version":  "0.1.8",
                          "host":  "AEFT",
                          "hostLabel":  "After Effects",
                          "platforms":  {
                                            "win":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Tamborine-Install-win-v0.1.7.zip",
-                                                       "sha256":  "b59ba47fd9178df0ab50718fded5f3048d6089b7410238fbec24aea3da5e86c2",
-                                                       "sizeBytes":  123347,
+                                                       "packageUrl":  "https://keyweaver.io/downloads/Tamborine-Install-win-v0.1.8.zip",
+                                                       "sha256":  "0c81501b6d881725bba4a389d99959f1a763b6627c2ead9efea5a443f9bea306",
+                                                       "sizeBytes":  123059,
                                                        "installScript":  "tamborine-install-windows.ps1"
                                                    },
                                            "mac":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Tamborine-Install-mac-v0.1.7.zip",
-                                                       "sha256":  "329c153ea94b000317e4775d90c4faa76018e8d959be536e20afb8f0457b588b",
-                                                       "sizeBytes":  122810,
+                                                       "packageUrl":  "https://keyweaver.io/downloads/Tamborine-Install-mac-v0.1.8.zip",
+                                                       "sha256":  "585ea05dc7d371cc50d55168609a324e21ea420565af322f60fd86d88ec5b170",
+                                                       "sizeBytes":  122522,
                                                        "installScript":  "tamborine-install-macos.sh"
                                                    }
                                        },
@@ -112,20 +112,20 @@
                          "displayName":  "Superconductor by Keyweaver",
                          "description":  "AI video shots and motion plates inside After Effects.",
                          "panelId":  "com.keyweaver.superconductor.panel",
-                         "version":  "0.1.6",
+                         "version":  "0.1.7",
                          "host":  "AEFT",
                          "hostLabel":  "After Effects",
                          "platforms":  {
                                            "win":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Superconductor-Install-win-v0.1.6.zip",
-                                                       "sha256":  "8a4cc7d2e8696c18bddf617d5051d981c83b5d0c6857f82fd9a04188ccc232ad",
-                                                       "sizeBytes":  127371,
+                                                       "packageUrl":  "https://keyweaver.io/downloads/Superconductor-Install-win-v0.1.7.zip",
+                                                       "sha256":  "540717d3994d9a7fa70ed25dbd4d41d98359241e97fe7556feb01b6edb92444e",
+                                                       "sizeBytes":  126992,
                                                        "installScript":  "superconductor-install-windows.ps1"
                                                    },
                                            "mac":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Superconductor-Install-mac-v0.1.6.zip",
-                                                       "sha256":  "d35c106929cbb7f87ba856c78b3f090bed82424fcf6a323791e1b75f4ec8be4d",
-                                                       "sizeBytes":  126834,
+                                                       "packageUrl":  "https://keyweaver.io/downloads/Superconductor-Install-mac-v0.1.7.zip",
+                                                       "sha256":  "cd6dedb748c2a2fa11733af6eebedad69bdbbab751996fca5c6e508ea51f5b53",
+                                                       "sizeBytes":  126455,
                                                        "installScript":  "superconductor-install-macos.sh"
                                                    }
                                        },
@@ -138,20 +138,20 @@
                          "displayName":  "Ludo by Keyweaver",
                          "description":  "Motion toolkit - animation, text, layout, colour, and export.",
                          "panelId":  "com.keyweaver.ludo.panel",
-                         "version":  "0.3.7",
+                         "version":  "0.3.8",
                          "host":  "AEFT",
                          "hostLabel":  "After Effects",
                          "platforms":  {
                                            "win":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Ludo-Install-win-v0.3.7.zip",
-                                                       "sha256":  "e8c16de04470602b596780b3c0772061f250a066787b82513f59ecacb36bb6aa",
-                                                       "sizeBytes":  220986,
+                                                       "packageUrl":  "https://keyweaver.io/downloads/Ludo-Install-win-v0.3.8.zip",
+                                                       "sha256":  "57cb379e8e69ee8389ca4765658a020db6ffb27becfe7d39d47cce9a1d1b72e7",
+                                                       "sizeBytes":  220771,
                                                        "installScript":  "ludo-install-windows.ps1"
                                                    },
                                            "mac":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Ludo-Install-mac-v0.3.7.zip",
-                                                       "sha256":  "c2ce082b0fadf2955d99c0bf42f31ba93a290015b886b7f1bba0d31449bc86b2",
-                                                       "sizeBytes":  220451,
+                                                       "packageUrl":  "https://keyweaver.io/downloads/Ludo-Install-mac-v0.3.8.zip",
+                                                       "sha256":  "fd19d7eb38b343eaf8ac72561bac4e8b1649a4350385a84071e135d2dfba8334",
+                                                       "sizeBytes":  220236,
                                                        "installScript":  "ludo-install-macos.sh"
                                                    }
                                        },
@@ -164,20 +164,20 @@
                          "displayName":  "Trillian for Premiere",
                          "description":  "AI voiceover and narration for Adobe Premiere Pro.",
                          "panelId":  "com.keyweaver.trillian.premiere.panel",
-                         "version":  "0.1.8",
+                         "version":  "0.1.9",
                          "host":  "PPRO",
                          "hostLabel":  "Premiere Pro",
                          "platforms":  {
                                            "win":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Trillian-Premiere-Install-win-v0.1.8.zip",
-                                                       "sha256":  "b5557828f33694ca75abcfacd82e12fa083cc51b8a541ee22e435c0e5afc2af3",
-                                                       "sizeBytes":  127136,
+                                                       "packageUrl":  "https://keyweaver.io/downloads/Trillian-Premiere-Install-win-v0.1.9.zip",
+                                                       "sha256":  "b29a437e96d1be29f4d3b0bfb6578859106827c7350d6f04c99da86f78f43a5a",
+                                                       "sizeBytes":  126819,
                                                        "installScript":  "trillian-premiere-install-windows.ps1"
                                                    },
                                            "mac":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Trillian-Premiere-Install-mac-v0.1.8.zip",
-                                                       "sha256":  "7ed3ad3955d0d012962d05b2994f061c29a0cc338bf9f4ca2e28ed2ab1884104",
-                                                       "sizeBytes":  126616,
+                                                       "packageUrl":  "https://keyweaver.io/downloads/Trillian-Premiere-Install-mac-v0.1.9.zip",
+                                                       "sha256":  "5963d34e9b7697a0ec1795fe18198be52d00e1829da714d47dd7611d3b9ba7ef",
+                                                       "sizeBytes":  126299,
                                                        "installScript":  "trillian-premiere-install-macos.sh"
                                                    }
                                        },
@@ -190,20 +190,20 @@
                          "displayName":  "Tamborine for Premiere",
                          "description":  "Generate music beds and sound effects in Premiere Pro.",
                          "panelId":  "com.keyweaver.tamborine.premiere.panel",
-                         "version":  "0.1.8",
+                         "version":  "0.1.9",
                          "host":  "PPRO",
                          "hostLabel":  "Premiere Pro",
                          "platforms":  {
                                            "win":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Tamborine-Premiere-Install-win-v0.1.8.zip",
-                                                       "sha256":  "5118eb0974612448ba140b724c4c42a16b695ec8d85793512166950f3b9c657a",
-                                                       "sizeBytes":  125464,
+                                                       "packageUrl":  "https://keyweaver.io/downloads/Tamborine-Premiere-Install-win-v0.1.9.zip",
+                                                       "sha256":  "e8e761a5641d5c9c65f82735a7db11334f26e32cbf3b586b9e749d9c56078b8c",
+                                                       "sizeBytes":  125196,
                                                        "installScript":  "tamborine-premiere-install-windows.ps1"
                                                    },
                                            "mac":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Tamborine-Premiere-Install-mac-v0.1.8.zip",
-                                                       "sha256":  "fa68355219d4b6ec9a109b11caea0ad741f0bd69c064e1b8e3b3550565209004",
-                                                       "sizeBytes":  124943,
+                                                       "packageUrl":  "https://keyweaver.io/downloads/Tamborine-Premiere-Install-mac-v0.1.9.zip",
+                                                       "sha256":  "45408619e4469e3a98c11e3456380acb8d4f97a7573697070a763fb9a65b8544",
+                                                       "sizeBytes":  124675,
                                                        "installScript":  "tamborine-premiere-install-macos.sh"
                                                    }
                                        },
@@ -216,20 +216,20 @@
                          "displayName":  "Superconductor for Premiere",
                          "description":  "AI video shots and motion plates for Premiere Pro.",
                          "panelId":  "com.keyweaver.superconductor.premiere.panel",
-                         "version":  "0.1.7",
+                         "version":  "0.1.8",
                          "host":  "PPRO",
                          "hostLabel":  "Premiere Pro",
                          "platforms":  {
                                            "win":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Superconductor-Premiere-Install-win-v0.1.7.zip",
-                                                       "sha256":  "ead4f466a3866298a61de7f76b9b06214790baadbdb233c06dda89c07d5c34bb",
-                                                       "sizeBytes":  127852,
+                                                       "packageUrl":  "https://keyweaver.io/downloads/Superconductor-Premiere-Install-win-v0.1.8.zip",
+                                                       "sha256":  "59f81277a8e812d804e2c46fbf4463915d6a1aa424b911f1c7e49203728b6e90",
+                                                       "sizeBytes":  127484,
                                                        "installScript":  "superconductor-premiere-install-windows.ps1"
                                                    },
                                            "mac":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Superconductor-Premiere-Install-mac-v0.1.7.zip",
-                                                       "sha256":  "b1f278195f10c3d102b5eab5f4ddc92f62e0cc487ecee7d0e3407e69c2e3d9fc",
-                                                       "sizeBytes":  127333,
+                                                       "packageUrl":  "https://keyweaver.io/downloads/Superconductor-Premiere-Install-mac-v0.1.8.zip",
+                                                       "sha256":  "4effc3da8f4acc4dde8e6e48d3e700dc33b05b04de51ea8c0a934958fa3ec3d1",
+                                                       "sizeBytes":  126965,
                                                        "installScript":  "superconductor-premiere-install-macos.sh"
                                                    }
                                        },
