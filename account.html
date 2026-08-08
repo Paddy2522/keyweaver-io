@@ -624,6 +624,7 @@
 
 <div class="toast" id="toast"></div>
 
+<script src="/js/pricing-currency.js"></script>
 <script>
   const BACKEND = 'https://keyweaver-backend.vercel.app';
 
@@ -1207,7 +1208,12 @@
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ' + token
         },
-        body: JSON.stringify({ plan: 'credits' })
+        body: JSON.stringify({
+          plan: 'credits',
+          currency: (window.CuemarkPricing && CuemarkPricing.checkoutCurrencyCode)
+            ? CuemarkPricing.checkoutCurrencyCode()
+            : 'gbp',
+        })
       });
       const data = await res.json();
       if (res.ok && data.checkout_url) {
@@ -1313,7 +1319,13 @@
 
   // Init
   loadAccount();
-</script><script src="/js/cuemark-turnstile.js"></script>
+  if (window.CuemarkPricing) {
+    CuemarkPricing.detectDisplayCurrencyAsync().then(function (code) {
+      if (code) CuemarkPricing.rememberCurrency(code);
+    });
+  }
+</script>
+<script src="/js/cuemark-turnstile.js"></script>
   <script src="/js/help-widget.js" defer></script>
 </body>
 </html>

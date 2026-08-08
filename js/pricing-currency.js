@@ -222,13 +222,50 @@
     return p.code;
   }
 
+  var STORAGE_KEY = 'keyweaver.displayCurrency';
+
+  function rememberCurrency(code) {
+    var c = String(code || '').toUpperCase();
+    if (c !== 'GBP' && c !== 'EUR' && c !== 'USD') return;
+    try {
+      localStorage.setItem(STORAGE_KEY, c);
+    } catch (e) {}
+  }
+
+  /** Currency for Stripe checkout (lowercase) — matches displayed prices. */
+  function checkoutCurrencyCode(displayCode) {
+    var raw = displayCode;
+    if (raw == null || raw === '') {
+      try {
+        raw = localStorage.getItem(STORAGE_KEY);
+      } catch (e) {}
+    }
+    if (raw == null || raw === '') {
+      raw = detectDisplayCurrency();
+    }
+    var c = String(raw || 'GBP').toUpperCase();
+    if (c === 'EUR') return 'eur';
+    if (c === 'USD') return 'usd';
+    return 'gbp';
+  }
+
+  function wrapApply(fn) {
+    return function (currency) {
+      var code = fn(currency);
+      rememberCurrency(code || currency);
+      return code;
+    };
+  }
+
   global.CuemarkPricing = {
     PRICES: CUEMARK_PRICES,
     detectDisplayCurrency: detectDisplayCurrency,
     detectDisplayCurrencyAsync: detectDisplayCurrencyAsync,
     currencyFromCountry: currencyFromCountry,
-    applyPricingPage: applyPricingPage,
-    applyHomePricing: applyHomePricing,
-    applySignupPlans: applySignupPlans,
+    rememberCurrency: rememberCurrency,
+    checkoutCurrencyCode: checkoutCurrencyCode,
+    applyPricingPage: wrapApply(applyPricingPage),
+    applyHomePricing: wrapApply(applyHomePricing),
+    applySignupPlans: wrapApply(applySignupPlans),
   };
 })(typeof window !== 'undefined' ? window : globalThis);
