@@ -939,3 +939,153 @@ body.theme-ludo .product-atmos::after {
     min-width: calc(50% - 0.4rem);
   }
 }
+
+/* ── Trillian voice examples ── */
+.trillian-examples {
+  max-width: 720px;
+  margin: 2.25rem auto 0;
+}
+
+.trillian-script {
+  position: relative;
+  border-bottom: 1px solid var(--edge);
+  padding: 0 0 1.35rem;
+  margin-bottom: 1.5rem;
+}
+
+.trillian-script-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #8a8aa3;
+  margin-bottom: 0.75rem;
+}
+
+.trillian-script-text {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(1.05rem, 2.4vw, 1.25rem);
+  line-height: 1.65;
+  color: var(--text);
+  min-height: 4.2em;
+  white-space: pre-wrap;
+}
+
+.trillian-script-text .trillian-caret {
+  display: inline-block;
+  width: 2px;
+  height: 1.05em;
+  margin-left: 2px;
+  vertical-align: -0.12em;
+  background: var(--accent2);
+  animation: trillian-caret-blink 0.9s steps(1) infinite;
+}
+
+.trillian-script-text.is-done .trillian-caret {
+  display: none;
+}
+
+@keyframes trillian-caret-blink {
+  0%,
+  45% {
+    opacity: 1;
+  }
+  46%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.trillian-voices-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #8a8aa3;
+  margin-bottom: 0.85rem;
+}
+
+.trillian-voice-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-top: 1px solid var(--edge);
+}
+
+.trillian-voice-row {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  width: 100%;
+  padding: 0.85rem 0.15rem;
+  border: 0;
+  border-bottom: 1px solid var(--edge);
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.trillian-voice-row:hover,
+.trillian-voice-row:focus-visible {
+  background: rgba(var(--accent-rgb), 0.06);
+  outline: none;
+}
+
+.trillian-voice-row.is-playing {
+  background: rgba(var(--accent-rgb), 0.1);
+}
+
+.trillian-voice-play {
+  flex: 0 0 auto;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(var(--accent-rgb), 0.45);
+  background: rgba(var(--accent-rgb), 0.12);
+  color: var(--accent2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.trillian-voice-row.is-playing .trillian-voice-play {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.trillian-voice-play svg {
+  width: 14px;
+  height: 14px;
+  display: block;
+}
+
+.trillian-voice-copy {
+  min-width: 0;
+  flex: 1;
+}
+
+.trillian-voice-name {
+  display: block;
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--text);
+  margin-bottom: 0.15rem;
+}
+
+.trillian-voice-meta {
+  display: block;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.trillian-examples-note {
+  margin-top: 1rem;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.55;
+}

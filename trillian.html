@@ -9,7 +9,7 @@
   <script src="/js/nav-auth.js" defer></script>
   <link rel="stylesheet" href="/css/chrome.css" />
   <link rel="stylesheet" href="/css/help-widget.css" />
-  <link rel="stylesheet" href="/css/site.css?v=20260807c" />
+  <link rel="stylesheet" href="/css/site.css?v=20260808a" />
   <title>Trillian by Keyweaver - AI Voiceover for After Effects &amp; Premiere Pro</title>
   <meta name="description" content="Generate AI voiceover and narration from a script inside Adobe After Effects or Premiere Pro, then import audio into your timeline." />
   <link rel="canonical" href="https://keyweaver.io/trillian" />
@@ -73,6 +73,92 @@
     <a href="/pricing" class="btn btn-ghost btn-xl">See pricing</a>
   </div>
 </header>
+
+<hr class="divider" />
+
+<section class="section" aria-labelledby="trillian-examples-title">
+  <div class="container">
+    <p class="section-label">Hear it</p>
+    <h2 class="section-title" id="trillian-examples-title">Same script, different voices</h2>
+    <p class="section-sub">Watch a line type in, then preview how it sounds across voices available in Trillian.</p>
+
+    <div class="trillian-examples">
+      <div class="trillian-script">
+        <p class="trillian-script-label">Script</p>
+        <p
+          id="trillian-script-text"
+          class="trillian-script-text"
+          aria-live="polite"
+        ></p>
+      </div>
+
+      <p class="trillian-voices-label">Voices</p>
+      <div id="trillian-voice-list" class="trillian-voice-list" role="group" aria-label="Trillian voice examples">
+        <button type="button" class="trillian-voice-row" data-src="/audio/trillian/rachel.mp3" aria-pressed="false">
+          <span class="trillian-voice-play" aria-hidden="true">
+            <svg data-icon="play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            <svg data-icon="stop" viewBox="0 0 24 24" fill="currentColor" hidden><path d="M6 6h12v12H6z"/></svg>
+          </span>
+          <span class="trillian-voice-copy">
+            <span class="trillian-voice-name">Rachel</span>
+            <span class="trillian-voice-meta">American · Female</span>
+          </span>
+        </button>
+        <button type="button" class="trillian-voice-row" data-src="/audio/trillian/sarah.mp3" aria-pressed="false">
+          <span class="trillian-voice-play" aria-hidden="true">
+            <svg data-icon="play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            <svg data-icon="stop" viewBox="0 0 24 24" fill="currentColor" hidden><path d="M6 6h12v12H6z"/></svg>
+          </span>
+          <span class="trillian-voice-copy">
+            <span class="trillian-voice-name">Sarah</span>
+            <span class="trillian-voice-meta">American · Female</span>
+          </span>
+        </button>
+        <button type="button" class="trillian-voice-row" data-src="/audio/trillian/charlie.mp3" aria-pressed="false">
+          <span class="trillian-voice-play" aria-hidden="true">
+            <svg data-icon="play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            <svg data-icon="stop" viewBox="0 0 24 24" fill="currentColor" hidden><path d="M6 6h12v12H6z"/></svg>
+          </span>
+          <span class="trillian-voice-copy">
+            <span class="trillian-voice-name">Charlie</span>
+            <span class="trillian-voice-meta">Australian · Male</span>
+          </span>
+        </button>
+        <button type="button" class="trillian-voice-row" data-src="/audio/trillian/george.mp3" aria-pressed="false">
+          <span class="trillian-voice-play" aria-hidden="true">
+            <svg data-icon="play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            <svg data-icon="stop" viewBox="0 0 24 24" fill="currentColor" hidden><path d="M6 6h12v12H6z"/></svg>
+          </span>
+          <span class="trillian-voice-copy">
+            <span class="trillian-voice-name">George</span>
+            <span class="trillian-voice-meta">British · Male</span>
+          </span>
+        </button>
+        <button type="button" class="trillian-voice-row" data-src="/audio/trillian/callum.mp3" aria-pressed="false">
+          <span class="trillian-voice-play" aria-hidden="true">
+            <svg data-icon="play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            <svg data-icon="stop" viewBox="0 0 24 24" fill="currentColor" hidden><path d="M6 6h12v12H6z"/></svg>
+          </span>
+          <span class="trillian-voice-copy">
+            <span class="trillian-voice-name">Callum</span>
+            <span class="trillian-voice-meta">American · Male</span>
+          </span>
+        </button>
+        <button type="button" class="trillian-voice-row" data-src="/audio/trillian/liam.mp3" aria-pressed="false">
+          <span class="trillian-voice-play" aria-hidden="true">
+            <svg data-icon="play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            <svg data-icon="stop" viewBox="0 0 24 24" fill="currentColor" hidden><path d="M6 6h12v12H6z"/></svg>
+          </span>
+          <span class="trillian-voice-copy">
+            <span class="trillian-voice-name">Liam</span>
+            <span class="trillian-voice-meta">American · Male</span>
+          </span>
+        </button>
+      </div>
+      <p class="trillian-examples-note">Samples use voices available in Trillian. More voices are in the panel when you generate.</p>
+    </div>
+  </div>
+</section>
 
 <hr class="divider" />
 
@@ -183,6 +269,7 @@
   </ul>
 </footer>
 <script src="/js/help-widget.js" defer></script>
+<script src="/js/trillian-examples.js" defer></script>
 <script src="/js/cuemark-turnstile.js"></script>
 </body>
 </html>
