@@ -104,7 +104,7 @@
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 16px;
-      align-items: start;
+      align-items: stretch;
     }
     .pricing-grid-2 {
       grid-template-columns: repeat(2, 1fr);
@@ -247,6 +247,10 @@
       padding: 2rem 1.75rem;
       position: relative;
       transition: border-color 0.2s;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      min-height: 0;
     }
     .pricing-card:hover { border-color: var(--subtle); }
     .pricing-card.featured {
@@ -263,7 +267,7 @@
 
     .card-tier {
       font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
-      color: var(--muted); font-weight: 600; margin-bottom: 1rem;
+      color: var(--muted); font-weight: 600; margin-bottom: 0.85rem;
     }
 
     .card-price {
@@ -287,21 +291,39 @@
       margin-bottom: 0.35rem;
     }
     .card-price-period {
-      font-size: 13px; color: var(--muted); margin-bottom: 1.25rem;
+      font-size: 13px; color: var(--muted); margin-bottom: 1.1rem;
+      min-height: 1.25em;
     }
 
     .card-desc {
       font-size: 13px; color: var(--muted); line-height: 1.6;
-      padding-bottom: 1.5rem;
+      padding-bottom: 1.35rem;
       border-bottom: 1px solid var(--edge);
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.35rem;
+      min-height: 4.8em;
     }
 
-    .card-features { list-style: none; margin-bottom: 2rem; }
+    .card-features {
+      list-style: none;
+      margin: 0 0 1.5rem;
+      flex: 1 1 auto;
+    }
     .card-features li {
-      display: flex; align-items: flex-start; gap: 10px;
-      font-size: 13px; color: var(--muted);
-      padding: 5px 0; line-height: 1.5;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--muted);
+      padding: 5px 0;
+      line-height: 1.5;
+    }
+    .card-features li > span {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+    .card-features li strong {
+      color: var(--text);
+      font-weight: 600;
     }
     .card-features li svg {
       width: 15px; height: 15px; flex-shrink: 0;
@@ -316,6 +338,8 @@
       width: 100%; height: 44px; border-radius: 9px;
       font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 500;
       text-decoration: none; cursor: pointer; transition: all 0.15s; border: none;
+      margin-top: auto;
+      flex-shrink: 0;
     }
     .cta-primary { background: var(--accent); color: #fff; }
     .cta-primary:hover { background: var(--accent2); }
@@ -472,9 +496,13 @@
     .footer-links a { font-size: 13px; color: var(--muted); text-decoration: none; }
     .footer-links a:hover { color: var(--text); }
 
+    @media (max-width: 1100px) {
+      .pricing-grid { grid-template-columns: repeat(2, 1fr); }
+    }
     @media (max-width: 720px) {
       .pricing-grid,
       .pricing-grid-2 { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+      .card-desc { min-height: 0; }
       .comp-table th:nth-child(2), .comp-table td:nth-child(2) { display: none; }
     }
     @media (max-width: 500px) {
@@ -549,14 +577,14 @@
     <div class="pricing-card">
       <div class="card-tier">Free</div>
       <div class="card-price"><sup id="sym-free">£</sup><span id="price-free">0</span></div>
-      <div class="card-price-period">free</div>
-      <div class="card-desc">Try in After Effects or Premiere Pro with no account, then sign up free for a real credit balance across every Keyweaver AI plugin.</div>
+      <div class="card-price-period">No card required</div>
+      <div class="card-desc">Guest trial in each AI panel, then sign up free for shared credits across Cuemark, Superconductor, Trillian, and Tamborine.</div>
       <ul class="card-features">
-        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Guest trials in each AI panel</li>
-        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg><strong>40 credits</strong> after you verify your email</li>
-        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Shared across all Keyweaver AI tools</li>
-        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Ludo motion toolkit stays free</li>
-        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Top up any time</li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg><span>Guest trials in each AI panel</span></li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg><span><strong>40 credits</strong> after you verify your email</span></li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg><span>Shared across all Keyweaver AI plugins</span></li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg><span>Ludo motion toolkit stays free</span></li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg><span>Top up any time</span></li>
       </ul>
       <a href="/download" class="card-cta cta-outline">Download free</a>
     </div>
@@ -569,10 +597,11 @@
       <div class="card-price-period" id="credits-period">one-time · <span id="credits-count">60</span> credits</div>
       <div class="card-desc">Impulse top-up. Pay once - no recurring charge.</div>
       <ul class="card-features">
-        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>60 Keyweaver Credits</li>
-        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Captions, video, VO, and audio</li>
-        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Credits never expire</li>
-        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Top up any time</li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg><span>60 Keyweaver Credits</span></li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg><span>Captions, video, VO, and audio</span></li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg><span>Credits never expire</span></li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg><span>Works in After Effects and Premiere Pro</span></li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg><span>Top up any time</span></li>
       </ul>
       <a href="#" class="card-cta cta-primary" id="cta-credits">Buy Starter pack</a>
     </div>
@@ -584,9 +613,11 @@
       <div class="card-price-period">one-time · 150 credits</div>
       <div class="card-desc">Better value for Superconductor and VO-heavy weeks.</div>
       <ul class="card-features">
-        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>150 Keyweaver Credits</li>
-        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>~2.5× Starter for ~2× the price</li>
-        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Credits never expire</li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg><span>150 Keyweaver Credits</span></li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg><span>~2.5× Starter for ~2× the price</span></li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg><span>Credits never expire</span></li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg><span>Works in After Effects and Premiere Pro</span></li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg><span>Top up any time</span></li>
       </ul>
       <a href="#" class="card-cta cta-outline" id="cta-credits-150">Buy Creator pack</a>
     </div>
@@ -598,9 +629,11 @@
       <div class="card-price-period">one-time · 500 credits</div>
       <div class="card-desc">Biggest pack for heavy AI weeks - still no subscription.</div>
       <ul class="card-features">
-        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>500 Keyweaver Credits</li>
-        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Best pack rate</li>
-        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Credits never expire</li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg><span>500 Keyweaver Credits</span></li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg><span>Best pack rate</span></li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg><span>Credits never expire</span></li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg><span>Works in After Effects and Premiere Pro</span></li>
+        <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg><span>Top up any time</span></li>
       </ul>
       <a href="#" class="card-cta cta-outline" id="cta-credits-500">Buy Studio pack</a>
     </div>
@@ -638,9 +671,9 @@
         <div class="card-price-period" id="period-sub-standard">300 credits / month</div>
         <div class="card-desc" id="desc-sub-standard">Best for regular editors. Credits refresh each billing period with rollover.</div>
         <ul class="card-features">
-          <li id="feat-sub-standard-credits"><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>300 credits every month</li>
-          <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Up to 150 credits roll over</li>
-          <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Cancel any time</li>
+          <li id="feat-sub-standard-credits"><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg><span>300 credits every month</span></li>
+          <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg><span>Up to 150 credits roll over</span></li>
+          <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg><span>Cancel any time</span></li>
         </ul>
         <a href="#" class="card-cta cta-accent-outline" id="cta-sub-standard">Start monthly</a>
       </div>
@@ -656,9 +689,9 @@
         <div class="card-price-period" id="period-sub-pro">900 credits / month</div>
         <div class="card-desc" id="desc-sub-pro">For Superconductor, VO, and music in the same workflow.</div>
         <ul class="card-features">
-          <li id="feat-sub-pro-credits"><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>900 credits every month</li>
-          <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Up to 300 credits roll over</li>
-          <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>Cancel any time</li>
+          <li id="feat-sub-pro-credits"><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg><span>900 credits every month</span></li>
+          <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg><span>Up to 300 credits roll over</span></li>
+          <li><svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg><span>Cancel any time</span></li>
         </ul>
         <a href="#" class="card-cta cta-primary" id="cta-sub-pro">Start Pro monthly</a>
       </div>
@@ -740,7 +773,7 @@
       <tr>
         <td>Included transcription</td>
         <td>5 guest trial (Cuemark) + <strong>40 after email verify</strong></td>
-        <td class="featured-col">60 / 150 pack options</td>
+        <td class="featured-col">60 / 150 / 500 pack options</td>
         <td>300 credits / month</td>
       </tr>
       <tr>
@@ -842,7 +875,7 @@
       <tr>
         <td>Credits included</td>
         <td>Guest trials + 40 after verify</td>
-        <td class="featured-col">60 per pack</td>
+        <td class="featured-col">60 / 150 / 500 packs</td>
         <td>300 / month</td>
       </tr>
       <tr>
@@ -1012,9 +1045,9 @@
       document.getElementById('period-sub-standard').textContent = '3600 credits / year';
       document.getElementById('period-sub-pro').textContent = '10800 credits / year';
       document.getElementById('feat-sub-standard-credits').innerHTML =
-        '<svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>3600 credits billed yearly';
+        '<svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg><span>3600 credits billed yearly</span>';
       document.getElementById('feat-sub-pro-credits').innerHTML =
-        '<svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>10800 credits billed yearly';
+        '<svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg><span>10800 credits billed yearly</span>';
       document.getElementById('desc-sub-standard').textContent =
         'Same monthly credits as Standard - pay once a year and get 2 months free.';
       document.getElementById('desc-sub-pro').textContent =
@@ -1035,9 +1068,9 @@
       document.getElementById('period-sub-standard').textContent = '300 credits / month';
       document.getElementById('period-sub-pro').textContent = '900 credits / month';
       document.getElementById('feat-sub-standard-credits').innerHTML =
-        '<svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>300 credits every month';
+        '<svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg><span>300 credits every month</span>';
       document.getElementById('feat-sub-pro-credits').innerHTML =
-        '<svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg>900 credits every month';
+        '<svg viewBox="0 0 15 15"><polyline points="2 7 5.5 11 13 3"/></svg><span>900 credits every month</span>';
       document.getElementById('desc-sub-standard').textContent =
         'Best for regular editors. Credits refresh each month with rollover.';
       document.getElementById('desc-sub-pro').textContent =
