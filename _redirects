@@ -1,6 +1,9 @@
-﻿/legal/terms    /terms.html    200
+/legal/terms    /terms.html    200
 /legal/privacy  /privacy.html  200
 /legal/cookies  /cookies.html  200
+/terms          /terms.html    200
+/privacy        /privacy.html  200
+/cookies        /cookies.html  200
 /unsubscribe    /unsubscribe.html  200
 /forgot-password /forgot-password.html 200
 /reset-password  /reset-password.html  200

@@ -8,21 +8,53 @@
   <script src="/js/cookie-consent.js?v=20260731a"></script>
   <script src="/js/nav-auth.js" defer></script>
   <link rel="stylesheet" href="/css/chrome.css" />
-  <link rel="stylesheet" href="/css/site.css" />
+  <link rel="stylesheet" href="/css/site.css?v=20260808b" />
   <title>Page not found - Keyweaver</title>
   <meta name="robots" content="noindex" />
   <link href="https://fonts.googleapis.com/css2?family=Cal+Sans&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
   <style>
-    .not-found { min-height: 80vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:6rem 1.5rem 4rem; }
-    .not-found h1 { font-family:'Cal Sans',sans-serif; font-size:clamp(2rem,5vw,3rem); letter-spacing: 0.05em; margin-bottom:0.75rem; }
-    .not-found p { color: var(--muted); max-width: 420px; margin-bottom: 1.75rem; }
+    .not-found {
+      min-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6rem 1.5rem 4rem;
+    }
+    .not-found h1 {
+      font-family: 'Cal Sans', sans-serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      letter-spacing: 0.05em;
+      margin-bottom: 0.75rem;
+    }
+    .not-found p {
+      color: var(--muted);
+      max-width: 440px;
+      margin-bottom: 1.75rem;
+      line-height: 1.6;
+    }
+    .not-found-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem 1.1rem;
+      justify-content: center;
+      max-width: 520px;
+      margin-top: 1.75rem;
+    }
+    .not-found-links a {
+      color: var(--accent2);
+      text-decoration: none;
+      font-size: 14px;
+    }
+    .not-found-links a:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
 <nav class="site-nav" aria-label="Primary">
   <a href="/" class="nav-brand" aria-label="Keyweaver"><img src="/images/keyweaver-logo.svg" alt="" width="162" height="28" /></a>
   <ul class="nav-links">
-    <li><a href="/">Plugins</a></li>
+    <li><a href="/">Home</a></li>
     <li><a href="/pricing">Pricing</a></li>
     <li><a href="/download">Download</a></li>
     <li><a href="/help">Help</a></li>
@@ -34,15 +66,28 @@
 </nav>
 <main class="not-found">
   <h1>Page not found</h1>
-  <p>That URL isn’t on keyweaver.io. Try the homepage, download, or help centre.</p>
+  <p>That URL isn’t on keyweaver.io. Try the homepage, download Keyweaver Manager, or open the help centre.</p>
   <div class="product-hero-ctas">
     <a href="/" class="btn btn-primary btn-lg">Home</a>
     <a href="/download" class="btn btn-ghost btn-lg">Download</a>
     <a href="/help" class="btn btn-ghost btn-lg">Help</a>
   </div>
+  <div class="not-found-links" aria-label="Popular pages">
+    <a href="/cuemark">Cuemark</a>
+    <a href="/pricing">Pricing</a>
+    <a href="/video-seo">Video SEO</a>
+    <a href="/legal/terms">Terms</a>
+    <a href="/legal/privacy">Privacy</a>
+  </div>
 </main>
 <footer class="site-footer">
   <p>© 2026 Keyweaver Ltd</p>
+  <ul class="footer-links">
+    <li><a href="/legal/privacy">Privacy</a></li>
+    <li><a href="/legal/terms">Terms</a></li>
+    <li><a href="/legal/cookies">Cookies</a></li>
+    <li><a href="/help">Help</a></li>
+  </ul>
 </footer>
 </body>
 </html>
