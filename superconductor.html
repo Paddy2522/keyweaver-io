@@ -9,7 +9,7 @@
   <script src="/js/nav-auth.js" defer></script>
   <link rel="stylesheet" href="/css/chrome.css" />
   <link rel="stylesheet" href="/css/help-widget.css" />
-  <link rel="stylesheet" href="/css/site.css?v=20260807c" />
+  <link rel="stylesheet" href="/css/site.css?v=20260809b" />
   <title>Superconductor by Keyweaver - AI Video for After Effects &amp; Premiere Pro</title>
   <meta name="description" content="Generate short AI video clips, b-roll, and motion plates inside Adobe After Effects or Premiere Pro and import them into your timeline." />
   <link rel="canonical" href="https://keyweaver.io/superconductor" />
@@ -73,6 +73,78 @@
     <a href="/pricing" class="btn btn-ghost btn-xl">See pricing</a>
   </div>
 </header>
+
+<hr class="divider" />
+
+<section class="section" aria-labelledby="sc-examples-title">
+  <div class="container">
+    <p class="section-label">See it</p>
+    <h2 class="section-title" id="sc-examples-title">Same panel flow, different prompts</h2>
+    <p class="section-sub">Switch prompts to preview Pro-quality clips like the ones Superconductor generates for your timeline.</p>
+
+    <div class="sc-examples">
+      <div class="sc-examples-layout">
+        <div>
+          <div class="sc-example-prompt-wrap">
+            <p class="sc-example-label">Prompt</p>
+            <p id="sc-example-prompt" class="sc-example-prompt" aria-live="polite"></p>
+          </div>
+
+          <div class="sc-example-stage">
+            <video
+              id="sc-example-video"
+              playsinline
+              preload="metadata"
+              muted
+              loop
+              poster="/video/superconductor/neon-rain.jpg"
+              title="Superconductor example clip"
+            ></video>
+            <button type="button" class="sc-example-play-btn" id="sc-example-play" aria-pressed="false" aria-label="Play example">
+              <svg data-icon="play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+              <svg data-icon="pause" viewBox="0 0 24 24" fill="currentColor" hidden><path d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <p class="sc-example-label">Examples</p>
+          <div id="sc-example-list" class="sc-example-list" role="group" aria-label="Superconductor prompt examples">
+            <button type="button" class="sc-example-row is-active" data-id="neon-rain" aria-pressed="true">
+              <span class="sc-example-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+              <span class="sc-example-copy">
+                <span class="sc-example-name">Neon rain street</span>
+                <span class="sc-example-meta">Cinematic b-roll · 16:9</span>
+              </span>
+            </button>
+            <button type="button" class="sc-example-row" data-id="product-studio" aria-pressed="false">
+              <span class="sc-example-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+              <span class="sc-example-copy">
+                <span class="sc-example-name">Product studio plate</span>
+                <span class="sc-example-meta">Compositing backdrop · 16:9</span>
+              </span>
+            </button>
+            <button type="button" class="sc-example-row" data-id="abstract-energy" aria-pressed="false">
+              <span class="sc-example-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+              <span class="sc-example-copy">
+                <span class="sc-example-name">Abstract energy</span>
+                <span class="sc-example-meta">Motion plate · 16:9</span>
+              </span>
+            </button>
+            <button type="button" class="sc-example-row" data-id="morning-coffee" aria-pressed="false">
+              <span class="sc-example-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+              <span class="sc-example-copy">
+                <span class="sc-example-name">Morning coffee steam</span>
+                <span class="sc-example-meta">Lifestyle cutaway · 16:9</span>
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <p class="sc-examples-note">Samples are Seedance generates styled like Superconductor Pro clips. In the panel, Standard and Pro tiers let you match quality and length to the shot.</p>
+    </div>
+  </div>
+</section>
 
 <hr class="divider" />
 
@@ -212,6 +284,7 @@
   </ul>
 </footer>
 <script src="/js/help-widget.js" defer></script>
+<script src="/js/superconductor-examples.js" defer></script>
 <script src="/js/cuemark-turnstile.js"></script>
 </body>
 </html>
