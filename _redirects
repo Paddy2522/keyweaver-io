@@ -19,7 +19,9 @@
 /superconductor /superconductor.html 200
 /ludo           /ludo.html     200
 /trillian       /trillian.html 200
-/tamborine      /tamborine.html 200
+/tambourine     /tambourine.html 200
+/tamborine      /tambourine 301
+/tamborine.html /tambourine 301
 /video-seo      /video-seo.html 200
 /tools/video-seo /video-seo.html 200
 /campaign-kit   /campaign-kit.html 200
