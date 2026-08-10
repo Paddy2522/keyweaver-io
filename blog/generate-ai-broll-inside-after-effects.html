@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" href="/images/favicon.svg" type="image/svg+xml" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/css/cookie-consent.css" />
+  <script src="/js/cookie-consent.js?v=20260731a"></script>
+  <title>How to Generate AI B-Roll Inside After Effects (Without Leaving the Timeline)</title>
+  <meta name="description" content="Learn how to generate AI B-roll inside After Effects from a text prompt, import clips to your comp, and when Superconductor beats stock libraries." />
+  <link rel="canonical" href="https://keyweaver.io/blog/generate-ai-broll-inside-after-effects" />
+  <meta property="og:title" content="How to Generate AI B-Roll Inside After Effects (Without Leaving the Timeline)" />
+  <meta property="og:description" content="Learn how to generate AI B-roll inside After Effects from a text prompt, import clips to your comp, and when Superconductor beats stock libraries." />
+  <meta property="og:url" content="https://keyweaver.io/blog/generate-ai-broll-inside-after-effects" />
+  <meta property="og:type" content="article" />
+  <meta property="og:image" content="https://keyweaver.io/images/blog/ai-broll-after-effects.webp" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="robots" content="index,follow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cal+Sans&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/blog.css?v=20260810a" />
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "headline": "How to Generate AI B-Roll Inside After Effects (Without Leaving the Timeline)",
+      "description": "Learn how to generate AI B-roll inside After Effects from a text prompt, import clips to your comp, and when Superconductor beats stock libraries.",
+      "image": "https://keyweaver.io/images/blog/ai-broll-after-effects.webp",
+      "author": {
+        "@type": "Organization",
+        "name": "Keyweaver Ltd"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Keyweaver",
+        "url": "https://keyweaver.io",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://keyweaver.io/images/keyweaver-logo.svg"
+        }
+      },
+      "datePublished": "2026-08-10",
+      "dateModified": "2026-08-10",
+      "mainEntityOfPage": "https://keyweaver.io/blog/generate-ai-broll-inside-after-effects"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Keyweaver",
+          "item": "https://keyweaver.io/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://keyweaver.io/blog"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Generate AI B-roll in After Effects",
+          "item": "https://keyweaver.io/blog/generate-ai-broll-inside-after-effects"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Can After Effects generate AI video?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "After Effects does not include a full built-in text-to-video generator for B-roll. Plugins like Superconductor add prompt-to-clip generation inside AE so you can import results to the timeline."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the best AI B-roll plugin for After Effects?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Superconductor is designed for short AI clips and motion plates generated from inside After Effects or Premiere Pro, with credit costs shown before you run a job."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How many credits does AI B-roll cost?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "It depends on quality and length. Superconductor Standard 5s 720p starts at 8 credits; higher quality and longer clips cost more. The panel shows the estimate before generate."
+          }
+        }
+      ]
+    }
+  ]
+}
+  </script>
+</head>
+<body>
+<nav class="blog-nav" aria-label="Blog">
+  <a href="/" class="blog-nav-logo" aria-label="Keyweaver">
+    <img src="/images/keyweaver-logo.svg" alt="" width="162" height="28" />
+  </a>
+  <div class="blog-nav-links">
+    <a href="/blog">Blog</a>
+    <a href="/download">Download free</a>
+  </div>
+</nav>
+
+<main class="blog-wrap">
+  <article class="blog-article" itemscope itemtype="https://schema.org/Article">
+    <header>
+      <p class="blog-meta"><time datetime="2026-08-10">10 August 2026</time> · 8 min read · Superconductor · B-roll</p>
+      <h1 itemprop="headline">How to Generate AI B-Roll Inside After Effects</h1>
+      <p class="blog-lead" itemprop="description">Missing B-roll kills pacing. Here is how to generate short AI cutaways inside After Effects (and Premiere) so you are not hunting stock at midnight.</p>
+    </header>
+    <figure class="blog-hero-figure">
+      <img src="/images/blog/ai-broll-after-effects.webp" alt="Cinematic neon street B-roll plate next to an editing timeline silhouette" width="1280" height="720" loading="eager" />
+    </figure>
+    <nav class="blog-toc" aria-label="Table of contents">
+      <h2>On this page</h2>
+      <ol>
+        <li><a href="#why-in-ae">Why generate B-roll inside AE</a></li>
+        <li><a href="#steps">Step-by-step Superconductor workflow</a></li>
+        <li><a href="#prompt-tips">Prompt tips that look like real plates</a></li>
+        <li><a href="#standard-vs-pro">Standard vs Pro quality</a></li>
+        <li><a href="#stock-vs-ai">Stock libraries vs AI plates</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ol>
+    </nav>
+
+    <div class="blog-content" itemprop="articleBody">
+      
+      <h2 id="why-in-ae">Why generate AI B-roll inside After Effects?</h2>
+      <p>External AI video sites add friction: export prompt → wait → download → import → colour match. An <strong>AI B-roll plugin for After Effects</strong> keeps aspect ratio, credits, and import in one place. <a href="/superconductor">Superconductor</a> does that for AE and Premiere Pro.</p>
+
+      <h2 id="steps">Step-by-step: AI B-roll with Superconductor</h2>
+      <ol>
+        <li>Install Superconductor from <a href="/download">Keyweaver Manager</a> (After Effects tab).</li>
+        <li>Open your edit comp and launch <strong>Window → Extensions → Keyweaver - Superconductor</strong>.</li>
+        <li>Write a prompt, pick aspect (active comp, 16:9, 9:16, 1:1), length, and quality.</li>
+        <li>Confirm credit cost → generate → import from the library onto the timeline.</li>
+      </ol>
+
+      <h2 id="prompt-tips">Prompt tips that look like real editorial plates</h2>
+      <ul>
+        <li>Describe <strong>camera move</strong> (slow dolly, gentle orbit, static with light shift).</li>
+        <li>Specify <strong>lighting</strong> (softbox, neon night, morning window).</li>
+        <li>Say <strong>no text, no logos</strong> when you need clean compositing space.</li>
+        <li>Match the grade: "charcoal studio", "warm lifestyle", "cool cyber night".</li>
+      </ul>
+      <p>See live prompt → clip examples on the <a href="/superconductor">Superconductor page</a>.</p>
+
+      <h2 id="standard-vs-pro">Standard vs Pro (and credits)</h2>
+      <p>Standard is built for quick plates; Pro targets higher-fidelity hero shots. Costs are shown before you generate - start around 8 credits for a Standard 5s 720p path. Full table on <a href="/pricing">pricing</a>.</p>
+
+      <h2 id="stock-vs-ai">When stock still wins vs AI B-roll</h2>
+      <table class="blog-table">
+        <thead><tr><th>Need</th><th>Prefer</th></tr></thead>
+        <tbody>
+          <tr><td>Exact real location / brand-safe documentary footage</td><td>Shot or licensed stock</td></tr>
+          <tr><td>Abstract plate, product pedestal, mood cutaway tonight</td><td>AI B-roll in-panel</td></tr>
+          <tr><td>Matching active comp aspect quickly</td><td>Superconductor active-comp ratio</td></tr>
+        </tbody>
+      </table>
+    
+    </div>
+
+    <section class="blog-faq" id="faq">
+      <h2>Frequently asked questions</h2>
+      <div class="blog-faq-item">
+        <h3>Can After Effects generate AI video?</h3>
+        <p>After Effects does not include a full built-in text-to-video generator for B-roll. Plugins like Superconductor add prompt-to-clip generation inside AE so you can import results to the timeline.</p>
+      </div>
+      <div class="blog-faq-item">
+        <h3>What is the best AI B-roll plugin for After Effects?</h3>
+        <p>Superconductor is designed for short AI clips and motion plates generated from inside After Effects or Premiere Pro, with credit costs shown before you run a job.</p>
+      </div>
+      <div class="blog-faq-item">
+        <h3>How many credits does AI B-roll cost?</h3>
+        <p>It depends on quality and length. Superconductor Standard 5s 720p starts at 8 credits; higher quality and longer clips cost more. The panel shows the estimate before generate.</p>
+      </div>
+    </section>
+
+    <aside class="blog-cta">
+      <h2>Generate B-roll in your timeline</h2>
+      <p>Install Superconductor for After Effects or Premiere Pro. Guest trial credits available in the panel.</p>
+      <a href="/superconductor" class="blog-cta-btn">Download free</a>
+    </aside>
+
+    <p class="blog-related-label">Keep reading</p>
+    <ul class="blog-related">
+      <li><a href="/blog/what-is-b-roll-and-how-editors-create-it-faster">What is B-roll? How editors create it faster</a></li>
+      <li><a href="/blog/best-ai-plugins-after-effects-2026">Best AI plugins for After Effects</a></li>
+      <li><a href="/blog/after-effects-vs-premiere-ai-plugins">After Effects vs Premiere AI plugins</a></li>
+      <li><a href="/blog">All Keyweaver blog posts</a></li>
+    </ul>
+
+    <p class="blog-disclaimer">Adobe, After Effects, and Premiere Pro are trademarks of Adobe Inc. Keyweaver is not affiliated with or endorsed by Adobe.</p>
+  </article>
+</main>
+
+<footer class="blog-footer">
+  <p>© 2026 Keyweaver Ltd · Company no. 17283644</p>
+  <p><a href="/blog">Blog</a> · <a href="/legal/privacy">Privacy</a> · <a href="/legal/terms">Terms</a> · <a href="/help">Help</a></p>
+</footer>
+</body>
+</html>
