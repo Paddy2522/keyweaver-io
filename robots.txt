@@ -1,4 +1,10 @@
 User-agent: *
 Allow: /
 
+# Not website content — backend APIs are on keyweaver-backend.vercel.app.
+# These paths 404 on this host; keep crawlers off them to save budget.
+Disallow: /api/
+Disallow: /manifest/
+Disallow: /downloads/
+
 Sitemap: https://keyweaver.io/sitemap.xml
