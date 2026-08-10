@@ -43,12 +43,24 @@ export default {
     const isHtml = contentType.includes('text/html');
     const isJsOrCss =
       pathLower.endsWith('.js') || pathLower.endsWith('.css') || pathLower.endsWith('.json');
+    const isRobots = pathLower === '/robots.txt' || pathLower === '/sitemap.xml';
 
     const headers = new Headers(response.headers);
 
     // Soft-signal: never index error pages even if a crawler keeps the URL.
     if (response.status === 404 || response.status === 410) {
       headers.set('X-Robots-Tag', 'noindex, nofollow');
+    }
+
+    if (isRobots) {
+      headers.set('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');
+      headers.set('CDN-Cache-Control', 'no-store');
+      headers.set('Cloudflare-CDN-Cache-Control', 'no-store');
+      return new Response(response.body, {
+        status: response.status,
+        statusText: response.statusText,
+        headers,
+      });
     }
 
     if (!isHtml && !isJsOrCss) {

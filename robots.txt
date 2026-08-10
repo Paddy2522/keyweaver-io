@@ -7,4 +7,5 @@ Disallow: /api/
 Disallow: /manifest/
 Disallow: /downloads/
 
+# v=20260810b
 Sitemap: https://keyweaver.io/sitemap.xml
