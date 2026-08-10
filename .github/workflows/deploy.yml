@@ -117,10 +117,15 @@ jobs:
             "https://keyweaver.io/tools/shot-list",
             "https://keyweaver.io/privacy",
             "https://keyweaver.io/privacy.html",
+            "https://keyweaver.io/legal/privacy",
             "https://keyweaver.io/terms",
             "https://keyweaver.io/terms.html",
+            "https://keyweaver.io/legal/terms",
             "https://keyweaver.io/cookies",
             "https://keyweaver.io/cookies.html",
+            "https://keyweaver.io/legal/cookies",
+            "https://keyweaver.io/blog",
+            "https://keyweaver.io/blog.html",
             "https://keyweaver.io/account",
             "https://keyweaver.io/login",
             "https://keyweaver.io/signup",
@@ -156,6 +161,7 @@ jobs:
             "https://keyweaver.io/js/changelog.js",
             "https://keyweaver.io/downloads.json",
             "https://keyweaver.io/changelog.json",
+            "https://keyweaver.io/robots.txt",
             "https://keyweaver.io/sitemap.xml",
             "https://keyweaver.io/images/keyweaver-logo.svg",
             "https://keyweaver.io/installer/manifest.json"
@@ -164,7 +170,7 @@ jobs:
           fi
 
           # Prefix purge — host+path, no scheme (Cloudflare API format).
-          if ! purge_batch '{"prefixes":["keyweaver.io/css","keyweaver.io/js","keyweaver.io/images","keyweaver.io/installer"]}' "prefixes"; then
+          if ! purge_batch '{"prefixes":["keyweaver.io/css","keyweaver.io/js","keyweaver.io/images","keyweaver.io/installer","keyweaver.io/blog","keyweaver.io/legal"]}' "prefixes"; then
             echo "Prefix purge unavailable or rate-limited — file batches above still ran."
           fi
 
