@@ -506,10 +506,12 @@ body {
 }
 
 .product-hero-logo {
-  /* Same height for every product so the icon square matches across pages. */
+  /* Same rendered height for every product so the icon square matches.
+     Do not use a shared max-width — that shrinks wider wordmarks more
+     (Superconductor / Tambourine) and makes their squares look smaller. */
   height: 44px;
   width: auto;
-  max-width: min(100%, 340px);
+  max-width: none;
   margin: 0;
   display: block;
   object-fit: contain;
@@ -523,10 +525,13 @@ body {
 
   .product-hero-top {
     margin-bottom: 1.35rem;
+    max-width: 100%;
+    overflow: hidden;
   }
 
   .product-hero-logo {
-    height: 34px;
+    /* Scale by height only so squares stay equal; fit widest logo (Superconductor). */
+    height: min(34px, calc((100vw - 2.5rem) * 166.8 / 2115.9));
   }
 }
 

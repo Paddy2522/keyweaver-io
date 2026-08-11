@@ -10,7 +10,7 @@
 
 <link rel="stylesheet" href="/css/nav-brand.css" />
   <link rel="stylesheet" href="/css/chrome.css" />
-  <link rel="stylesheet" href="/css/site.css?v=20260807c" />
+  <link rel="stylesheet" href="/css/site.css?v=20260811b" />
   <link rel="stylesheet" href="/css/help-widget.css" />
   <title>Cuemark by Keyweaver - AI Captions for After Effects</title>
   <meta name="description" content="AI-powered subtitle generator that lives inside Adobe After Effects. Transcribe, style, and sync captions in seconds." />
@@ -126,7 +126,7 @@
     .hero .product-hero-logo {
       height: 44px;
       width: auto;
-      max-width: min(100%, 340px);
+      max-width: none;
       margin: 0;
       display: block;
       object-fit: contain;
@@ -555,7 +555,10 @@
       section { padding: 4rem 1.25rem; }
       .hero { padding: 6rem 1.25rem 3rem; }
       .hero .product-hero-top { margin-bottom: 1.35rem; }
-      .hero .product-hero-logo { height: 34px; }
+      .hero .product-hero-logo {
+        height: min(34px, calc((100vw - 2.5rem) * 166.8 / 2115.9));
+        max-width: none;
+      }
       .download-box { padding: 2rem 1.5rem; }
     }
 
@@ -639,7 +642,7 @@
 <!-- HERO -->
 <section class="hero">
   <div class="product-hero-top">
-    <img class="product-hero-logo" src="/images/plugins/cuemark-web-logo.svg" alt="Cuemark" width="280" height="48" />
+    <img class="product-hero-logo" src="/images/plugins/cuemark-web-logo.svg" alt="Cuemark" />
   </div>
   <div class="hero-eyebrow">
     <span class="hero-eyebrow-dot"></span>
