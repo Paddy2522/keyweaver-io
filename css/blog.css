@@ -38,7 +38,24 @@ body {
 .blog-nav a { text-decoration: none; color: var(--muted); font-size: 14px; }
 .blog-nav a:hover { color: var(--text); }
 .blog-nav-logo { display: flex; align-items: center; }
-.blog-nav-links { display: flex; align-items: center; gap: 1.25rem; }
+.blog-nav-links { display: flex; align-items: center; gap: 0.75rem; }
+.blog-nav-links a[href="/download"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 34px;
+  padding: 0 1rem;
+  border-radius: 7px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+.blog-nav-links a[href="/download"]:hover {
+  background: var(--accent2);
+  color: #fff;
+}
 
 .blog-wrap {
   max-width: 760px;
