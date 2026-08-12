@@ -1,6 +1,13 @@
 (function () {
   'use strict';
 
+  if (!document.querySelector('link[href*="help-widget.css"]')) {
+    var link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = '/css/help-widget.css';
+    document.head.appendChild(link);
+  }
+
   var BACKEND = 'https://keyweaver-backend.vercel.app';
 
   var TYPES = [
