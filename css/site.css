@@ -411,15 +411,33 @@ body {
   padding: 1.5rem;
   text-decoration: none;
   color: inherit;
-  transition: border-color 0.15s, background 0.15s, transform 0.15s;
+  transition: border-color 0.15s, background 0.15s, transform 0.15s, box-shadow 0.15s;
   min-height: 220px;
   overflow: hidden;
+  position: relative;
 }
+
+.product-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.product-card--cuemark::before { background: linear-gradient(90deg, #3d9cf0, transparent 88%); }
+.product-card--trillian::before { background: linear-gradient(90deg, #b56bff, transparent 88%); }
+.product-card--tambourine::before { background: linear-gradient(90deg, #e8952f, transparent 88%); }
+.product-card--superconductor::before { background: linear-gradient(90deg, #5b6bf8, transparent 88%); }
+.product-card--ludo::before { background: linear-gradient(90deg, #34d399, transparent 88%); }
 
 .product-card:hover {
   border-color: rgba(255, 255, 255, 0.12);
   background: #1a1a26;
   transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
 }
 
 /* Icon marks are ~132×132 in a 166.8-tall wordmark SVG - scale so the
@@ -490,9 +508,39 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  /* Soft charcoal lift only - keep brand accents on CTAs, not a purple wash. */
+  /* Soft charcoal lift - theme pages add a subtle brand wash below. */
   background: radial-gradient(ellipse 64% 40% at 50% 0%, rgba(255, 255, 255, 0.04) 0%, transparent 70%);
   pointer-events: none;
+}
+
+body.theme-cuemark .product-hero::before {
+  background:
+    radial-gradient(ellipse 58% 42% at 50% -4%, rgba(61, 156, 240, 0.14) 0%, transparent 62%),
+    radial-gradient(ellipse 40% 30% at 82% 70%, rgba(61, 156, 240, 0.05) 0%, transparent 70%);
+}
+
+body.theme-trillian .product-hero::before {
+  background:
+    radial-gradient(ellipse 58% 42% at 50% -4%, rgba(181, 107, 255, 0.14) 0%, transparent 62%),
+    radial-gradient(ellipse 40% 30% at 18% 72%, rgba(181, 107, 255, 0.05) 0%, transparent 70%);
+}
+
+body.theme-tambourine .product-hero::before {
+  background:
+    radial-gradient(ellipse 58% 42% at 50% -4%, rgba(232, 149, 47, 0.14) 0%, transparent 62%),
+    radial-gradient(ellipse 40% 30% at 80% 68%, rgba(232, 149, 47, 0.05) 0%, transparent 70%);
+}
+
+body.theme-superconductor .product-hero::before {
+  background:
+    radial-gradient(ellipse 58% 42% at 50% -4%, rgba(91, 107, 248, 0.14) 0%, transparent 62%),
+    radial-gradient(ellipse 40% 30% at 20% 70%, rgba(91, 107, 248, 0.05) 0%, transparent 70%);
+}
+
+body.theme-ludo .product-hero::before {
+  background:
+    radial-gradient(ellipse 58% 42% at 50% -4%, rgba(52, 211, 153, 0.12) 0%, transparent 62%),
+    radial-gradient(ellipse 40% 30% at 78% 68%, rgba(52, 211, 153, 0.05) 0%, transparent 70%);
 }
 
 .product-hero-top {
@@ -671,6 +719,30 @@ body.theme-ludo .product-atmos::after {
   background:
     linear-gradient(180deg, rgba(10, 10, 15, 0.84) 0%, rgba(10, 10, 15, 0.92) 55%, rgba(10, 10, 15, 0.98) 100%),
     radial-gradient(ellipse 42% 40% at 22% 68%, rgba(52, 211, 153, 0.08) 0%, transparent 65%);
+}
+
+body.theme-tambourine .product-atmos::after {
+  background:
+    linear-gradient(180deg, rgba(10, 10, 15, 0.82) 0%, rgba(10, 10, 15, 0.92) 55%, rgba(10, 10, 15, 0.98) 100%),
+    radial-gradient(ellipse 46% 42% at 72% 34%, rgba(232, 149, 47, 0.1) 0%, transparent 68%);
+}
+
+body.theme-trillian .product-atmos::after {
+  background:
+    linear-gradient(180deg, rgba(10, 10, 15, 0.82) 0%, rgba(10, 10, 15, 0.92) 55%, rgba(10, 10, 15, 0.98) 100%),
+    radial-gradient(ellipse 46% 42% at 28% 40%, rgba(181, 107, 255, 0.1) 0%, transparent 68%);
+}
+
+body.theme-cuemark .product-atmos::after {
+  background:
+    linear-gradient(180deg, rgba(10, 10, 15, 0.82) 0%, rgba(10, 10, 15, 0.92) 55%, rgba(10, 10, 15, 0.98) 100%),
+    radial-gradient(ellipse 46% 42% at 70% 36%, rgba(61, 156, 240, 0.1) 0%, transparent 68%);
+}
+
+body.theme-superconductor .product-atmos::after {
+  background:
+    linear-gradient(180deg, rgba(10, 10, 15, 0.82) 0%, rgba(10, 10, 15, 0.92) 55%, rgba(10, 10, 15, 0.98) 100%),
+    radial-gradient(ellipse 46% 42% at 30% 38%, rgba(91, 107, 248, 0.1) 0%, transparent 68%);
 }
 
 .feature-grid {

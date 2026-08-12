@@ -9,7 +9,7 @@
   <script src="/js/nav-auth.js" defer></script>
   <link rel="stylesheet" href="/css/chrome.css" />
   <link rel="stylesheet" href="/css/help-widget.css" />
-  <link rel="stylesheet" href="/css/site.css?v=20260807c" />
+  <link rel="stylesheet" href="/css/site.css?v=20260812b" />
   <title>Keyweaver - Plugins for After Effects and Premiere Pro</title>
   <meta name="description" content="Keyweaver builds plugins for After Effects and Premiere Pro: AI captions, AI video, voiceover, music &amp; SFX, and a motion toolkit. One account, shared credits." />
   <link rel="canonical" href="https://keyweaver.io/" />
@@ -18,10 +18,13 @@
   <meta property="og:title" content="Keyweaver - Plugins for After Effects and Premiere Pro" />
   <meta property="og:description" content="AI captions, video, voice, and sound - plus a motion toolkit. One account. Shared credits across the suite." />
   <meta property="og:url" content="https://keyweaver.io/" />
-  <meta property="og:image" content="https://keyweaver.io/images/keyweaver-logo.svg" />
-  <meta name="twitter:card" content="summary" />
+  <meta property="og:image" content="https://keyweaver.io/images/og-keyweaver.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Keyweaver - After Effects and Premiere Pro plugins" />
   <meta name="twitter:description" content="AI captions, video, voice, and sound for After Effects and Premiere Pro. One account, shared credits." />
+  <meta name="twitter:image" content="https://keyweaver.io/images/og-keyweaver.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=SN+Pro:wght@300;400;500;600;700&family=Cal+Sans&display=swap" rel="stylesheet" />
@@ -37,8 +40,9 @@
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(ellipse 58% 48% at 12% 0%, rgba(255, 255, 255, 0.045) 0%, transparent 68%),
-        radial-gradient(ellipse 42% 38% at 92% 72%, rgba(255, 255, 255, 0.02) 0%, transparent 70%);
+        radial-gradient(ellipse 62% 52% at 8% -6%, rgba(91, 107, 248, 0.1) 0%, transparent 58%),
+        radial-gradient(ellipse 48% 40% at 88% 78%, rgba(255, 255, 255, 0.03) 0%, transparent 68%),
+        linear-gradient(180deg, rgba(10,10,15,0) 0%, rgba(10,10,15,0.35) 100%);
       pointer-events: none;
     }
     .hub-hero-inner {
@@ -301,7 +305,7 @@
     <p class="section-label" style="margin-top:2.5rem;">After Effects</p>
     <h3 class="section-title" style="font-size:clamp(1.35rem,3vw,1.75rem);">Five plugins for AE</h3>
     <div class="product-grid">
-      <a class="product-card" href="/cuemark">
+      <a class="product-card product-card--cuemark" href="/cuemark">
         <span class="product-card-logo"><img src="/images/plugins/cuemark-web-logo.svg" alt="" width="200" height="40" /></span>
         <div class="product-card-category">AI Captions · After Effects</div>
         <h3>Cuemark</h3>
@@ -309,7 +313,7 @@
         <span class="product-card-cta">Explore Cuemark →</span>
       </a>
 
-      <a class="product-card" href="/trillian">
+      <a class="product-card product-card--trillian" href="/trillian">
         <span class="product-card-logo"><img src="/images/plugins/trillian-web-logo.svg" alt="" width="200" height="40" /></span>
         <div class="product-card-category">AI Voiceover · After Effects (+ Premiere)</div>
         <h3>Trillian</h3>
@@ -317,7 +321,7 @@
         <span class="product-card-cta">Explore Trillian →</span>
       </a>
 
-      <a class="product-card" href="/tambourine">
+      <a class="product-card product-card--tambourine" href="/tambourine">
         <span class="product-card-logo"><img src="/images/plugins/tamborine-web-logo.svg" alt="" width="200" height="40" /></span>
         <div class="product-card-category">AI Music &amp; SFX · After Effects (+ Premiere)</div>
         <h3>Tambourine</h3>
@@ -325,7 +329,7 @@
         <span class="product-card-cta">Explore Tambourine →</span>
       </a>
 
-      <a class="product-card" href="/superconductor">
+      <a class="product-card product-card--superconductor" href="/superconductor">
         <span class="product-card-logo"><img src="/images/plugins/superconductor-web-logo.svg" alt="" width="200" height="40" /></span>
         <div class="product-card-category">AI Video · After Effects (+ Premiere)</div>
         <h3>Superconductor</h3>
@@ -333,7 +337,7 @@
         <span class="product-card-cta">Explore Superconductor →</span>
       </a>
 
-      <a class="product-card" href="/ludo">
+      <a class="product-card product-card--ludo" href="/ludo">
         <span class="product-card-logo"><img src="/images/plugins/ludo-web-logo.svg" alt="" width="200" height="40" /></span>
         <div class="product-card-category">Motion Toolkit · After Effects</div>
         <h3>Ludo</h3>
@@ -346,7 +350,7 @@
     <h3 class="section-title" style="font-size:clamp(1.35rem,3vw,1.75rem);">Three plugins for Premiere</h3>
     <p class="section-sub">Same Keyweaver Manager catalog - install the Premiere build of each tool.</p>
     <div class="product-grid">
-      <a class="product-card" href="/trillian">
+      <a class="product-card product-card--trillian" href="/trillian">
         <span class="product-card-logo"><img src="/images/plugins/trillian-web-logo.svg" alt="" width="200" height="40" /></span>
         <div class="product-card-category">AI Voiceover · Premiere Pro</div>
         <h3>Trillian for Premiere</h3>
@@ -354,7 +358,7 @@
         <span class="product-card-cta">Explore Trillian →</span>
       </a>
 
-      <a class="product-card" href="/tambourine">
+      <a class="product-card product-card--tambourine" href="/tambourine">
         <span class="product-card-logo"><img src="/images/plugins/tamborine-web-logo.svg" alt="" width="200" height="40" /></span>
         <div class="product-card-category">AI Music &amp; SFX · Premiere Pro</div>
         <h3>Tambourine for Premiere</h3>
@@ -362,7 +366,7 @@
         <span class="product-card-cta">Explore Tambourine →</span>
       </a>
 
-      <a class="product-card" href="/superconductor">
+      <a class="product-card product-card--superconductor" href="/superconductor">
         <span class="product-card-logo"><img src="/images/plugins/superconductor-web-logo.svg" alt="" width="200" height="40" /></span>
         <div class="product-card-category">AI Video · Premiere Pro</div>
         <h3>Superconductor for Premiere</h3>
