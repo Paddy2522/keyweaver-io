@@ -1339,3 +1339,140 @@ body.theme-ludo .product-atmos::after {
   color: var(--muted);
   line-height: 1.55;
 }
+
+/* ── Tambourine music / SFX examples ── */
+.tambourine-examples {
+  max-width: 720px;
+  margin: 2.25rem auto 0;
+}
+
+.tambourine-example-prompt-wrap {
+  border-bottom: 1px solid var(--edge);
+  padding: 0 0 1.35rem;
+  margin-bottom: 1.5rem;
+}
+
+.tambourine-example-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #8a8aa3;
+  margin-bottom: 0.75rem;
+}
+
+.tambourine-example-prompt {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(1.05rem, 2.4vw, 1.25rem);
+  line-height: 1.65;
+  color: var(--text);
+  min-height: 4.2em;
+  white-space: pre-wrap;
+}
+
+.tambourine-example-prompt .tambourine-caret {
+  display: inline-block;
+  width: 2px;
+  height: 1.05em;
+  margin-left: 2px;
+  vertical-align: -0.12em;
+  background: var(--accent2);
+  animation: trillian-caret-blink 0.9s steps(1) infinite;
+}
+
+.tambourine-example-prompt.is-done .tambourine-caret {
+  display: none;
+}
+
+.tambourine-example-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-top: 1px solid var(--edge);
+}
+
+.tambourine-example-row {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  width: 100%;
+  padding: 0.85rem 0.15rem;
+  border: 0;
+  border-bottom: 1px solid var(--edge);
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.tambourine-example-row:hover,
+.tambourine-example-row:focus-visible {
+  background: rgba(var(--accent-rgb), 0.06);
+  outline: none;
+}
+
+.tambourine-example-row.is-active {
+  background: rgba(var(--accent-rgb), 0.08);
+}
+
+.tambourine-example-row.is-playing {
+  background: rgba(var(--accent-rgb), 0.12);
+}
+
+.tambourine-example-play {
+  flex: 0 0 auto;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(var(--accent-rgb), 0.45);
+  background: rgba(var(--accent-rgb), 0.12);
+  color: var(--accent2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.tambourine-example-row.is-active .tambourine-example-play {
+  border-color: rgba(var(--accent-rgb), 0.7);
+}
+
+.tambourine-example-row.is-playing .tambourine-example-play {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.tambourine-example-play svg {
+  width: 14px;
+  height: 14px;
+  display: block;
+}
+
+.tambourine-example-copy {
+  min-width: 0;
+  flex: 1;
+}
+
+.tambourine-example-name {
+  display: block;
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--text);
+  margin-bottom: 0.15rem;
+}
+
+.tambourine-example-meta {
+  display: block;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.tambourine-examples-note {
+  margin-top: 1rem;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.55;
+}

@@ -9,7 +9,7 @@
   <script src="/js/nav-auth.js" defer></script>
   <link rel="stylesheet" href="/css/chrome.css" />
   <link rel="stylesheet" href="/css/help-widget.css" />
-  <link rel="stylesheet" href="/css/site.css?v=20260811b" />
+  <link rel="stylesheet" href="/css/site.css?v=20260812a" />
   <title>Tambourine by Keyweaver - AI Music &amp; SFX for After Effects &amp; Premiere Pro</title>
   <meta name="description" content="Generate AI music beds and sound effects inside Adobe After Effects or Premiere Pro and place them on your timeline." />
   <link rel="canonical" href="https://keyweaver.io/tambourine" />
@@ -93,6 +93,88 @@
     </div>
   </div>
 </header>
+
+<hr class="divider" />
+
+<section class="section" aria-labelledby="tambourine-examples-title">
+  <div class="container">
+    <p class="section-label">Hear it</p>
+    <h2 class="section-title" id="tambourine-examples-title">Same prompt flow, different cues</h2>
+    <p class="section-sub">Switch examples to preview music beds and sound effects like the ones Tambourine generates for your timeline.</p>
+
+    <div class="tambourine-examples">
+      <div class="tambourine-example-prompt-wrap">
+        <p class="tambourine-example-label">Prompt</p>
+        <p id="tambourine-example-prompt" class="tambourine-example-prompt" aria-live="polite"></p>
+      </div>
+
+      <p class="tambourine-example-label">Examples</p>
+      <div id="tambourine-example-list" class="tambourine-example-list" role="group" aria-label="Tambourine music and sound effect examples">
+        <button type="button" class="tambourine-example-row is-active" data-id="soft-documentary" aria-pressed="true">
+          <span class="tambourine-example-play" aria-hidden="true">
+            <svg data-icon="play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            <svg data-icon="stop" viewBox="0 0 24 24" fill="currentColor" hidden><path d="M6 6h12v12H6z"/></svg>
+          </span>
+          <span class="tambourine-example-copy">
+            <span class="tambourine-example-name">Soft documentary bed</span>
+            <span class="tambourine-example-meta">Music · Ambient piano · ~10s</span>
+          </span>
+        </button>
+        <button type="button" class="tambourine-example-row" data-id="tech-pulse" aria-pressed="false">
+          <span class="tambourine-example-play" aria-hidden="true">
+            <svg data-icon="play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            <svg data-icon="stop" viewBox="0 0 24 24" fill="currentColor" hidden><path d="M6 6h12v12H6z"/></svg>
+          </span>
+          <span class="tambourine-example-copy">
+            <span class="tambourine-example-name">Tech promo pulse</span>
+            <span class="tambourine-example-meta">Music · Electronic · ~10s</span>
+          </span>
+        </button>
+        <button type="button" class="tambourine-example-row" data-id="cinematic-tension" aria-pressed="false">
+          <span class="tambourine-example-play" aria-hidden="true">
+            <svg data-icon="play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            <svg data-icon="stop" viewBox="0 0 24 24" fill="currentColor" hidden><path d="M6 6h12v12H6z"/></svg>
+          </span>
+          <span class="tambourine-example-copy">
+            <span class="tambourine-example-name">Cinematic tension</span>
+            <span class="tambourine-example-meta">Music · Cinematic · ~10s</span>
+          </span>
+        </button>
+        <button type="button" class="tambourine-example-row" data-id="soft-whoosh" aria-pressed="false">
+          <span class="tambourine-example-play" aria-hidden="true">
+            <svg data-icon="play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            <svg data-icon="stop" viewBox="0 0 24 24" fill="currentColor" hidden><path d="M6 6h12v12H6z"/></svg>
+          </span>
+          <span class="tambourine-example-copy">
+            <span class="tambourine-example-name">Soft whoosh</span>
+            <span class="tambourine-example-meta">SFX · Transition</span>
+          </span>
+        </button>
+        <button type="button" class="tambourine-example-row" data-id="ui-click" aria-pressed="false">
+          <span class="tambourine-example-play" aria-hidden="true">
+            <svg data-icon="play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            <svg data-icon="stop" viewBox="0 0 24 24" fill="currentColor" hidden><path d="M6 6h12v12H6z"/></svg>
+          </span>
+          <span class="tambourine-example-copy">
+            <span class="tambourine-example-name">UI click</span>
+            <span class="tambourine-example-meta">SFX · Interface</span>
+          </span>
+        </button>
+        <button type="button" class="tambourine-example-row" data-id="cinematic-hit" aria-pressed="false">
+          <span class="tambourine-example-play" aria-hidden="true">
+            <svg data-icon="play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            <svg data-icon="stop" viewBox="0 0 24 24" fill="currentColor" hidden><path d="M6 6h12v12H6z"/></svg>
+          </span>
+          <span class="tambourine-example-copy">
+            <span class="tambourine-example-name">Cinematic hit</span>
+            <span class="tambourine-example-meta">SFX · Impact</span>
+          </span>
+        </button>
+      </div>
+      <p class="tambourine-examples-note">Samples are styled like Tambourine panel generates. In the panel you can prompt music beds and one-shot SFX, then place them on the timeline.</p>
+    </div>
+  </div>
+</section>
 
 <hr class="divider" />
 
@@ -206,6 +288,7 @@
   </ul>
 </footer>
 <script src="/js/help-widget.js" defer></script>
+<script src="/js/tambourine-examples.js" defer></script>
 <script src="/js/cuemark-turnstile.js"></script>
 </body>
 </html>
