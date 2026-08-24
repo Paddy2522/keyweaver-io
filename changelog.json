@@ -2,6 +2,16 @@
   "product": "Keyweaver",
   "releases": [
     {
+      "version": "1.0.15",
+      "date": "2026-08-24",
+      "panel": [
+        "Ludo 0.3.11: split character layers stay collapsed in the timeline"
+      ],
+      "website": [
+        "Manager catalog updated for Ludo 0.3.11"
+      ]
+    },
+    {
       "version": "1.0.14",
       "date": "2026-08-24",
       "panel": [

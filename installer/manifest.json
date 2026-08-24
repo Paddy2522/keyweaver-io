@@ -138,20 +138,20 @@
                          "displayName":  "Ludo by Keyweaver",
                          "description":  "Motion toolkit - animation, text, layout, colour, and export.",
                          "panelId":  "com.keyweaver.ludo.panel",
-                         "version":  "0.3.10",
+                         "version":  "0.3.11",
                          "host":  "AEFT",
                          "hostLabel":  "After Effects",
                          "platforms":  {
                                            "win":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Ludo-Install-win-v0.3.10.zip",
-                                                       "sha256":  "1e8c59687dc7351a68fc6d40b6ba30f0bec6f054aa0f7777df8f6df067cf4d5f",
-                                                       "sizeBytes":  303433,
+                                                       "packageUrl":  "https://keyweaver.io/downloads/Ludo-Install-win-v0.3.11.zip",
+                                                       "sha256":  "3d0320df67dcd35a0036715c5e3bcefc4c1d9fdacfbff9df08f1eb0fc1c87d33",
+                                                       "sizeBytes":  303775,
                                                        "installScript":  "ludo-install-windows.ps1"
                                                    },
                                            "mac":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Ludo-Install-mac-v0.3.10.zip",
-                                                       "sha256":  "9f3c7150cffce54547e0ade7ca32f7a4d339147f784d984964884f848a52999c",
-                                                       "sizeBytes":  302898,
+                                                       "packageUrl":  "https://keyweaver.io/downloads/Ludo-Install-mac-v0.3.11.zip",
+                                                       "sha256":  "5d36f219e5e590980d4a76ebec38dc1eb333e19bf155eea06aea1a254f1d0414",
+                                                       "sizeBytes":  303240,
                                                        "installScript":  "ludo-install-macos.sh"
                                                    }
                                        },
