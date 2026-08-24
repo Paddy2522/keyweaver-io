@@ -2,6 +2,16 @@
   "product": "Keyweaver",
   "releases": [
     {
+      "version": "1.0.14",
+      "date": "2026-08-24",
+      "panel": [
+        "Ludo 0.3.10: text split and stagger follow reading order again"
+      ],
+      "website": [
+        "Manager catalog updated for Ludo 0.3.10"
+      ]
+    },
+    {
       "version": "1.0.13",
       "date": "2026-08-24",
       "panel": [
