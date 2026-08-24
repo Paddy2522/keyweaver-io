@@ -91,13 +91,13 @@
                          "hostLabel":  "After Effects",
                          "platforms":  {
                                            "win":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Tamborine-Install-win-v0.1.8.zip",
+                                                       "packageUrl":  "https://keyweaver.io/downloads/Tambourine-Install-win-v0.1.8.zip",
                                                        "sha256":  "0c81501b6d881725bba4a389d99959f1a763b6627c2ead9efea5a443f9bea306",
                                                        "sizeBytes":  123059,
                                                        "installScript":  "tamborine-install-windows.ps1"
                                                    },
                                            "mac":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Tamborine-Install-mac-v0.1.8.zip",
+                                                       "packageUrl":  "https://keyweaver.io/downloads/Tambourine-Install-mac-v0.1.8.zip",
                                                        "sha256":  "585ea05dc7d371cc50d55168609a324e21ea420565af322f60fd86d88ec5b170",
                                                        "sizeBytes":  122522,
                                                        "installScript":  "tamborine-install-macos.sh"
@@ -138,20 +138,20 @@
                          "displayName":  "Ludo by Keyweaver",
                          "description":  "Motion toolkit - animation, text, layout, colour, and export.",
                          "panelId":  "com.keyweaver.ludo.panel",
-                         "version":  "0.3.8",
+                         "version":  "0.3.9",
                          "host":  "AEFT",
                          "hostLabel":  "After Effects",
                          "platforms":  {
                                            "win":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Ludo-Install-win-v0.3.8.zip",
-                                                       "sha256":  "57cb379e8e69ee8389ca4765658a020db6ffb27becfe7d39d47cce9a1d1b72e7",
-                                                       "sizeBytes":  220771,
+                                                       "packageUrl":  "https://keyweaver.io/downloads/Ludo-Install-win-v0.3.9.zip",
+                                                       "sha256":  "cc0daaa5d166341f0c9d1c1ca6d62821b28add4ed0689c623c7f847590b36b5d",
+                                                       "sizeBytes":  300693,
                                                        "installScript":  "ludo-install-windows.ps1"
                                                    },
                                            "mac":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Ludo-Install-mac-v0.3.8.zip",
-                                                       "sha256":  "fd19d7eb38b343eaf8ac72561bac4e8b1649a4350385a84071e135d2dfba8334",
-                                                       "sizeBytes":  220236,
+                                                       "packageUrl":  "https://keyweaver.io/downloads/Ludo-Install-mac-v0.3.9.zip",
+                                                       "sha256":  "ffef56ce72e3d6e264f49ab629072397aefb7f1abe4a85458a06b7edc96495df",
+                                                       "sizeBytes":  300158,
                                                        "installScript":  "ludo-install-macos.sh"
                                                    }
                                        },
@@ -195,13 +195,13 @@
                          "hostLabel":  "Premiere Pro",
                          "platforms":  {
                                            "win":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Tamborine-Premiere-Install-win-v0.1.9.zip",
+                                                       "packageUrl":  "https://keyweaver.io/downloads/Tambourine-Premiere-Install-win-v0.1.9.zip",
                                                        "sha256":  "e8e761a5641d5c9c65f82735a7db11334f26e32cbf3b586b9e749d9c56078b8c",
                                                        "sizeBytes":  125196,
                                                        "installScript":  "tamborine-premiere-install-windows.ps1"
                                                    },
                                            "mac":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Tamborine-Premiere-Install-mac-v0.1.9.zip",
+                                                       "packageUrl":  "https://keyweaver.io/downloads/Tambourine-Premiere-Install-mac-v0.1.9.zip",
                                                        "sha256":  "45408619e4469e3a98c11e3456380acb8d4f97a7573697070a763fb9a65b8544",
                                                        "sizeBytes":  124675,
                                                        "installScript":  "tamborine-premiere-install-macos.sh"

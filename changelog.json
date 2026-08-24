@@ -2,6 +2,16 @@
   "product": "Keyweaver",
   "releases": [
     {
+      "version": "1.0.13",
+      "date": "2026-08-24",
+      "panel": [
+        "Ludo 0.3.9: restored host script so animation, layer, text, and layout tools unlock with a selection"
+      ],
+      "website": [
+        "Manager catalog updated for Ludo 0.3.9"
+      ]
+    },
+    {
       "version": "1.0.12",
       "date": "2026-08-08",
       "panel": [
