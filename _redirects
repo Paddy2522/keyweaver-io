@@ -166,6 +166,9 @@
 /downloads/Trillian-Install-mac-v0.1.8.zip https://github.com/Paddy2522/keyweaver-io/releases/download/trillian-v0.1.8/Trillian-Install-mac-v0.1.8.zip 302
 /downloads/Tamborine-Install-win-v0.1.8.zip https://github.com/Paddy2522/keyweaver-io/releases/download/tamborine-v0.1.8/Tamborine-Install-win-v0.1.8.zip 302
 /downloads/Tamborine-Install-mac-v0.1.8.zip https://github.com/Paddy2522/keyweaver-io/releases/download/tamborine-v0.1.8/Tamborine-Install-mac-v0.1.8.zip 302
+# Alias: misspelled "Tambourine-" catalog URLs → same GitHub assets
+/downloads/Tambourine-Install-win-v0.1.8.zip https://github.com/Paddy2522/keyweaver-io/releases/download/tamborine-v0.1.8/Tamborine-Install-win-v0.1.8.zip 302
+/downloads/Tambourine-Install-mac-v0.1.8.zip https://github.com/Paddy2522/keyweaver-io/releases/download/tamborine-v0.1.8/Tamborine-Install-mac-v0.1.8.zip 302
 /downloads/Superconductor-Install-win-v0.1.7.zip https://github.com/Paddy2522/keyweaver-io/releases/download/superconductor-v0.1.7/Superconductor-Install-win-v0.1.7.zip 302
 /downloads/Superconductor-Install-mac-v0.1.7.zip https://github.com/Paddy2522/keyweaver-io/releases/download/superconductor-v0.1.7/Superconductor-Install-mac-v0.1.7.zip 302
 /downloads/Ludo-Install-win-v0.3.8.zip https://github.com/Paddy2522/keyweaver-io/releases/download/ludo-v0.3.8/Ludo-Install-win-v0.3.8.zip 302
@@ -180,5 +183,7 @@
 /downloads/Trillian-Premiere-Install-mac-v0.1.9.zip https://github.com/Paddy2522/keyweaver-io/releases/download/trillian-premiere-v0.1.9/Trillian-Premiere-Install-mac-v0.1.9.zip 302
 /downloads/Tamborine-Premiere-Install-win-v0.1.9.zip https://github.com/Paddy2522/keyweaver-io/releases/download/tamborine-premiere-v0.1.9/Tamborine-Premiere-Install-win-v0.1.9.zip 302
 /downloads/Tamborine-Premiere-Install-mac-v0.1.9.zip https://github.com/Paddy2522/keyweaver-io/releases/download/tamborine-premiere-v0.1.9/Tamborine-Premiere-Install-mac-v0.1.9.zip 302
+/downloads/Tambourine-Premiere-Install-win-v0.1.9.zip https://github.com/Paddy2522/keyweaver-io/releases/download/tamborine-premiere-v0.1.9/Tamborine-Premiere-Install-win-v0.1.9.zip 302
+/downloads/Tambourine-Premiere-Install-mac-v0.1.9.zip https://github.com/Paddy2522/keyweaver-io/releases/download/tamborine-premiere-v0.1.9/Tamborine-Premiere-Install-mac-v0.1.9.zip 302
 /downloads/Superconductor-Premiere-Install-win-v0.1.8.zip https://github.com/Paddy2522/keyweaver-io/releases/download/superconductor-premiere-v0.1.8/Superconductor-Premiere-Install-win-v0.1.8.zip 302
 /downloads/Superconductor-Premiere-Install-mac-v0.1.8.zip https://github.com/Paddy2522/keyweaver-io/releases/download/superconductor-premiere-v0.1.8/Superconductor-Premiere-Install-mac-v0.1.8.zip 302

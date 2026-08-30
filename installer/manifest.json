@@ -91,13 +91,13 @@
                          "hostLabel":  "After Effects",
                          "platforms":  {
                                            "win":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Tambourine-Install-win-v0.1.8.zip",
+                                                       "packageUrl":  "https://keyweaver.io/downloads/Tamborine-Install-win-v0.1.8.zip",
                                                        "sha256":  "0c81501b6d881725bba4a389d99959f1a763b6627c2ead9efea5a443f9bea306",
                                                        "sizeBytes":  123059,
                                                        "installScript":  "tamborine-install-windows.ps1"
                                                    },
                                            "mac":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Tambourine-Install-mac-v0.1.8.zip",
+                                                       "packageUrl":  "https://keyweaver.io/downloads/Tamborine-Install-mac-v0.1.8.zip",
                                                        "sha256":  "585ea05dc7d371cc50d55168609a324e21ea420565af322f60fd86d88ec5b170",
                                                        "sizeBytes":  122522,
                                                        "installScript":  "tamborine-install-macos.sh"
@@ -195,13 +195,13 @@
                          "hostLabel":  "Premiere Pro",
                          "platforms":  {
                                            "win":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Tambourine-Premiere-Install-win-v0.1.9.zip",
+                                                       "packageUrl":  "https://keyweaver.io/downloads/Tamborine-Premiere-Install-win-v0.1.9.zip",
                                                        "sha256":  "e8e761a5641d5c9c65f82735a7db11334f26e32cbf3b586b9e749d9c56078b8c",
                                                        "sizeBytes":  125196,
                                                        "installScript":  "tamborine-premiere-install-windows.ps1"
                                                    },
                                            "mac":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Tambourine-Premiere-Install-mac-v0.1.9.zip",
+                                                       "packageUrl":  "https://keyweaver.io/downloads/Tamborine-Premiere-Install-mac-v0.1.9.zip",
                                                        "sha256":  "45408619e4469e3a98c11e3456380acb8d4f97a7573697070a763fb9a65b8544",
                                                        "sizeBytes":  124675,
                                                        "installScript":  "tamborine-premiere-install-macos.sh"
