@@ -959,6 +959,19 @@
 
       <div class="faq-item">
         <div class="faq-q" onclick="toggleFaq(this)">
+          <span>Keyweaver Manager says “virus or potentially unwanted software”</span>
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-a">
+          That message is from <strong>Windows Security</strong>, not from Keyweaver. Manager is signed by <strong>Keyweaver Ltd</strong>; some PCs still flag a new build once.
+          Open <strong>Windows Security</strong> → <strong>Virus &amp; threat protection</strong> → <strong>Protection history</strong>, find <strong>Keyweaver-Manager.exe</strong>, then <strong>Actions</strong> → <strong>Allow</strong> / <strong>Restore</strong>.
+          Close Manager fully and reopen from the Start Menu so it can sync the latest signed build.
+          If it still fails, reinstall from this download page (Setup stays signed; Manager updates on next launch).
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
           <span>The panel doesn't appear in Window → Extensions</span>
           <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
         </div>

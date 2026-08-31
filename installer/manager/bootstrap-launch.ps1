@@ -95,7 +95,26 @@ try {
 } catch {}
 
 $exe = Join-Path $managerRoot 'Keyweaver-Manager.exe'
-if (-not (Test-Path -LiteralPath $exe)) {
-  throw "Keyweaver Manager not found at $managerRoot"
+$ps1 = Join-Path $managerRoot 'Keyweaver-Manager.ps1'
+$started = $false
+if (Test-Path -LiteralPath $exe) {
+  try {
+    Start-Process -FilePath $exe -WorkingDirectory $managerRoot
+    $started = $true
+  } catch {
+    # Unsigned host can be false-positive blocked (virus / PUA). Fall back to .ps1 UI.
+    if ($_.Exception.Message -notmatch 'virus|unwanted software|cannot be run') { throw }
+  }
 }
-Start-Process -FilePath $exe -WorkingDirectory $managerRoot
+if (-not $started) {
+  if (-not (Test-Path -LiteralPath $ps1)) {
+    throw "Keyweaver Manager not found at $managerRoot"
+  }
+  $ps = Join-Path $env:SystemRoot 'System32\WindowsPowerShell\v1.0\powershell.exe'
+  Start-Process -FilePath $ps -WorkingDirectory $managerRoot -WindowStyle Hidden -ArgumentList @(
+    '-NoProfile',
+    '-ExecutionPolicy', 'Bypass',
+    '-WindowStyle', 'Hidden',
+    '-File', $ps1
+  )
+}
