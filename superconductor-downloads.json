@@ -1,9 +1,9 @@
 {
-    "files":  {
-                  "macZip":  "https://keyweaver.io/downloads/Superconductor-Install-mac-v0.1.0.zip",
-                  "winZip":  "https://keyweaver.io/downloads/Superconductor-Install-win-v0.1.0.zip"
-              },
-    "status":  "available",
-    "releasePage":  "https://github.com/Paddy2522/keyweaver-io/releases/tag/superconductor-v0.1.0",
-    "version":  "0.1.0"
+  "version": "0.1.7",
+  "status": "available",
+  "releasePage": "https://github.com/Paddy2522/keyweaver-io/releases/tag/superconductor-v0.1.7",
+  "files": {
+    "winZip": "https://keyweaver.io/downloads/Superconductor-Install-win-v0.1.7.zip",
+    "macZip": "https://keyweaver.io/downloads/Superconductor-Install-mac-v0.1.7.zip"
+  }
 }
