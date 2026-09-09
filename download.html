@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -645,7 +645,7 @@
         <div class="download-card-info">
           <span class="download-badge" id="win-badge">Signed · Keyweaver Ltd</span>
           <h3 id="win-primary-name">Keyweaver Installer for Windows</h3>
-          <p id="win-primary-desc">Installs Keyweaver Manager · then install any plugin from the catalog · extract and run Install-Keyweaver-Manager.cmd</p>
+          <p id="win-primary-desc">Installs Keyweaver Manager · then install any plugin from the catalog · extract and double-click Install Keyweaver Manager</p>
           <span class="win-filename-muted" id="win-filename-muted">Keyweaver-Manager-Install-win-v1.0.0.zip</span>
         </div>
         <a href="https://keyweaver.io/downloads/Keyweaver-Manager-Install-win-v1.0.0.zip" class="btn-download is-loading" id="win-download-btn" data-file="winExe" aria-disabled="true" title="Download Keyweaver Installer for Windows">
@@ -661,7 +661,7 @@
         </div>
         <div class="win-quick-step">
           <div class="win-quick-step-num">2</div>
-          <p><strong>Extract</strong>, then run <strong>Install-Keyweaver-Manager.cmd</strong>. If Windows asks, click <strong>Run</strong></p>
+          <p><strong>Extract</strong>, then double-click <strong>Install Keyweaver Manager</strong>. A small installer window appears — no black terminal</p>
         </div>
         <div class="win-quick-step">
           <div class="win-quick-step-num">3</div>
@@ -686,7 +686,7 @@
         Manual copy steps are in <strong>README.txt</strong> if you prefer not to run the installer. For Superconductor, Trillian, Tambourine, or Ludo on Windows, use Keyweaver Manager.
       </p>
       <p class="install-hint" id="win-install-hint-exe">
-        Extract the zip, then run <strong>Install-Keyweaver-Manager.cmd</strong> to install Keyweaver Manager. Open Manager, pick the <strong>After Effects</strong> or <strong>Premiere Pro</strong> tab, click <strong>Install</strong>, then fully quit and reopen that host. On newer AE builds, look under <strong>Window → Extensions (Legacy)</strong> if Extensions is empty.
+        Extract the zip, then double-click <strong>Install Keyweaver Manager</strong>. Manager opens when install finishes. Pick the <strong>After Effects</strong> or <strong>Premiere Pro</strong> tab, click <strong>Install</strong>, then fully quit and reopen that host. On newer AE builds, look under <strong>Window → Extensions (Legacy)</strong> if Extensions is empty.
       </p>
       <div class="security-notice" id="win-security-notice" hidden>
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
@@ -694,7 +694,7 @@
       </div>
       <div class="security-notice security-notice-trust" id="win-signed-notice">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/></svg>
-        <p><strong>Official Keyweaver install.</strong> Extract the zip and run <strong>Install-Keyweaver-Manager.cmd</strong> (same pattern as the Cuemark zip). Then open Keyweaver Manager and install the plugins you need. Optional Setup wizard is still available below if you prefer it.</p>
+        <p><strong>Official Keyweaver install.</strong> Extract the zip and double-click <strong>Install Keyweaver Manager</strong> — a small branded window installs Manager (signed from keyweaver.io) and opens it. Optional Setup wizard is still available below if you prefer it.</p>
       </div>
     </div>
 
@@ -738,7 +738,7 @@
           <div class="step-number">1</div>
           <div class="step-body">
             <h3>Extract and run Keyweaver Installer</h3>
-            <p>Open the zip, then double-click <strong id="win-step-exe-name">Install-Keyweaver-Manager.cmd</strong>. No admin password.</p>
+            <p>Open the zip, then double-click <strong id="win-step-exe-name">Install Keyweaver Manager</strong>. No admin password — a small installer window appears.</p>
             <div class="step-note">
               <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
               <p>If you see <strong>Windows protected your PC</strong>, click <strong>More info</strong> → <strong>Run anyway</strong>. Check the publisher is <strong>Keyweaver Ltd</strong> - that means you have the real installer.</p>
@@ -941,7 +941,7 @@
           <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
         <div class="faq-a">
-          Use the recommended <strong>Manager install zip</strong>: extract it, then run <strong>Install-Keyweaver-Manager.cmd</strong> (same style as the Cuemark zip — no Setup.exe inside).
+          Use the recommended <strong>Manager install zip</strong>: extract it, then double-click <strong>Install Keyweaver Manager</strong> (no Setup.exe inside — Chrome-safe).
           If you downloaded the bare <strong>Keyweaver-Setup.exe</strong> and Chrome blocked it: open Downloads (<strong>Ctrl+J</strong>) → <strong>⋯</strong> → <strong>Keep</strong> / <strong>Download anyway</strong>, or switch back to the Manager zip from this page.
           Cuemark only: <a href="#" id="faq-win-zip-link" data-file="winZip" style="color:var(--accent2);">Download the Cuemark zip</a>.
         </div>
@@ -1292,7 +1292,7 @@
   }
 
   function bindDownloadControl(el, key) {
-    // Primary download is a script-only Manager zip (Install-Keyweaver-Manager.cmd) - avoids nested Setup.exe.
+    // Primary download is a script-only Manager zip (Install Keyweaver Manager.vbs + UI) - avoids nested Setup.exe.
     // Bare .exe still uses the SmartScreen gate when linked separately.
     if (key === 'winExeRaw' && document.body.dataset.winExePrimary) {
       bindSmartscreenGate(el);
@@ -1329,7 +1329,7 @@
       fileNames.winSetupExe = 'Keyweaver-Setup-' + bootstrapVersion + '.exe';
       fileNames.winExe = 'Keyweaver-Manager-Install-win-v' + bootstrapVersion + '.zip';
       fileNames.winExeRaw = fileNames.winSetupExe;
-      fileNames.winInstallCmd = 'Install-Keyweaver-Manager.cmd';
+      fileNames.winInstallCmd = 'Install Keyweaver Manager';
       fileNames.winZip = 'Cuemark-Install-win-v' + version + '.zip';
       fileNames.macPkg = 'Keyweaver-Manager-' + bootstrapVersion + '.pkg';
       const verEl = document.getElementById('download-version');
@@ -1345,7 +1345,7 @@
         winPrimary.textContent = 'Cuemark for Windows (zip)';
       }
       if (winStepZip) winStepZip.textContent = fileNames.winZip;
-      if (winStepExe) winStepExe.textContent = fileNames.winInstallCmd || 'Install-Keyweaver-Manager.cmd';
+      if (winStepExe) winStepExe.textContent = fileNames.winInstallCmd || 'Install Keyweaver Manager';
       if (macStepPkg) macStepPkg.textContent = fileNames.macPkg;
       if (macFilename) macFilename.textContent = fileNames.macPkg;
       if (winZipAltLink) winZipAltLink.textContent = fileNames.winZip;
@@ -1377,7 +1377,7 @@
         winBtn.setAttribute('title', 'Download Keyweaver Installer for Windows');
         if (winBadge) winBadge.textContent = 'Signed · Keyweaver Ltd';
         if (winPrimary) winPrimary.textContent = 'Keyweaver Installer for Windows';
-        if (winDesc) winDesc.textContent = 'Installs Keyweaver Manager · then install any plugin from the catalog · extract and run Install-Keyweaver-Manager.cmd';
+        if (winDesc) winDesc.textContent = 'Installs Keyweaver Manager · then install any plugin from the catalog · extract and double-click Install Keyweaver Manager';
         if (winFilename) {
           winFilename.textContent = fileNames.winExe;
           winFilename.hidden = false;
@@ -1388,7 +1388,7 @@
         if (hintZip) hintZip.hidden = true;
         if (hintExe) {
           hintExe.hidden = false;
-          hintExe.innerHTML = 'Extract the zip, then run <strong>' + (fileNames.winInstallCmd || 'Install-Keyweaver-Manager.cmd') + '</strong> to install Keyweaver Manager. Open Manager, pick the <strong>After Effects</strong> or <strong>Premiere Pro</strong> tab, click <strong>Install</strong>, then fully quit and reopen that host.';
+          hintExe.innerHTML = 'Extract the zip, then double-click <strong>' + (fileNames.winInstallCmd || 'Install Keyweaver Manager') + '</strong>. Manager opens when install finishes. Pick the <strong>After Effects</strong> or <strong>Premiere Pro</strong> tab, click <strong>Install</strong>, then fully quit and reopen that host.';
         }
         if (noticeUnsigned) noticeUnsigned.hidden = true;
         if (noticeSigned) noticeSigned.hidden = false;
