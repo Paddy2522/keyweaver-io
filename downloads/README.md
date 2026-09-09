@@ -1,4 +1,4 @@
-# Cuemark installer downloads
+﻿# Cuemark installer downloads
 
 Installer packages total **~150 MB** (Keyweaver bootstrap ~2.5 MB, Windows zip ~48 MB, macOS zip ~64 MB with bundled ffmpeg). They are too large to ship inside the Cloudflare Workers static deploy, which is why `/downloads/*` on keyweaver.io redirects to GitHub Releases.
 
@@ -6,7 +6,7 @@ Installer packages total **~150 MB** (Keyweaver bootstrap ~2.5 MB, Windows zip ~
 
 1. **Website** (`download.html`) loads `/downloads.json`, which lists **keyweaver.io** download URLs.
 2. **Cloudflare redirects** (`_redirects`) map `/downloads/*` to **GitHub Releases** (binaries are not in the site deploy).
-3. **Primary Windows download:** `Keyweaver-Setup-<bootstrapVersion>.zip` containing the signed `Keyweaver-Setup-<bootstrapVersion>.exe` (Keyweaver Ltd) - installs **Keyweaver Manager**, then plugins install from Manager. Bare `.exe` remains available as an optional direct link.
+3. **Primary Windows download:** `Keyweaver-Manager-Install-win-v<bootstrapVersion>.zip` — extract and run `Install-Keyweaver-Manager.cmd` (script-only zip, same pattern as Cuemark; avoids Chrome flagging nested Setup.exe). Optional: bare `Keyweaver-Setup.exe` / Setup zip.
 4. **Primary macOS download:** notarized `Keyweaver-Manager-<bootstrapVersion>.pkg` - same Manager + catalog flow (no public per-plugin zip CTAs).
 5. **Remote catalog:** `installer/manifest.json` on keyweaver.io - Manager fetches product versions, package URLs, and sizes (including Mac packages used only by Manager).
 6. **Windows zip fallback:** zip + `Install-Cuemark.cmd` (Cuemark only).
@@ -63,3 +63,4 @@ Push `Captio/Website`. Manager self-updates on next launch.
 ## Local / fallback
 
 `download.html` falls back to `/downloads/<filename>` if `downloads.json` cannot be loaded - useful when testing with files in this folder on a local static server.
+
