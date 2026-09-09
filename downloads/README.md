@@ -6,7 +6,7 @@ Installer packages total **~150 MB** (Keyweaver bootstrap ~2.5 MB, Windows zip ~
 
 1. **Website** (`download.html`) loads `/downloads.json`, which lists **keyweaver.io** download URLs.
 2. **Cloudflare redirects** (`_redirects`) map `/downloads/*` to **GitHub Releases** (binaries are not in the site deploy).
-3. **Primary Windows download:** signed `Keyweaver-Setup-<bootstrapVersion>.exe` (Keyweaver Ltd) - installs **Keyweaver Manager**, then plugins install from Manager.
+3. **Primary Windows download:** `Keyweaver-Setup-<bootstrapVersion>.zip` containing the signed `Keyweaver-Setup-<bootstrapVersion>.exe` (Keyweaver Ltd) - installs **Keyweaver Manager**, then plugins install from Manager. Bare `.exe` remains available as an optional direct link.
 4. **Primary macOS download:** notarized `Keyweaver-Manager-<bootstrapVersion>.pkg` - same Manager + catalog flow (no public per-plugin zip CTAs).
 5. **Remote catalog:** `installer/manifest.json` on keyweaver.io - Manager fetches product versions, package URLs, and sizes (including Mac packages used only by Manager).
 6. **Windows zip fallback:** zip + `Install-Cuemark.cmd` (Cuemark only).
@@ -53,7 +53,8 @@ Push `Captio/Website`. Manager self-updates on next launch.
 
 | File | Role |
 |------|------|
-| `Keyweaver-Setup-1.0.0.exe` | Signed bootstrap - primary Windows CTA on download page |
+| `Keyweaver-Setup-1.0.0.zip` | Zip of signed bootstrap - primary Windows CTA on download page |
+| `Keyweaver-Setup-1.0.0.exe` | Signed bootstrap - optional direct download (Chrome may flag bare .exe) |
 | `Keyweaver-Manager-1.0.0.pkg` | Notarized Mac Manager - primary (only) macOS CTA on download page |
 | `Cuemark-Install-win-v1.0.1.zip` | Zip fallback - extract, run `Install-Cuemark.cmd` |
 | `*-Install-mac-*.zip` | Used by Mac Manager catalog installs (not linked on the download page) |

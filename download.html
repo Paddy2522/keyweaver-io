@@ -645,10 +645,10 @@
         <div class="download-card-info">
           <span class="download-badge" id="win-badge">Signed · Keyweaver Ltd</span>
           <h3 id="win-primary-name">Keyweaver Installer for Windows</h3>
-          <p id="win-primary-desc">Installs Keyweaver Manager · then install any plugin from the catalog · ~2 MB download</p>
-          <span class="win-filename-muted" id="win-filename-muted">Keyweaver-Setup-1.0.0.exe</span>
+          <p id="win-primary-desc">Installs Keyweaver Manager · then install any plugin from the catalog · zip with signed Setup (~2 MB)</p>
+          <span class="win-filename-muted" id="win-filename-muted">Keyweaver-Setup-1.0.0.zip</span>
         </div>
-        <a href="https://keyweaver.io/downloads/Keyweaver-Setup-1.0.0.exe" class="btn-download is-loading" id="win-download-btn" data-file="winExe" aria-disabled="true" title="Download Keyweaver Installer for Windows">
+        <a href="https://keyweaver.io/downloads/Keyweaver-Setup-1.0.0.zip" class="btn-download is-loading" id="win-download-btn" data-file="winExe" aria-disabled="true" title="Download Keyweaver Installer for Windows">
           <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           <span class="btn-download-label">Preparing download…</span>
         </a>
@@ -657,11 +657,11 @@
       <div class="win-quick-steps" id="win-quick-steps">
         <div class="win-quick-step">
           <div class="win-quick-step-num">1</div>
-          <p><strong>Download</strong> Keyweaver Installer (~2 MB)</p>
+          <p><strong>Download</strong> the installer zip (~2 MB)</p>
         </div>
         <div class="win-quick-step">
           <div class="win-quick-step-num">2</div>
-          <p><strong>Run setup</strong> - signed by Keyweaver Ltd. Chrome says “dangerous”? Keep the file, then SmartScreen → <strong>More info</strong> → <strong>Run anyway</strong></p>
+          <p><strong>Extract</strong>, then run <strong>Keyweaver-Setup-1.0.0.exe</strong> (signed by Keyweaver Ltd). If Windows SmartScreen appears → <strong>More info</strong> → <strong>Run anyway</strong></p>
         </div>
         <div class="win-quick-step">
           <div class="win-quick-step-num">3</div>
@@ -680,13 +680,13 @@
         <span class="win-trust-pill">No admin password</span>
       </div>
 
-      <p class="download-alt" id="win-zip-alt">Browser blocked the .exe? <a href="#" id="win-zip-alt-link" data-file="winZip">Download the Cuemark zip instead</a> — extract and run <strong>Install-Cuemark.cmd</strong> (Cuemark only). For the full plugin suite, keep the Setup download in Chrome, or try Edge/Firefox.</p>
+      <p class="download-alt" id="win-zip-alt">Prefer the bare installer? <a href="https://keyweaver.io/downloads/Keyweaver-Setup-1.0.0.exe" id="win-exe-raw-link" data-file="winExeRaw">Download Keyweaver-Setup-1.0.0.exe</a>. Cuemark only: <a href="#" id="win-zip-alt-link" data-file="winZip">Cuemark zip</a> (extract and run <strong>Install-Cuemark.cmd</strong>).</p>
       <p class="install-hint" id="win-install-hint-zip" hidden>
         Extract the zip, double-click <strong>Install-Cuemark.cmd</strong>, click <strong>Run</strong> if Windows asks, then restart After Effects.
         Manual copy steps are in <strong>README.txt</strong> if you prefer not to run the installer. For Superconductor, Trillian, Tambourine, or Ludo on Windows, use Keyweaver Manager.
       </p>
       <p class="install-hint" id="win-install-hint-exe">
-        Run <strong>Keyweaver-Setup</strong> to install Keyweaver Manager. Open Manager, pick the <strong>After Effects</strong> or <strong>Premiere Pro</strong> tab, click <strong>Install</strong>, then fully quit and reopen that host. On newer AE builds, look under <strong>Window → Extensions (Legacy)</strong> if Extensions is empty.
+        Extract the zip, then run <strong>Keyweaver-Setup-1.0.0.exe</strong> to install Keyweaver Manager. Open Manager, pick the <strong>After Effects</strong> or <strong>Premiere Pro</strong> tab, click <strong>Install</strong>, then fully quit and reopen that host. On newer AE builds, look under <strong>Window → Extensions (Legacy)</strong> if Extensions is empty.
       </p>
       <div class="security-notice" id="win-security-notice" hidden>
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
@@ -694,14 +694,14 @@
       </div>
       <div class="security-notice security-notice-trust" id="win-signed-notice">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/></svg>
-        <p><strong>One extra click on first run.</strong> Chrome may flag the download as dangerous — keep the file from Downloads, then run it. Windows may also show "Windows protected your PC" — click <strong>More info</strong> → <strong>Run anyway</strong>. Confirm the publisher is <strong>Keyweaver Ltd</strong>, then Keyweaver Manager opens. Use the <strong>After Effects</strong> or <strong>Premiere Pro</strong> tab, then install the plugins you need.</p>
+        <p><strong>Signed by Keyweaver Ltd.</strong> Extract the zip and run <strong>Keyweaver-Setup-1.0.0.exe</strong>. If Windows shows "Windows protected your PC", click <strong>More info</strong> → <strong>Run anyway</strong> and confirm the publisher is <strong>Keyweaver Ltd</strong>. Then open Keyweaver Manager and install the plugins you need.</p>
       </div>
     </div>
 
     <noscript>
       <p class="install-hint" style="text-align:center;">
         JavaScript is disabled. Download directly:
-        <a href="https://keyweaver.io/downloads/Keyweaver-Setup-1.0.0.exe">Windows installer (Keyweaver Manager)</a>
+        <a href="https://keyweaver.io/downloads/Keyweaver-Setup-1.0.0.zip">Windows installer zip (Keyweaver Manager)</a>
         · <a href="https://keyweaver.io/downloads/Keyweaver-Manager-1.0.0.pkg">macOS Manager (.pkg)</a>
       </p>
     </noscript>
@@ -737,8 +737,8 @@
         <div class="install-step">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h3>Run Keyweaver Installer</h3>
-            <p>Double-click <strong id="win-step-exe-name">Keyweaver-Setup-1.0.0.exe</strong> and click through the prompts. No admin password.</p>
+            <h3>Extract and run Keyweaver Installer</h3>
+            <p>Open the zip, then double-click <strong id="win-step-exe-name">Keyweaver-Setup-1.0.0.exe</strong> and click through the prompts. No admin password.</p>
             <div class="step-note">
               <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
               <p>If you see <strong>Windows protected your PC</strong>, click <strong>More info</strong> → <strong>Run anyway</strong>. Check the publisher is <strong>Keyweaver Ltd</strong> - that means you have the real installer.</p>
@@ -942,10 +942,10 @@
         </div>
         <div class="faq-a">
           This is common for new signed installers and does <strong>not</strong> mean the file failed a virus scan on our side. <strong>Keyweaver-Setup</strong> is signed by <strong>Keyweaver Ltd</strong>.
-          In Chrome: open Downloads (<strong>Ctrl+J</strong>) → on the blocked file choose <strong>⋯</strong> → <strong>Keep</strong> / <strong>Download anyway</strong>.
-          Then run the installer. If Windows SmartScreen appears: <strong>More info</strong> → <strong>Run anyway</strong>.
-          Prefer not to use the .exe? <a href="#" id="faq-win-zip-link" data-file="winZip" style="color:var(--accent2);">Download the Cuemark zip</a> (Cuemark only).
-          You can also try <strong>Edge</strong> or <strong>Firefox</strong> for the Setup download.
+          Prefer the zip (recommended): extract it, then run the Setup file inside.
+          If you downloaded the bare <strong>.exe</strong> in Chrome: open Downloads (<strong>Ctrl+J</strong>) → on the blocked file choose <strong>⋯</strong> → <strong>Keep</strong> / <strong>Download anyway</strong>, then run it.
+          Then if Windows SmartScreen appears: <strong>More info</strong> → <strong>Run anyway</strong>.
+          Cuemark only: <a href="#" id="faq-win-zip-link" data-file="winZip" style="color:var(--accent2);">Download the Cuemark zip</a>.
         </div>
       </div>
 
@@ -1112,6 +1112,7 @@
 
   var DOWNLOAD_LABELS = {
     winExe: 'Download Keyweaver Installer',
+    winExeRaw: 'Download Setup .exe',
     winZip: 'Download zip for Windows',
     macPkg: 'Download Keyweaver Manager',
   };
@@ -1144,8 +1145,8 @@
   }
 
   function trackCuemarkDownloadClick(key, href) {
-    var os = (key === 'winZip' || key === 'winExe') ? 'windows' : 'macos';
-    var isInstaller = key === 'winExe' || key === 'macPkg';
+    var os = (key === 'winZip' || key === 'winExe' || key === 'winExeRaw') ? 'windows' : 'macos';
+    var isInstaller = key === 'winExe' || key === 'winExeRaw' || key === 'macPkg';
     const payload = JSON.stringify({
       event_name: 'download_click',
       source: 'website',
@@ -1293,7 +1294,9 @@
   }
 
   function bindDownloadControl(el, key) {
-    if (key === 'winExe' && document.body.dataset.winExePrimary) {
+    // Primary download is a zip of the signed Setup - no Chrome Keep modal.
+    // Bare .exe still uses the SmartScreen gate when linked separately.
+    if (key === 'winExeRaw' && document.body.dataset.winExePrimary) {
       bindSmartscreenGate(el);
       return;
     }
@@ -1316,6 +1319,8 @@
     let bootstrapVersion = '1.0.0';
     const fileNames = {
       winExe: '',
+      winSetupExe: '',
+      winExeRaw: '',
       winZip: '',
       macPkg: ''
     };
@@ -1323,7 +1328,9 @@
     function setVersion(v, bootstrap) {
       version = v || version;
       if (bootstrap) bootstrapVersion = bootstrap;
-      fileNames.winExe = 'Keyweaver-Setup-' + bootstrapVersion + '.exe';
+      fileNames.winSetupExe = 'Keyweaver-Setup-' + bootstrapVersion + '.exe';
+      fileNames.winExe = 'Keyweaver-Setup-' + bootstrapVersion + '.zip';
+      fileNames.winExeRaw = fileNames.winSetupExe;
       fileNames.winZip = 'Cuemark-Install-win-v' + version + '.zip';
       fileNames.macPkg = 'Keyweaver-Manager-' + bootstrapVersion + '.pkg';
       const verEl = document.getElementById('download-version');
@@ -1334,14 +1341,16 @@
       const macStepPkg = document.getElementById('mac-step-pkg-name');
       const macFilename = document.getElementById('mac-filename-muted');
       const winZipAltLink = document.getElementById('win-zip-alt-link');
+      const winExeRawLink = document.getElementById('win-exe-raw-link');
       if (winPrimary && !document.body.dataset.winExePrimary) {
         winPrimary.textContent = 'Cuemark for Windows (zip)';
       }
       if (winStepZip) winStepZip.textContent = fileNames.winZip;
-      if (winStepExe) winStepExe.textContent = fileNames.winExe;
+      if (winStepExe) winStepExe.textContent = fileNames.winSetupExe;
       if (macStepPkg) macStepPkg.textContent = fileNames.macPkg;
       if (macFilename) macFilename.textContent = fileNames.macPkg;
       if (winZipAltLink) winZipAltLink.textContent = fileNames.winZip;
+      if (winExeRawLink) winExeRawLink.textContent = 'Download ' + fileNames.winExeRaw;
     }
 
     function setWindowsExePrimary(enabled) {
@@ -1369,7 +1378,7 @@
         winBtn.setAttribute('title', 'Download Keyweaver Installer for Windows');
         if (winBadge) winBadge.textContent = 'Signed · Keyweaver Ltd';
         if (winPrimary) winPrimary.textContent = 'Keyweaver Installer for Windows';
-        if (winDesc) winDesc.textContent = 'Installs Keyweaver Manager · then install any plugin from the catalog · ~2 MB download';
+        if (winDesc) winDesc.textContent = 'Installs Keyweaver Manager · then install any plugin from the catalog · zip with signed Setup (~2 MB)';
         if (winFilename) {
           winFilename.textContent = fileNames.winExe;
           winFilename.hidden = false;
@@ -1380,7 +1389,7 @@
         if (hintZip) hintZip.hidden = true;
         if (hintExe) {
           hintExe.hidden = false;
-          hintExe.innerHTML = 'Run <strong>Keyweaver-Setup</strong> to install Keyweaver Manager. Open Manager, pick the <strong>After Effects</strong> or <strong>Premiere Pro</strong> tab, click <strong>Install</strong>, then fully quit and reopen that host.';
+          hintExe.innerHTML = 'Extract the zip, then run <strong>' + fileNames.winSetupExe + '</strong> to install Keyweaver Manager. Open Manager, pick the <strong>After Effects</strong> or <strong>Premiere Pro</strong> tab, click <strong>Install</strong>, then fully quit and reopen that host.';
         }
         if (noticeUnsigned) noticeUnsigned.hidden = true;
         if (noticeSigned) noticeSigned.hidden = false;
@@ -1418,6 +1427,7 @@
       initSmartscreenModal();
       const siteFallback = {
         winExe: SITE_DOWNLOAD_BASE + fileNames.winExe,
+        winExeRaw: SITE_DOWNLOAD_BASE + fileNames.winExeRaw,
         winZip: SITE_DOWNLOAD_BASE + fileNames.winZip,
         macPkg: SITE_DOWNLOAD_BASE + fileNames.macPkg,
       };
@@ -1440,6 +1450,7 @@
         setVersion(version, bootstrapVersion);
         applyUrls({ files: {
           winExe: SITE_DOWNLOAD_BASE + fileNames.winExe,
+          winExeRaw: SITE_DOWNLOAD_BASE + fileNames.winExeRaw,
           winZip: SITE_DOWNLOAD_BASE + fileNames.winZip,
           macPkg: SITE_DOWNLOAD_BASE + fileNames.macPkg
         }});
@@ -1448,6 +1459,7 @@
       setVersion(version, bootstrapVersion);
       applyUrls({ files: {
         winExe: SITE_DOWNLOAD_BASE + fileNames.winExe,
+        winExeRaw: SITE_DOWNLOAD_BASE + fileNames.winExeRaw,
         winZip: SITE_DOWNLOAD_BASE + fileNames.winZip,
         macPkg: SITE_DOWNLOAD_BASE + fileNames.macPkg
       }});
