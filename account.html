@@ -507,16 +507,21 @@
       <div class="history-table" style="padding:1.25rem;">
         <p style="font-size:14px;color:var(--text);line-height:1.55;margin:0 0 0.75rem;">
           Signing in on this website does <strong>not</strong> sign you into the plugins.
-          Run the connector once on this computer so plugins pick up your account
-          (same file they already share: <code style="font-size:12px;">session.json</code>).
+          Copy a short command, paste it in PowerShell or Terminal once — no download
+          (browsers often block connector scripts as unsafe).
         </p>
         <p style="font-size:13px;color:var(--muted);line-height:1.5;margin:0 0 1rem;">
           Or open any Keyweaver panel → Account → Sign in with this email and password.
         </p>
         <div style="display:flex;flex-wrap:wrap;gap:8px;">
-          <button type="button" class="btn-sm btn-primary-sm" id="connect-plugins-win">Download Windows connector</button>
-          <button type="button" class="btn-sm btn-ghost-sm" id="connect-plugins-mac">Download Mac connector</button>
+          <button type="button" class="btn-sm btn-primary-sm" id="connect-plugins-win">Copy Windows command</button>
+          <button type="button" class="btn-sm btn-ghost-sm" id="connect-plugins-mac">Copy Mac command</button>
         </div>
+        <ol id="connect-plugins-steps" style="font-size:12px;color:var(--muted);line-height:1.55;margin:0.85rem 0 0;padding-left:1.2rem;display:none;">
+          <li id="connect-plugins-step1"></li>
+          <li>Paste (Ctrl+V / Cmd+V) and press Enter.</li>
+          <li>Focus or reopen a Keyweaver panel so it loads your credits.</li>
+        </ol>
         <p id="connect-plugins-hint" style="font-size:12px;color:var(--muted);line-height:1.5;margin:0.85rem 0 0;"></p>
       </div>
     </div>
@@ -856,84 +861,93 @@
     }
   }
 
-  function downloadTextFile(filename, text) {
-    var blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
-    var url = URL.createObjectURL(blob);
-    var a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    setTimeout(function () { URL.revokeObjectURL(url); }, 2000);
-  }
-
   function escapePsSingleQuoted(value) {
     return String(value).replace(/'/g, "''");
   }
 
-  function buildWindowsPluginConnector(token) {
+  function buildWindowsPluginConnectCommand(token) {
     var t = escapePsSingleQuoted(token);
     return [
-      '# Keyweaver — write plugin session (safe to delete this file after running)',
-      '$ErrorActionPreference = \'Stop\'',
-      '$token = \'' + t + '\'',
-      '$dir = Join-Path $env:APPDATA \'Keyweaver\'',
-      'New-Item -ItemType Directory -Force -Path $dir | Out-Null',
-      '$path = Join-Path $dir \'session.json\'',
-      '$payload = @{ cc_token = $token }',
-      '$json = ($payload | ConvertTo-Json -Compress)',
-      '[System.IO.File]::WriteAllText($path, $json, (New-Object System.Text.UTF8Encoding $false))',
-      'Write-Host \'Signed plugins in on this PC.\'',
-      'Write-Host \'Reopen After Effects / Premiere (or click the Keyweaver panel) to load your credits.\'',
-      'Write-Host (\'Wrote \' + $path)',
-      'Remove-Item -LiteralPath $MyInvocation.MyCommand.Path -Force -ErrorAction SilentlyContinue',
-      'Read-Host \'Press Enter to close\''
-    ].join('\r\n');
+      "$t='" + t + "';",
+      "$d=Join-Path $env:APPDATA 'Keyweaver';",
+      "New-Item -ItemType Directory -Force -Path $d|Out-Null;",
+      "$p=Join-Path $d 'session.json';",
+      "[IO.File]::WriteAllText($p,((@{cc_token=$t}|ConvertTo-Json -Compress)),[Text.UTF8Encoding]::new($false));",
+      "Write-Host ('Signed plugins in. Wrote '+$p)"
+    ].join(' ');
   }
 
-  function buildMacPluginConnector(token) {
-    var json = JSON.stringify({ cc_token: token });
+  function buildMacPluginConnectCommand(token) {
+    var json = JSON.stringify({ cc_token: token }).replace(/'/g, "'\\''");
     return [
-      '#!/bin/bash',
-      '# Keyweaver — write plugin session (safe to delete this file after running)',
-      'set -euo pipefail',
-      'DIR="$HOME/Library/Application Support/Keyweaver"',
-      'mkdir -p "$DIR"',
-      'PATH_JSON="$DIR/session.json"',
-      "cat > \"$PATH_JSON\" <<'KW_EOF'",
-      json,
-      'KW_EOF',
-      'echo "Signed plugins in on this Mac."',
-      'echo "Reopen After Effects / Premiere (or click the Keyweaver panel) to load your credits."',
-      'echo "Wrote $PATH_JSON"',
-      'rm -f -- "$0"',
-      'read -r -p "Press Enter to close "'
-    ].join('\n');
+      "mkdir -p \"$HOME/Library/Application Support/Keyweaver\" &&",
+      "printf '%s' '" + json + "' > \"$HOME/Library/Application Support/Keyweaver/session.json\" &&",
+      "echo \"Signed plugins in. Wrote $HOME/Library/Application Support/Keyweaver/session.json\""
+    ].join(' ');
+  }
+
+  function copyTextToClipboard(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(text);
+    }
+    return new Promise(function (resolve, reject) {
+      try {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.setAttribute('readonly', '');
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        var ok = document.execCommand('copy');
+        ta.remove();
+        if (ok) resolve();
+        else reject(new Error('copy failed'));
+      } catch (err) {
+        reject(err);
+      }
+    });
   }
 
   function wirePluginConnectButtons() {
     var winBtn = document.getElementById('connect-plugins-win');
     var macBtn = document.getElementById('connect-plugins-mac');
     var hint = document.getElementById('connect-plugins-hint');
+    var steps = document.getElementById('connect-plugins-steps');
+    var step1 = document.getElementById('connect-plugins-step1');
     if (!winBtn || !macBtn) return;
+
+    function afterCopy(osLabel, openHow) {
+      if (steps) steps.style.display = 'block';
+      if (step1) step1.textContent = openHow;
+      if (hint) {
+        hint.textContent = osLabel + ' command copied. Nothing was downloaded.';
+      }
+      if (typeof showToast === 'function') showToast(osLabel + ' command copied');
+    }
 
     winBtn.addEventListener('click', function () {
       var token = localStorage.getItem('cc_token');
       if (!token) { window.location.href = '/login'; return; }
-      downloadTextFile('Keyweaver-Connect-Plugins.ps1', buildWindowsPluginConnector(token));
-      if (hint) {
-        hint.textContent = 'Windows: right-click the downloaded file → Run with PowerShell. If blocked, open PowerShell and run: Set-ExecutionPolicy -Scope Process Bypass; then run the script. After that, focus or reopen a Keyweaver panel.';
-      }
+      copyTextToClipboard(buildWindowsPluginConnectCommand(token))
+        .then(function () {
+          afterCopy('Windows', 'Open PowerShell (Win+X → Windows PowerShell / Terminal).');
+        })
+        .catch(function () {
+          if (hint) hint.textContent = 'Could not copy. Allow clipboard access and try again.';
+        });
     });
 
     macBtn.addEventListener('click', function () {
       var token = localStorage.getItem('cc_token');
       if (!token) { window.location.href = '/login'; return; }
-      downloadTextFile('Keyweaver-Connect-Plugins.command', buildMacPluginConnector(token));
-      if (hint) {
-        hint.textContent = 'Mac: in Terminal run chmod +x ~/Downloads/Keyweaver-Connect-Plugins.command then double-click it (or open it from Terminal). After that, focus or reopen a Keyweaver panel.';
-      }
+      copyTextToClipboard(buildMacPluginConnectCommand(token))
+        .then(function () {
+          afterCopy('Mac', 'Open Terminal (Applications → Utilities → Terminal).');
+        })
+        .catch(function () {
+          if (hint) hint.textContent = 'Could not copy. Allow clipboard access and try again.';
+        });
     });
   }
 
