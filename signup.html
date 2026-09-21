@@ -463,13 +463,35 @@
   // If already logged in
   if (localStorage.getItem('cc_token')) window.location.href = '/account';
 
-  // Check for ?plan= param
+  // Check for ?plan= / ?next= params
   const urlParams = new URLSearchParams(window.location.search);
   const urlPlan = urlParams.get('plan');
+  const urlNext = urlParams.get('next');
+  // Plans that verify-email can send to Stripe; others resume after auth via sessionStorage.
+  const SIGNUP_STRIPE_PLANS = { free: true, credits: true, monthly: true };
+  const CHECKOUT_ONLY_PLANS = {
+    credits_150: true, credits_500: true,
+    monthly_pro: true, annual: true, annual_pro: true
+  };
+  if (urlNext && urlNext.startsWith('/') && !urlNext.startsWith('//')) {
+    try { sessionStorage.setItem('cc_login_next', urlNext); } catch (e) { /* ignore */ }
+  }
+  if (urlPlan && CHECKOUT_ONLY_PLANS[urlPlan]) {
+    try { sessionStorage.setItem('kw_pending_checkout_plan', urlPlan); } catch (e) { /* ignore */ }
+  }
   if (urlPlan) {
+    let matched = false;
     document.querySelectorAll('.plan-card').forEach(c => {
-      c.classList.toggle('selected', c.dataset.plan === urlPlan);
+      const on = c.dataset.plan === urlPlan;
+      if (on) matched = true;
+      c.classList.toggle('selected', on);
     });
+    // Unknown / checkout-only plan: keep Free selected (do not leave no card selected).
+    if (!matched || !SIGNUP_STRIPE_PLANS[urlPlan]) {
+      document.querySelectorAll('.plan-card').forEach(c => {
+        c.classList.toggle('selected', c.dataset.plan === 'free');
+      });
+    }
   }
 
   // Password toggle

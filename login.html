@@ -234,14 +234,14 @@
   <a href="/" class="nav-logo" aria-label="Keyweaver">
         <img src="/images/keyweaver-logo.svg" alt="" class="nav-logo-img" width="162" height="28" />
   </a>
-  <a href="/signup" class="nav-link">No account? Sign up →</a>
+  <a href="/signup" class="nav-link" id="nav-signup-link">No account? Sign up →</a>
 </nav>
 
 <main>
   <div class="auth-card">
     <div class="auth-header">
       <h1>Welcome back</h1>
-      <p>No account yet? <a href="/signup">Sign up free</a></p>
+      <p>No account yet? <a href="/signup" id="form-signup-link">Sign up free</a></p>
     </div>
 
     <div id="alert" class="alert"></div>
@@ -324,6 +324,18 @@
     try { sessionStorage.removeItem('cc_login_next'); } catch (e) { /* ignore */ }
     return target;
   }
+
+  // Preserve checkout resume target when user chooses Sign up from this page.
+  (function wireSignupLinksWithNext() {
+    const next = new URLSearchParams(window.location.search).get('next');
+    if (!next || !next.startsWith('/') || next.startsWith('//')) return;
+    const href = '/signup?next=' + encodeURIComponent(next);
+    const nav = document.getElementById('nav-signup-link');
+    const form = document.getElementById('form-signup-link');
+    if (nav) nav.setAttribute('href', href);
+    if (form) form.setAttribute('href', href);
+    try { sessionStorage.setItem('cc_login_next', next); } catch (e) { /* ignore */ }
+  })();
 
   const loginErrors = {
     invalid_link: 'That sign-in link is invalid. Request a new one or use your password.',

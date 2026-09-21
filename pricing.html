@@ -1138,33 +1138,56 @@
     document.getElementById('sym-sub-pro').textContent = p.sym;
   }
 
-  async function startPlanCheckout(e, plan) {
-    e.preventDefault();
-    const btn = e.currentTarget;
-    const token = localStorage.getItem('cc_token');
+  // Plans that signup + verify-email already send straight to Stripe.
+  var SIGNUP_STRIPE_PLANS = { credits: true, monthly: true };
+  var CHECKOUT_PLANS = {
+    credits: true, credits_150: true, credits_500: true,
+    monthly: true, monthly_pro: true, annual: true, annual_pro: true
+  };
+  var PENDING_CHECKOUT_KEY = 'kw_pending_checkout_plan';
 
-    if (!token) {
-      window.location.href = '/signup?plan=' + encodeURIComponent(plan);
-      return;
+  function stashPendingCheckoutPlan(plan) {
+    if (!CHECKOUT_PLANS[plan]) return;
+    try { sessionStorage.setItem(PENDING_CHECKOUT_KEY, plan); } catch (e) { /* ignore */ }
+  }
+
+  function takePendingCheckoutPlan() {
+    var params = new URLSearchParams(window.location.search);
+    var plan = params.get('checkout');
+    if (!plan) {
+      try { plan = sessionStorage.getItem(PENDING_CHECKOUT_KEY); } catch (e) { plan = null; }
     }
+    if (!plan || !CHECKOUT_PLANS[plan]) return null;
+    try { sessionStorage.removeItem(PENDING_CHECKOUT_KEY); } catch (e) { /* ignore */ }
+    if (params.has('checkout')) {
+      params.delete('checkout');
+      var q = params.toString();
+      history.replaceState(null, '', window.location.pathname + (q ? '?' + q : ''));
+    }
+    return plan;
+  }
 
-    const label = btn.textContent;
-    btn.textContent = 'Redirecting…';
-    btn.style.pointerEvents = 'none';
-
+  async function redirectToCheckout(plan, btn) {
+    var token = localStorage.getItem('cc_token');
+    if (!token || !CHECKOUT_PLANS[plan]) return false;
+    var label = btn ? btn.textContent : '';
+    if (btn) {
+      btn.textContent = 'Redirecting…';
+      btn.style.pointerEvents = 'none';
+    }
     try {
-      const res = await fetch(BACKEND + '/api/captio/checkout', {
+      var res = await fetch(BACKEND + '/api/captio/checkout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ' + token
         },
         body: JSON.stringify({
-          plan,
+          plan: plan,
           currency: CuemarkPricing.checkoutCurrencyCode(displayCurrency),
         })
       });
-      const data = await res.json();
+      var data = await res.json();
       if (res.ok && data.checkout_url) {
         if (window.CuemarkPixel) {
           CuemarkPixel.trackInitiateCheckout(plan, function () {
@@ -1173,16 +1196,47 @@
         } else {
           window.location.href = data.checkout_url;
         }
-        return;
+        return true;
       }
       alert(data.error || 'Could not start checkout. Try again from your account page.');
     } catch {
       alert('Could not reach the server. Please try again.');
     }
-
-    btn.textContent = label;
-    btn.style.pointerEvents = '';
+    if (btn) {
+      btn.textContent = label;
+      btn.style.pointerEvents = '';
+    }
+    return false;
   }
+
+  async function startPlanCheckout(e, plan) {
+    e.preventDefault();
+    var btn = e.currentTarget;
+    var token = localStorage.getItem('cc_token');
+
+    if (!token) {
+      // credits + monthly: existing signup → verify → Stripe path (unchanged).
+      if (SIGNUP_STRIPE_PLANS[plan]) {
+        window.location.href = '/signup?plan=' + encodeURIComponent(plan);
+        return;
+      }
+      // Higher plans have no signup card; stash + login, then resume on /pricing.
+      stashPendingCheckoutPlan(plan);
+      window.location.href = '/login?next=' + encodeURIComponent('/pricing?checkout=' + plan);
+      return;
+    }
+
+    await redirectToCheckout(plan, btn);
+  }
+
+  // Resume after login (?checkout= or sessionStorage from a prior CTA).
+  (function resumeCheckoutAfterAuth() {
+    var token = localStorage.getItem('cc_token');
+    if (!token) return;
+    var plan = takePendingCheckoutPlan();
+    if (!plan) return;
+    redirectToCheckout(plan, null);
+  })();
 
   document.getElementById('billing-monthly').addEventListener('click', () => setBillingPeriod('monthly'));
   document.getElementById('billing-yearly').addEventListener('click', () => setBillingPeriod('yearly'));

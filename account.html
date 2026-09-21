@@ -826,9 +826,53 @@
       if (justVerified) {
         showToast('Email verified - your free credits are ready.');
       }
+      // Resume pricing CTAs that have no signup card (credits_150 / pro / annual, etc.).
+      resumePendingCheckout(token);
 
     } catch (err) {
       showLoadError('Network error - check your connection and try again.');
+    }
+  }
+
+  async function resumePendingCheckout(token) {
+    if (!token) return;
+    var plan = null;
+    try { plan = sessionStorage.getItem('kw_pending_checkout_plan'); } catch (e) { /* ignore */ }
+    var allowed = {
+      credits: true, credits_150: true, credits_500: true,
+      monthly: true, monthly_pro: true, annual: true, annual_pro: true
+    };
+    if (!plan || !allowed[plan]) return;
+    try { sessionStorage.removeItem('kw_pending_checkout_plan'); } catch (e) { /* ignore */ }
+    showToast('Continuing to checkout…');
+    try {
+      var res = await fetch(BACKEND + '/api/captio/checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({
+          plan: plan,
+          currency: (window.CuemarkPricing && CuemarkPricing.checkoutCurrencyCode)
+            ? CuemarkPricing.checkoutCurrencyCode()
+            : 'gbp',
+        })
+      });
+      var data = await res.json();
+      if (res.ok && data.checkout_url) {
+        if (window.CuemarkPixel) {
+          CuemarkPixel.trackInitiateCheckout(plan, function () {
+            window.location.href = data.checkout_url;
+          });
+        } else {
+          window.location.href = data.checkout_url;
+        }
+        return;
+      }
+      showToast(data.error || 'Could not start checkout. Use Buy credits below.');
+    } catch (e) {
+      showToast('Could not reach the server to continue checkout.');
     }
   }
 
