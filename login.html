@@ -441,8 +441,7 @@
         return;
       }
 
-      // Website browser session only (CEP panels use %APPDATA%\Keyweaver\session.json —
-      // connect from /account or sign in inside a panel).
+      // Website browser session (CEP panels use their own login / shared session.json).
       localStorage.setItem('cc_token', data.token);
 
       window.location.href = consumeLoginNext();
