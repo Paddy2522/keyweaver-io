@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="/css/chrome.css" />
   <link rel="stylesheet" href="/css/site.css?v=20260807c" />
   <link rel="stylesheet" href="/css/tools-shared.css" />
-  <link rel="stylesheet" href="/css/shot-list.css" />
+  <link rel="stylesheet" href="/css/shot-list.css?v=20260922a" />
   <link rel="stylesheet" href="/css/help-widget.css" />
   <title>Shot List - Free shoot plan for creators | Keyweaver</title>
   <meta name="description" content="Free Shot List for creators and editors. One brief → ordered shots with framing, camera move, audio notes, and rough timings. Templates by video type - $0 in your browser." />
@@ -121,15 +121,27 @@
     <div class="slist-row">
       <div class="slist-field">
         <label for="slist-locations">Locations <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
-        <p class="hint">Comma-separated. We’ll weave them into setup notes.</p>
+        <p class="hint">Comma-separated. Rotated across shots in order.</p>
         <input id="slist-locations" name="locations" type="text" placeholder="desk studio, kitchen, street" autocomplete="off" />
       </div>
       <div class="slist-field">
         <label for="slist-talent">Talent / gear <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
-        <p class="hint">Who’s on camera, or kit constraints (gimbal, 50mm, lav, etc.).</p>
+        <p class="hint">Noted on A-roll / CTA beats only.</p>
         <input id="slist-talent" name="talent" type="text" placeholder="Host + B-cam; 24-70; lav + boom" autocomplete="off" />
       </div>
     </div>
+
+    <fieldset class="slist-density">
+      <legend>Coverage density</legend>
+      <label class="slist-density-opt">
+        <input type="radio" name="slist-density" value="full" checked />
+        <span>Full coverage</span>
+      </label>
+      <label class="slist-density-opt">
+        <input type="radio" name="slist-density" value="short" />
+        <span>Short (fewer beats)</span>
+      </label>
+    </fieldset>
 
     <p class="slist-error" id="slist-error" role="alert"></p>
 
@@ -151,10 +163,12 @@
       <p id="slist-summary">Ordered for coverage. Use on set or in the edit. Copy or download when ready.</p>
     </div>
 
-    <div class="slist-toolbar">
+    <div class="slist-toolbar no-print">
       <button type="button" class="btn btn-ghost" id="slist-copy">Copy all</button>
       <button type="button" class="btn btn-ghost" id="slist-dl-txt">Download .txt</button>
       <button type="button" class="btn btn-ghost" id="slist-dl-csv">Download .csv</button>
+      <button type="button" class="btn btn-ghost" id="slist-print">Print for set</button>
+      <button type="button" class="btn btn-ghost" id="slist-add-row">Add shot</button>
     </div>
 
     <div class="slist-table-wrap">
@@ -166,13 +180,16 @@
             <th scope="col">Movement</th>
             <th scope="col">Audio</th>
             <th scope="col">Time</th>
+            <th scope="col" class="no-print">Edit</th>
           </tr>
         </thead>
         <tbody id="slist-body"></tbody>
       </table>
     </div>
 
-    <aside class="tools-handoff" aria-label="Next steps">
+    <p class="slist-sync-note">Brief synced across Video SEO · Shot List · Campaign Kit.</p>
+
+    <aside class="tools-handoff no-print" aria-label="Next steps">
       <h3>Continue with this brief</h3>
       <p>Same concept → publish copy (free) or thumb/teaser recipes (free; optional paid AI render).</p>
       <div class="tools-handoff-actions">
@@ -211,7 +228,7 @@
   </ul>
 </footer>
 
-<script src="/js/shot-list.js" defer></script>
+<script src="/js/shot-list.js?v=20260922a" defer></script>
 <script src="/js/help-widget.js" defer></script>
 <script src="/js/cuemark-turnstile.js"></script>
 </body>

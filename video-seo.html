@@ -115,6 +115,12 @@
       </div>
     </div>
 
+    <div class="vseo-field">
+      <label for="vseo-duration">Approx. length (minutes) <span class="vseo-optional">optional</span></label>
+      <p class="hint">Helps space YouTube chapter timestamps. Leave blank if unknown.</p>
+      <input id="vseo-duration" name="durationMinutes" type="number" min="1" max="180" step="1" placeholder="e.g. 8" inputmode="numeric" />
+    </div>
+
     <details class="vseo-advanced">
       <summary>Chapter outline <span class="vseo-optional">optional</span></summary>
       <div class="vseo-field" style="margin-top:0.75rem">
@@ -142,7 +148,7 @@
     <div class="vseo-actions">
       <button type="submit" class="btn btn-primary btn-lg" id="vseo-generate">Generate</button>
       <button type="button" class="btn btn-ghost" id="vseo-clear">Clear</button>
-      <p class="tools-form-note" id="vseo-cost-note">Sign in for 2 free AI generations. After that, 2 purchased credits each.</p>
+      <p class="tools-form-note" id="vseo-cost-note">Sign in for 2 free AI generations. After that, 2 credits for a full pack · 1 to refine / one platform.</p>
     </div>
   </form>
 
@@ -164,7 +170,7 @@
       </div>
     </div>
     <p class="tools-credit-help">
-      Free gens are tied to your account (not this browser). After 2 free, each generate costs <strong>2 purchased credits</strong>. Free signup credits cannot pay for AI.
+      Free gens are tied to your account (not this browser). After 2 free, a full pack costs <strong>2 purchased credits</strong>; refine or one platform costs <strong>1</strong>. Free signup credits cannot pay for AI.
     </p>
     <div class="tools-credit-actions">
       <a href="/login?next=/video-seo" class="btn btn-primary" id="vseo-credits-signin">Sign in</a>
@@ -175,12 +181,18 @@
 
   <div class="vseo-paywall" id="vseo-paywall" hidden>
     <h2>Free generations used</h2>
-    <p>You’ve used both free AI writes. Next generate costs <strong>2 purchased credits</strong>.</p>
+    <p>You’ve used both free AI writes. Next full pack costs <strong>2 purchased credits</strong> (refine / one platform: <strong>1</strong>).</p>
     <div class="vseo-paywall-actions">
       <a href="/pricing" class="btn btn-primary">Buy credits</a>
       <a href="/account" class="btn btn-ghost">Account</a>
     </div>
   </div>
+
+  <aside class="vseo-history" id="vseo-history" aria-label="Recent packs" hidden>
+    <h3>Recent packs</h3>
+    <p class="vseo-history-hint">Last 5 in this browser. Restore to edit and export again.</p>
+    <ul class="vseo-history-list" id="vseo-history-list"></ul>
+  </aside>
 
   <div class="vseo-loading" id="vseo-loading" hidden aria-live="polite">
     <div class="vseo-loading-bar" aria-hidden="true"></div>
@@ -190,16 +202,40 @@
   <div class="tools-empty" id="vseo-empty">
     <h2>Results show up here</h2>
     <p>Hit <strong>Generate</strong> for tabbed copy you can paste into YouTube, TikTok, Instagram, or Facebook.</p>
+    <button type="button" class="btn btn-ghost" id="vseo-demo">See demo</button>
   </div>
 
   <div class="vseo-results" id="vseo-results">
     <div class="vseo-results-head">
-      <h2 id="vseo-results-title">Your copy</h2>
-      <p id="vseo-results-sub">Edit freely, then copy field-by-field.</p>
+      <div class="vseo-results-head-row">
+        <div>
+          <h2 id="vseo-results-title">Your copy</h2>
+          <p id="vseo-results-sub">Edit freely, then copy field-by-field.</p>
+        </div>
+        <div class="vseo-export" id="vseo-export" aria-label="Download pack">
+          <button type="button" class="btn btn-ghost vseo-export-btn" id="vseo-dl-txt">Download .txt</button>
+          <button type="button" class="btn btn-ghost vseo-export-btn" id="vseo-dl-md">Download .md</button>
+        </div>
+      </div>
     </div>
 
     <div class="vseo-tabs" id="vseo-tabs" role="tablist" aria-label="Platform results"></div>
     <div id="vseo-results-body"></div>
+
+    <div class="vseo-refine" id="vseo-refine" hidden>
+      <h3>Refine this pack</h3>
+      <p class="vseo-refine-hint">1 credit each (or free gen if you have one left). Keeps other platforms.</p>
+      <div class="vseo-refine-chips" id="vseo-refine-chips" role="group" aria-label="Refine options">
+        <button type="button" class="vseo-chip" data-refine="shorter">Shorter</button>
+        <button type="button" class="vseo-chip" data-refine="more curiosity">More curiosity</button>
+        <button type="button" class="vseo-chip" data-refine="force keyword">Force keyword</button>
+      </div>
+    </div>
+
+    <aside class="vseo-checklist" id="vseo-checklist" aria-label="Publish checklist" hidden>
+      <h3>Publish checklist</h3>
+      <ul id="vseo-checklist-list"></ul>
+    </aside>
 
     <aside class="vseo-extras" id="vseo-extras" aria-label="YouTube extras" hidden>
       <h3>YouTube extras</h3>
@@ -209,7 +245,7 @@
 
     <aside class="tools-handoff" aria-label="Next steps">
       <h3>Continue with this brief</h3>
-      <p>Saved in this browser. Next: thumb recipes or a shoot plan.</p>
+      <p>Brief synced across Video SEO · Shot List · Campaign Kit.</p>
       <div class="tools-handoff-actions">
         <a href="/campaign-kit" class="btn btn-primary">Campaign Kit</a>
         <a href="/shot-list" class="btn btn-ghost">Shot List</a>

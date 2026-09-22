@@ -80,6 +80,35 @@
     <div class="ckit-note" id="ckit-handoff-banner" role="status" hidden></div>
   </header>
 
+  <section class="ckit-demo" id="ckit-demo" aria-label="Example AI renders">
+    <h2>Example renders <span class="ckit-optional">demo · not live AI</span></h2>
+    <p class="hint">Static samples so you can see the paid stills path. Free pack never calls fal; render uses purchased credits only.</p>
+    <div class="ckit-demo-grid">
+      <figure class="ckit-demo-card">
+        <div class="ckit-demo-media ckit-demo-media--yt" role="img" aria-label="Demo YouTube thumbnail">
+          <picture>
+            <source srcset="/images/tools-atmosphere.webp" type="image/webp" />
+            <img src="/images/tools-atmosphere.png" alt="" loading="lazy" width="320" height="180" onerror="this.style.display='none'; this.parentNode.classList.add('is-fallback');" />
+          </picture>
+          <span class="ckit-demo-label">Demo · 16:9 thumb</span>
+        </div>
+        <figcaption>YouTube thumb</figcaption>
+      </figure>
+      <figure class="ckit-demo-card">
+        <div class="ckit-demo-media ckit-demo-media--vert" role="img" aria-label="Demo vertical cover">
+          <span class="ckit-demo-label">Demo · 9:16 cover</span>
+        </div>
+        <figcaption>TikTok / Reels</figcaption>
+      </figure>
+      <figure class="ckit-demo-card">
+        <div class="ckit-demo-media ckit-demo-media--sq" role="img" aria-label="Demo square title card">
+          <span class="ckit-demo-label">Demo · 1:1 card</span>
+        </div>
+        <figcaption>IG / FB square</figcaption>
+      </figure>
+    </div>
+  </section>
+
   <form id="ckit-form" class="ckit-form" novalidate>
     <div class="ckit-field">
       <label for="ckit-brief">What is the video about?</label>
@@ -130,12 +159,36 @@
           <label class="ckit-chip"><input type="checkbox" id="plat-instagram" checked /> Instagram</label>
           <label class="ckit-chip"><input type="checkbox" id="plat-facebook" checked /> Facebook</label>
         </div>
+        <p class="hint" id="ckit-fb-hint">Facebook reuses IG 1:1 or YouTube 16:9 layouts — no separate fifth crop.</p>
       </div>
     </div>
 
+    <details class="ckit-advanced" id="ckit-brand-kit">
+      <summary>Brand kit <span class="ckit-optional">optional · baked into free prompts</span></summary>
+      <p class="hint" style="margin-top:0.65rem">Stays in this browser. Helps prompts match your look without any AI cost.</p>
+      <div class="ckit-row ckit-brand-row">
+        <div class="ckit-field">
+          <label for="ckit-brand-primary">Primary color</label>
+          <input type="text" id="ckit-brand-primary" name="brandPrimary" placeholder="#1a1a1a or charcoal" maxlength="48" autocomplete="off" />
+        </div>
+        <div class="ckit-field">
+          <label for="ckit-brand-accent">Accent color</label>
+          <input type="text" id="ckit-brand-accent" name="brandAccent" placeholder="#c4a574 or warm gold" maxlength="48" autocomplete="off" />
+        </div>
+      </div>
+      <div class="ckit-field">
+        <label for="ckit-brand-style">Style note</label>
+        <input type="text" id="ckit-brand-style" name="brandStyle" placeholder="e.g. soft grain, minimal type, documentary stills" maxlength="160" autocomplete="off" />
+      </div>
+      <label class="ckit-chip ckit-brand-logos">
+        <input type="checkbox" id="ckit-brand-nologos" checked />
+        No other brand logos in the frame
+      </label>
+    </details>
+
     <details class="ckit-advanced">
-      <summary>Asset types <span class="ckit-optional">defaults are fine</span></summary>
-      <p class="hint" style="margin-top:0.65rem">Stills are free to generate as prompts. Motion prompts are free; rendering video costs purchased credits.</p>
+      <summary>Asset types <span class="ckit-optional">synced with platforms</span></summary>
+      <p class="hint" style="margin-top:0.65rem">Stills are free as prompts. Motion prompts are free; rendering video costs purchased credits. Unchecking a platform unchecks its asset.</p>
       <div class="ckit-assets">
         <label class="ckit-chip"><input type="checkbox" id="asset-youtube_thumb" checked /> YouTube thumb</label>
         <label class="ckit-chip"><input type="checkbox" id="asset-vertical" checked /> TikTok / Reels cover</label>
@@ -211,7 +264,8 @@
   <div class="ckit-results" id="ckit-results">
     <div class="ckit-results-head">
       <h2>Your asset pack</h2>
-      <p>Copy a prompt, or render with purchased credits. Each tab is one asset to make.</p>
+      <p>Copy a prompt, pick a burn-in winner, or render with purchased credits. Each tab is one asset to make.</p>
+      <p class="ckit-sync-line" id="ckit-sync-line">Brief synced across Video SEO · Shot List · Campaign Kit.</p>
       <div class="ckit-results-actions">
         <button type="button" class="btn btn-ghost" id="ckit-copy-all">Copy all prompts</button>
         <button type="button" class="btn btn-ghost" id="ckit-download">Download .txt</button>
@@ -221,9 +275,15 @@
     <div class="ckit-tabs" id="ckit-tabs" role="tablist" aria-label="Asset results"></div>
     <div id="ckit-results-body"></div>
 
+    <aside class="ckit-session" id="ckit-session" aria-label="Rendered this session" hidden>
+      <h3>Rendered this session</h3>
+      <p class="hint">Files open in a new tab — right-click / long-press to download. URLs last for this browser session.</p>
+      <ul class="ckit-session-list" id="ckit-session-list"></ul>
+    </aside>
+
     <aside class="tools-handoff" aria-label="Next steps">
       <h3>Continue with this brief</h3>
-      <p>Saved in this browser. Write publish copy next, or plan the shoot.</p>
+      <p>Brief synced across Video SEO · Shot List · Campaign Kit. Write publish copy next, or plan the shoot.</p>
       <div class="tools-handoff-actions">
         <a href="/video-seo" class="btn btn-primary">Video SEO</a>
         <a href="/shot-list" class="btn btn-ghost">Shot List</a>

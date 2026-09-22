@@ -109,8 +109,21 @@
     custom: 'Custom / mixed'
   };
 
+  /** Beats where talent/gear notes belong (A-roll / to-camera / CTA). */
+  var TALENT_TAGS = {
+    a_roll: 1,
+    agenda: 1,
+    intro: 1,
+    cta: 1,
+    speech: 1,
+    verdict: 1,
+    reflect: 1,
+    title: 1
+  };
+
   var lastShots = [];
   var lastMeta = null;
+  var persistTimer = null;
 
   function $(id) {
     return document.getElementById(id);
@@ -139,6 +152,22 @@
     return '~' + m + 'm ' + r + 's';
   }
 
+  function parseTimeInput(raw) {
+    var s = cleanText(raw).toLowerCase().replace(/^~/, '');
+    if (!s) return null;
+    var mColon = s.match(/^(\d+)\s*:\s*(\d{1,2})$/);
+    if (mColon) {
+      return Math.max(1, parseInt(mColon[1], 10) * 60 + parseInt(mColon[2], 10));
+    }
+    var mCombo = s.match(/^(?:(\d+)\s*m(?:in(?:ute)?s?)?)?\s*(?:(\d+)\s*s(?:ec(?:ond)?s?)?)?$/);
+    if (mCombo && (mCombo[1] || mCombo[2])) {
+      return Math.max(1, (parseInt(mCombo[1] || '0', 10) * 60) + parseInt(mCombo[2] || '0', 10));
+    }
+    var n = parseInt(s.replace(/[^\d]/g, ''), 10);
+    if (!isNaN(n) && n > 0) return n;
+    return null;
+  }
+
   function parseList(raw) {
     return cleanText(raw)
       .split(/[,;|/]+/)
@@ -146,12 +175,16 @@
       .filter(Boolean);
   }
 
-  function firstHook(concept) {
-    var sents = cleanText(concept)
+  function splitSentences(concept) {
+    return cleanText(concept)
       .replace(/([.!?])\s+/g, '$1\n')
       .split(/\n+/)
       .map(function (x) { return x.trim(); })
       .filter(Boolean);
+  }
+
+  function firstHook(concept) {
+    var sents = splitSentences(concept);
     var first = (sents[0] || concept).replace(/[.!?]+$/, '');
     if (first.length > 90) first = first.slice(0, 87).replace(/\s+\S*$/, '') + '…';
     return sentenceCase(first);
@@ -177,6 +210,16 @@
       .slice(0, 4);
   }
 
+  function baseTag(tag) {
+    return String(tag || '').replace(/_x$/, '');
+  }
+
+  function isTalentBeat(tag) {
+    var t = baseTag(tag);
+    if (TALENT_TAGS[t]) return true;
+    return t.indexOf('a_roll') >= 0;
+  }
+
   function shotCountForDuration(seconds, baseLen) {
     if (seconds <= 30) return Math.min(5, baseLen);
     if (seconds <= 60) return Math.min(7, baseLen);
@@ -191,26 +234,64 @@
     return type || 'tutorial';
   }
 
-  function expandTemplate(type, targetSec) {
-    type = normalizeType(type);
-    var base = TEMPLATES[type] || TEMPLATES.custom;
-    var count = shotCountForDuration(targetSec, base.length);
-    var picks = base.slice(0, Math.min(count, base.length));
+  function normalizeDensity(d) {
+    return d === 'short' ? 'short' : 'full';
+  }
 
-    // Longer videos: duplicate middle coverage beats with variant labels
-    if (count > picks.length) {
-      var mid = picks.slice(2, picks.length - 2);
-      var i = 0;
-      while (picks.length < count && mid.length) {
-        var src = mid[i % mid.length];
-        picks.splice(picks.length - 2, 0, {
-          framing: src.framing.replace(/step \d+/i, 'extra coverage').replace(/beat [AB]/i, 'extended beat'),
-          movement: src.movement,
-          audio: src.audio,
-          w: src.w * 0.85,
-          tag: src.tag + '_x'
-        });
-        i++;
+  /** Evenly pick short-arc beats from a template (open → middle → CTA). */
+  function pickShortBeats(base) {
+    if (base.length <= 5) return base.slice();
+    var want = 5;
+    var indices = [];
+    var i;
+    for (i = 0; i < want; i++) {
+      indices.push(Math.round((i / (want - 1)) * (base.length - 1)));
+    }
+    var seen = {};
+    var out = [];
+    indices.forEach(function (idx) {
+      if (seen[idx]) return;
+      seen[idx] = 1;
+      out.push(base[idx]);
+    });
+    // Prefer keeping a real CTA/outro if the last pick was not one
+    var last = base[base.length - 1];
+    if (out.length && baseTag(out[out.length - 1].tag) !== baseTag(last.tag)) {
+      out[out.length - 1] = last;
+    }
+    return out;
+  }
+
+  function expandTemplate(type, targetSec, density) {
+    type = normalizeType(type);
+    density = normalizeDensity(density);
+    var base = TEMPLATES[type] || TEMPLATES.custom;
+    var picks;
+    var count;
+
+    if (density === 'short') {
+      picks = pickShortBeats(base);
+      // Cap further for very short targets
+      if (targetSec <= 30 && picks.length > 4) picks = picks.slice(0, 4);
+    } else {
+      count = shotCountForDuration(targetSec, base.length);
+      picks = base.slice(0, Math.min(count, base.length));
+
+      // Longer videos: duplicate middle coverage beats with variant labels
+      if (count > picks.length) {
+        var mid = picks.slice(2, picks.length - 2);
+        var i = 0;
+        while (picks.length < count && mid.length) {
+          var src = mid[i % mid.length];
+          picks.splice(picks.length - 2, 0, {
+            framing: src.framing.replace(/step \d+/i, 'extra coverage').replace(/beat [AB]/i, 'extended beat'),
+            movement: src.movement,
+            audio: src.audio,
+            w: src.w * 0.85,
+            tag: src.tag + '_x'
+          });
+          i++;
+        }
       }
     }
 
@@ -226,30 +307,51 @@
     });
   }
 
+  function sentenceForShot(sentences, idx, total) {
+    if (!sentences.length || total < 1) return '';
+    if (sentences.length === 1) return idx === 0 ? sentences[0] : '';
+    var mapped = Math.min(
+      sentences.length - 1,
+      Math.floor((idx / Math.max(total - 1, 1)) * (sentences.length - 1))
+    );
+    // Prefer unique mapping when enough sentences
+    if (sentences.length >= total) return sentences[idx] || '';
+    return sentences[mapped] || '';
+  }
+
   function enrichShots(shots, opts) {
+    var sentences = splitSentences(opts.concept);
     var hook = firstHook(opts.concept);
     var keys = pickKeywords(opts.concept);
-    var locs = opts.locations;
+    var locs = opts.locations || [];
     var talent = cleanText(opts.talent);
     var keyPhrase = keys.length ? keys.slice(0, 2).join(' / ') : '';
+    var total = shots.length;
 
     return shots.map(function (s, idx) {
       var loc = locs.length ? locs[idx % locs.length] : '';
       var framing = s.framing;
       var detail = '';
+      var beatLine = sentenceForShot(sentences, idx, total);
 
-      if (idx === 0 && hook) {
+      if (beatLine) {
+        var trimmed = beatLine.replace(/[.!?]+$/, '');
+        if (trimmed.length > 110) trimmed = trimmed.slice(0, 107).replace(/\s+\S*$/, '') + '…';
+        detail = 'Beat: ' + sentenceCase(trimmed);
+      } else if (idx === 0 && hook) {
         detail = 'Story: ' + hook;
-      } else if (keyPhrase && (s.tag.indexOf('a_roll') >= 0 || s.tag.indexOf('step') >= 0 || s.tag === 'use' || s.tag === 'beat_a')) {
-        detail = 'Lean into: ' + keyPhrase;
-      } else if (keys[idx % Math.max(keys.length, 1)] && (s.tag === 'detail' || s.tag === 'insert' || s.tag === 'feature')) {
-        detail = 'Feature cue: ' + keys[idx % keys.length];
+      }
+
+      if (keyPhrase && (s.tag.indexOf('a_roll') >= 0 || s.tag.indexOf('step') >= 0 || s.tag === 'use' || s.tag === 'beat_a' || s.tag === 'proof')) {
+        detail = (detail ? detail + ' · ' : '') + 'Lean into: ' + keyPhrase;
+      } else if (keys.length && (s.tag === 'detail' || s.tag === 'insert' || s.tag === 'feature')) {
+        detail = (detail ? detail + ' · ' : '') + 'Feature cue: ' + keys[idx % keys.length];
       }
 
       if (loc) {
         framing = framing + ' @ ' + loc;
       }
-      if (talent && (s.tag.indexOf('a_roll') >= 0 || s.tag === 'speech' || s.tag === 'intro' || s.tag === 'cta' || idx === 1)) {
+      if (talent && isTalentBeat(s.tag)) {
         detail = (detail ? detail + ' · ' : '') + 'Talent/gear: ' + talent;
       }
 
@@ -260,7 +362,8 @@
         movement: s.movement,
         audio: s.audio,
         seconds: s.seconds,
-        timeLabel: formatTime(s.seconds)
+        timeLabel: formatTime(s.seconds),
+        tag: s.tag
       };
     });
   }
@@ -283,7 +386,7 @@
   }
 
   function generate(opts) {
-    var raw = expandTemplate(opts.type, opts.duration);
+    var raw = expandTemplate(opts.type, opts.duration, opts.density);
     var shots = enrichShots(raw, opts);
     return rebalanceTimes(shots, opts.duration);
   }
@@ -296,40 +399,115 @@
       .replace(/"/g, '&quot;');
   }
 
+  function renumber(shots) {
+    shots.forEach(function (s, i) {
+      s.num = i + 1;
+      if (!s.timeLabel) s.timeLabel = formatTime(s.seconds || 5);
+    });
+    return shots;
+  }
+
+  function blankShot() {
+    return {
+      num: 1,
+      framing: 'New shot - describe setup',
+      detail: '',
+      movement: 'Locked',
+      audio: 'TBD',
+      seconds: 5,
+      timeLabel: formatTime(5),
+      tag: 'custom'
+    };
+  }
+
+  function updateSummary() {
+    if (!lastMeta) return;
+    var total = lastShots.reduce(function (a, s) { return a + (s.seconds || 0); }, 0);
+    var dens = normalizeDensity(lastMeta.density) === 'short' ? 'Short · ' : '';
+    $('slist-summary').textContent =
+      dens +
+      (TYPE_LABELS[lastMeta.type] || 'Custom') +
+      ' · ' + lastShots.length + ' shots · ~' + formatTime(total).replace(/^~/, '') +
+      ' total (target ' + formatTime(lastMeta.duration).replace(/^~/, '') + '). Edit freely, then copy, download, or print.';
+  }
+
   function render(shots, meta) {
+    lastShots = renumber(shots || []);
+    lastMeta = meta;
     var body = $('slist-body');
-    var html = shots.map(function (s) {
-      var setup = '<span class="slist-setup">' + escapeHtml(s.framing) + '</span>';
-      if (s.detail) setup += '<span class="slist-detail">' + escapeHtml(s.detail) + '</span>';
+    var html = lastShots.map(function (s, idx) {
       return (
-        '<tr>' +
-        '<td>' + s.num + '</td>' +
-        '<td>' + setup + '</td>' +
-        '<td>' + escapeHtml(s.movement) + '</td>' +
-        '<td>' + escapeHtml(s.audio) + '</td>' +
-        '<td>' + escapeHtml(s.timeLabel) + '</td>' +
+        '<tr data-idx="' + idx + '">' +
+        '<td class="slist-num">' + s.num + '</td>' +
+        '<td>' +
+        '<textarea class="slist-cell" data-field="framing" rows="2" aria-label="Setup / framing">' + escapeHtml(s.framing) + '</textarea>' +
+        (s.detail
+          ? '<textarea class="slist-cell slist-cell-detail" data-field="detail" rows="1" aria-label="Note">' + escapeHtml(s.detail) + '</textarea>'
+          : '<textarea class="slist-cell slist-cell-detail" data-field="detail" rows="1" aria-label="Note" placeholder="Note (optional)"></textarea>') +
+        '</td>' +
+        '<td><textarea class="slist-cell" data-field="movement" rows="2" aria-label="Movement">' + escapeHtml(s.movement) + '</textarea></td>' +
+        '<td><textarea class="slist-cell" data-field="audio" rows="2" aria-label="Audio">' + escapeHtml(s.audio) + '</textarea></td>' +
+        '<td><input class="slist-cell slist-cell-time" data-field="time" type="text" value="' + escapeHtml(s.timeLabel) + '" aria-label="Time" /></td>' +
+        '<td class="slist-row-actions no-print">' +
+        '<button type="button" class="slist-icon-btn" data-action="up" title="Move up" aria-label="Move up"' + (idx === 0 ? ' disabled' : '') + '>↑</button>' +
+        '<button type="button" class="slist-icon-btn" data-action="down" title="Move down" aria-label="Move down"' + (idx === lastShots.length - 1 ? ' disabled' : '') + '>↓</button>' +
+        '<button type="button" class="slist-icon-btn slist-icon-danger" data-action="delete" title="Delete" aria-label="Delete row">×</button>' +
+        '</td>' +
         '</tr>'
       );
     }).join('');
     body.innerHTML = html;
 
-    var total = shots.reduce(function (a, s) { return a + s.seconds; }, 0);
-    $('slist-summary').textContent =
-      (TYPE_LABELS[meta.type] || 'Custom') +
-      ' · ' + shots.length + ' shots · ~' + formatTime(total).replace(/^~/, '') +
-      ' total (target ' + formatTime(meta.duration).replace(/^~/, '') + '). Edit freely, then copy or download.';
+    updateSummary();
 
     var empty = $('slist-empty');
     if (empty) empty.classList.add('is-hidden');
     $('slist-results').classList.add('is-visible');
-    lastShots = shots;
-    lastMeta = meta;
+  }
+
+  function schedulePersist() {
+    if (persistTimer) clearTimeout(persistTimer);
+    persistTimer = setTimeout(persistState, 200);
+  }
+
+  function persistState() {
+    if (!lastMeta) return;
+    saveBrief({
+      concept: lastMeta.concept,
+      duration: lastMeta.duration,
+      type: lastMeta.type,
+      locations: lastMeta.locations || [],
+      talent: lastMeta.talent || '',
+      density: normalizeDensity(lastMeta.density),
+      shots: lastShots,
+      savedAt: Date.now()
+    });
+  }
+
+  function readFormOpts() {
+    return {
+      concept: cleanText($('slist-concept').value),
+      duration: parseInt($('slist-duration').value, 10) || 60,
+      type: normalizeType($('slist-type').value || 'tutorial'),
+      locations: parseList($('slist-locations').value),
+      talent: cleanText($('slist-talent').value),
+      density: normalizeDensity(
+        (document.querySelector('input[name="slist-density"]:checked') || {}).value || 'full'
+      )
+    };
+  }
+
+  function setDensity(value) {
+    value = normalizeDensity(value);
+    var el = document.querySelector('input[name="slist-density"][value="' + value + '"]');
+    if (el) el.checked = true;
   }
 
   function shotsToText(shots, meta) {
     var lines = [
       'Keyweaver Shot List',
       'Type: ' + (TYPE_LABELS[meta.type] || meta.type),
+      'Density: ' + (normalizeDensity(meta.density) === 'short' ? 'Short' : 'Full'),
       'Target: ' + formatTime(meta.duration),
       'Concept: ' + cleanText(meta.concept).replace(/\n/g, ' '),
       ''
@@ -420,6 +598,34 @@
     } catch (e) { /* ignore quota */ }
   }
 
+  function restoreShots(saved) {
+    if (!saved || !Array.isArray(saved.shots) || !saved.shots.length) return false;
+    var meta = {
+      concept: saved.concept || '',
+      duration: saved.duration || 60,
+      type: normalizeType(saved.type),
+      locations: Array.isArray(saved.locations) ? saved.locations : parseList(saved.locations),
+      talent: saved.talent || '',
+      density: normalizeDensity(saved.density)
+    };
+    var shots = saved.shots.map(function (s, i) {
+      var seconds = parseInt(s.seconds, 10);
+      if (isNaN(seconds) || seconds < 1) seconds = 5;
+      return {
+        num: i + 1,
+        framing: s.framing || '',
+        detail: s.detail || '',
+        movement: s.movement || '',
+        audio: s.audio || '',
+        seconds: seconds,
+        timeLabel: s.timeLabel || formatTime(seconds),
+        tag: s.tag || 'custom'
+      };
+    });
+    render(shots, meta);
+    return true;
+  }
+
   function loadBrief() {
     var saved = readJson(STORAGE_KEY);
     if (saved && saved.concept) {
@@ -428,6 +634,8 @@
       if (saved.type) $('slist-type').value = normalizeType(saved.type);
       if (saved.locations) $('slist-locations').value = Array.isArray(saved.locations) ? saved.locations.join(', ') : saved.locations;
       if (saved.talent) $('slist-talent').value = saved.talent;
+      if (saved.density) setDensity(saved.density);
+      if (restoreShots(saved)) return 'saved-shots';
       return 'saved';
     }
 
@@ -476,27 +684,97 @@
     setTimeout(function () { btn.textContent = prev; }, 1400);
   }
 
+  function onCellInput(e) {
+    var field = e.target.getAttribute('data-field');
+    if (!field) return;
+    var row = e.target.closest('tr');
+    if (!row) return;
+    var idx = parseInt(row.getAttribute('data-idx'), 10);
+    if (isNaN(idx) || !lastShots[idx]) return;
+
+    if (field === 'time') {
+      var parsed = parseTimeInput(e.target.value);
+      if (parsed != null) {
+        lastShots[idx].seconds = parsed;
+        lastShots[idx].timeLabel = formatTime(parsed);
+      }
+    } else {
+      lastShots[idx][field] = e.target.value;
+    }
+    updateSummary();
+    schedulePersist();
+  }
+
+  function onCellBlur(e) {
+    var field = e.target.getAttribute('data-field');
+    if (field !== 'time') return;
+    var row = e.target.closest('tr');
+    if (!row) return;
+    var idx = parseInt(row.getAttribute('data-idx'), 10);
+    if (isNaN(idx) || !lastShots[idx]) return;
+    var parsed = parseTimeInput(e.target.value);
+    if (parsed != null) {
+      lastShots[idx].seconds = parsed;
+      lastShots[idx].timeLabel = formatTime(parsed);
+      e.target.value = lastShots[idx].timeLabel;
+    } else {
+      e.target.value = lastShots[idx].timeLabel;
+    }
+    updateSummary();
+    schedulePersist();
+  }
+
+  function onRowAction(e) {
+    var btn = e.target.closest('[data-action]');
+    if (!btn) return;
+    var action = btn.getAttribute('data-action');
+    var row = btn.closest('tr');
+    if (!row) return;
+    var idx = parseInt(row.getAttribute('data-idx'), 10);
+    if (isNaN(idx)) return;
+
+    if (action === 'delete') {
+      if (lastShots.length <= 1) return;
+      lastShots.splice(idx, 1);
+    } else if (action === 'up' && idx > 0) {
+      var up = lastShots[idx - 1];
+      lastShots[idx - 1] = lastShots[idx];
+      lastShots[idx] = up;
+    } else if (action === 'down' && idx < lastShots.length - 1) {
+      var down = lastShots[idx + 1];
+      lastShots[idx + 1] = lastShots[idx];
+      lastShots[idx] = down;
+    } else {
+      return;
+    }
+    render(lastShots, lastMeta);
+    persistState();
+  }
+
+  function onAddRow() {
+    if (!lastMeta) return;
+    lastShots.push(blankShot());
+    render(lastShots, lastMeta);
+    persistState();
+  }
+
   function onSubmit(e) {
     e.preventDefault();
     showError('');
-    var concept = cleanText($('slist-concept').value);
-    if (concept.length < 12) {
+    var opts = readFormOpts();
+    if (opts.concept.length < 12) {
       showError('Add a short concept (at least a sentence) so the shot list has something to hang on.');
       $('slist-concept').focus();
       return;
     }
-    var duration = parseInt($('slist-duration').value, 10) || 60;
-    var type = normalizeType($('slist-type').value || 'tutorial');
-    var locations = parseList($('slist-locations').value);
-    var talent = cleanText($('slist-talent').value);
 
-    var opts = { concept: concept, duration: duration, type: type, locations: locations, talent: talent };
     saveBrief({
-      concept: concept,
-      duration: duration,
-      type: type,
-      locations: locations,
-      talent: talent,
+      concept: opts.concept,
+      duration: opts.duration,
+      type: opts.type,
+      locations: opts.locations,
+      talent: opts.talent,
+      density: opts.density,
       savedAt: Date.now()
     });
 
@@ -510,6 +788,7 @@
     setTimeout(function () {
       var shots = generate(opts);
       render(shots, opts);
+      persistState();
       $('slist-results').scrollIntoView({ behavior: 'smooth', block: 'start' });
       if (submit) {
         submit.classList.remove('is-busy');
@@ -523,7 +802,8 @@
   function onClear() {
     $('slist-form').reset();
     $('slist-duration').value = '60';
-    $('slist-type').value = 'talking_head';
+    $('slist-type').value = 'tutorial';
+    setDensity('full');
     showError('');
     $('slist-results').classList.remove('is-visible');
     $('slist-body').innerHTML = '';
@@ -539,6 +819,23 @@
     loadBrief();
     $('slist-form').addEventListener('submit', onSubmit);
     $('slist-clear').addEventListener('click', onClear);
+
+    var body = $('slist-body');
+    body.addEventListener('input', onCellInput);
+    body.addEventListener('change', onCellInput);
+    body.addEventListener('blur', onCellBlur, true);
+    body.addEventListener('click', onRowAction);
+
+    var addBtn = $('slist-add-row');
+    if (addBtn) addBtn.addEventListener('click', onAddRow);
+
+    var printBtn = $('slist-print');
+    if (printBtn) {
+      printBtn.addEventListener('click', function () {
+        if (!lastShots.length) return;
+        window.print();
+      });
+    }
 
     $('slist-copy').addEventListener('click', function () {
       if (!lastShots.length || !lastMeta) return;

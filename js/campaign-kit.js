@@ -17,6 +17,11 @@
   /** @type {ReturnType<typeof buildPack> | null} */
   var lastPack = null;
   var activeTab = '';
+  /** @type {Object.<string, string>} itemId → chosen burn-in */
+  var selectedBurnIns = {};
+  /** @type {Array<{id: string, title: string, url: string, kind: string, at: number}>} */
+  var sessionRenders = [];
+  var syncingPlatformAssets = false;
 
   var VIDEO_TYPES = {
     tutorial: {
@@ -63,7 +68,16 @@
     youtube_thumb: { ratio: '16:9', pixels: '1280×720', fal: '16:9', tab: 'youtube', tabLabel: 'YouTube' },
     vertical: { ratio: '9:16', pixels: '1080×1920', fal: '9:16', tab: 'tiktok', tabLabel: 'TikTok' },
     quote_card: { ratio: '1:1', pixels: '1080×1080', fal: '1:1', tab: 'instagram', tabLabel: 'Instagram' },
+    facebook: { ratio: '1:1 / 16:9', pixels: '1080×1080 or 1280×720', fal: '1:1', tab: 'facebook', tabLabel: 'Facebook' },
     motion: { ratio: '9:16', pixels: '720p · 4s', fal: '9:16', tab: 'motion', tabLabel: 'Motion' }
+  };
+
+  var CTR_TIPS = {
+    youtube_thumb: 'CTR tip: face or hero large, high contrast, burn-in 3–5 words max, leave title-safe margins.',
+    vertical: 'CTR tip: subject in the upper two-thirds; keep text out of the bottom caption bar.',
+    quote_card: 'CTR tip: one bold line, plenty of negative space, legible at phone feed size.',
+    facebook: 'CTR tip: Facebook scrapes IG 1:1 or YT 16:9 — same face-large, 3–5 word rule.',
+    motion: 'CTR tip: open on a readable still frame; motion should not fight the title overlay.'
   };
 
   function $(id) {
@@ -203,6 +217,36 @@
     return map[t] || 'tutorial';
   }
 
+  function readBrand() {
+    return {
+      primary: cleanText(($('ckit-brand-primary') && $('ckit-brand-primary').value) || ''),
+      accent: cleanText(($('ckit-brand-accent') && $('ckit-brand-accent').value) || ''),
+      styleNote: cleanText(($('ckit-brand-style') && $('ckit-brand-style').value) || ''),
+      noLogos: !($('ckit-brand-nologos') && !$('ckit-brand-nologos').checked)
+    };
+  }
+
+  function applyBrand(brand) {
+    if (!brand) return;
+    if ($('ckit-brand-primary')) $('ckit-brand-primary').value = brand.primary || '';
+    if ($('ckit-brand-accent')) $('ckit-brand-accent').value = brand.accent || '';
+    if ($('ckit-brand-style')) $('ckit-brand-style').value = brand.styleNote || '';
+    if ($('ckit-brand-nologos')) {
+      $('ckit-brand-nologos').checked = brand.noLogos !== false;
+    }
+  }
+
+  function brandClause(brand) {
+    brand = brand || readBrand();
+    var bits = [];
+    if (brand.primary) bits.push('primary color ' + brand.primary);
+    if (brand.accent) bits.push('accent color ' + brand.accent);
+    if (brand.styleNote) bits.push(brand.styleNote);
+    if (brand.noLogos !== false) bits.push('no other brand logos or watermarks in frame');
+    if (!bits.length) return ' No other brand logos or watermarks.';
+    return ' Brand kit: ' + bits.join('; ') + '.';
+  }
+
   function readForm() {
     var assets = [];
     ['youtube_thumb', 'vertical', 'quote_card', 'motion'].forEach(function (a) {
@@ -220,13 +264,53 @@
       tone: ($('ckit-tone') && $('ckit-tone').value) || 'educational',
       cta: $('ckit-cta').value || 'none',
       platforms: platforms,
-      assets: assets
+      assets: assets,
+      brand: readBrand()
     };
   }
 
-  function saveForm(data) {
+  function capturePackState() {
+    if (!lastPack) return null;
+    var items = lastPack.items.map(function (item) {
+      var ta = $('ckit-prompt-' + item.id);
+      var copy = {};
+      Object.keys(item).forEach(function (k) {
+        copy[k] = item[k];
+      });
+      if (ta) copy.prompt = ta.value;
+      if (selectedBurnIns[item.id]) copy.selectedBurnIn = selectedBurnIns[item.id];
+      return copy;
+    });
+    return {
+      items: items,
+      checklist: lastPack.checklist.slice(),
+      titles: (lastPack.titles || []).slice(),
+      cta: lastPack.cta,
+      videoType: lastPack.videoType,
+      hook: lastPack.hook,
+      mood: lastPack.mood
+    };
+  }
+
+  function saveForm(data, opts) {
+    opts = opts || {};
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      var payload = {
+        brief: data.brief,
+        videoType: data.videoType,
+        tone: data.tone,
+        cta: data.cta,
+        platforms: data.platforms,
+        assets: data.assets,
+        brand: data.brand || readBrand(),
+        selectedBurnIns: selectedBurnIns,
+        savedAt: Date.now()
+      };
+      if (opts.includePack !== false) {
+        var pack = capturePackState();
+        if (pack) payload.pack = pack;
+      }
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
     } catch (e) { /* ignore */ }
   }
 
@@ -245,10 +329,18 @@
   function loadForm() {
     var data = null;
     var fromHandoff = false;
+    var restoredPack = null;
     try {
       data = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
     } catch (e) {
       data = null;
+    }
+
+    if (data && data.pack && data.pack.items && data.pack.items.length) {
+      restoredPack = data.pack;
+      if (data.selectedBurnIns && typeof data.selectedBurnIns === 'object') {
+        selectedBurnIns = data.selectedBurnIns;
+      }
     }
 
     if (!data || !data.brief) {
@@ -264,7 +356,8 @@
             platforms: Array.isArray(vseo.platforms) && vseo.platforms.length
               ? vseo.platforms
               : ['youtube', 'tiktok', 'instagram', 'facebook'],
-            assets: ['youtube_thumb', 'vertical', 'quote_card']
+            assets: ['youtube_thumb', 'vertical', 'quote_card'],
+            brand: { primary: '', accent: '', styleNote: '', noLogos: true }
           };
           fromHandoff = true;
           showHandoffBanner('Video SEO', '/video-seo');
@@ -275,7 +368,8 @@
             tone: mapTone(shot.tone) || 'educational',
             cta: mapCta(shot.cta),
             platforms: ['youtube', 'tiktok', 'instagram', 'facebook'],
-            assets: ['youtube_thumb', 'vertical', 'quote_card']
+            assets: ['youtube_thumb', 'vertical', 'quote_card'],
+            brand: { primary: '', accent: '', styleNote: '', noLogos: true }
           };
           fromHandoff = true;
           showHandoffBanner('Shot List', '/shot-list');
@@ -283,7 +377,7 @@
       } catch (e2) { /* ignore */ }
     }
 
-    if (!data) return;
+    if (!data) return { restoredPack: null };
     $('ckit-brief').value = data.brief || '';
     if ($('ckit-video-type')) {
       $('ckit-video-type').value = data.videoType || 'tutorial';
@@ -295,6 +389,8 @@
       }
     }
     if ($('ckit-cta')) $('ckit-cta').value = mapCta(data.cta);
+    applyBrand(data.brand);
+    syncingPlatformAssets = true;
     ['youtube', 'tiktok', 'instagram', 'facebook'].forEach(function (p) {
       var el = $('plat-' + p);
       if (el) el.checked = !data.platforms || data.platforms.indexOf(p) !== -1;
@@ -304,9 +400,70 @@
       var el = $('asset-' + a);
       if (el) el.checked = assets.indexOf(a) !== -1;
     });
+    syncingPlatformAssets = false;
+    updateFbHint();
     if (fromHandoff) {
       /* keep banner */
     }
+    return { restoredPack: restoredPack };
+  }
+
+  function updateFbHint() {
+    var hint = $('ckit-fb-hint');
+    if (!hint) return;
+    var fb = $('plat-facebook');
+    hint.hidden = !(fb && fb.checked);
+  }
+
+  function syncPlatformToAssets(changedPlat) {
+    if (syncingPlatformAssets) return;
+    syncingPlatformAssets = true;
+    var map = {
+      youtube: 'youtube_thumb',
+      tiktok: 'vertical',
+      instagram: 'quote_card'
+    };
+    if (changedPlat && map[changedPlat]) {
+      var platEl = $('plat-' + changedPlat);
+      var assetEl = $('asset-' + map[changedPlat]);
+      if (platEl && assetEl) assetEl.checked = platEl.checked;
+    }
+    // Vertical also serves IG Reels / Shorts when TikTok is off but IG/YT Shorts intent remains
+    var tiktok = $('plat-tiktok');
+    var instagram = $('plat-instagram');
+    var vertical = $('asset-vertical');
+    if (tiktok && instagram && vertical && changedPlat === 'tiktok' && !tiktok.checked && instagram.checked) {
+      vertical.checked = true;
+    }
+    updateFbHint();
+    syncingPlatformAssets = false;
+  }
+
+  function syncAssetToPlatforms(changedAsset) {
+    if (syncingPlatformAssets) return;
+    syncingPlatformAssets = true;
+    var reverse = {
+      youtube_thumb: 'youtube',
+      vertical: 'tiktok',
+      quote_card: 'instagram'
+    };
+    if (changedAsset && reverse[changedAsset]) {
+      var assetEl = $('asset-' + changedAsset);
+      var platEl = $('plat-' + reverse[changedAsset]);
+      if (assetEl && platEl && assetEl.checked) platEl.checked = true;
+      if (assetEl && platEl && !assetEl.checked && changedAsset === 'youtube_thumb') {
+        platEl.checked = false;
+      }
+      if (assetEl && platEl && !assetEl.checked && changedAsset === 'quote_card') {
+        platEl.checked = false;
+      }
+      if (assetEl && platEl && !assetEl.checked && changedAsset === 'vertical') {
+        var ig = $('plat-instagram');
+        if (!(ig && ig.checked)) platEl.checked = false;
+      }
+    }
+    updateFbHint();
+    syncingPlatformAssets = false;
   }
 
   function imageCreditsNeed() {
@@ -329,7 +486,9 @@
     if (platforms.indexOf('youtube') !== -1) notes.push('YouTube safe margins for UI chrome');
     if (platforms.indexOf('tiktok') !== -1) notes.push('TikTok caption bar at bottom');
     if (platforms.indexOf('instagram') !== -1) notes.push('IG feed + Reels crop awareness');
-    if (platforms.indexOf('facebook') !== -1) notes.push('Facebook feed also reads well at 1:1 or 16:9');
+    if (platforms.indexOf('facebook') !== -1) {
+      notes.push('Facebook reuses IG 1:1 or YouTube 16:9 (see Facebook tab)');
+    }
     return notes.length ? notes.join(' · ') : 'General social framing';
   }
 
@@ -340,10 +499,14 @@
     var hook = firstHook(data.brief);
     var mood = extractMood(data.brief);
     var audience = extractAudience(data.brief);
-    var titles = shortTitles(data.brief, data.videoType, data.cta);
+    var titles = shortTitles(data.brief, data.videoType, data.cta).slice(0, 3);
     var cta = ctaLine(data.cta);
     var framing = platformFraming(data.platforms);
     var audienceBit = audience ? ' Aimed at ' + audience + '.' : '';
+    var brandBit = brandClause(data.brand);
+    var burn0 = titles[0] || 'WATCH THIS';
+    var burn1 = titles[1] || burn0;
+    var burn2 = titles[2] || burn1;
 
     var items = [];
     var checklist = [
@@ -356,7 +519,7 @@
     ];
 
     if (data.platforms.indexOf('facebook') !== -1) {
-      checklist.splice(4, 0, 'Facebook: reuse the IG square or YouTube 16:9 - do not invent a fifth layout');
+      checklist.splice(4, 0, 'Facebook: reuse the IG square (1:1) or YouTube 16:9 — see the Facebook tab recipes');
     }
 
     if (data.assets.indexOf('youtube_thumb') !== -1) {
@@ -368,20 +531,22 @@
         title: 'YouTube thumbnail',
         meta: ASPECT.youtube_thumb.ratio + ' · ' + ASPECT.youtube_thumb.pixels,
         framing: framing,
-        prompt:
+        ctrTip: CTR_TIPS.youtube_thumb,
+        basePrompt:
           vibeLine +
           'YouTube thumbnail still, 16:9 landscape. ' +
           type.frame +
-          '. Big readable title space for the words "' +
-          titles[0] +
-          '". Mood: ' +
+          '. Big readable title space for burned-in text. Mood: ' +
           mood +
           '.' +
           audienceBit +
           ' Hook idea (do not print the whole brief): ' +
           hook +
-          '. Soft studio or natural light, face or hero product large, high contrast, no watermark, no cluttered UI chrome, no fake play button.',
-        titles: titles.slice(0, 4),
+          '. Soft studio or natural light, face or hero product large, high contrast, no watermark, no cluttered UI chrome, no fake play button.' +
+          brandBit,
+        prompt: '',
+        titles: [burn0, burn1, burn2],
+        selectedBurnIn: selectedBurnIns.youtube_thumb || burn0,
         aspect: ASPECT.youtube_thumb.fal,
         recipe:
           'Render or crop to 1280×720 (16:9). Leave safe margin for YouTube UI. Prefer faces or the hero subject large. Burn in one short line only.'
@@ -397,7 +562,8 @@
         title: 'TikTok / Reels / Shorts cover',
         meta: ASPECT.vertical.ratio + ' · ' + ASPECT.vertical.pixels,
         framing: framing,
-        prompt:
+        ctrTip: CTR_TIPS.vertical,
+        basePrompt:
           vibeLine +
           'Vertical 9:16 cover still for short-form video. ' +
           type.frame +
@@ -407,8 +573,11 @@
           mood +
           '.' +
           audienceBit +
-          ' Phone-native composition, room for caption UI at the bottom, clean high-contrast look, no watermark, no busy stickers.',
-        titles: [titles[1] || titles[0], titles[3] || titles[2]].filter(Boolean),
+          ' Phone-native composition, room for caption UI at the bottom, clean high-contrast look, no watermark, no busy stickers.' +
+          brandBit,
+        prompt: '',
+        titles: [burn1, burn0, burn2],
+        selectedBurnIn: selectedBurnIns.vertical || burn1,
         aspect: ASPECT.vertical.fal,
         recipe:
           '1080×1920. Keep faces and text above the lower 20% (caption and UI safe zone). Works for TikTok, Reels, and Shorts.'
@@ -424,19 +593,50 @@
         title: 'Instagram square / title card',
         meta: ASPECT.quote_card.ratio + ' · ' + ASPECT.quote_card.pixels,
         framing: framing,
-        prompt:
+        ctrTip: CTR_TIPS.quote_card,
+        basePrompt:
           vibeLine +
-          'Minimal square title card, bold centered type reading "' +
-          titles[0] +
-          '", charcoal or soft gradient background, generous negative space, creator-social look. Optional small subtitle: "' +
+          'Minimal square title card, bold centered type, charcoal or soft gradient background, generous negative space, creator-social look. Optional small subtitle: "' +
           (cta || hook) +
           '". Mood: ' +
           mood +
-          '. No fake app-store badges, no unrelated brand logos.',
-        titles: [titles[0], titles[2], cta].filter(Boolean),
+          '.' +
+          brandBit,
+        prompt: '',
+        titles: [burn0, burn2, burn1],
+        selectedBurnIn: selectedBurnIns.quote_card || burn0,
         aspect: '1:1',
         recipe:
           '1080×1080 for Instagram feed. Type should stay legible at ~320px wide. Duplicate as 16:9 if you also need a landscape title card.'
+      });
+    }
+
+    if (data.platforms.indexOf('facebook') !== -1) {
+      items.push({
+        id: 'facebook',
+        kind: 'image',
+        tab: 'facebook',
+        tabLabel: 'Facebook',
+        title: 'Facebook feed (1:1 or 16:9)',
+        meta: ASPECT.facebook.ratio + ' · ' + ASPECT.facebook.pixels,
+        framing: framing,
+        ctrTip: CTR_TIPS.facebook,
+        basePrompt:
+          vibeLine +
+          'Facebook feed still that works as either a 1:1 square (reuse IG title-card energy) or 16:9 landscape (reuse YouTube thumb energy). ' +
+          type.frame +
+          '. Mood: ' +
+          mood +
+          '.' +
+          audienceBit +
+          ' One clear subject, high contrast, spare type, no fake UI chrome.' +
+          brandBit,
+        prompt: '',
+        titles: [burn0, burn1, burn2],
+        selectedBurnIn: selectedBurnIns.facebook || burn0,
+        aspect: '1:1',
+        recipe:
+          'Facebook does not need a fifth layout. Export (A) 1080×1080 square — same as IG title card — for feed link posts, or (B) 1280×720 16:9 — same as YouTube thumb — for video covers and shared links. Prefer A for static posts, B when the video itself is landscape.'
       });
     }
 
@@ -451,7 +651,8 @@
         title: 'Short motion teaser',
         meta: '4s · ' + motionAspect + ' · ' + VIDEO_CREDITS + ' purchased credits to render',
         framing: framing,
-        prompt:
+        ctrTip: CTR_TIPS.motion,
+        basePrompt:
           vibeLine +
           '4-second cinematic social teaser, ' +
           motionAspect +
@@ -461,14 +662,21 @@
           mood +
           '.' +
           audienceBit +
-          ' Smooth camera, soft lighting, no rapid cuts, no logos of other brands. End on a clean frame ready for text.',
-        titles: titles.slice(0, 2),
+          ' Smooth camera, soft lighting, no rapid cuts. End on a clean frame ready for text.' +
+          brandBit,
+        prompt: '',
+        titles: [burn0, burn1, burn2],
+        selectedBurnIn: selectedBurnIns.motion || burn0,
         aspect: motionAspect,
         recipe:
           '4s motion, ~720p. Prefer stills first. Video is a purchased-credit add-on. Not a music-license substitute.'
       });
       checklist.push('Motion: render stills first; video is the expensive purchased-credit add-on');
     }
+
+    items.forEach(function (item) {
+      item.prompt = withBurnIn(item.basePrompt, item.selectedBurnIn || (item.titles && item.titles[0]) || '');
+    });
 
     return {
       items: items,
@@ -479,6 +687,26 @@
       hook: hook,
       mood: mood
     };
+  }
+
+  function withBurnIn(basePrompt, burnIn) {
+    var text = cleanText(burnIn);
+    if (!text) return basePrompt;
+    return (
+      cleanText(basePrompt) +
+      ' Burn-in text (exactly, large and readable): "' +
+      text +
+      '".'
+    );
+  }
+
+  function applyBurnInToPrompt(item, burnIn, textarea) {
+    selectedBurnIns[item.id] = burnIn;
+    item.selectedBurnIn = burnIn;
+    var next = withBurnIn(item.basePrompt || item.prompt, burnIn);
+    item.prompt = next;
+    if (textarea) textarea.value = next;
+    saveForm(readForm());
   }
 
   function copyText(text, btn) {
@@ -575,7 +803,15 @@
           purchaseLinksHtml()
       };
     }
-    return { ok: true, reason: 'Will charge ' + need + ' purchased credits for this render.' };
+    return {
+      ok: true,
+      reason:
+        'Purchased credits remaining: ' +
+        creditsState.paidRemaining +
+        ' · will charge ' +
+        need +
+        ' (signup/promo credits never cover fal).'
+    };
   }
 
   function setBusy(btn, busy, label) {
@@ -730,32 +966,41 @@
               ' purchased credit' +
               (charged === 1 ? '' : 's') +
               (paidRemain != null ? ' · ' + paidRemain + ' purchased remaining' : '') +
-              '.',
+              '. Open the file → right-click / long-press to download.',
             'ok'
           );
           updateCreditsPanel();
-          if (url && previewHost) {
-            previewHost.innerHTML = '';
-            if (item.kind === 'video') {
-              var v = document.createElement('video');
-              v.className = 'ckit-preview';
-              v.controls = true;
-              v.src = url;
-              previewHost.appendChild(v);
-            } else {
-              var img = document.createElement('img');
-              img.className = 'ckit-preview';
-              img.alt = 'Rendered asset';
-              img.src = url;
-              previewHost.appendChild(img);
+          if (url) {
+            pushSessionRender(item, url);
+            if (previewHost) {
+              previewHost.innerHTML = '';
+              if (item.kind === 'video') {
+                var v = document.createElement('video');
+                v.className = 'ckit-preview';
+                v.controls = true;
+                v.src = url;
+                previewHost.appendChild(v);
+              } else {
+                var img = document.createElement('img');
+                img.className = 'ckit-preview';
+                img.alt = 'Rendered asset';
+                img.src = url;
+                previewHost.appendChild(img);
+              }
+              var a = document.createElement('a');
+              a.href = url;
+              a.target = '_blank';
+              a.rel = 'noopener';
+              a.download = '';
+              a.className = 'btn btn-ghost';
+              a.textContent = 'Open / download';
+              previewHost.appendChild(a);
+              var hint = document.createElement('p');
+              hint.className = 'ckit-download-hint';
+              hint.textContent =
+                'Tip: open the file, then right-click (or long-press) → Save image / Save video.';
+              previewHost.appendChild(hint);
             }
-            var a = document.createElement('a');
-            a.href = url;
-            a.target = '_blank';
-            a.rel = 'noopener';
-            a.className = 'btn btn-ghost';
-            a.textContent = 'Open file';
-            previewHost.appendChild(a);
           }
         })
         .catch(function () {
@@ -772,6 +1017,45 @@
         'err'
       );
       syncRenderButtons();
+    });
+  }
+
+  function pushSessionRender(item, url) {
+    sessionRenders.unshift({
+      id: item.id + '-' + Date.now(),
+      title: item.title,
+      url: url,
+      kind: item.kind,
+      burnIn: selectedBurnIns[item.id] || item.selectedBurnIn || '',
+      at: Date.now()
+    });
+    if (sessionRenders.length > 12) sessionRenders.length = 12;
+    renderSessionList();
+  }
+
+  function renderSessionList() {
+    var host = $('ckit-session');
+    var list = $('ckit-session-list');
+    if (!host || !list) return;
+    list.innerHTML = '';
+    if (!sessionRenders.length) {
+      host.hidden = true;
+      return;
+    }
+    host.hidden = false;
+    sessionRenders.forEach(function (row) {
+      var li = document.createElement('li');
+      var link = document.createElement('a');
+      link.href = row.url;
+      link.target = '_blank';
+      link.rel = 'noopener';
+      link.textContent = row.title + (row.burnIn ? ' · "' + row.burnIn + '"' : '');
+      var meta = document.createElement('span');
+      meta.className = 'ckit-session-meta';
+      meta.textContent = row.kind === 'video' ? 'Video' : 'Image';
+      li.appendChild(link);
+      li.appendChild(meta);
+      list.appendChild(li);
     });
   }
 
@@ -810,22 +1094,60 @@
     recipe.innerHTML = '<strong>Aspect recipe:</strong> ' + item.recipe;
     panel.appendChild(recipe);
 
+    if (item.ctrTip) {
+      var tip = document.createElement('p');
+      tip.className = 'ckit-ctr-tip';
+      tip.textContent = item.ctrTip;
+      panel.appendChild(tip);
+    }
+
+    var ta = document.createElement('textarea');
+    ta.id = 'ckit-prompt-' + item.id;
+    ta.rows = 6;
+    ta.value = item.prompt;
+    ta.setAttribute('aria-label', item.title + ' prompt');
+    ta.addEventListener('change', function () {
+      item.prompt = ta.value;
+      saveForm(readForm());
+    });
+
     if (item.titles && item.titles.length) {
+      var burnLabel = document.createElement('p');
+      burnLabel.className = 'ckit-burnin-label';
+      burnLabel.textContent = 'Pick burn-in winner (injects into prompt · used for render)';
+      panel.appendChild(burnLabel);
+
       var burnWrap = document.createElement('div');
       burnWrap.className = 'ckit-burnins';
       burnWrap.setAttribute('aria-label', 'Burn-in text options');
-      item.titles.forEach(function (t) {
+      var winner = selectedBurnIns[item.id] || item.selectedBurnIn || item.titles[0];
+      item.titles.slice(0, 3).forEach(function (t) {
         var chip = document.createElement('button');
         chip.type = 'button';
-        chip.className = 'ckit-burnin';
+        chip.className = 'ckit-burnin' + (t === winner ? ' is-selected' : '');
         chip.textContent = t;
-        chip.title = 'Copy burn-in text';
+        chip.title = 'Use as burn-in for render';
+        chip.setAttribute('aria-pressed', t === winner ? 'true' : 'false');
         chip.addEventListener('click', function () {
-          copyText(t, chip);
+          burnWrap.querySelectorAll('.ckit-burnin').forEach(function (c) {
+            c.classList.remove('is-selected');
+            c.setAttribute('aria-pressed', 'false');
+          });
+          chip.classList.add('is-selected');
+          chip.setAttribute('aria-pressed', 'true');
+          applyBurnInToPrompt(item, t, ta);
         });
         burnWrap.appendChild(chip);
       });
       panel.appendChild(burnWrap);
+      if (!selectedBurnIns[item.id]) {
+        selectedBurnIns[item.id] = winner;
+        item.selectedBurnIn = winner;
+      }
+      if (item.basePrompt) {
+        item.prompt = withBurnIn(item.basePrompt, selectedBurnIns[item.id] || winner);
+        ta.value = item.prompt;
+      }
     }
 
     var field = document.createElement('div');
@@ -842,12 +1164,6 @@
     copyBtn.textContent = 'Copy';
     fieldHead.appendChild(copyBtn);
     field.appendChild(fieldHead);
-
-    var ta = document.createElement('textarea');
-    ta.id = 'ckit-prompt-' + item.id;
-    ta.rows = 6;
-    ta.value = item.prompt;
-    ta.setAttribute('aria-label', item.title + ' prompt');
     field.appendChild(ta);
     panel.appendChild(field);
 
@@ -893,6 +1209,10 @@
     panel.appendChild(preview);
 
     renderBtn.addEventListener('click', function () {
+      var burn = selectedBurnIns[item.id] || item.selectedBurnIn;
+      if (burn && item.basePrompt) {
+        applyBurnInToPrompt(item, burn, ta);
+      }
       renderSelected(item, ta, status, preview, renderBtn);
     });
 
@@ -932,8 +1252,23 @@
     return panel;
   }
 
-  function renderResults(data) {
-    var pack = buildPack(data);
+  function renderResults(data, existingPack) {
+    var pack = existingPack || buildPack(data);
+    if (existingPack && existingPack.items) {
+      pack.items.forEach(function (item) {
+        if (!item.basePrompt && item.prompt) {
+          item.basePrompt = String(item.prompt).replace(
+            /\s*Burn-in text \(exactly, large and readable\): "[^"]*"\.\s*$/,
+            ''
+          );
+        }
+        if (item.selectedBurnIn) selectedBurnIns[item.id] = item.selectedBurnIn;
+        if (selectedBurnIns[item.id] && item.basePrompt) {
+          item.prompt = withBurnIn(item.basePrompt, selectedBurnIns[item.id]);
+        }
+        if (!item.ctrTip && CTR_TIPS[item.id]) item.ctrTip = CTR_TIPS[item.id];
+      });
+    }
     lastPack = pack;
     var host = $('ckit-results-body');
     var tabs = $('ckit-tabs');
@@ -971,8 +1306,12 @@
     selectTab(activeTab || (pack.items[0] && pack.items[0].tab) || 'checklist');
     syncRenderButtons();
     updateCreditsPanel();
+    renderSessionList();
     $('ckit-results').classList.add('is-visible');
-    $('ckit-results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    saveForm(data || readForm());
+    if (!existingPack) {
+      $('ckit-results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
 
   function syncCreditCostHighlights() {
@@ -1178,11 +1517,15 @@
       lines.push((i + 1) + '. ' + item.title);
       lines.push(item.meta);
       lines.push('Recipe: ' + item.recipe);
+      if (item.ctrTip) lines.push(item.ctrTip);
       if (item.titles && item.titles.length) {
         lines.push('Burn-in options: ' + item.titles.join(' · '));
+        var winner = selectedBurnIns[item.id] || item.selectedBurnIn;
+        if (winner) lines.push('Selected burn-in: ' + winner);
       }
       lines.push('');
-      lines.push(item.prompt);
+      var ta = $('ckit-prompt-' + item.id);
+      lines.push(ta ? ta.value : item.prompt);
       lines.push('');
       lines.push('---');
       lines.push('');
@@ -1233,6 +1576,7 @@
     if (empty) empty.classList.add('is-hidden');
     $('ckit-results').classList.remove('is-visible');
     saveForm(data);
+    selectedBurnIns = {};
     setTimeout(function () {
       renderResults(data);
       setBusy(submit, false);
@@ -1248,6 +1592,8 @@
     if ($('ckit-video-type')) $('ckit-video-type').value = 'tutorial';
     if ($('ckit-tone')) $('ckit-tone').value = 'educational';
     $('ckit-cta').value = 'none';
+    applyBrand({ primary: '', accent: '', styleNote: '', noLogos: true });
+    syncingPlatformAssets = true;
     ['youtube', 'tiktok', 'instagram', 'facebook'].forEach(function (p) {
       var el = $('plat-' + p);
       if (el) el.checked = true;
@@ -1258,9 +1604,14 @@
     });
     var motionEl = $('asset-motion');
     if (motionEl) motionEl.checked = false;
+    syncingPlatformAssets = false;
+    updateFbHint();
     imageQuality = 'standard';
     lastPack = null;
     activeTab = '';
+    selectedBurnIns = {};
+    sessionRenders = [];
+    renderSessionList();
     $('ckit-results').classList.remove('is-visible');
     $('ckit-results-body').innerHTML = '';
     $('ckit-tabs').innerHTML = '';
@@ -1299,9 +1650,10 @@
   }
 
   document.addEventListener('DOMContentLoaded', function () {
-    loadForm();
+    var loaded = loadForm();
     hydrateCostLabels();
     updateCreditsPanel();
+    updateFbHint();
 
     if (window.CuemarkTurnstile) {
       CuemarkTurnstile.prepare('ckit-turnstile-wrap', 'ckit-turnstile').catch(function () {});
@@ -1316,6 +1668,21 @@
     }
     var clearBtn = $('ckit-clear');
     if (clearBtn) clearBtn.addEventListener('click', clearAll);
+
+    ['youtube', 'tiktok', 'instagram', 'facebook'].forEach(function (p) {
+      var el = $('plat-' + p);
+      if (!el) return;
+      el.addEventListener('change', function () {
+        syncPlatformToAssets(p);
+      });
+    });
+    ['youtube_thumb', 'vertical', 'quote_card', 'motion'].forEach(function (a) {
+      var el = $('asset-' + a);
+      if (!el) return;
+      el.addEventListener('change', function () {
+        syncAssetToPlatforms(a);
+      });
+    });
 
     var copyAll = $('ckit-copy-all');
     if (copyAll) {
@@ -1340,5 +1707,9 @@
         if (!d.contains(e.target)) d.removeAttribute('open');
       });
     });
+
+    if (loaded && loaded.restoredPack) {
+      renderResults(readForm(), loaded.restoredPack);
+    }
   });
 })();

@@ -559,6 +559,236 @@
   text-decoration: underline;
 }
 
+/* History */
+.vseo-history {
+  margin-top: 1.35rem;
+  padding: 1.15rem 1.25rem;
+  border: 1px solid var(--edge);
+  border-radius: 14px;
+  background: var(--surface);
+}
+
+.vseo-history[hidden] {
+  display: none !important;
+}
+
+.vseo-history h3 {
+  font-family: 'Cal Sans', sans-serif;
+  font-size: 1.05rem;
+  letter-spacing: 0.03em;
+  margin: 0 0 0.25rem;
+}
+
+.vseo-history-hint {
+  margin: 0 0 0.85rem;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.vseo-history-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.vseo-history-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--edge);
+  border-radius: 8px;
+  background: var(--ink);
+}
+
+.vseo-history-meta {
+  min-width: 0;
+  flex: 1;
+}
+
+.vseo-history-snippet {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.vseo-history-time {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.vseo-history-restore {
+  flex-shrink: 0;
+  height: 34px;
+  padding: 0 0.75rem;
+  font-size: 12px;
+}
+
+/* Export + results head */
+.vseo-results-head-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.85rem;
+}
+
+.vseo-export {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.vseo-export-btn {
+  height: 36px;
+  padding: 0 0.85rem;
+  font-size: 12px;
+}
+
+.vseo-panel-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.vseo-regen-plat.is-disabled,
+.vseo-chip.is-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Refine chips */
+.vseo-refine {
+  margin-top: 1.15rem;
+  padding: 1.1rem 1.2rem;
+  border: 1px solid var(--edge);
+  border-radius: 14px;
+  background: var(--surface);
+}
+
+.vseo-refine[hidden] {
+  display: none !important;
+}
+
+.vseo-refine h3 {
+  font-family: 'Cal Sans', sans-serif;
+  font-size: 1.05rem;
+  letter-spacing: 0.03em;
+  margin: 0 0 0.25rem;
+}
+
+.vseo-refine-hint {
+  margin: 0 0 0.75rem;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.vseo-refine-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.vseo-chip {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+  background: var(--ink);
+  border: 1px solid var(--edge);
+  border-radius: 8px;
+  padding: 0.45rem 0.8rem;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+
+.vseo-chip:hover:not(:disabled):not(.is-disabled) {
+  color: var(--text);
+  border-color: rgba(var(--accent-rgb), 0.45);
+  background: rgba(var(--accent-rgb), 0.1);
+}
+
+.vseo-chip.is-busy {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+/* Publish checklist */
+.vseo-checklist {
+  margin-top: 1.15rem;
+  padding: 1.1rem 1.2rem;
+  border: 1px dashed var(--edge);
+  border-radius: 14px;
+  background: rgba(19, 19, 26, 0.55);
+}
+
+.vseo-checklist[hidden] {
+  display: none !important;
+}
+
+.vseo-checklist h3 {
+  font-family: 'Cal Sans', sans-serif;
+  font-size: 1.05rem;
+  letter-spacing: 0.03em;
+  margin: 0 0 0.65rem;
+}
+
+.vseo-checklist ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.vseo-check-item {
+  position: relative;
+  padding-left: 1.15rem;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.vseo-check-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.45em;
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: var(--subtle);
+}
+
+.vseo-check-item.is-ok::before {
+  background: #8fd4a8;
+}
+
+.vseo-check-item.is-warn::before {
+  background: #e0b45a;
+}
+
+.vseo-check-item.is-ok {
+  color: var(--text);
+}
+
+#vseo-empty .btn {
+  margin-top: 0.85rem;
+}
+
 @media (max-width: 700px) {
   .vseo-row {
     grid-template-columns: 1fr;
@@ -582,5 +812,14 @@
     text-align: center;
     padding: 0.5rem 0.55rem;
     font-size: 12px;
+  }
+
+  .vseo-history-item {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .vseo-results-head-row {
+    flex-direction: column;
   }
 }
