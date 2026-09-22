@@ -139,6 +139,16 @@
   flex: 1 1 100%;
 }
 
+.slist-actions .btn.is-busy,
+.slist-actions .btn:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.slist-credits {
+  margin-top: 1.25rem;
+}
+
 .slist-results {
   display: none;
   margin-top: 2rem;

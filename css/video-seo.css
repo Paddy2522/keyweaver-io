@@ -142,6 +142,41 @@
   color: var(--text);
 }
 
+.vseo-pro-body {
+  display: grid;
+  gap: 0.85rem;
+  margin-top: 0.75rem;
+}
+
+.vseo-pro-body .tools-form-note {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.vseo-pro-body input[type='file'] {
+  font-size: 13px;
+  color: var(--muted);
+  padding: 0.5rem 0;
+  background: transparent;
+  border: none;
+}
+
+.vseo-pro-body #vseo-generate-pro {
+  justify-self: start;
+}
+
+.vseo-thumbs-grid {
+  display: grid;
+  gap: 0.65rem;
+  margin-top: 0.35rem;
+}
+
+.vseo-thumbs-grid .vseo-field {
+  margin: 0;
+}
+
 .vseo-platforms {
   display: flex;
   flex-wrap: wrap;

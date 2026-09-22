@@ -76,6 +76,7 @@
     <div class="tools-badges" aria-label="Pricing">
       <span class="tools-badge tools-badge-free">2 free AI gens</span>
       <span class="tools-badge tools-badge-paid">Then 2 credits each</span>
+      <span class="tools-badge tools-badge-paid">Pro · transcript / audio</span>
     </div>
   </header>
 
@@ -129,6 +130,27 @@
       </div>
     </details>
 
+    <details class="vseo-advanced vseo-pro-section" id="vseo-pro-details">
+      <summary>Video SEO Pro <span class="vseo-optional">transcript or audio · purchased credits</span></summary>
+      <div class="vseo-pro-body">
+        <p class="hint">
+          Ground titles, descriptions, and chapters in what was said. Paste a transcript and/or upload audio
+          (Whisper). Pro never uses free gens — purchased credits only.
+        </p>
+        <div class="vseo-field">
+          <label for="vseo-transcript">Transcript <span class="vseo-optional">optional</span></label>
+          <textarea id="vseo-transcript" name="transcript" rows="5" placeholder="Paste a rough transcript or captions export…"></textarea>
+        </div>
+        <div class="vseo-field">
+          <label for="vseo-audio">Audio upload <span class="vseo-optional">optional · max ~20 min / 25 MB</span></label>
+          <input id="vseo-audio" name="audio" type="file" accept="audio/*,.mp3,.wav,.m4a,.ogg,.webm,.mp4" />
+          <p class="hint" id="vseo-audio-name" hidden></p>
+        </div>
+        <p class="tools-form-note" id="vseo-pro-cost-note">Pro uses purchased credits only · 3 paste / 6 audio</p>
+        <button type="button" class="btn btn-ghost" id="vseo-generate-pro">Generate with Pro</button>
+      </div>
+    </details>
+
     <div class="vseo-field">
       <label>Platforms</label>
       <div class="vseo-platforms">
@@ -170,7 +192,7 @@
       </div>
     </div>
     <p class="tools-credit-help">
-      Free gens are tied to your account (not this browser). After 2 free, a full pack costs <strong>2 purchased credits</strong>; refine or one platform costs <strong>1</strong>. Free signup credits cannot pay for AI.
+      Free gens are tied to your account (not this browser). After 2 free, a full pack costs <strong>2 purchased credits</strong>; refine or one platform costs <strong>1</strong>. Pro (transcript / audio) is <strong>3</strong> / <strong>6</strong> purchased only. Free signup credits cannot pay for AI.
     </p>
     <div class="tools-credit-actions">
       <a href="/login?next=/video-seo" class="btn btn-primary" id="vseo-credits-signin">Sign in</a>

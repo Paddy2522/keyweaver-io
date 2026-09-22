@@ -11,15 +11,15 @@
   <link rel="stylesheet" href="/css/chrome.css" />
   <link rel="stylesheet" href="/css/site.css?v=20260807c" />
   <link rel="stylesheet" href="/css/tools-shared.css" />
-  <link rel="stylesheet" href="/css/shot-list.css?v=20260922a" />
+  <link rel="stylesheet" href="/css/shot-list.css?v=20260922b" />
   <link rel="stylesheet" href="/css/help-widget.css" />
   <title>Shot List - Free shoot plan for creators | Keyweaver</title>
-  <meta name="description" content="Free Shot List for creators and editors. One brief → ordered shots with framing, camera move, audio notes, and rough timings. Templates by video type - $0 in your browser." />
+  <meta name="description" content="Free Shot List for creators and editors. One brief → ordered shots with framing, camera move, audio notes, and rough timings. Free templates forever; optional AI expand uses purchased credits only." />
   <link rel="canonical" href="https://keyweaver.io/shot-list" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Keyweaver" />
   <meta property="og:title" content="Shot List - Keyweaver Tools" />
-  <meta property="og:description" content="For creators: one video brief → an ordered shoot plan with framing, movement, audio, and rough timings. Free forever." />
+  <meta property="og:description" content="For creators: one video brief → an ordered shoot plan. Free templates forever; optional AI expand with purchased credits." />
   <meta property="og:url" content="https://keyweaver.io/shot-list" />
   <meta property="og:image" content="https://keyweaver.io/images/keyweaver-logo.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -74,12 +74,12 @@
     <h1>Shot List</h1>
     <p>For creators and editors: one video brief → an ordered shoot plan with framing, camera move, audio notes, and rough timings - sized to your duration and video type.</p>
     <div class="tools-badges" aria-label="Pricing">
-      <span class="tools-badge tools-badge-free">Free forever</span>
-      <span class="tools-badge">No credits · runs in browser</span>
+      <span class="tools-badge tools-badge-free">Free templates forever</span>
+      <span class="tools-badge tools-badge-paid">AI expand · 2 purchased credits</span>
     </div>
     <div class="tools-tier" role="note">
-      <p><strong>Free forever:</strong> ordered coverage from templates (tutorial, product review, vlog, talking head, short-form hook, launch trailer, and more).</p>
-      <p><strong>Credits:</strong> never used. Edit freely, then copy or download .txt / .csv for set or edit.</p>
+      <p><strong>Free forever:</strong> ordered coverage from templates (tutorial, product review, vlog, talking head, short-form hook, launch trailer, and more) - runs in your browser, $0 COGS.</p>
+      <p><strong>AI generate:</strong> personalized shot list from your brief via LLM. Uses <strong>purchased credits only</strong> (2 per generate) - never signup / promo credits.</p>
     </div>
     <div class="slist-note" id="slist-handoff-banner" role="status" style="display:none;margin-top:0.75rem"></div>
   </header>
@@ -145,16 +145,44 @@
 
     <p class="slist-error" id="slist-error" role="alert"></p>
 
+    <div class="cuemark-turnstile-wrap" id="slist-turnstile-wrap" hidden>
+      <div id="slist-turnstile"></div>
+    </div>
+
     <div class="slist-actions">
-      <button type="submit" class="btn btn-primary btn-lg" id="slist-submit">Generate free shot list</button>
+      <button type="submit" class="btn btn-primary btn-lg" id="slist-submit">Generate free</button>
+      <button type="button" class="btn btn-ghost btn-lg" id="slist-ai-submit">AI generate · 2 credits</button>
       <button type="button" class="btn btn-ghost" id="slist-clear">Clear</button>
-      <p class="tools-form-note">Runs in your browser. No account or credits required.</p>
+      <p class="tools-form-note" id="slist-form-note">Free templates run in your browser (no account). AI generate needs sign-in and purchased credits only.</p>
     </div>
   </form>
 
+  <aside class="tools-credit-panel slist-credits" id="slist-credits" aria-label="Shot List AI credits">
+    <h3>AI generate</h3>
+    <p class="tools-credit-status" id="slist-balance">Free templates never charge. Sign in to use AI generate with purchased credits.</p>
+    <div class="tools-credit-meter" id="slist-credit-meter" hidden>
+      <div class="tools-credit-row">
+        <span class="label">Purchased credits</span>
+        <span class="value" id="slist-paid-value">-</span>
+      </div>
+      <div class="tools-credit-row">
+        <span class="label">AI generate</span>
+        <span class="value is-ok">2 credits</span>
+      </div>
+    </div>
+    <p class="tools-credit-help">
+      Free templates stay $0 forever. AI expand personalizes the shot list from your brief and debits <strong>2 purchased credits</strong> - signup / promo credits cannot cover it.
+    </p>
+    <div class="tools-credit-actions">
+      <a href="/login?next=/shot-list" class="btn btn-primary" id="slist-credits-signin">Sign in</a>
+      <a href="/pricing" class="btn btn-primary" id="slist-credits-buy" hidden>Buy credits</a>
+      <a href="/account" class="btn btn-ghost" id="slist-credits-account" hidden>Account</a>
+    </div>
+  </aside>
+
   <div class="tools-empty" id="slist-empty">
     <h2>Your shoot plan appears here</h2>
-    <p>Add a concept and click <strong>Generate free shot list</strong>. You’ll get ordered coverage to shoot or hand to an editor - no sign-in, no credits.</p>
+    <p>Add a concept and click <strong>Generate free</strong> for templates, or <strong>AI generate · 2 credits</strong> for a personalized list (purchased credits only).</p>
   </div>
 
   <div class="slist-results" id="slist-results">
@@ -200,7 +228,7 @@
   </div>
 
   <p class="slist-footer-note">
-    Free forever - no credits. Part of the pre-publish toolkit with <a href="/video-seo">Video SEO</a> and <a href="/campaign-kit">Campaign Kit</a>. For timeline plugins, see <a href="/download">Download</a>.
+    Free templates forever; AI generate uses purchased credits only. Part of the pre-publish toolkit with <a href="/video-seo">Video SEO</a> and <a href="/campaign-kit">Campaign Kit</a>. For timeline plugins, see <a href="/download">Download</a>.
   </p>
 </main>
 
@@ -228,7 +256,8 @@
   </ul>
 </footer>
 
-<script src="/js/shot-list.js?v=20260922a" defer></script>
+<script src="/js/tools-auth.js"></script>
+<script src="/js/shot-list.js?v=20260922b" defer></script>
 <script src="/js/help-widget.js" defer></script>
 <script src="/js/cuemark-turnstile.js"></script>
 </body>

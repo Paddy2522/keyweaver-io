@@ -1,9 +1,14 @@
 (function () {
   'use strict';
 
+  var Auth = window.KeyweaverToolsAuth;
+  var BACKEND = (Auth && Auth.BACKEND) || 'https://keyweaver-backend.vercel.app';
+  var AI_CREDITS = 2;
   var STORAGE_KEY = 'keyweaver.shotList.lastBrief';
   var VSEO_KEY = 'keyweaver.videoSeo.lastBrief';
   var CKIT_KEY = 'keyweaver.campaignKit.lastBrief';
+
+  var creditsState = null;
 
   /** Base beat templates: weight shares sum ~1; scaled to target duration. */
   var TEMPLATES = {
@@ -407,6 +412,441 @@
     return shots;
   }
 
+  function getToken() {
+    return Auth && Auth.getToken ? Auth.getToken() : '';
+  }
+
+  function loginHref() {
+    return Auth && Auth.loginUrl ? Auth.loginUrl('/shot-list') : '/login?next=' + encodeURIComponent('/shot-list');
+  }
+
+  function purchaseLinksHtml() {
+    return (
+      '<span class="tools-inline-cta">' +
+      '<a href="/pricing">Buy credits</a>' +
+      '<a href="/account">Account</a>' +
+      '</span>'
+    );
+  }
+
+  function apiVideoType(type) {
+    type = normalizeType(type);
+    if (type === 'short_hook') return 'short_form_hook';
+    return type;
+  }
+
+  function mapAiShots(apiShots) {
+    if (!Array.isArray(apiShots)) return [];
+    return apiShots.map(function (s, i) {
+      var detail = '';
+      var beat = cleanText(s && s.beat);
+      var note = cleanText(s && s.note);
+      var talent = cleanText(s && s.talent);
+      if (beat) detail = 'Beat: ' + beat;
+      if (note) detail = (detail ? detail + ' · ' : '') + note;
+      if (talent) detail = (detail ? detail + ' · ' : '') + 'Talent/gear: ' + talent;
+      var seconds = Math.max(2, Math.round(Number(s && (s.timeSec != null ? s.timeSec : s.seconds)) || 5));
+      return {
+        num: i + 1,
+        framing: cleanText(s && s.framing) || beat || 'Shot ' + (i + 1),
+        detail: detail,
+        movement: cleanText(s && s.movement) || 'Locked',
+        audio: cleanText(s && s.audio) || 'TBD',
+        seconds: seconds,
+        timeLabel: formatTime(seconds),
+        tag: 'ai'
+      };
+    });
+  }
+
+  function syncCreditActions() {
+    if (!Auth || !Auth.syncCreditActions) return;
+    Auth.syncCreditActions({
+      signin: $('slist-credits-signin'),
+      buy: $('slist-credits-buy'),
+      account: $('slist-credits-account'),
+      nextPath: '/shot-list',
+      signedIn: !!getToken(),
+      paidRemaining: creditsState ? creditsState.paidRemaining : getToken() ? null : 0
+    });
+  }
+
+  function syncTurnstileVisibility() {
+    var wrap = $('slist-turnstile-wrap');
+    if (!wrap) return;
+    var show =
+      !!getToken() &&
+      creditsState &&
+      creditsState.paidRemaining >= AI_CREDITS;
+    wrap.hidden = !show;
+    if (show && window.CuemarkTurnstile) {
+      CuemarkTurnstile.prepare('slist-turnstile-wrap', 'slist-turnstile').catch(function () {});
+    }
+  }
+
+  function syncAiButton() {
+    var btn = $('slist-ai-submit');
+    var note = $('slist-form-note');
+    if (!btn) return;
+    var gate = aiGateReason();
+    btn.disabled = !!btn.classList.contains('is-busy') ? true : !gate.ok;
+    btn.classList.toggle('is-disabled', !gate.ok);
+    btn.title = gate.ok
+      ? 'Charges ' + AI_CREDITS + ' purchased credits'
+      : 'Purchased credits required';
+    if (note && !btn.classList.contains('is-busy')) {
+      note.innerHTML = gate.reason;
+    }
+    syncTurnstileVisibility();
+  }
+
+  function aiGateReason() {
+    if (!getToken()) {
+      return {
+        ok: false,
+        reason:
+          'Free templates never charge. <a href="' +
+          loginHref() +
+          '">Sign in</a> for AI generate (purchased credits only).'
+      };
+    }
+    if (!creditsState) {
+      return { ok: false, reason: 'Checking purchased credit balance…' };
+    }
+    if (!creditsState.hasPaid || creditsState.paidRemaining <= 0) {
+      return {
+        ok: false,
+        reason:
+          'Signed in with 0 purchased credits. Free signup credits cannot run AI generate. ' +
+          purchaseLinksHtml()
+      };
+    }
+    if (creditsState.paidRemaining < AI_CREDITS) {
+      return {
+        ok: false,
+        reason:
+          'Need ' +
+          AI_CREDITS +
+          ' purchased credits (you have ' +
+          creditsState.paidRemaining +
+          '). ' +
+          purchaseLinksHtml()
+      };
+    }
+    return {
+      ok: true,
+      reason:
+        'Purchased credits remaining: ' +
+        creditsState.paidRemaining +
+        ' · AI generate charges ' +
+        AI_CREDITS +
+        ' (signup/promo never cover). Free templates stay $0.'
+    };
+  }
+
+  function updateCreditsPanel() {
+    var bal = $('slist-balance');
+    var meter = $('slist-credit-meter');
+    var paidEl = $('slist-paid-value');
+    var token = getToken();
+    syncCreditActions();
+    if (!token) {
+      creditsState = null;
+      if (meter) meter.hidden = true;
+      if (bal) {
+        bal.className = 'tools-credit-status is-warn';
+        bal.textContent =
+          'Free templates never charge. Sign in to use AI generate with purchased credits.';
+      }
+      syncAiButton();
+      return;
+    }
+    if (bal) {
+      bal.className = 'tools-credit-status';
+      bal.textContent = 'Checking purchased credit balance…';
+    }
+
+    function applyCredits(snap) {
+      if (!bal) return;
+      if (!snap || !snap.ok) {
+        creditsState = null;
+        if (meter) meter.hidden = true;
+        if (snap && snap.unauthorized) {
+          bal.className = 'tools-credit-status is-warn';
+          bal.innerHTML =
+            'Session expired. <a href="' + loginHref() + '">Sign in</a> for AI generate.';
+        } else {
+          bal.className = 'tools-credit-status is-err';
+          bal.innerHTML =
+            'Could not load credits. Try <a href="/account">Account</a> or refresh.';
+        }
+        syncCreditActions();
+        syncAiButton();
+        return;
+      }
+      creditsState = {
+        remaining: snap.remaining,
+        total: snap.total,
+        paidRemaining: snap.paidRemaining,
+        hasPaid: snap.hasPaid
+      };
+      if (meter) meter.hidden = false;
+      if (paidEl) {
+        paidEl.textContent = String(snap.paidRemaining);
+        paidEl.classList.toggle('is-zero', snap.paidRemaining <= 0);
+        paidEl.classList.toggle('is-ok', snap.paidRemaining > 0);
+      }
+      if (snap.paidRemaining >= AI_CREDITS) {
+        bal.className = 'tools-credit-status is-ok';
+        bal.textContent =
+          'Ready for AI generate · ' + snap.paidRemaining + ' purchased credits remaining.';
+      } else if (snap.paidRemaining > 0) {
+        bal.className = 'tools-credit-status is-warn';
+        bal.innerHTML =
+          'Need ' +
+          AI_CREDITS +
+          ' purchased credits (you have ' +
+          snap.paidRemaining +
+          '). ' +
+          purchaseLinksHtml();
+      } else {
+        bal.className = 'tools-credit-status is-warn';
+        bal.innerHTML =
+          'Signed in with 0 purchased credits. Free signup credits cannot run AI generate. ' +
+          purchaseLinksHtml();
+      }
+      syncCreditActions();
+      syncAiButton();
+    }
+
+    if (Auth && Auth.fetchCredits) {
+      Auth.fetchCredits().then(applyCredits);
+    } else {
+      applyCredits({ ok: false });
+    }
+  }
+
+  function setBusy(btn, busy, label) {
+    if (!btn) return;
+    if (busy) {
+      btn.dataset.prevLabel = btn.textContent;
+      btn.textContent = label || 'Working…';
+      btn.classList.add('is-busy');
+      btn.disabled = true;
+    } else {
+      if (btn.dataset.prevLabel) btn.textContent = btn.dataset.prevLabel;
+      delete btn.dataset.prevLabel;
+      btn.classList.remove('is-busy');
+      btn.disabled = false;
+    }
+  }
+
+  function resetTurnstile() {
+    if (window.CuemarkTurnstile) {
+      CuemarkTurnstile.reset('slist-turnstile');
+    }
+  }
+
+  function withTurnstile(run) {
+    if (window.CuemarkTurnstile && CuemarkTurnstile.enabled && CuemarkTurnstile.enabled()) {
+      return CuemarkTurnstile.requireToken('slist-turnstile').then(run);
+    }
+    if (window.CuemarkTurnstile) {
+      return CuemarkTurnstile.loadConfig().then(function () {
+        if (CuemarkTurnstile.enabled()) {
+          return CuemarkTurnstile.requireToken('slist-turnstile').then(run);
+        }
+        return run('');
+      });
+    }
+    return Promise.resolve(run(''));
+  }
+
+  function onAiGenerate() {
+    showError('');
+    var opts = readFormOpts();
+    if (opts.concept.length < 12) {
+      showError('Add a short concept (at least a sentence) so AI has something to expand.');
+      $('slist-concept').focus();
+      return;
+    }
+
+    var gate = aiGateReason();
+    if (!gate.ok) {
+      showError('');
+      var note = $('slist-form-note');
+      if (note) note.innerHTML = gate.reason;
+      var bal = $('slist-balance');
+      if (bal) {
+        bal.className = 'tools-credit-status is-warn';
+        bal.innerHTML = gate.reason;
+      }
+      $('slist-credits').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      return;
+    }
+
+    saveBrief({
+      concept: opts.concept,
+      duration: opts.duration,
+      type: opts.type,
+      locations: opts.locations,
+      talent: opts.talent,
+      density: opts.density,
+      savedAt: Date.now()
+    });
+
+    var btn = $('slist-ai-submit');
+    var freeBtn = $('slist-submit');
+    setBusy(btn, true, 'Generating…');
+    if (freeBtn) freeBtn.disabled = true;
+
+    withTurnstile(function (turnstileToken) {
+      var body = {
+        brief: opts.concept,
+        concept: opts.concept,
+        type: apiVideoType(opts.type),
+        videoType: apiVideoType(opts.type),
+        density: opts.density,
+        duration: opts.duration,
+        durationSec: opts.duration,
+        locations: opts.locations,
+        talent: opts.talent,
+        turnstile_token: turnstileToken || undefined
+      };
+      return fetch(BACKEND + '/api/shot-list/generate', {
+        method: 'POST',
+        headers: Auth && Auth.authHeaders
+          ? Auth.authHeaders()
+          : {
+              'Content-Type': 'application/json',
+              Authorization: 'Bearer ' + getToken()
+            },
+        body: JSON.stringify(body)
+      })
+        .then(function (res) {
+          return res.json().then(function (data) {
+            return { res: res, data: data };
+          });
+        })
+        .then(function (x) {
+          setBusy(btn, false);
+          if (freeBtn) freeBtn.disabled = false;
+          resetTurnstile();
+
+          if (x.res.status === 503 && x.data && x.data.reason === 'provider_not_configured') {
+            showError(
+              'Shot List AI is temporarily unavailable. Free templates still work - try Generate free.'
+            );
+            syncAiButton();
+            return;
+          }
+          if (x.res.status === 400 && x.data && /security check/i.test(x.data.error || '')) {
+            showError((x.data && x.data.error) || 'Complete the security check, then try again.');
+            syncAiButton();
+            return;
+          }
+          if (x.res.status === 401) {
+            if (Auth && Auth.clearToken) Auth.clearToken();
+            creditsState = null;
+            showError('');
+            updateCreditsPanel();
+            var note401 = $('slist-form-note');
+            if (note401) {
+              note401.innerHTML =
+                'Session expired. <a href="' + loginHref() + '">Sign in</a> again for AI generate.';
+            }
+            return;
+          }
+          if (x.res.status === 402) {
+            var needCr =
+              x.data && x.data.credits_required != null ? x.data.credits_required : AI_CREDITS;
+            var paidLeft =
+              x.data && x.data.paid_credits_remaining != null
+                ? x.data.paid_credits_remaining
+                : 0;
+            if (creditsState) creditsState.paidRemaining = paidLeft;
+            if (x.data && x.data.reason === 'paid_credits_required') {
+              showError('');
+              var msg402 =
+                'Purchased credits required (need ' +
+                needCr +
+                ', you have ' +
+                paidLeft +
+                '). Free signup credits cannot run AI generate. ' +
+                purchaseLinksHtml();
+              var note402 = $('slist-form-note');
+              if (note402) note402.innerHTML = msg402;
+              var bal402 = $('slist-balance');
+              if (bal402) {
+                bal402.className = 'tools-credit-status is-warn';
+                bal402.innerHTML = msg402;
+              }
+            } else {
+              showError('Not enough credits (need ' + needCr + ').');
+            }
+            updateCreditsPanel();
+            return;
+          }
+          if (x.res.status === 429) {
+            showError((x.data && x.data.error) || 'Too many requests. Try again in a bit.');
+            syncAiButton();
+            return;
+          }
+          if (!x.res.ok) {
+            showError(
+              (x.data && x.data.error) || 'Could not generate. No charge if the provider failed.'
+            );
+            syncAiButton();
+            return;
+          }
+
+          var shots = mapAiShots(x.data.shots);
+          if (!shots.length) {
+            showError('AI returned an empty list. No charge applied - try again.');
+            syncAiButton();
+            return;
+          }
+
+          if (x.data.paid_credits_remaining != null && creditsState) {
+            creditsState.paidRemaining = Number(x.data.paid_credits_remaining);
+            creditsState.hasPaid = creditsState.paidRemaining > 0;
+          }
+
+          render(shots, opts);
+          persistState();
+          updateCreditsPanel();
+          $('slist-results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+          var charged =
+            x.data.credits_charged != null ? x.data.credits_charged : AI_CREDITS;
+          var paidRemain =
+            x.data.paid_credits_remaining != null ? x.data.paid_credits_remaining : null;
+          var noteOk = $('slist-form-note');
+          if (noteOk) {
+            noteOk.textContent =
+              'AI shot list ready. Charged ' +
+              charged +
+              ' purchased credit' +
+              (charged === 1 ? '' : 's') +
+              (paidRemain != null ? ' · ' + paidRemain + ' purchased remaining' : '') +
+              '. Edit freely below.';
+          }
+        })
+        .catch(function () {
+          setBusy(btn, false);
+          if (freeBtn) freeBtn.disabled = false;
+          resetTurnstile();
+          showError('Network error. Try again - no charge if the request failed.');
+          syncAiButton();
+        });
+    }).catch(function (err) {
+      setBusy(btn, false);
+      if (freeBtn) freeBtn.disabled = false;
+      showError((err && err.message) || 'Complete the security check, then try again.');
+      syncAiButton();
+    });
+  }
+
   function blankShot() {
     return {
       num: 1,
@@ -530,7 +970,7 @@
         '\n'
       );
     });
-    lines.push('Generated free at https://keyweaver.io/shot-list');
+    lines.push('Generated at https://keyweaver.io/shot-list');
     return lines.join('\n');
   }
 
@@ -661,7 +1101,7 @@
         (source === 'Campaign Kit' ? 'campaign-kit' : 'video-seo') +
         '">' +
         source +
-        '</a> brief in this shot list. Edit freely, then generate - still free, no credits.';
+        '</a> brief in this shot list. Edit freely, then Generate free (templates) or AI generate (purchased credits).';
       return 'handoff';
     }
     return null;
@@ -779,12 +1219,14 @@
     });
 
     var submit = $('slist-submit');
+    var aiBtn = $('slist-ai-submit');
     if (submit) {
       submit.classList.add('is-busy');
       submit.disabled = true;
       submit.dataset.prevLabel = submit.textContent;
       submit.textContent = 'Generating…';
     }
+    if (aiBtn) aiBtn.disabled = true;
     setTimeout(function () {
       var shots = generate(opts);
       render(shots, opts);
@@ -796,6 +1238,7 @@
         if (submit.dataset.prevLabel) submit.textContent = submit.dataset.prevLabel;
         delete submit.dataset.prevLabel;
       }
+      syncAiButton();
     }, 10);
   }
 
@@ -819,6 +1262,9 @@
     loadBrief();
     $('slist-form').addEventListener('submit', onSubmit);
     $('slist-clear').addEventListener('click', onClear);
+
+    var aiBtn = $('slist-ai-submit');
+    if (aiBtn) aiBtn.addEventListener('click', onAiGenerate);
 
     var body = $('slist-body');
     body.addEventListener('input', onCellInput);
@@ -853,6 +1299,11 @@
       if (!lastShots.length) return;
       download('keyweaver-shot-list.csv', shotsToCsv(lastShots), 'text/csv;charset=utf-8');
     });
+
+    updateCreditsPanel();
+    if (window.CuemarkTurnstile) {
+      CuemarkTurnstile.prepare('slist-turnstile-wrap', 'slist-turnstile').catch(function () {});
+    }
   }
 
   if (document.readyState === 'loading') {

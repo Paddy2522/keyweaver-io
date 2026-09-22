@@ -10,6 +10,8 @@
   /** Must match .backend-checkout/lib/video-seo-policy.ts */
   var AI_CREDITS = 2;
   var REFINE_CREDITS = 1;
+  var PRO_TRANSCRIPT_CREDITS = 3;
+  var PRO_AUDIO_CREDITS = 6;
   var FREE_LIMIT = 2;
   var HISTORY_MAX = 5;
   /** @type {{ remaining: number, total: number, paidRemaining: number, hasPaid: boolean, freeRemaining: number, freeUsed: number } | null} */
@@ -369,6 +371,7 @@
       btn.disabled = false;
       syncGenerateButton();
       syncRefineUi();
+      syncProButton();
     }
   }
 
@@ -394,6 +397,31 @@
     if (free > 0) return { ok: true, reason: 'free', cost: need };
     if (creditsState.paidRemaining >= need) return { ok: true, reason: 'paid', cost: need };
     return { ok: false, reason: 'paywall', cost: need };
+  }
+
+  /** Pro never uses free gens — purchased ledger only. */
+  function canGeneratePro(cost) {
+    var need = cost == null ? PRO_TRANSCRIPT_CREDITS : cost;
+    if (!getToken()) return { ok: false, reason: 'signin', cost: need };
+    if (!creditsState) return { ok: false, reason: 'loading', cost: need };
+    if (creditsState.paidRemaining >= need) return { ok: true, reason: 'paid', cost: need };
+    return { ok: false, reason: 'paywall', cost: need };
+  }
+
+  function readProInputs() {
+    var transcript = cleanText($('vseo-transcript') ? $('vseo-transcript').value : '');
+    var audioEl = $('vseo-audio');
+    var file = audioEl && audioEl.files && audioEl.files[0] ? audioEl.files[0] : null;
+    return { transcript: transcript, audio: file };
+  }
+
+  function hasProInputs() {
+    var p = readProInputs();
+    return !!(p.transcript || p.audio);
+  }
+
+  function proCreditsFor(inputs) {
+    return inputs && inputs.audio ? PRO_AUDIO_CREDITS : PRO_TRANSCRIPT_CREDITS;
   }
 
   function syncCreditActions() {
@@ -470,7 +498,11 @@
           AI_CREDITS +
           ' credits for a full pack · ' +
           REFINE_CREDITS +
-          ' to refine / one platform. <a href="' +
+          ' to refine / one platform. Pro: ' +
+          PRO_TRANSCRIPT_CREDITS +
+          ' paste / ' +
+          PRO_AUDIO_CREDITS +
+          ' audio (purchased only). <a href="' +
           loginHref() +
           '">Sign in</a>';
       } else if (!creditsState) {
@@ -488,7 +520,7 @@
           freeRemaining() +
           ' free AI generation' +
           (freeRemaining() === 1 ? '' : 's') +
-          ' left · refine also uses a free gen if remaining.';
+          ' left · refine also uses a free gen if remaining. Pro always uses purchased credits.';
       } else {
         note.textContent =
           'Full pack: ' +
@@ -498,6 +530,96 @@
           ' (you have ' +
           creditsState.paidRemaining +
           ').';
+      }
+    }
+    syncProButton();
+  }
+
+  function syncProButton() {
+    var btn = $('vseo-generate-pro');
+    var note = $('vseo-pro-cost-note');
+    var inputs = readProInputs();
+    var cost = proCreditsFor(inputs);
+    var gate = canGeneratePro(cost);
+    var hasInput = !!(inputs.transcript || inputs.audio);
+
+    if (btn && !btn.classList.contains('is-busy')) {
+      var label = 'Generate with Pro';
+      if (getToken() && creditsState) {
+        if (inputs.audio) {
+          label =
+            creditsState.paidRemaining >= PRO_AUDIO_CREDITS
+              ? 'Generate with Pro · ' + PRO_AUDIO_CREDITS + ' credits'
+              : 'Generate with Pro · buy credits';
+        } else if (inputs.transcript) {
+          label =
+            creditsState.paidRemaining >= PRO_TRANSCRIPT_CREDITS
+              ? 'Generate with Pro · ' + PRO_TRANSCRIPT_CREDITS + ' credits'
+              : 'Generate with Pro · buy credits';
+        } else {
+          label = 'Generate with Pro · add transcript or audio';
+        }
+      } else if (!getToken()) {
+        label = 'Generate with Pro · sign in';
+      }
+      btn.textContent = label;
+      btn.disabled = !hasInput || !gate.ok;
+      btn.classList.toggle('is-disabled', !hasInput || !gate.ok);
+    }
+
+    if (note) {
+      if (!getToken()) {
+        note.innerHTML =
+          'Pro uses purchased credits only · ' +
+          PRO_TRANSCRIPT_CREDITS +
+          ' paste / ' +
+          PRO_AUDIO_CREDITS +
+          ' audio. <a href="' +
+          loginHref() +
+          '">Sign in</a>';
+      } else if (!creditsState) {
+        note.textContent = 'Checking purchased credits…';
+      } else if (!hasInput) {
+        note.textContent =
+          'Pro uses purchased credits only · ' +
+          PRO_TRANSCRIPT_CREDITS +
+          ' paste / ' +
+          PRO_AUDIO_CREDITS +
+          ' audio';
+      } else if (gate.reason === 'paywall') {
+        note.innerHTML =
+          'Need ' +
+          cost +
+          ' purchased credit' +
+          (cost === 1 ? '' : 's') +
+          ' for Pro (you have ' +
+          creditsState.paidRemaining +
+          '). ' +
+          purchaseLinksHtml();
+      } else {
+        note.textContent =
+          'Pro · ' +
+          cost +
+          ' purchased credit' +
+          (cost === 1 ? '' : 's') +
+          (inputs.audio ? ' (audio + generate)' : ' (transcript + generate)') +
+          ' · you have ' +
+          creditsState.paidRemaining;
+      }
+    }
+
+    var nameEl = $('vseo-audio-name');
+    if (nameEl) {
+      if (inputs.audio) {
+        nameEl.hidden = false;
+        nameEl.textContent =
+          inputs.audio.name +
+          ' · ' +
+          (Math.round((inputs.audio.size / (1024 * 1024)) * 10) / 10) +
+          ' MB';
+      } else {
+        nameEl.hidden = true;
+        nameEl.textContent = '';
       }
     }
   }
@@ -1149,18 +1271,27 @@
             );
             hasYtExtras = true;
           }
-          (yt.thumbs || []).slice(0, 3).forEach(function (t, i) {
+          (yt.thumbs || []).slice(0, 6).forEach(function (t, i) {
             extras.appendChild(
               fieldBlock({
                 label: 'Thumb text ' + String.fromCharCode(65 + i),
                 value: t,
-                tip: 'Keep under ~6 words.',
+                tip: 'Keep under ~6 words. Strong contrast on the thumb.',
                 limit: 28,
                 soft: 22
               })
             );
             hasYtExtras = true;
           });
+          if ((yt.thumbs || []).length >= 4) {
+            var thumbsNote = document.createElement('p');
+            thumbsNote.className = 'hint';
+            thumbsNote.style.marginTop = '0.35rem';
+            thumbsNote.textContent =
+              (yt.thumbs || []).length +
+              ' thumb text options — pick the punchiest for your still.';
+            extras.appendChild(thumbsNote);
+          }
         }
       } else if ((p === 'tiktok' || p === 'instagram') && copy[p]) {
         var short = copy[p];
@@ -1273,6 +1404,17 @@
    */
   function generate(opts) {
     opts = opts || {};
+
+    // Auto-route to Pro when transcript/audio is filled (unless this is a refine).
+    var isScopedEarly = !!(
+      opts.scope &&
+      (opts.scope.refine || (opts.scope.platforms && opts.scope.platforms.length))
+    );
+    if (!isScopedEarly && hasProInputs()) {
+      generatePro();
+      return;
+    }
+
     var data = readForm();
     if (!validateForm(data)) return;
 
@@ -1487,6 +1629,276 @@
     }
   }
 
+  function generatePro() {
+    var data = readForm();
+    if (!validateForm(data)) return;
+
+    var pro = readProInputs();
+    if (!pro.transcript && !pro.audio) {
+      setFormError('Add a transcript and/or audio file for Pro, or use Generate for brief-only.');
+      var details = $('vseo-pro-details');
+      if (details) details.open = true;
+      var t = $('vseo-transcript');
+      if (t) t.focus();
+      return;
+    }
+
+    if (pro.audio && pro.audio.size > 25 * 1024 * 1024) {
+      setFormError('Audio file is too large (max 25 MB).');
+      return;
+    }
+
+    var cost = proCreditsFor(pro);
+    var gate = canGeneratePro(cost);
+    if (!gate.ok) {
+      if (gate.reason === 'signin') {
+        setFormError(
+          'Sign in to use Video SEO Pro (purchased credits only). <a href="' +
+            loginHref() +
+            '">Sign in</a>',
+          true
+        );
+      } else if (gate.reason === 'paywall') {
+        setFormError(
+          'Pro needs ' +
+            cost +
+            ' purchased credit' +
+            (cost === 1 ? '' : 's') +
+            ' (you have ' +
+            (creditsState ? creditsState.paidRemaining : 0) +
+            '). Free gens cannot pay for Pro. ' +
+            purchaseLinksHtml(),
+          true
+        );
+        var paywall = $('vseo-paywall');
+        if (paywall) paywall.hidden = false;
+      } else {
+        setFormError('Checking your balance…');
+      }
+      updateCreditsPanel();
+      return;
+    }
+
+    var btn = $('vseo-generate-pro');
+    var mainBtn = $('vseo-generate');
+    setBusy(btn, true, pro.audio ? 'Transcribing + writing…' : 'Generating Pro…');
+    if (mainBtn) {
+      mainBtn.disabled = true;
+      mainBtn.classList.add('is-disabled');
+    }
+    setLoading(true);
+    setFormError('');
+    showingDemo = false;
+    saveForm(data, lastResults);
+
+    var loadingEl = $('vseo-loading');
+    if (loadingEl) {
+      var lp = loadingEl.querySelector('p');
+      if (lp) {
+        lp.textContent = pro.audio
+          ? 'Transcribing audio and writing platform copy…'
+          : 'Writing Pro copy from your transcript…';
+      }
+    }
+
+    var run = function (turnstileToken) {
+      var headers =
+        Auth && Auth.authHeaders
+          ? Auth.authHeaders()
+          : { Authorization: 'Bearer ' + getToken() };
+      var fetchOpts;
+
+      if (pro.audio) {
+        var fd = new FormData();
+        fd.append('brief', data.brief);
+        fd.append('keywords', data.keywords || '');
+        fd.append('tone', data.tone);
+        fd.append('cta', data.cta);
+        fd.append('outline', data.outline || '');
+        fd.append('platforms', JSON.stringify(data.platforms));
+        if (data.durationMinutes) fd.append('durationMinutes', String(data.durationMinutes));
+        if (pro.transcript) fd.append('transcript', pro.transcript);
+        if (turnstileToken) fd.append('turnstile_token', turnstileToken);
+        fd.append('audio', pro.audio, pro.audio.name);
+        // Let the browser set multipart boundary — do not force Content-Type.
+        var authHeaders = {};
+        if (headers.Authorization) authHeaders.Authorization = headers.Authorization;
+        fetchOpts = { method: 'POST', headers: authHeaders, body: fd };
+      } else {
+        var body = {
+          brief: data.brief,
+          keywords: data.keywords,
+          tone: data.tone,
+          cta: data.cta,
+          outline: data.outline,
+          platforms: data.platforms,
+          transcript: pro.transcript,
+          turnstile_token: turnstileToken || undefined
+        };
+        if (data.durationMinutes) body.durationMinutes = data.durationMinutes;
+        fetchOpts = {
+          method: 'POST',
+          headers: Object.assign(
+            { 'Content-Type': 'application/json' },
+            headers.Authorization ? { Authorization: headers.Authorization } : headers
+          ),
+          body: JSON.stringify(body)
+        };
+      }
+
+      fetch(BACKEND + '/api/video-seo/pro', fetchOpts)
+        .then(function (res) {
+          return res.json().then(function (respBody) {
+            return { res: res, data: respBody };
+          });
+        })
+        .then(function (x) {
+          setBusy(btn, false);
+          if (mainBtn) {
+            mainBtn.disabled = false;
+            mainBtn.classList.remove('is-disabled');
+          }
+          setLoading(false);
+          resetTurnstile();
+          if (loadingEl) {
+            var resetP = loadingEl.querySelector('p');
+            if (resetP) resetP.textContent = 'Writing platform copy…';
+          }
+
+          if (x.res.status === 503) {
+            setFormError(
+              (x.data && x.data.error) ||
+                'Pro AI / transcription is temporarily unavailable. Try again shortly.'
+            );
+            return;
+          }
+          if (x.res.status === 401) {
+            if (Auth && Auth.clearToken) Auth.clearToken();
+            creditsState = null;
+            setFormError(
+              'Session expired. <a href="' + loginHref() + '">Sign in</a> again.',
+              true
+            );
+            updateCreditsPanel();
+            return;
+          }
+          if (x.res.status === 429) {
+            setFormError('Too many requests. Wait a bit and try again.');
+            return;
+          }
+          if (x.res.status === 413 || (x.data && x.data.reason === 'file_too_large')) {
+            setFormError('Audio file is too large (max 25 MB).');
+            return;
+          }
+          if (x.res.status === 400) {
+            setFormError((x.data && x.data.error) || 'Check your Pro inputs and try again.');
+            return;
+          }
+          if (x.res.status === 402) {
+            var need =
+              x.data && x.data.credits_required != null ? x.data.credits_required : cost;
+            var paidLeft =
+              x.data && x.data.paid_credits_remaining != null
+                ? x.data.paid_credits_remaining
+                : 0;
+            setFormError(
+              'Need ' +
+                need +
+                ' purchased credit' +
+                (need === 1 ? '' : 's') +
+                ' for Pro (you have ' +
+                paidLeft +
+                '). ' +
+                purchaseLinksHtml(),
+              true
+            );
+            var pw = $('vseo-paywall');
+            if (pw) pw.hidden = false;
+            updateCreditsPanel();
+            return;
+          }
+
+          var results = (x.data && (x.data.results || x.data.copy)) || null;
+          if (!x.res.ok || !results) {
+            setFormError(
+              (x.data && x.data.error) || 'Pro generate failed. No charge if it failed.'
+            );
+            return;
+          }
+
+          lastResults = results;
+          lastFormData = data;
+          saveForm(data, results);
+          pushHistory(data, results);
+          renderResults(data, results);
+
+          if (x.data.paid_credits_remaining != null && creditsState) {
+            creditsState.paidRemaining = Number(x.data.paid_credits_remaining);
+          }
+
+          var charged =
+            x.data.credits_charged != null ? x.data.credits_charged : cost;
+          var src =
+            x.data.transcript_source === 'audio' ? 'audio transcript' : 'pasted transcript';
+          setFormError(
+            'Done · Pro (' +
+              src +
+              ') · charged ' +
+              charged +
+              ' credit' +
+              (charged === 1 ? '' : 's') +
+              (x.data.paid_credits_remaining != null
+                ? ' · ' + x.data.paid_credits_remaining + ' purchased remaining'
+                : ''),
+            false,
+            'ok'
+          );
+          updateCreditsPanel();
+        })
+        .catch(function () {
+          setBusy(btn, false);
+          if (mainBtn) {
+            mainBtn.disabled = false;
+            mainBtn.classList.remove('is-disabled');
+          }
+          setLoading(false);
+          resetTurnstile();
+          if (loadingEl) {
+            var resetP2 = loadingEl.querySelector('p');
+            if (resetP2) resetP2.textContent = 'Writing platform copy…';
+          }
+          setFormError('Could not reach the server. Try again.');
+        });
+    };
+
+    if (window.CuemarkTurnstile && CuemarkTurnstile.enabled && CuemarkTurnstile.enabled()) {
+      CuemarkTurnstile.requireToken('vseo-turnstile')
+        .then(run)
+        .catch(function (err) {
+          setBusy(btn, false);
+          if (mainBtn) {
+            mainBtn.disabled = false;
+            mainBtn.classList.remove('is-disabled');
+          }
+          setLoading(false);
+          setFormError((err && err.message) || 'Complete the security check, then try again.');
+        });
+    } else if (window.CuemarkTurnstile) {
+      CuemarkTurnstile.loadConfig()
+        .then(function () {
+          if (CuemarkTurnstile.enabled()) {
+            return CuemarkTurnstile.requireToken('vseo-turnstile').then(run);
+          }
+          run('');
+        })
+        .catch(function () {
+          run('');
+        });
+    } else {
+      run('');
+    }
+  }
+
   function regeneratePlatform(platform, btn) {
     generate({
       scope: { platforms: [platform] },
@@ -1519,6 +1931,10 @@
     $('vseo-brief').value = '';
     $('vseo-keywords').value = '';
     $('vseo-outline').value = '';
+    var transcript = $('vseo-transcript');
+    if (transcript) transcript.value = '';
+    var audio = $('vseo-audio');
+    if (audio) audio.value = '';
     $('vseo-tone').value = 'educational';
     $('vseo-cta').value = 'none';
     var dur = $('vseo-duration');
@@ -1536,6 +1952,7 @@
     setLoading(false);
     setFormError('');
     try { localStorage.removeItem(STORAGE_KEY); } catch (e) { /* ignore */ }
+    syncProButton();
     $('vseo-brief').focus();
   }
 
@@ -1557,6 +1974,22 @@
     }
     var clearBtn = $('vseo-clear');
     if (clearBtn) clearBtn.addEventListener('click', clearAll);
+
+    var proBtn = $('vseo-generate-pro');
+    if (proBtn) {
+      proBtn.addEventListener('click', function () {
+        generatePro();
+      });
+    }
+    var transcriptEl = $('vseo-transcript');
+    if (transcriptEl) {
+      transcriptEl.addEventListener('input', syncProButton);
+    }
+    var audioEl = $('vseo-audio');
+    if (audioEl) {
+      audioEl.addEventListener('change', syncProButton);
+    }
+    syncProButton();
 
     var demoBtn = $('vseo-demo');
     if (demoBtn) demoBtn.addEventListener('click', showDemo);
