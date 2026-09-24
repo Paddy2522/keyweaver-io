@@ -22,6 +22,9 @@
 /tambourine     /tambourine.html 200
 /tamborine      /tambourine 301
 /tamborine.html /tambourine 301
+/create         /create.html 200
+/ai-generator   /create.html 200
+/tools/create   /create.html 200
 /video-seo      /video-seo.html 200
 /tools/video-seo /video-seo.html 200
 /campaign-kit   /campaign-kit.html 200
