@@ -596,9 +596,9 @@ function Initialize-InstallWorkerHost {
       Send-PluginInstallAnalytics -ProductId ([string]$prod.id) -ProductVersion ([string]$prod.version)
     } catch {}
     $hostLabel = Get-ProductHostLabel $prod
-    Set-Status ($name + ' installed. Quit and reopen ' + $hostLabel + '.')
+    Set-Status ($name + ' installed. Quit and reopen ' + $hostLabel + ', then generate once.')
     [System.Windows.MessageBox]::Show(
-      ($name + " is installed.`n`n1. Quit $hostLabel completely`n2. Reopen $hostLabel`n3. " + $prod.menuPath),
+      ($name + " is installed.`n`nQuit $hostLabel completely, then reopen it.`n" + $prod.menuPath + "`n`nRun it once on a real clip. The trial is free. No account needed."),
       'Keyweaver',
       'OK',
       'Information'
