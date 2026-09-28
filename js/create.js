@@ -71,16 +71,21 @@
   function updateBalance(n) {
     creditsRemaining = n;
     var el = $('create-balance');
-    if (!el) return;
-    if (!getToken()) {
-      el.textContent = 'Sign up free for 60 credits. Verify your email, then generate here.';
-      return;
+    if (el) {
+      if (!getToken()) {
+        el.textContent = 'Sign up free for 60 credits. Verify your email, then generate here.';
+      } else if (n == null) {
+        el.textContent = 'Checking your credits…';
+      } else {
+        el.textContent = n + ' credits left on this account.';
+      }
     }
-    if (n == null) {
-      el.textContent = 'Checking your credits…';
-      return;
+    if (getToken() && n != null && isFinite(n)) {
+      var navBals = document.querySelectorAll('.nav-credit-balance');
+      for (var i = 0; i < navBals.length; i++) {
+        navBals[i].textContent = n === 1 ? '1 credit' : Math.floor(n) + ' credits';
+      }
     }
-    el.textContent = n + ' credits left on this account.';
   }
 
   function loadCredits() {
