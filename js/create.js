@@ -151,10 +151,10 @@
       host.appendChild(video);
       return;
     }
-    if (result.kind === 'model3d') {
+    if (result.kind === 'model3d' || /\.(glb|gltf|obj|fbx|usdz)(\?|$)/i.test(String(result.url || result.filename || ''))) {
       var card = document.createElement('div');
       card.className = 'create-model-card';
-      card.innerHTML = '<strong>3D model ready</strong><p class="create-hint">Download the GLB and drop it into Blender, After Effects, or a game engine.</p>';
+      card.innerHTML = '<strong>3D model ready</strong><p class="create-hint">Download the file and open it in Blender, After Effects, or a game engine.</p>';
       host.appendChild(card);
       return;
     }
@@ -224,8 +224,8 @@
 
     var btn = $('create-generate');
     btn.disabled = true;
-    btn.textContent = 'Generating…';
-    setError('');
+    btn.textContent = kind === 'model3d' ? 'Generating 3D\u2026 (1\u20133 min)' : 'Generating\u2026';
+    setError(kind === 'model3d' ? 'Building the model \u2014 this often takes a couple of minutes.' : '', true);
 
     var body = new FormData();
     body.append('kind', kind);
@@ -234,17 +234,27 @@
     var file = $('create-reference') && $('create-reference').files && $('create-reference').files[0];
     if (file) body.append('reference', file);
 
+    var controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+    var timeoutMs = kind === 'model3d' || kind === 'video' ? 290000 : 150000;
+    var timer = controller
+      ? setTimeout(function () { try { controller.abort(); } catch (e) {} }, timeoutMs)
+      : null;
+
     var run = function (token) {
       if (token) body.set('turnstile_token', token);
       fetch(BACKEND + '/api/prompt-lab/generate', {
         method: 'POST',
         headers: { Authorization: 'Bearer ' + getToken() },
-        body: body
+        body: body,
+        signal: controller ? controller.signal : undefined
       })
         .then(function (res) {
-          return res.json().then(function (data) { return { res: res, data: data }; });
+          return res.json().then(function (data) { return { res: res, data: data }; }).catch(function () {
+            return { res: res, data: null };
+          });
         })
         .then(function (x) {
+          if (timer) clearTimeout(timer);
           btn.disabled = false;
           btn.textContent = 'Generate';
           if (window.CuemarkTurnstile) CuemarkTurnstile.reset('create-turnstile');
@@ -265,15 +275,21 @@
           if (x.data.credits_remaining != null) updateBalance(Number(x.data.credits_remaining));
           setError('Done · ' + x.data.credits_charged + ' credits used.', true);
         })
-        .catch(function () {
+        .catch(function (err) {
+          if (timer) clearTimeout(timer);
           btn.disabled = false;
           btn.textContent = 'Generate';
+          if (err && err.name === 'AbortError') {
+            setError('That took too long. Try a shorter prompt, or try again.');
+            return;
+          }
           setError('Could not reach the server. Try again.');
         });
     };
 
     if (window.CuemarkTurnstile && CuemarkTurnstile.enabled && CuemarkTurnstile.enabled()) {
       CuemarkTurnstile.requireToken('create-turnstile').then(run).catch(function (err) {
+        if (timer) clearTimeout(timer);
         btn.disabled = false;
         btn.textContent = 'Generate';
         setError((err && err.message) || 'Complete the security check, then try again.');
