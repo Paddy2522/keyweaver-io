@@ -2,6 +2,16 @@
   "product": "Keyweaver",
   "releases": [
     {
+      "version": "1.0.9",
+      "date": "2026-09-28",
+      "panel": [
+        "Try a sample: caption a short demo clip in one click when your project is empty"
+      ],
+      "website": [
+        "Cuemark 1.0.9 install packages"
+      ]
+    },
+    {
       "version": "1.0.15",
       "date": "2026-08-24",
       "panel": [

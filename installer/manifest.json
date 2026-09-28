@@ -4,14 +4,14 @@
     "publisher":  "Keyweaver Ltd",
     "catalogUrl":  "https://keyweaver.io/installer/manifest.json",
     "manager":  {
-                    "version":  "1.0.24",
+                    "version":  "1.0.25",
                     "baseUrl":  "https://keyweaver.io/installer/manager/",
                     "files":  {
-                                  "Keyweaver-Manager.ps1":  "b80a83b76a58a5b7a3d4ac6a678c32386b6853bc2cd09349626941e48627e721",
+                                  "Keyweaver-Manager.ps1":  "2a850bd16484836799f23460132a78e64fc161b19c578fabd83c001c55226fc4",
                                   "Keyweaver-InstallLib.ps1":  "0a23bbac8fcacabd871f261fc51a55261ab52ca93ecd48266f6ba7e24d36fcff",
                                   "Keyweaver-Manager-Launcher.ps1":  "8f0eaffb5762de02b5521e2fd68b851e2ee62c54f42e5fdccd95a982dfa93f6e",
                                   "Sync-KeyweaverManagerRuntime.ps1":  "21230c134a1daaf901971817d14d317c53cd34f3df1daf54f6605885712c57bb",
-                                  "Keyweaver-Manager.exe":  "74211f2ef19bfde19579bc8534d3f97e87937d3586fec89036a9b7cb4d205c62",
+                                  "Keyweaver-Manager.exe":  "f0186fc48cfe4a266d178c6db8c440de5bbdafef02a6aa808cad4b3b4dcb042d",
                                   "Keyweaver-Manager.cmd":  "56add36ae43a1dab56844b8fbb589815554900005008275d83b60a2c3f8ed7bd",
                                   "Keyweaver-Manager.vbs":  "a27d0a42064c2d38cc548a317ae4701d56e9526d42bd014be40690e15733058c",
                                   "keyweaver.ico":  "a2133d99221ac192cb3e42b008e7edb59d1ef8ad539168785189b1de191e1d4f",
@@ -34,20 +34,20 @@
                          "displayName":  "Cuemark by Keyweaver",
                          "description":  "AI subtitles and captions inside Adobe After Effects.",
                          "panelId":  "com.captioncraft.panel",
-                         "version":  "1.0.8",
+                         "version":  "1.0.9",
                          "host":  "AEFT",
                          "hostLabel":  "After Effects",
                          "platforms":  {
                                            "win":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Cuemark-Install-win-v1.0.8.zip",
-                                                       "sha256":  "6ec5a3076d99e05af81051921a9b5a7619fc69a12a057597b0afcbb7c0b4f36f",
-                                                       "sizeBytes":  50209752,
+                                                       "packageUrl":  "https://keyweaver.io/downloads/Cuemark-Install-win-v1.0.9.zip",
+                                                       "sha256":  "3458964e63146ae09a42857ce88490bbde56ab82cc989aedfd5b5151f3474534",
+                                                       "sizeBytes":  50284326,
                                                        "installScript":  "cuemark-install-windows.ps1"
                                                    },
                                            "mac":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Cuemark-Install-mac-v1.0.8.zip",
-                                                       "sha256":  "a3f7c827c3b0ba6a0525840c9f0093dbbe664c75c51736dfc6272f688167374e",
-                                                       "sizeBytes":  67623617,
+                                                       "packageUrl":  "https://keyweaver.io/downloads/Cuemark-Install-mac-v1.0.9.zip",
+                                                       "sha256":  "973485cf43862ba9fcff42d0576f8702d901c01501c35849875369cdc52a8519",
+                                                       "sizeBytes":  67698191,
                                                        "installScript":  "cuemark-install-macos.sh"
                                                    }
                                        },
