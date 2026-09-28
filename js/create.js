@@ -206,6 +206,82 @@
       });
   }
 
+  function finishGenerate(btn) {
+    btn.disabled = false;
+    btn.textContent = 'Generate';
+    if (window.CuemarkTurnstile) CuemarkTurnstile.reset('create-turnstile');
+  }
+
+  function handleAuthPaywall(res, data) {
+    if (res.status === 401) {
+      openModal('create-signup-modal');
+      return true;
+    }
+    if (res.status === 402) {
+      if (data && data.credits_remaining != null) updateBalance(Number(data.credits_remaining));
+      openModal('create-pay-modal');
+      return true;
+    }
+    return false;
+  }
+
+  function poll3dJob(requestId, modelId, btn, creditsCharged) {
+    var started = Date.now();
+    var maxMs = 12 * 60 * 1000;
+    var attempt = 0;
+
+    function tick() {
+      if (Date.now() - started > maxMs) {
+        finishGenerate(btn);
+        setError('3D is still running on the server. Check back in a minute, or try again — if it failed, credits are refunded.');
+        return;
+      }
+      attempt += 1;
+      btn.textContent = 'Building 3D\u2026 (' + Math.max(1, Math.round((Date.now() - started) / 1000)) + 's)';
+      setError('Building the model \u2014 often 2\u20135 minutes. Stay on this page.', true);
+
+      fetch(BACKEND + '/api/prompt-lab/job', {
+        method: 'POST',
+        headers: {
+          Authorization: 'Bearer ' + getToken(),
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ request_id: requestId, model_id: modelId })
+      })
+        .then(function (res) {
+          return res.json().then(function (data) { return { res: res, data: data }; }).catch(function () {
+            return { res: res, data: null };
+          });
+        })
+        .then(function (x) {
+          if (handleAuthPaywall(x.res, x.data)) {
+            finishGenerate(btn);
+            return;
+          }
+          if (x.data && x.data.pending) {
+            var wait = attempt < 6 ? 2500 : 5000;
+            setTimeout(tick, wait);
+            return;
+          }
+          finishGenerate(btn);
+          if (!x.res.ok || !x.data || !x.data.url) {
+            setError((x.data && x.data.error) || '3D generate failed. Credits refunded if the job failed.');
+            loadCredits();
+            return;
+          }
+          showPreview(x.data);
+          if (x.data.credits_remaining != null) updateBalance(Number(x.data.credits_remaining));
+          setError('Done · ' + (x.data.credits_charged || creditsCharged || COSTS.model3d) + ' credits used.', true);
+          loadCredits();
+        })
+        .catch(function () {
+          setTimeout(tick, 4000);
+        });
+    }
+
+    setTimeout(tick, 2000);
+  }
+
   function generate() {
     var prompt = ($('create-prompt').value || '').trim();
     if (prompt.length < 8) {
@@ -224,8 +300,8 @@
 
     var btn = $('create-generate');
     btn.disabled = true;
-    btn.textContent = kind === 'model3d' ? 'Generating 3D\u2026 (1\u20133 min)' : 'Generating\u2026';
-    setError(kind === 'model3d' ? 'Building the model \u2014 this often takes a couple of minutes.' : '', true);
+    btn.textContent = kind === 'model3d' ? 'Starting 3D\u2026' : 'Generating\u2026';
+    setError(kind === 'model3d' ? 'Queuing the model \u2014 then we\u2019ll wait until it finishes.' : '', true);
 
     var body = new FormData();
     body.append('kind', kind);
@@ -235,7 +311,8 @@
     if (file) body.append('reference', file);
 
     var controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
-    var timeoutMs = kind === 'model3d' || kind === 'video' ? 290000 : 150000;
+    // Submit is quick for 3D (async queue); video still needs a long sync wait.
+    var timeoutMs = kind === 'model3d' ? 90000 : kind === 'video' ? 290000 : 150000;
     var timer = controller
       ? setTimeout(function () { try { controller.abort(); } catch (e) {} }, timeoutMs)
       : null;
@@ -255,30 +332,35 @@
         })
         .then(function (x) {
           if (timer) clearTimeout(timer);
-          btn.disabled = false;
-          btn.textContent = 'Generate';
           if (window.CuemarkTurnstile) CuemarkTurnstile.reset('create-turnstile');
-          if (x.res.status === 401) {
-            openModal('create-signup-modal');
+          if (handleAuthPaywall(x.res, x.data)) {
+            finishGenerate(btn);
             return;
           }
-          if (x.res.status === 402) {
-            if (x.data && x.data.credits_remaining != null) updateBalance(Number(x.data.credits_remaining));
-            openModal('create-pay-modal');
+          if (!x.res.ok || !x.data) {
+            finishGenerate(btn);
+            setError((x.data && x.data.error) || 'Generate failed. No charge if it failed.');
             return;
           }
-          if (!x.res.ok || !x.data || (!x.data.url && !x.data.base64)) {
+          if (x.data.credits_remaining != null) updateBalance(Number(x.data.credits_remaining));
+
+          // Async 3D: keep polling until fal finishes (beyond Vercel request limits).
+          if (x.data.pending && x.data.request_id && x.data.model_id) {
+            poll3dJob(x.data.request_id, x.data.model_id, btn, x.data.credits_charged);
+            return;
+          }
+
+          finishGenerate(btn);
+          if (!x.data.url && !x.data.base64) {
             setError((x.data && x.data.error) || 'Generate failed. No charge if it failed.');
             return;
           }
           showPreview(x.data);
-          if (x.data.credits_remaining != null) updateBalance(Number(x.data.credits_remaining));
           setError('Done · ' + x.data.credits_charged + ' credits used.', true);
         })
         .catch(function (err) {
           if (timer) clearTimeout(timer);
-          btn.disabled = false;
-          btn.textContent = 'Generate';
+          finishGenerate(btn);
           if (err && err.name === 'AbortError') {
             setError('That took too long. Try a shorter prompt, or try again.');
             return;
@@ -290,8 +372,7 @@
     if (window.CuemarkTurnstile && CuemarkTurnstile.enabled && CuemarkTurnstile.enabled()) {
       CuemarkTurnstile.requireToken('create-turnstile').then(run).catch(function (err) {
         if (timer) clearTimeout(timer);
-        btn.disabled = false;
-        btn.textContent = 'Generate';
+        finishGenerate(btn);
         setError((err && err.message) || 'Complete the security check, then try again.');
       });
     } else {
