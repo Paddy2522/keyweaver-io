@@ -546,9 +546,19 @@
     host._remote = result.url || '';
 
     if (result.kind === 'model3d' || /\.(glb|gltf|obj|fbx|usdz)(\?|$)/i.test(String(result.url || result.filename || ''))) {
+      var isObj = /\.obj(\?|$)/i.test(String(result.url || result.filename || ''));
+      if (isObj) {
+        var objCard = document.createElement('div');
+        objCard.className = 'create-model-card';
+        objCard.innerHTML =
+          '<strong>3D model ready</strong><p class="create-hint">OBJ download — open in Blender or a DCC app (browser preview needs GLB).</p>';
+        host.appendChild(objCard);
+        return;
+      }
+
       var loading3d = document.createElement('p');
       loading3d.className = 'create-hint';
-      loading3d.textContent = 'Loading 3D preview…';
+      loading3d.textContent = 'Loading 3D preview\u2026';
       host.appendChild(loading3d);
 
       fetch(BACKEND + '/api/prompt-lab/download', {
