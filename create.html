@@ -163,10 +163,50 @@
         </select>
       </div>
 
-      <div class="create-drop">
+      <div class="create-field" id="create-video-opts" hidden>
+        <label for="create-video-duration">Length</label>
+        <select id="create-video-duration">
+          <option value="4">4 seconds · 25 credits</option>
+          <option value="5">5 seconds · 30 credits</option>
+          <option value="8">8 seconds · 45 credits</option>
+        </select>
+        <label class="create-check">
+          <input type="checkbox" id="create-video-dialogue" />
+          Prefer spoken dialogue / voiceover in the clip
+        </label>
+        <p class="create-hint">Video includes synced sound. Dialogue works best when you write what is said in the prompt. For a dedicated VO track, use <a href="/trillian">Trillian</a>.</p>
+      </div>
+
+      <div class="create-field" id="create-music-opts" hidden>
+        <label for="create-music-duration">Length</label>
+        <select id="create-music-duration">
+          <option value="10">10 seconds · 5 credits</option>
+          <option value="20">20 seconds · 10 credits</option>
+          <option value="30">30 seconds · 15 credits</option>
+        </select>
+        <label class="create-check">
+          <input type="checkbox" id="create-music-instrumental" checked />
+          Instrumental only (no vocals)
+        </label>
+        <p class="create-opt-label">Genre</p>
+        <div class="create-chips" id="create-music-genres" role="group" aria-label="Genre"></div>
+        <p class="create-opt-label">Mood</p>
+        <div class="create-chips" id="create-music-moods" role="group" aria-label="Mood"></div>
+      </div>
+
+      <div class="create-field" id="create-sfx-opts" hidden>
+        <label for="create-sfx-duration">Length</label>
+        <select id="create-sfx-duration">
+          <option value="2">2 seconds · 4 credits</option>
+          <option value="5">5 seconds · 10 credits</option>
+          <option value="10">10 seconds · 20 credits</option>
+        </select>
+      </div>
+
+      <div class="create-drop" id="create-ref-wrap">
         <span class="create-drop-label" id="create-ref-label">Reference image</span>
         <input id="create-reference" type="file" accept="image/png,image/jpeg,image/webp" />
-        <p class="create-hint" id="create-ref-note">Optional PNG, JPEG, or WebP reference (max 8 MB).</p>
+        <p class="create-hint" id="create-ref-note">Optional PNG, JPEG, or WebP. Used to guide image, video, or 3D — not music or SFX.</p>
       </div>
 
       <div class="cuemark-turnstile-wrap" id="create-turnstile-wrap">
@@ -197,11 +237,11 @@
       <div class="create-steps">
         <article>
           <h3>1. Pick the output</h3>
-          <p>Image, 4-second video, a 10-second music bed, a short sound effect, or a downloadable 3D model.</p>
+          <p>Image, video (4–8s with sound), music bed, short SFX, or a downloadable 3D model. Options change with the type you pick.</p>
         </article>
         <article>
-          <h3>2. Prompt, then a reference if you want one</h3>
-          <p>Describe the shot, the track, or the object. For image, video, and 3D you can upload a still so the result stays closer to your frame.</p>
+          <h3>2. Prompt, then a reference if it applies</h3>
+          <p>Describe the shot, the track, or the object. Image, video, and 3D accept an optional still. Music and SFX are prompt-only (genre and mood chips help for music).</p>
         </article>
         <article>
           <h3>3. Download</h3>
@@ -213,7 +253,7 @@
       <h2>Questions</h2>
       <details open>
         <summary>What do free credits cover?</summary>
-        <p>A new account gets 60 credits after you verify your email. An image is 4, music or a sound effect is 5, a 3D model is 12, and a video is 25.</p>
+        <p>A new account gets 60 credits after you verify your email. Image is 4, 3D is 12, music and SFX scale with length, and video is 25–45 depending on length.</p>
       </details>
       <details>
         <summary>What happens when credits run out?</summary>
@@ -262,7 +302,7 @@
 
 <script src="/js/tools-auth.js"></script>
 <script src="/js/cuemark-turnstile.js"></script>
-<script src="/js/create.js?v=20260928-3d" defer></script>
+<script src="/js/create.js?v=20260929-create" defer></script>
 <script src="/js/help-widget.js" defer></script>
 </body>
 </html>

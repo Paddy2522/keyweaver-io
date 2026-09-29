@@ -3,7 +3,6 @@
 
   var Auth = window.KeyweaverToolsAuth;
   var BACKEND = (Auth && Auth.BACKEND) || 'https://keyweaver-backend.vercel.app';
-  var COSTS = { image: 4, video: 25, music: 5, sfx: 5, model3d: 12 };
   var LABELS = {
     image: 'Image',
     video: 'Video',
@@ -11,9 +10,21 @@
     sfx: 'Sound effects',
     model3d: '3D model'
   };
+  var VIDEO_CREDITS = { '4': 25, '5': 30, '8': 45 };
+  var MUSIC_GENRES = [
+    'Ambient', 'Electronic', 'Hip Hop', 'Pop', 'Rock', 'Cinematic',
+    'Corporate', 'Lo-fi', 'Jazz', 'Classical', 'R&B', 'Dance'
+  ];
+  var MUSIC_MOODS = [
+    'Upbeat', 'Calm', 'Dark', 'Epic', 'Happy', 'Melancholic',
+    'Dreamy', 'Energetic', 'Mysterious', 'Inspiring'
+  ];
+
   var kind = 'image';
   var creditsRemaining = null;
   var lastObjectUrl = '';
+  var musicGenre = '';
+  var musicMood = '';
 
   function $(id) {
     return document.getElementById(id);
@@ -35,8 +46,57 @@
     el.classList.toggle('is-ok', !!ok && !!msg);
   }
 
-  function selectedKind() {
-    return kind;
+  function currentCost() {
+    if (kind === 'image') return 4;
+    if (kind === 'model3d') return 12;
+    if (kind === 'video') {
+      var vd = ($('create-video-duration') && $('create-video-duration').value) || '4';
+      return VIDEO_CREDITS[vd] || 25;
+    }
+    if (kind === 'music') {
+      var ms = Number(($('create-music-duration') && $('create-music-duration').value) || 10);
+      return Math.max(5, Math.ceil(ms / 10) * 5);
+    }
+    if (kind === 'sfx') {
+      var ss = Number(($('create-sfx-duration') && $('create-sfx-duration').value) || 2);
+      return Math.max(3, Math.ceil(ss * 2));
+    }
+    return 4;
+  }
+
+  function buildMusicPrompt(base) {
+    var bits = [];
+    if (musicGenre) bits.push(musicGenre + ' genre');
+    if (musicMood) bits.push(musicMood.toLowerCase() + ' mood');
+    if (!bits.length) return base;
+    return base + '. Style: ' + bits.join(', ') + '.';
+  }
+
+  function buildVideoPrompt(base) {
+    var dialogue = $('create-video-dialogue');
+    if (dialogue && dialogue.checked) {
+      return base +
+        ' Include clear spoken dialogue or voiceover that matches the scene (lip-synced where a face is visible).';
+    }
+    return base;
+  }
+
+  function fillChips(hostId, items, getSelected, setSelected) {
+    var host = $(hostId);
+    if (!host) return;
+    host.innerHTML = '';
+    items.forEach(function (label) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'create-chip' + (getSelected() === label ? ' is-on' : '');
+      btn.textContent = label;
+      btn.addEventListener('click', function () {
+        setSelected(getSelected() === label ? '' : label);
+        fillChips(hostId, items, getSelected, setSelected);
+        syncKinds();
+      });
+      host.appendChild(btn);
+    });
   }
 
   function syncKinds() {
@@ -44,18 +104,57 @@
       btn.classList.toggle('is-on', btn.getAttribute('data-kind') === kind);
       btn.setAttribute('aria-pressed', btn.getAttribute('data-kind') === kind ? 'true' : 'false');
     });
+
     var cost = $('create-cost');
     if (cost) {
-      cost.textContent = COSTS[kind] + ' credits · ' + LABELS[kind];
+      cost.textContent = currentCost() + ' credits · ' + LABELS[kind];
     }
-    var refNote = $('create-ref-note');
-    if (refNote) {
-      refNote.textContent = (kind === 'music' || kind === 'sfx')
-        ? 'Music and sound effects follow the prompt. Image references are for image, video, and 3D.'
-        : 'Optional PNG, JPEG, or WebP reference (max 8 MB).';
-    }
+
     var aspectWrap = $('create-aspect-wrap');
     if (aspectWrap) aspectWrap.hidden = kind === 'music' || kind === 'sfx' || kind === 'model3d';
+
+    var videoOpts = $('create-video-opts');
+    if (videoOpts) videoOpts.hidden = kind !== 'video';
+    var musicOpts = $('create-music-opts');
+    if (musicOpts) musicOpts.hidden = kind !== 'music';
+    var sfxOpts = $('create-sfx-opts');
+    if (sfxOpts) sfxOpts.hidden = kind !== 'sfx';
+
+    var refWrap = $('create-ref-wrap');
+    var refInput = $('create-reference');
+    var refNote = $('create-ref-note');
+    var refLabel = $('create-ref-label');
+    var allowRef = kind === 'image' || kind === 'video' || kind === 'model3d';
+    if (refWrap) refWrap.hidden = !allowRef;
+    if (!allowRef && refInput) refInput.value = '';
+    if (refLabel) {
+      refLabel.textContent =
+        kind === 'video' ? 'Reference still (optional)' :
+        kind === 'model3d' ? 'Reference image for 3D (optional)' :
+        'Reference image (optional)';
+    }
+    if (refNote) {
+      refNote.textContent =
+        kind === 'video'
+          ? 'Optional still to animate (image-to-video). PNG, JPEG, or WebP, max 8 MB.'
+          : kind === 'model3d'
+            ? 'Optional still for image-to-3D. Without one we use text-to-3D.'
+            : 'Optional PNG, JPEG, or WebP (max 8 MB).';
+    }
+
+    var prompt = $('create-prompt');
+    if (prompt && !prompt.value) {
+      prompt.placeholder =
+        kind === 'music'
+          ? 'Upbeat lo-fi bed for a product unboxing, soft vinyl crackle, no vocals.'
+          : kind === 'sfx'
+            ? 'Short whoosh into a soft UI click, clean and modern.'
+            : kind === 'video'
+              ? 'A handheld night shot of a neon noodle stall in the rain, shallow depth of field.'
+              : kind === 'model3d'
+                ? 'A low-poly game-ready lamp, clean topology, matte ceramic.'
+                : 'A handheld night shot of a neon noodle stall in the rain, shallow depth of field, film grain.';
+    }
   }
 
   function openModal(id) {
@@ -115,6 +214,67 @@
     }
   }
 
+  function attachMedia(host, el) {
+    host.appendChild(el);
+  }
+
+  /** fal URLs often block hotlink playback — proxy through our download route for preview. */
+  function previewRemoteMedia(host, result, tagName) {
+    var loading = document.createElement('p');
+    loading.className = 'create-hint';
+    loading.textContent = 'Loading preview…';
+    host.appendChild(loading);
+
+    fetch(BACKEND + '/api/prompt-lab/download', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + getToken()
+      },
+      body: JSON.stringify({ url: result.url, filename: result.filename || 'preview' })
+    })
+      .then(function (res) {
+        if (!res.ok) throw new Error('preview');
+        return res.blob();
+      })
+      .then(function (blob) {
+        revokePreview();
+        lastObjectUrl = URL.createObjectURL(blob);
+        host._blob = blob;
+        host.innerHTML = '';
+        var el = document.createElement(tagName);
+        if (tagName === 'video') {
+          el.controls = true;
+          el.playsInline = true;
+          el.preload = 'metadata';
+        } else {
+          el.alt = 'Generated image';
+        }
+        el.src = lastObjectUrl;
+        attachMedia(host, el);
+      })
+      .catch(function () {
+        host.innerHTML = '';
+        var el = document.createElement(tagName);
+        if (tagName === 'video') {
+          el.controls = true;
+          el.playsInline = true;
+          el.preload = 'metadata';
+        } else {
+          el.alt = 'Generated image';
+        }
+        el.src = result.url;
+        el.addEventListener('error', function () {
+          host.innerHTML = '';
+          var card = document.createElement('div');
+          card.className = 'create-model-card';
+          card.innerHTML = '<strong>File ready</strong><p class="create-hint">Preview blocked by the file host — use Download.</p>';
+          host.appendChild(card);
+        });
+        attachMedia(host, el);
+      });
+  }
+
   function showPreview(result) {
     var host = $('create-preview');
     if (!host) return;
@@ -143,14 +303,6 @@
     host._filename = result.filename;
     host._remote = result.url || '';
 
-    if (result.kind === 'video') {
-      var video = document.createElement('video');
-      video.controls = true;
-      video.playsInline = true;
-      video.src = result.url;
-      host.appendChild(video);
-      return;
-    }
     if (result.kind === 'model3d' || /\.(glb|gltf|obj|fbx|usdz)(\?|$)/i.test(String(result.url || result.filename || ''))) {
       var card = document.createElement('div');
       card.className = 'create-model-card';
@@ -158,10 +310,21 @@
       host.appendChild(card);
       return;
     }
-    var img = document.createElement('img');
-    img.alt = 'Generated image';
-    img.src = result.url;
-    host.appendChild(img);
+
+    if (result.kind === 'video' || /\.(mp4|webm|mov)(\?|$)/i.test(String(result.url || result.filename || ''))) {
+      previewRemoteMedia(host, result, 'video');
+      return;
+    }
+
+    if (result.url) {
+      previewRemoteMedia(host, result, 'img');
+      return;
+    }
+
+    var empty = document.createElement('p');
+    empty.className = 'create-empty';
+    empty.textContent = 'File ready — use Download.';
+    host.appendChild(empty);
   }
 
   function downloadResult() {
@@ -170,7 +333,7 @@
     var name = host._filename || 'keyweaver-file';
     if (host._blob) {
       var a = document.createElement('a');
-      a.href = lastObjectUrl;
+      a.href = lastObjectUrl || URL.createObjectURL(host._blob);
       a.download = name;
       a.click();
       return;
@@ -225,20 +388,27 @@
     return false;
   }
 
-  function poll3dJob(requestId, modelId, btn, creditsCharged) {
+  function pollJob(requestId, modelId, jobKind, btn, creditsCharged) {
     var started = Date.now();
-    var maxMs = 12 * 60 * 1000;
+    var maxMs = jobKind === 'video' ? 10 * 60 * 1000 : 12 * 60 * 1000;
     var attempt = 0;
+    var label = jobKind === 'video' ? 'Video' : '3D';
 
     function tick() {
       if (Date.now() - started > maxMs) {
         finishGenerate(btn);
-        setError('3D is still running on the server. Check back in a minute, or try again — if it failed, credits are refunded.');
+        setError(label + ' is still running. Stay on this page a bit longer, or try again — failed jobs refund credits.');
         return;
       }
       attempt += 1;
-      btn.textContent = 'Building 3D\u2026 (' + Math.max(1, Math.round((Date.now() - started) / 1000)) + 's)';
-      setError('Building the model \u2014 often 2\u20135 minutes. Stay on this page.', true);
+      var secs = Math.max(1, Math.round((Date.now() - started) / 1000));
+      btn.textContent = 'Building ' + label + '\u2026 (' + secs + 's)';
+      setError(
+        jobKind === 'video'
+          ? 'Rendering on the GPU queue — usually 1–3 minutes. Stay on this page.'
+          : 'Building the model — often 2–5 minutes. Stay on this page.',
+        true
+      );
 
       fetch(BACKEND + '/api/prompt-lab/job', {
         method: 'POST',
@@ -246,7 +416,12 @@
           Authorization: 'Bearer ' + getToken(),
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ request_id: requestId, model_id: modelId })
+        body: JSON.stringify({
+          request_id: requestId,
+          model_id: modelId,
+          kind: jobKind,
+          credits_charged: creditsCharged
+        })
       })
         .then(function (res) {
           return res.json().then(function (data) { return { res: res, data: data }; }).catch(function () {
@@ -259,19 +434,18 @@
             return;
           }
           if (x.data && x.data.pending) {
-            var wait = attempt < 6 ? 2500 : 5000;
-            setTimeout(tick, wait);
+            setTimeout(tick, attempt < 8 ? 2500 : 4500);
             return;
           }
           finishGenerate(btn);
           if (!x.res.ok || !x.data || !x.data.url) {
-            setError((x.data && x.data.error) || '3D generate failed. Credits refunded if the job failed.');
+            setError((x.data && x.data.error) || label + ' failed. Credits refunded if the job failed.');
             loadCredits();
             return;
           }
           showPreview(x.data);
           if (x.data.credits_remaining != null) updateBalance(Number(x.data.credits_remaining));
-          setError('Done · ' + (x.data.credits_charged || creditsCharged || COSTS.model3d) + ' credits used.', true);
+          setError('Done · ' + (x.data.credits_charged || creditsCharged) + ' credits used.', true);
           loadCredits();
         })
         .catch(function () {
@@ -283,8 +457,8 @@
   }
 
   function generate() {
-    var prompt = ($('create-prompt').value || '').trim();
-    if (prompt.length < 8) {
+    var promptRaw = ($('create-prompt').value || '').trim();
+    if (promptRaw.length < 8) {
       setError('Add a prompt (at least a short sentence).');
       $('create-prompt').focus();
       return;
@@ -293,26 +467,55 @@
       openModal('create-signup-modal');
       return;
     }
-    if (creditsRemaining != null && creditsRemaining < COSTS[kind]) {
+    var cost = currentCost();
+    if (creditsRemaining != null && creditsRemaining < cost) {
       openModal('create-pay-modal');
       return;
     }
 
+    var prompt = promptRaw;
+    if (kind === 'music') prompt = buildMusicPrompt(promptRaw);
+    if (kind === 'video') prompt = buildVideoPrompt(promptRaw);
+
     var btn = $('create-generate');
     btn.disabled = true;
-    btn.textContent = kind === 'model3d' ? 'Starting 3D\u2026' : 'Generating\u2026';
-    setError(kind === 'model3d' ? 'Queuing the model \u2014 then we\u2019ll wait until it finishes.' : '', true);
+    btn.textContent =
+      kind === 'model3d' ? 'Starting 3D\u2026' :
+      kind === 'video' ? 'Queuing video\u2026' :
+      'Generating\u2026';
+    setError(
+      kind === 'model3d' || kind === 'video'
+        ? 'Queued — we\u2019ll keep this page updated until it finishes.'
+        : '',
+      true
+    );
 
     var body = new FormData();
     body.append('kind', kind);
     body.append('prompt', prompt);
     body.append('aspect', ($('create-aspect') && $('create-aspect').value) || '16:9');
-    var file = $('create-reference') && $('create-reference').files && $('create-reference').files[0];
+
+    if (kind === 'video') {
+      body.append('duration', ($('create-video-duration') && $('create-video-duration').value) || '4');
+      body.append('generate_audio', '1');
+    }
+    if (kind === 'music') {
+      body.append('duration_sec', ($('create-music-duration') && $('create-music-duration').value) || '10');
+      body.append(
+        'instrumental',
+        ($('create-music-instrumental') && $('create-music-instrumental').checked) ? '1' : '0'
+      );
+    }
+    if (kind === 'sfx') {
+      body.append('duration_sec', ($('create-sfx-duration') && $('create-sfx-duration').value) || '2');
+    }
+
+    var allowRef = kind === 'image' || kind === 'video' || kind === 'model3d';
+    var file = allowRef && $('create-reference') && $('create-reference').files && $('create-reference').files[0];
     if (file) body.append('reference', file);
 
     var controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
-    // Submit is quick for 3D (async queue); video still needs a long sync wait.
-    var timeoutMs = kind === 'model3d' ? 90000 : kind === 'video' ? 290000 : 150000;
+    var timeoutMs = kind === 'model3d' || kind === 'video' ? 90000 : 150000;
     var timer = controller
       ? setTimeout(function () { try { controller.abort(); } catch (e) {} }, timeoutMs)
       : null;
@@ -339,20 +542,25 @@
           }
           if (!x.res.ok || !x.data) {
             finishGenerate(btn);
-            setError((x.data && x.data.error) || 'Generate failed. No charge if it failed.');
+            setError((x.data && x.data.error) || 'Generate failed. Credits refunded if it failed.');
             return;
           }
           if (x.data.credits_remaining != null) updateBalance(Number(x.data.credits_remaining));
 
-          // Async 3D: keep polling until fal finishes (beyond Vercel request limits).
           if (x.data.pending && x.data.request_id && x.data.model_id) {
-            poll3dJob(x.data.request_id, x.data.model_id, btn, x.data.credits_charged);
+            pollJob(
+              x.data.request_id,
+              x.data.model_id,
+              x.data.kind === 'video' ? 'video' : 'model3d',
+              btn,
+              x.data.credits_charged || cost
+            );
             return;
           }
 
           finishGenerate(btn);
           if (!x.data.url && !x.data.base64) {
-            setError((x.data && x.data.error) || 'Generate failed. No charge if it failed.');
+            setError((x.data && x.data.error) || 'Generate failed. Credits refunded if it failed.');
             return;
           }
           showPreview(x.data);
@@ -362,7 +570,7 @@
           if (timer) clearTimeout(timer);
           finishGenerate(btn);
           if (err && err.name === 'AbortError') {
-            setError('That took too long. Try a shorter prompt, or try again.');
+            setError('That took too long. Try again — shorter prompts usually finish faster.');
             return;
           }
           setError('Could not reach the server. Try again.');
@@ -381,11 +589,28 @@
   }
 
   document.addEventListener('DOMContentLoaded', function () {
+    fillChips(
+      'create-music-genres',
+      MUSIC_GENRES,
+      function () { return musicGenre; },
+      function (v) { musicGenre = v; }
+    );
+    fillChips(
+      'create-music-moods',
+      MUSIC_MOODS,
+      function () { return musicMood; },
+      function (v) { musicMood = v; }
+    );
+
     document.querySelectorAll('.create-kind').forEach(function (btn) {
       btn.addEventListener('click', function () {
         kind = btn.getAttribute('data-kind') || 'image';
         syncKinds();
       });
+    });
+    ;['create-video-duration', 'create-music-duration', 'create-sfx-duration'].forEach(function (id) {
+      var el = $(id);
+      if (el) el.addEventListener('change', syncKinds);
     });
     syncKinds();
     loadCredits();

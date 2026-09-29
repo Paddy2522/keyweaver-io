@@ -198,6 +198,61 @@
   width: calc(100% - 1.5rem);
 }
 
+.create-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-top: 0.55rem;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.4;
+  cursor: pointer;
+}
+
+.create-check input {
+  margin-top: 0.15rem;
+}
+
+.create-opt-label {
+  margin: 0.65rem 0 0.35rem;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.create-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.create-chip {
+  appearance: none;
+  border: 1px solid var(--edge);
+  background: var(--ink);
+  color: var(--muted);
+  border-radius: 999px;
+  padding: 0.28rem 0.65rem;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.create-chip.is-on {
+  border-color: rgba(91, 107, 248, 0.85);
+  color: var(--text);
+  box-shadow: 0 0 0 1px rgba(91, 107, 248, 0.3) inset;
+}
+
+.create-drop[hidden],
+.create-field[hidden] {
+  display: none !important;
+}
+
+.create-preview video {
+  background: #000;
+}
+
 .create-empty {
   color: var(--muted);
   text-align: center;
