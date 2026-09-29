@@ -54,6 +54,78 @@
     voice: '',
     model3d: ''
   };
+  var PENDING_KEY = 'keyweaver.create.pendingJob';
+  var RESULT_KEY = 'keyweaver.create.lastResult';
+  var activePoll = false;
+
+  function savePendingJob(job) {
+    try {
+      localStorage.setItem(PENDING_KEY, JSON.stringify(job));
+    } catch (e) {}
+  }
+
+  function clearPendingJob() {
+    try {
+      localStorage.removeItem(PENDING_KEY);
+    } catch (e) {}
+  }
+
+  function loadPendingJob() {
+    try {
+      var raw = localStorage.getItem(PENDING_KEY);
+      if (!raw) return null;
+      var job = JSON.parse(raw);
+      if (!job || !job.request_id || !job.model_id) return null;
+      var age = Date.now() - Number(job.started_at || 0);
+      if (!job.started_at || age > 20 * 60 * 1000) {
+        clearPendingJob();
+        return null;
+      }
+      return job;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function saveLastResult(result) {
+    try {
+      if (!result) return;
+      localStorage.setItem(
+        RESULT_KEY,
+        JSON.stringify({
+          kind: result.kind,
+          mime: result.mime,
+          filename: result.filename,
+          url: result.url || null,
+          base64: result.base64 || null,
+          credits_charged: result.credits_charged,
+          saved_at: Date.now()
+        })
+      );
+    } catch (e) {}
+  }
+
+  function clearLastResult() {
+    try {
+      localStorage.removeItem(RESULT_KEY);
+    } catch (e) {}
+  }
+
+  function loadLastResult() {
+    try {
+      var raw = localStorage.getItem(RESULT_KEY);
+      if (!raw) return null;
+      var result = JSON.parse(raw);
+      if (!result || (!result.url && !result.base64)) return null;
+      if (Date.now() - Number(result.saved_at || 0) > 2 * 60 * 60 * 1000) {
+        clearLastResult();
+        return null;
+      }
+      return result;
+    } catch (e) {
+      return null;
+    }
+  }
 
   function saveCurrentPrompt() {
     var el = $('create-prompt');
@@ -527,24 +599,47 @@
     return false;
   }
 
-  function pollJob(requestId, modelId, jobKind, btn, creditsCharged) {
-    var started = Date.now();
+  function pollJob(requestId, modelId, jobKind, btn, creditsCharged, startedAt) {
+    var started = Number(startedAt) || Date.now();
     var maxMs = jobKind === 'video' ? 10 * 60 * 1000 : 12 * 60 * 1000;
     var attempt = 0;
     var label = jobKind === 'video' ? 'Video' : '3D';
     var typical = jobKind === 'video' ? 'usually 1–3 min' : 'usually 2–5 min';
+    activePoll = true;
+
+    savePendingJob({
+      request_id: requestId,
+      model_id: modelId,
+      kind: jobKind,
+      credits_charged: creditsCharged,
+      started_at: started
+    });
+
+    if (btn) {
+      btn.disabled = true;
+    }
 
     function tick() {
       if (Date.now() - started > maxMs) {
+        activePoll = false;
+        // Keep pending so a refresh can try again while fal may still finish.
         finishGenerate(btn);
-        setError(label + ' is still running on the queue. Failed jobs refund credits — you can try again.');
+        setError(
+          label +
+            ' is taking longer than usual. Refresh this page to keep checking — your credits stay with this job until it finishes or fails (failed jobs refund).',
+          true
+        );
         return;
       }
       attempt += 1;
       var secs = Math.max(1, Math.round((Date.now() - started) / 1000));
-      btn.textContent = 'Building ' + label + '\u2026 ' + secs + 's';
+      if (btn) btn.textContent = 'Building ' + label + '\u2026 ' + secs + 's';
       setError(
-        'In the provider queue (' + typical + '). Elapsed ' + secs + 's — stay on this page.',
+        'In the provider queue (' +
+          typical +
+          '). Elapsed ' +
+          secs +
+          's — safe to refresh; we\u2019ll resume automatically.',
         true
       );
 
@@ -568,6 +663,8 @@
         })
         .then(function (x) {
           if (handleAuthPaywall(x.res, x.data)) {
+            activePoll = false;
+            clearPendingJob();
             finishGenerate(btn);
             return;
           }
@@ -575,12 +672,16 @@
             setTimeout(tick, attempt < 8 ? 2500 : 4500);
             return;
           }
+          activePoll = false;
           finishGenerate(btn);
           if (!x.res.ok || !x.data || !x.data.url) {
+            clearPendingJob();
             setError((x.data && x.data.error) || label + ' failed. Credits refunded if the job failed.');
             loadCredits();
             return;
           }
+          clearPendingJob();
+          saveLastResult(x.data);
           showPreview(x.data);
           if (x.data.credits_remaining != null) updateBalance(Number(x.data.credits_remaining));
           setError('Done · ' + (x.data.credits_charged || creditsCharged) + ' credits used.', true);
@@ -591,10 +692,36 @@
         });
     }
 
-    setTimeout(tick, 2000);
+    setTimeout(tick, 1200);
+  }
+
+  function resumePendingJobIfAny() {
+    if (activePoll || !getToken()) return false;
+    var job = loadPendingJob();
+    if (!job) return false;
+    var btn = $('create-generate');
+    var jobKind = job.kind === 'video' ? 'video' : 'model3d';
+    kind = jobKind;
+    syncKinds();
+    setError('Resuming your ' + (jobKind === 'video' ? 'video' : '3D') + ' job\u2026', true);
+    pollJob(
+      job.request_id,
+      job.model_id,
+      jobKind,
+      btn,
+      job.credits_charged || (jobKind === 'video' ? 18 : 12),
+      job.started_at
+    );
+    return true;
   }
 
   function generate() {
+    if (activePoll || loadPendingJob()) {
+      if (!activePoll) resumePendingJobIfAny();
+      else setError('Your previous generate is still running — wait or refresh; it will resume.', true);
+      return;
+    }
+
     var promptRaw = ($('create-prompt').value || '').trim();
     if (promptRaw.length < 8) {
       setError('Add a prompt (at least a short sentence).');
@@ -623,7 +750,7 @@
       'Generating\u2026';
     setError(
       kind === 'model3d' || kind === 'video'
-        ? 'Queued — we\u2019ll keep this page updated until it finishes.'
+        ? 'Queued — safe to refresh; we\u2019ll keep this job and resume when you come back.'
         : '',
       true
     );
@@ -695,7 +822,8 @@
               x.data.model_id,
               x.data.kind === 'video' ? 'video' : 'model3d',
               btn,
-              x.data.credits_charged || cost
+              x.data.credits_charged || cost,
+              Date.now()
             );
             return;
           }
@@ -705,6 +833,8 @@
             setError((x.data && x.data.error) || 'Generate failed. Credits refunded if it failed.');
             return;
           }
+          clearPendingJob();
+          saveLastResult(x.data);
           showPreview(x.data);
           setError('Done · ' + x.data.credits_charged + ' credits used.', true);
         })
@@ -712,7 +842,9 @@
           if (timer) clearTimeout(timer);
           finishGenerate(btn);
           if (err && err.name === 'AbortError') {
-            setError('That took too long. Try again — shorter prompts usually finish faster.');
+            setError(
+              'Connection interrupted. If credits were charged, open Create again in a minute — for video/3D we resume automatically. Otherwise try Generate once more.'
+            );
             return;
           }
           setError('Could not reach the server. Try again.');
@@ -784,6 +916,14 @@
     }
     syncKinds();
     loadCredits();
+
+    if (!resumePendingJobIfAny()) {
+      var last = loadLastResult();
+      if (last) {
+        showPreview(last);
+        setError('Restored your last Create file from this browser.', true);
+      }
+    }
 
     if (window.CuemarkTurnstile) {
       CuemarkTurnstile.prepare('create-turnstile-wrap', 'create-turnstile').catch(function () {});
