@@ -244,18 +244,8 @@
     submitBtn.disabled = true;
     submitBtn.classList.add('is-loading');
 
-    let turnstileToken = '';
-    if (window.CuemarkTurnstile && CuemarkTurnstile.enabled()) {
-      turnstileToken = CuemarkTurnstile.getToken('kw-help-turnstile');
-      if (!turnstileToken) {
-        showError('Please complete the security check below.');
-        submitBtn.disabled = false;
-        submitBtn.classList.remove('is-loading');
-        return;
-      }
-    }
-
-    fetch(BACKEND + '/api/captio/contact', {
+    var sendContact = function (turnstileToken) {
+      return fetch(BACKEND + '/api/captio/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -267,26 +257,40 @@
           turnstile_token: turnstileToken || undefined
         })
       })
-      .then(function (res) { return res.json().then(function (data) { return { ok: res.ok, data: data }; }); })
-      .then(function (result) {
-        if (!result.ok) {
-          showError((result.data && result.data.error) || 'Could not send your message. Try again or email hello@keyweaver.io.');
+        .then(function (res) { return res.json().then(function (data) { return { ok: res.ok, data: data }; }); })
+        .then(function (result) {
+          if (!result.ok) {
+            showError((result.data && result.data.error) || 'Could not send your message. Try again or email hello@keyweaver.io.');
+            if (window.CuemarkTurnstile) CuemarkTurnstile.reset('kw-help-turnstile');
+            submitBtn.disabled = false;
+            submitBtn.classList.remove('is-loading');
+            return;
+          }
+          form.style.display = 'none';
+          successEl.classList.add('is-visible');
+          submitBtn.classList.remove('is-loading');
+          if (window.CuemarkPixel) { CuemarkPixel.trackContact(); }
+          if (window.CuemarkTurnstile) CuemarkTurnstile.reset('kw-help-turnstile');
+        })
+        .catch(function (err) {
+          showError(err && err.message ? err.message : 'Could not reach the server. Check your connection or email hello@keyweaver.io.');
           if (window.CuemarkTurnstile) CuemarkTurnstile.reset('kw-help-turnstile');
           submitBtn.disabled = false;
           submitBtn.classList.remove('is-loading');
-          return;
-        }
-        form.style.display = 'none';
-        successEl.classList.add('is-visible');
-        submitBtn.classList.remove('is-loading');
-        if (window.CuemarkPixel) { CuemarkPixel.trackContact(); }
-        if (window.CuemarkTurnstile) CuemarkTurnstile.reset('kw-help-turnstile');
-      })
-      .catch(function (err) {
-        showError(err && err.message ? err.message : 'Could not reach the server. Check your connection or email hello@keyweaver.io.');
-        if (window.CuemarkTurnstile) CuemarkTurnstile.reset('kw-help-turnstile');
-        submitBtn.disabled = false;
-        submitBtn.classList.remove('is-loading');
-      });
+        });
+    };
+
+    if (window.CuemarkTurnstile && CuemarkTurnstile.enabled && CuemarkTurnstile.enabled()) {
+      CuemarkTurnstile.requireToken('kw-help-turnstile')
+        .then(sendContact)
+        .catch(function (err) {
+          showError((err && err.message) || 'Please complete the security check, then try again.');
+          submitBtn.disabled = false;
+          submitBtn.classList.remove('is-loading');
+        });
+      return;
+    }
+
+    sendContact('');
   });
 })();
