@@ -917,6 +917,10 @@
           }
           if (!x.res.ok || !x.data) {
             finishGenerate(btn);
+            if (x.data && x.data.blocked) {
+              setError(x.data.error || 'That prompt is blocked by our safety policy.');
+              return;
+            }
             setError((x.data && x.data.error) || 'Generate failed. Credits refunded if it failed.');
             return;
           }
