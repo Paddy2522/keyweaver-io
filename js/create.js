@@ -46,6 +46,38 @@
   var musicMood = '';
   var musicTheme = '';
   var musicInstrument = '';
+  var promptsByKind = {
+    image: '',
+    video: '',
+    music: '',
+    sfx: '',
+    voice: '',
+    model3d: ''
+  };
+
+  function saveCurrentPrompt() {
+    var el = $('create-prompt');
+    if (!el) return;
+    promptsByKind[kind] = el.value;
+  }
+
+  function restorePromptForKind(nextKind) {
+    var el = $('create-prompt');
+    if (!el) return;
+    el.value = promptsByKind[nextKind] || '';
+  }
+
+  function switchKind(nextKind) {
+    var next = nextKind || 'image';
+    if (next === kind) {
+      syncKinds();
+      return;
+    }
+    saveCurrentPrompt();
+    kind = next;
+    restorePromptForKind(kind);
+    syncKinds();
+  }
 
   function $(id) {
     return document.getElementById(id);
@@ -736,8 +768,7 @@
 
     document.querySelectorAll('.create-kind').forEach(function (btn) {
       btn.addEventListener('click', function () {
-        kind = btn.getAttribute('data-kind') || 'image';
-        syncKinds();
+        switchKind(btn.getAttribute('data-kind') || 'image');
       });
     });
     ;['create-video-duration', 'create-video-resolution', 'create-music-duration', 'create-sfx-duration'].forEach(function (id) {
@@ -747,6 +778,7 @@
     var promptEl = $('create-prompt');
     if (promptEl) {
       promptEl.addEventListener('input', function () {
+        promptsByKind[kind] = promptEl.value;
         if (kind === 'voice') syncKinds();
       });
     }
