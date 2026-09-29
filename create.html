@@ -126,13 +126,14 @@
 <main class="create-page">
   <header class="create-hero">
     <p class="section-label">Create</p>
-    <h1>Prompt to video, image, music, sound, or 3D</h1>
+    <h1>Prompt to video, image, music, voice, or 3D</h1>
     <p class="lead">Write what you want, drop in a reference if you have one, and download the finished file. A free account includes 60 credits. When those are gone, buy a pack or start monthly.</p>
     <div class="create-pills" aria-label="What you can make">
       <span>AI video</span>
       <span>AI images</span>
       <span>AI music</span>
       <span>Sound effects</span>
+      <span>AI voiceover</span>
       <span>3D models</span>
     </div>
   </header>
@@ -141,9 +142,10 @@
     <div class="create-panel">
       <div class="create-kinds" role="group" aria-label="Output type">
         <button type="button" class="create-kind is-on" data-kind="image" aria-pressed="true"><strong>Image</strong><span>4 cr</span></button>
-        <button type="button" class="create-kind" data-kind="video" aria-pressed="false"><strong>Video</strong><span>25 cr</span></button>
-        <button type="button" class="create-kind" data-kind="music" aria-pressed="false"><strong>Music</strong><span>5 cr</span></button>
-        <button type="button" class="create-kind" data-kind="sfx" aria-pressed="false"><strong>SFX</strong><span>5 cr</span></button>
+        <button type="button" class="create-kind" data-kind="video" aria-pressed="false"><strong>Video</strong><span>from 18</span></button>
+        <button type="button" class="create-kind" data-kind="music" aria-pressed="false"><strong>Music</strong><span>from 5</span></button>
+        <button type="button" class="create-kind" data-kind="sfx" aria-pressed="false"><strong>SFX</strong><span>from 4</span></button>
+        <button type="button" class="create-kind" data-kind="voice" aria-pressed="false"><strong>Voice</strong><span>from 3</span></button>
         <button type="button" class="create-kind" data-kind="model3d" aria-pressed="false"><strong>3D</strong><span>12 cr</span></button>
       </div>
 
@@ -166,15 +168,26 @@
       <div class="create-field" id="create-video-opts" hidden>
         <label for="create-video-duration">Length</label>
         <select id="create-video-duration">
-          <option value="4">4 seconds · 25 credits</option>
-          <option value="5">5 seconds · 30 credits</option>
-          <option value="8">8 seconds · 45 credits</option>
+          <option value="4">4 seconds</option>
+          <option value="5">5 seconds</option>
+          <option value="8">8 seconds</option>
+        </select>
+        <label for="create-video-resolution">Quality</label>
+        <select id="create-video-resolution">
+          <option value="480p" selected>480p · faster · lower credits</option>
+          <option value="720p">720p · sharper · higher credits</option>
         </select>
         <label class="create-check">
           <input type="checkbox" id="create-video-dialogue" />
           Prefer spoken dialogue / voiceover in the clip
         </label>
-        <p class="create-hint">Video includes synced sound. Dialogue works best when you write what is said in the prompt. For a dedicated VO track, use <a href="/trillian">Trillian</a>.</p>
+        <p class="create-hint">Video includes synced sound. For a clean VO track, use the Voice tab (or <a href="/trillian">Trillian</a> in AE/Premiere).</p>
+      </div>
+
+      <div class="create-field" id="create-voice-opts" hidden>
+        <label for="create-voice-id">Voice</label>
+        <select id="create-voice-id"></select>
+        <p class="create-hint" id="create-voice-cost-hint">Credits scale with script length (3 min · about 200 characters per credit).</p>
       </div>
 
       <div class="create-field" id="create-music-opts" hidden>
@@ -192,6 +205,10 @@
         <div class="create-chips" id="create-music-genres" role="group" aria-label="Genre"></div>
         <p class="create-opt-label">Mood</p>
         <div class="create-chips" id="create-music-moods" role="group" aria-label="Mood"></div>
+        <p class="create-opt-label">Theme</p>
+        <div class="create-chips" id="create-music-themes" role="group" aria-label="Theme"></div>
+        <p class="create-opt-label">Instrument</p>
+        <div class="create-chips" id="create-music-instruments" role="group" aria-label="Instrument"></div>
       </div>
 
       <div class="create-field" id="create-sfx-opts" hidden>
@@ -237,7 +254,7 @@
       <div class="create-steps">
         <article>
           <h3>1. Pick the output</h3>
-          <p>Image, video (4–8s with sound), music bed, short SFX, or a downloadable 3D model. Options change with the type you pick.</p>
+          <p>Image, video (4–8s), music, SFX, voiceover, or a 3D model. Options change with the type you pick.</p>
         </article>
         <article>
           <h3>2. Prompt, then a reference if it applies</h3>
@@ -253,7 +270,7 @@
       <h2>Questions</h2>
       <details open>
         <summary>What do free credits cover?</summary>
-        <p>A new account gets 60 credits after you verify your email. Image is 4, 3D is 12, music and SFX scale with length, and video is 25–45 depending on length.</p>
+        <p>A new account gets 60 credits after you verify your email. Image is 4, 3D is 12, voiceover scales with script length, music and SFX scale with length, and video is cheaper at 480p.</p>
       </details>
       <details>
         <summary>What happens when credits run out?</summary>
@@ -300,9 +317,10 @@
   </div>
 </dialog>
 
+<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
 <script src="/js/tools-auth.js"></script>
 <script src="/js/cuemark-turnstile.js"></script>
-<script src="/js/create.js?v=20260929-create" defer></script>
+<script src="/js/create.js?v=20260929-create2" defer></script>
 <script src="/js/help-widget.js" defer></script>
 </body>
 </html>

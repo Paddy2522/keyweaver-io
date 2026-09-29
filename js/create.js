@@ -8,9 +8,20 @@
     video: 'Video',
     music: 'Music',
     sfx: 'Sound effects',
+    voice: 'Voiceover',
     model3d: '3D model'
   };
-  var VIDEO_CREDITS = { '4': 25, '5': 30, '8': 45 };
+  var VIDEO_CREDITS_720 = { '4': 25, '5': 30, '8': 45 };
+  var VOICES = [
+    { id: '21m00Tcm4TlvDq8ikWAM', label: 'Rachel · American · female' },
+    { id: '29vD33N1CtxCimIQ48CI', label: 'Drew · American · male' },
+    { id: 'EXAVITQu4vr4xnSDxMaL', label: 'Sarah · American · female' },
+    { id: 'ErXwobaYiN019PkySvjV', label: 'Antoni · American · male' },
+    { id: 'MF3mGyEYCl7XYWbV9V6O', label: 'Elli · American · female' },
+    { id: 'TxGEqnHWrfWFTfGW9XjX', label: 'Josh · American · male' },
+    { id: 'LcfcDJNUP1GQjkzn1xUU', label: 'Emily · American · female' },
+    { id: 'TX3LPaxmHKxFdv7VOQHJ', label: 'Liam · American · male' }
+  ];
   var MUSIC_GENRES = [
     'Ambient', 'Electronic', 'Hip Hop', 'Pop', 'Rock', 'Cinematic',
     'Corporate', 'Lo-fi', 'Jazz', 'Classical', 'R&B', 'Dance'
@@ -19,12 +30,22 @@
     'Upbeat', 'Calm', 'Dark', 'Epic', 'Happy', 'Melancholic',
     'Dreamy', 'Energetic', 'Mysterious', 'Inspiring'
   ];
+  var MUSIC_THEMES = [
+    'Corporate', 'Travel', 'Tech', 'Nature', 'Sports', 'Fashion',
+    'Gaming', 'Documentary', 'Social media', 'Product demo'
+  ];
+  var MUSIC_INSTRUMENTS = [
+    'Piano', 'Acoustic guitar', 'Electric guitar', 'Synth', 'Drums',
+    'Bass', 'Strings', 'Pads', 'Percussion', 'Violin'
+  ];
 
   var kind = 'image';
   var creditsRemaining = null;
   var lastObjectUrl = '';
   var musicGenre = '';
   var musicMood = '';
+  var musicTheme = '';
+  var musicInstrument = '';
 
   function $(id) {
     return document.getElementById(id);
@@ -46,12 +67,19 @@
     el.classList.toggle('is-ok', !!ok && !!msg);
   }
 
+  function videoCredits(duration, resolution) {
+    var base = VIDEO_CREDITS_720[duration] || 25;
+    if (resolution === '480p') return Math.max(15, Math.round(base * 0.7));
+    return base;
+  }
+
   function currentCost() {
     if (kind === 'image') return 4;
     if (kind === 'model3d') return 12;
     if (kind === 'video') {
       var vd = ($('create-video-duration') && $('create-video-duration').value) || '4';
-      return VIDEO_CREDITS[vd] || 25;
+      var vr = ($('create-video-resolution') && $('create-video-resolution').value) || '480p';
+      return videoCredits(vd, vr);
     }
     if (kind === 'music') {
       var ms = Number(($('create-music-duration') && $('create-music-duration').value) || 10);
@@ -61,13 +89,29 @@
       var ss = Number(($('create-sfx-duration') && $('create-sfx-duration').value) || 2);
       return Math.max(3, Math.ceil(ss * 2));
     }
+    if (kind === 'voice') {
+      var text = ($('create-prompt') && $('create-prompt').value || '').trim();
+      if (!text) return 3;
+      return Math.max(3, Math.ceil(text.length / 200));
+    }
     return 4;
+  }
+
+  function refreshVideoDurationLabels() {
+    var sel = $('create-video-duration');
+    var res = ($('create-video-resolution') && $('create-video-resolution').value) || '480p';
+    if (!sel) return;
+    Array.prototype.forEach.call(sel.options, function (opt) {
+      opt.textContent = opt.value + ' seconds · ' + videoCredits(opt.value, res) + ' credits';
+    });
   }
 
   function buildMusicPrompt(base) {
     var bits = [];
     if (musicGenre) bits.push(musicGenre + ' genre');
     if (musicMood) bits.push(musicMood.toLowerCase() + ' mood');
+    if (musicTheme) bits.push(musicTheme.toLowerCase() + ' theme');
+    if (musicInstrument) bits.push(musicInstrument.toLowerCase() + ' featured');
     if (!bits.length) return base;
     return base + '. Style: ' + bits.join(', ') + '.';
   }
@@ -111,7 +155,7 @@
     }
 
     var aspectWrap = $('create-aspect-wrap');
-    if (aspectWrap) aspectWrap.hidden = kind === 'music' || kind === 'sfx' || kind === 'model3d';
+    if (aspectWrap) aspectWrap.hidden = kind === 'music' || kind === 'sfx' || kind === 'voice' || kind === 'model3d';
 
     var videoOpts = $('create-video-opts');
     if (videoOpts) videoOpts.hidden = kind !== 'video';
@@ -119,6 +163,21 @@
     if (musicOpts) musicOpts.hidden = kind !== 'music';
     var sfxOpts = $('create-sfx-opts');
     if (sfxOpts) sfxOpts.hidden = kind !== 'sfx';
+    var voiceOpts = $('create-voice-opts');
+    if (voiceOpts) voiceOpts.hidden = kind !== 'voice';
+    if (kind === 'video') refreshVideoDurationLabels();
+
+    var voiceHint = $('create-voice-cost-hint');
+    if (voiceHint && kind === 'voice') {
+      var chars = ($('create-prompt') && $('create-prompt').value || '').trim().length;
+      voiceHint.textContent =
+        (chars ? chars + ' characters · ' : '') +
+        currentCost() +
+        ' credits (3 minimum · ~200 characters per credit).';
+    }
+
+    var promptLabel = document.querySelector('label[for="create-prompt"]');
+    if (promptLabel) promptLabel.textContent = kind === 'voice' ? 'Script' : 'Prompt';
 
     var refWrap = $('create-ref-wrap');
     var refInput = $('create-reference');
@@ -143,17 +202,19 @@
     }
 
     var prompt = $('create-prompt');
-    if (prompt && !prompt.value) {
+    if (prompt) {
       prompt.placeholder =
         kind === 'music'
           ? 'Upbeat lo-fi bed for a product unboxing, soft vinyl crackle, no vocals.'
           : kind === 'sfx'
             ? 'Short whoosh into a soft UI click, clean and modern.'
-            : kind === 'video'
-              ? 'A handheld night shot of a neon noodle stall in the rain, shallow depth of field.'
-              : kind === 'model3d'
-                ? 'A low-poly game-ready lamp, clean topology, matte ceramic.'
-                : 'A handheld night shot of a neon noodle stall in the rain, shallow depth of field, film grain.';
+            : kind === 'voice'
+              ? 'Welcome back. Today I am walking you through three simple edits that make your cuts feel sharper.'
+              : kind === 'video'
+                ? 'A handheld night shot of a neon noodle stall in the rain, shallow depth of field.'
+                : kind === 'model3d'
+                  ? 'A low-poly game-ready lamp, clean topology, matte ceramic.'
+                  : 'A handheld night shot of a neon noodle stall in the rain, shallow depth of field, film grain.';
     }
   }
 
@@ -304,10 +365,56 @@
     host._remote = result.url || '';
 
     if (result.kind === 'model3d' || /\.(glb|gltf|obj|fbx|usdz)(\?|$)/i.test(String(result.url || result.filename || ''))) {
-      var card = document.createElement('div');
-      card.className = 'create-model-card';
-      card.innerHTML = '<strong>3D model ready</strong><p class="create-hint">Download the file and open it in Blender, After Effects, or a game engine.</p>';
-      host.appendChild(card);
+      var loading3d = document.createElement('p');
+      loading3d.className = 'create-hint';
+      loading3d.textContent = 'Loading 3D preview…';
+      host.appendChild(loading3d);
+
+      fetch(BACKEND + '/api/prompt-lab/download', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + getToken()
+        },
+        body: JSON.stringify({ url: result.url, filename: result.filename || 'model.glb' })
+      })
+        .then(function (res) {
+          if (!res.ok) throw new Error('preview');
+          return res.blob();
+        })
+        .then(function (blob) {
+          revokePreview();
+          lastObjectUrl = URL.createObjectURL(blob);
+          host._blob = blob;
+          host.innerHTML = '';
+          if (customElements.get('model-viewer') || window.customElements) {
+            var viewer = document.createElement('model-viewer');
+            viewer.setAttribute('src', lastObjectUrl);
+            viewer.setAttribute('camera-controls', '');
+            viewer.setAttribute('touch-action', 'pan-y');
+            viewer.setAttribute('auto-rotate', '');
+            viewer.setAttribute('shadow-intensity', '0.6');
+            viewer.style.width = '100%';
+            viewer.style.height = '320px';
+            host.appendChild(viewer);
+            var note = document.createElement('p');
+            note.className = 'create-hint';
+            note.textContent = 'Drag to orbit. Download GLB for Blender, AE, or a game engine.';
+            host.appendChild(note);
+          } else {
+            var card = document.createElement('div');
+            card.className = 'create-model-card';
+            card.innerHTML = '<strong>3D model ready</strong><p class="create-hint">Download the GLB and open it in Blender, After Effects, or a game engine.</p>';
+            host.appendChild(card);
+          }
+        })
+        .catch(function () {
+          host.innerHTML = '';
+          var card = document.createElement('div');
+          card.className = 'create-model-card';
+          card.innerHTML = '<strong>3D model ready</strong><p class="create-hint">Preview unavailable — use Download.</p>';
+          host.appendChild(card);
+        });
       return;
     }
 
@@ -393,20 +500,19 @@
     var maxMs = jobKind === 'video' ? 10 * 60 * 1000 : 12 * 60 * 1000;
     var attempt = 0;
     var label = jobKind === 'video' ? 'Video' : '3D';
+    var typical = jobKind === 'video' ? 'usually 1–3 min' : 'usually 2–5 min';
 
     function tick() {
       if (Date.now() - started > maxMs) {
         finishGenerate(btn);
-        setError(label + ' is still running. Stay on this page a bit longer, or try again — failed jobs refund credits.');
+        setError(label + ' is still running on the queue. Failed jobs refund credits — you can try again.');
         return;
       }
       attempt += 1;
       var secs = Math.max(1, Math.round((Date.now() - started) / 1000));
-      btn.textContent = 'Building ' + label + '\u2026 (' + secs + 's)';
+      btn.textContent = 'Building ' + label + '\u2026 ' + secs + 's';
       setError(
-        jobKind === 'video'
-          ? 'Rendering on the GPU queue — usually 1–3 minutes. Stay on this page.'
-          : 'Building the model — often 2–5 minutes. Stay on this page.',
+        'In the provider queue (' + typical + '). Elapsed ' + secs + 's — stay on this page.',
         true
       );
 
@@ -497,6 +603,7 @@
 
     if (kind === 'video') {
       body.append('duration', ($('create-video-duration') && $('create-video-duration').value) || '4');
+      body.append('resolution', ($('create-video-resolution') && $('create-video-resolution').value) || '480p');
       body.append('generate_audio', '1');
     }
     if (kind === 'music') {
@@ -508,6 +615,9 @@
     }
     if (kind === 'sfx') {
       body.append('duration_sec', ($('create-sfx-duration') && $('create-sfx-duration').value) || '2');
+    }
+    if (kind === 'voice') {
+      body.append('voice_id', ($('create-voice-id') && $('create-voice-id').value) || VOICES[0].id);
     }
 
     var allowRef = kind === 'image' || kind === 'video' || kind === 'model3d';
@@ -589,6 +699,16 @@
   }
 
   document.addEventListener('DOMContentLoaded', function () {
+    var voiceSel = $('create-voice-id');
+    if (voiceSel) {
+      VOICES.forEach(function (v) {
+        var opt = document.createElement('option');
+        opt.value = v.id;
+        opt.textContent = v.label;
+        voiceSel.appendChild(opt);
+      });
+    }
+
     fillChips(
       'create-music-genres',
       MUSIC_GENRES,
@@ -601,6 +721,18 @@
       function () { return musicMood; },
       function (v) { musicMood = v; }
     );
+    fillChips(
+      'create-music-themes',
+      MUSIC_THEMES,
+      function () { return musicTheme; },
+      function (v) { musicTheme = v; }
+    );
+    fillChips(
+      'create-music-instruments',
+      MUSIC_INSTRUMENTS,
+      function () { return musicInstrument; },
+      function (v) { musicInstrument = v; }
+    );
 
     document.querySelectorAll('.create-kind').forEach(function (btn) {
       btn.addEventListener('click', function () {
@@ -608,10 +740,16 @@
         syncKinds();
       });
     });
-    ;['create-video-duration', 'create-music-duration', 'create-sfx-duration'].forEach(function (id) {
+    ;['create-video-duration', 'create-video-resolution', 'create-music-duration', 'create-sfx-duration'].forEach(function (id) {
       var el = $(id);
       if (el) el.addEventListener('change', syncKinds);
     });
+    var promptEl = $('create-prompt');
+    if (promptEl) {
+      promptEl.addEventListener('input', function () {
+        if (kind === 'voice') syncKinds();
+      });
+    }
     syncKinds();
     loadCredits();
 
