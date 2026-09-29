@@ -57,6 +57,76 @@
   var PENDING_KEY = 'keyweaver.create.pendingJob';
   var RESULT_KEY = 'keyweaver.create.lastResult';
   var activePoll = false;
+  var pixelAnim = null;
+
+  function stopPixelAnim() {
+    if (pixelAnim) {
+      cancelAnimationFrame(pixelAnim);
+      pixelAnim = null;
+    }
+  }
+
+  function showGeneratingVisual(statusText) {
+    var host = $('create-preview');
+    if (!host) return;
+    stopPixelAnim();
+    revokePreview();
+    host.innerHTML = '';
+    var download = $('create-download');
+    if (download) download.hidden = true;
+
+    var wrap = document.createElement('div');
+    wrap.className = 'create-gen-visual';
+    wrap.setAttribute('aria-live', 'polite');
+    var canvas = document.createElement('canvas');
+    canvas.className = 'create-pixel-canvas';
+    canvas.width = 56;
+    canvas.height = 32;
+    canvas.setAttribute('aria-hidden', 'true');
+    var status = document.createElement('p');
+    status.className = 'create-gen-status';
+    status.id = 'create-gen-status';
+    status.textContent = statusText || 'Generating\u2026';
+    wrap.appendChild(canvas);
+    wrap.appendChild(status);
+    host.appendChild(wrap);
+
+    var ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    var cols = 28;
+    var rows = 16;
+    var cellW = canvas.width / cols;
+    var cellH = canvas.height / rows;
+    var t0 = performance.now();
+
+    function frame(now) {
+      var t = (now - t0) / 1000;
+      ctx.fillStyle = '#050508';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      for (var y = 0; y < rows; y++) {
+        for (var x = 0; x < cols; x++) {
+          var n =
+            Math.sin(x * 0.55 + t * 2.4) * 0.5 +
+            Math.cos(y * 0.7 - t * 1.8) * 0.5 +
+            Math.sin((x + y) * 0.35 + t * 3.1) * 0.35;
+          var v = (n + 1.2) / 2.4;
+          if (v < 0.28) continue;
+          var a = Math.min(1, (v - 0.28) * 1.6);
+          var pulse = 0.55 + 0.45 * Math.sin(t * 4 + x * 0.2 + y * 0.15);
+          ctx.fillStyle =
+            'rgba(120, 140, 255,' + (a * pulse * 0.95).toFixed(3) + ')';
+          ctx.fillRect(x * cellW + 0.4, y * cellH + 0.4, cellW - 0.8, cellH - 0.8);
+        }
+      }
+      pixelAnim = requestAnimationFrame(frame);
+    }
+    pixelAnim = requestAnimationFrame(frame);
+  }
+
+  function updateGeneratingStatus(text) {
+    var el = $('create-gen-status');
+    if (el) el.textContent = text;
+  }
 
   function savePendingJob(job) {
     try {
@@ -171,10 +241,15 @@
     el.classList.toggle('is-ok', !!ok && !!msg);
   }
 
-  function videoCredits(duration, resolution) {
+  function videoCredits(duration, resolution, tier) {
     var base = VIDEO_CREDITS_720[duration] || 25;
-    if (resolution === '480p') return Math.max(15, Math.round(base * 0.7));
-    return base;
+    var atRes = resolution === '480p' ? Math.max(15, Math.round(base * 0.7)) : base;
+    if (tier === 'draft') return Math.max(10, Math.round(atRes * 0.5));
+    return atRes;
+  }
+
+  function currentVideoTier() {
+    return ($('create-video-tier') && $('create-video-tier').value) || 'draft';
   }
 
   function currentCost() {
@@ -183,7 +258,7 @@
     if (kind === 'video') {
       var vd = ($('create-video-duration') && $('create-video-duration').value) || '4';
       var vr = ($('create-video-resolution') && $('create-video-resolution').value) || '480p';
-      return videoCredits(vd, vr);
+      return videoCredits(vd, vr, currentVideoTier());
     }
     if (kind === 'music') {
       var ms = Number(($('create-music-duration') && $('create-music-duration').value) || 10);
@@ -204,9 +279,10 @@
   function refreshVideoDurationLabels() {
     var sel = $('create-video-duration');
     var res = ($('create-video-resolution') && $('create-video-resolution').value) || '480p';
+    var tier = currentVideoTier();
     if (!sel) return;
     Array.prototype.forEach.call(sel.options, function (opt) {
-      opt.textContent = opt.value + ' seconds · ' + videoCredits(opt.value, res) + ' credits';
+      opt.textContent = opt.value + ' seconds · ' + videoCredits(opt.value, res, tier) + ' credits';
     });
   }
 
@@ -443,6 +519,7 @@
   function showPreview(result) {
     var host = $('create-preview');
     if (!host) return;
+    stopPixelAnim();
     revokePreview();
     host.innerHTML = '';
     var download = $('create-download');
@@ -581,6 +658,7 @@
   }
 
   function finishGenerate(btn) {
+    stopPixelAnim();
     btn.disabled = false;
     btn.textContent = 'Generate';
     if (window.CuemarkTurnstile) CuemarkTurnstile.reset('create-turnstile');
@@ -604,7 +682,7 @@
     var maxMs = jobKind === 'video' ? 10 * 60 * 1000 : 12 * 60 * 1000;
     var attempt = 0;
     var label = jobKind === 'video' ? 'Video' : '3D';
-    var typical = jobKind === 'video' ? 'usually 1–3 min' : 'usually 2–5 min';
+    var typical = jobKind === 'video' ? 'Draft often under a minute' : 'usually 2–5 min';
     activePoll = true;
 
     savePendingJob({
@@ -619,11 +697,18 @@
       btn.disabled = true;
     }
 
+    showGeneratingVisual(
+      jobKind === 'video'
+        ? 'Rendering video pixels\u2026'
+        : 'Building 3D mesh\u2026'
+    );
+
     function tick() {
       if (Date.now() - started > maxMs) {
         activePoll = false;
         // Keep pending so a refresh can try again while fal may still finish.
         finishGenerate(btn);
+        updateGeneratingStatus('Still running — refresh to keep checking.');
         setError(
           label +
             ' is taking longer than usual. Refresh this page to keep checking — your credits stay with this job until it finishes or fails (failed jobs refund).',
@@ -634,6 +719,9 @@
       attempt += 1;
       var secs = Math.max(1, Math.round((Date.now() - started) / 1000));
       if (btn) btn.textContent = 'Building ' + label + '\u2026 ' + secs + 's';
+      updateGeneratingStatus(
+        label + ' in progress · ' + secs + 's · ' + typical
+      );
       setError(
         'In the provider queue (' +
           typical +
@@ -669,7 +757,9 @@
             return;
           }
           if (x.data && x.data.pending) {
-            setTimeout(tick, attempt < 8 ? 2500 : 4500);
+            // Snappier early polls so Draft finishes feel closer to fal.ai.
+            var delay = attempt < 12 ? 900 : attempt < 30 ? 1600 : 3200;
+            setTimeout(tick, delay);
             return;
           }
           activePoll = false;
@@ -688,11 +778,11 @@
           loadCredits();
         })
         .catch(function () {
-          setTimeout(tick, 4000);
+          setTimeout(tick, 2500);
         });
     }
 
-    setTimeout(tick, 1200);
+    setTimeout(tick, 600);
   }
 
   function resumePendingJobIfAny() {
@@ -748,6 +838,11 @@
       kind === 'model3d' ? 'Starting 3D\u2026' :
       kind === 'video' ? 'Queuing video\u2026' :
       'Generating\u2026';
+    showGeneratingVisual(
+      kind === 'video' ? 'Queuing video\u2026' :
+      kind === 'model3d' ? 'Starting 3D\u2026' :
+      'Generating\u2026'
+    );
     setError(
       kind === 'model3d' || kind === 'video'
         ? 'Queued — safe to refresh; we\u2019ll keep this job and resume when you come back.'
@@ -763,6 +858,7 @@
     if (kind === 'video') {
       body.append('duration', ($('create-video-duration') && $('create-video-duration').value) || '4');
       body.append('resolution', ($('create-video-resolution') && $('create-video-resolution').value) || '480p');
+      body.append('video_tier', currentVideoTier());
       body.append('generate_audio', '1');
     }
     if (kind === 'music') {
@@ -903,7 +999,7 @@
         switchKind(btn.getAttribute('data-kind') || 'image');
       });
     });
-    ;['create-video-duration', 'create-video-resolution', 'create-music-duration', 'create-sfx-duration'].forEach(function (id) {
+    ;['create-video-duration', 'create-video-resolution', 'create-video-tier', 'create-music-duration', 'create-sfx-duration'].forEach(function (id) {
       var el = $(id);
       if (el) el.addEventListener('change', syncKinds);
     });

@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="/css/chrome.css" />
   <link rel="stylesheet" href="/css/site.css?v=20260928-credits" />
   <link rel="stylesheet" href="/css/tools-shared.css" />
-  <link rel="stylesheet" href="/css/create.css" />
+  <link rel="stylesheet" href="/css/create.css?v=20260929-pixels" />
   <link rel="stylesheet" href="/css/help-widget.css" />
   <title>AI Video, Image, Music, Sound Effects and 3D Generator | Keyweaver</title>
   <meta name="description" content="Generate AI video, images, music, sound effects, and 3D models from a prompt. Upload a reference, download the file. Create a free Keyweaver account for 60 starter credits, then buy credits or go monthly." />
@@ -166,6 +166,11 @@
       </div>
 
       <div class="create-field" id="create-video-opts" hidden>
+        <label for="create-video-tier">Model</label>
+        <select id="create-video-tier">
+          <option value="draft" selected>Draft · Seedance Mini · faster</option>
+          <option value="standard">Standard · Seedance Fast · sharper</option>
+        </select>
         <label for="create-video-duration">Length</label>
         <select id="create-video-duration">
           <option value="4">4 seconds</option>
@@ -181,7 +186,7 @@
           <input type="checkbox" id="create-video-dialogue" />
           Prefer spoken dialogue / voiceover in the clip
         </label>
-        <p class="create-hint">Video includes synced sound. For a clean VO track, use the Voice tab (or <a href="/trillian">Trillian</a> in AE/Premiere).</p>
+        <p class="create-hint">Draft is usually much quicker. Standard costs more and looks sharper. For a clean VO track, use the Voice tab.</p>
       </div>
 
       <div class="create-field" id="create-voice-opts" hidden>
@@ -320,7 +325,7 @@
 <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
 <script src="/js/tools-auth.js"></script>
 <script src="/js/cuemark-turnstile.js"></script>
-<script src="/js/create.js?v=20260929-resume" defer></script>
+<script src="/js/create.js?v=20260929-pixels" defer></script>
 <script src="/js/help-widget.js" defer></script>
 </body>
 </html>
