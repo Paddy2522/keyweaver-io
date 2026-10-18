@@ -7,3 +7,5 @@ directory = "."
 binding = "ASSETS"
 not_found_handling = "404-page"
 html_handling = "none"
+# Sunset: Worker must run before _redirects so /downloads/* return 410 (not GitHub 302s).
+run_worker_first = true
