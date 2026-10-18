@@ -4,523 +4,76 @@
   <meta charset="UTF-8" />
   <link rel="icon" href="/images/favicon.svg" type="image/svg+xml" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="/css/cookie-consent.css" />
-  <script src="/js/cookie-consent.js?v=20260731a"></script>
-  <script src="/js/nav-auth.js?v=20260928-credits" defer></script>
-  <link rel="stylesheet" href="/css/chrome.css" />
-  <link rel="stylesheet" href="/css/help-widget.css" />
-  <link rel="stylesheet" href="/css/site.css?v=20260928-credits" />
-  <title>Keyweaver - Plugins for After Effects and Premiere Pro</title>
-  <meta name="description" content="Keyweaver builds plugins for After Effects and Premiere Pro: AI captions, AI video, voiceover, music &amp; SFX, and a motion toolkit. One account, shared credits." />
+  <title>Keyweaver — paused</title>
+  <meta name="description" content="Keyweaver is paused. New downloads are unavailable. Existing installs continue to work for now." />
+  <meta name="robots" content="noindex, nofollow" />
   <link rel="canonical" href="https://keyweaver.io/" />
-  <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="Keyweaver" />
-  <meta property="og:title" content="Keyweaver - Plugins for After Effects and Premiere Pro" />
-  <meta property="og:description" content="AI captions, video, voice, and sound - plus a motion toolkit. One account. Shared credits across the suite." />
-  <meta property="og:url" content="https://keyweaver.io/" />
-  <meta property="og:image" content="https://keyweaver.io/images/og-keyweaver.png" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Keyweaver - After Effects and Premiere Pro plugins" />
-  <meta name="twitter:description" content="AI captions, video, voice, and sound for After Effects and Premiere Pro. One account, shared credits." />
-  <meta name="twitter:image" content="https://keyweaver.io/images/og-keyweaver.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=SN+Pro:wght@300;400;500;600;700&family=Cal+Sans&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=SN+Pro:wght@300;500&family=Cal+Sans&display=swap" rel="stylesheet" />
   <style>
-    .hub-hero {
-      min-height: auto;
-      padding: 7.25rem 0 3.75rem;
-      position: relative;
-      overflow: hidden;
+    :root {
+      --ink: #0a0a0f;
+      --text: #e8e8f0;
+      --muted: #8a8aa3;
+      --accent: #5b6bf8;
     }
-    .hub-hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 62% 52% at 8% -6%, rgba(91, 107, 248, 0.1) 0%, transparent 58%),
-        radial-gradient(ellipse 48% 40% at 88% 78%, rgba(255, 255, 255, 0.03) 0%, transparent 68%),
-        linear-gradient(180deg, rgba(10,10,15,0) 0%, rgba(10,10,15,0.35) 100%);
-      pointer-events: none;
-    }
-    .hub-hero-inner {
-      position: relative;
-      z-index: 1;
-      max-width: 1240px;
-      margin: 0 auto;
-      padding: 0 1.5rem 0 2rem;
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
       display: grid;
-      grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.4fr);
-      gap: 1.75rem 2.25rem;
-      align-items: center;
-    }
-    .hub-hero-copy {
-      text-align: left;
-      max-width: 32rem;
-    }
-    .hub-brand {
-      font-family: 'SN Pro', sans-serif;
-      font-weight: 300;
-      font-size: clamp(2.35rem, 5.6vw, 3.75rem);
-      letter-spacing: 0.01em;
-      line-height: 0.94;
-      margin-bottom: 1.1rem;
-      color: #f2f2f8;
-    }
-    .hub-headline {
-      font-family: 'Cal Sans', sans-serif;
-      font-size: clamp(1.35rem, 2.9vw, 1.95rem);
-      font-weight: 700;
-      letter-spacing: 0.045em;
+      place-items: center;
+      padding: 2rem 1.25rem;
+      font-family: "SN Pro", system-ui, sans-serif;
       color: var(--text);
-      margin-bottom: 0.95rem;
-    }
-    .hub-lead {
-      color: var(--muted);
-      font-size: 1.08rem;
-      line-height: 1.7;
-      max-width: 32rem;
-      margin: 0 0 1.85rem;
-    }
-    .hub-ctas {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-      justify-content: flex-start;
-    }
-    .hub-note {
-      margin-top: 1.35rem;
-      font-size: 13px;
-      color: var(--muted);
-      letter-spacing: 0.01em;
-    }
-    .hub-hero-visual {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-width: 0;
-    }
-    .hub-hero-visual picture {
-      display: block;
-      width: 100%;
-      min-width: 0;
-    }
-    .hub-hero-visual img {
-      display: block;
-      width: 100%;
-      max-width: 880px;
-      height: auto;
-      border: 0;
-      outline: none;
-      background: transparent;
-      box-shadow: none;
-      border-radius: 0;
-    }
-    @media (max-width: 900px) {
-      .hub-hero {
-        padding: 6.25rem 0 2.75rem;
-      }
-      .hub-hero-inner {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-        padding: 0 1.5rem;
-      }
-      .hub-hero-copy {
-        max-width: none;
-        text-align: left;
-      }
-      .hub-hero-visual {
-        order: 2;
-      }
-      .hub-hero-visual img {
-        max-width: 640px;
-      }
-    }
-    @media (max-width: 560px) {
-      .hub-hero-inner {
-        padding: 0 1.25rem;
-      }
-      .hub-ctas {
-        flex-direction: column;
-        align-items: stretch;
-      }
-      .hub-ctas .btn {
-        text-align: center;
-      }
-    }
-    .tools-section {
-      position: relative;
-      overflow: hidden;
-    }
-    .tools-atmos {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      z-index: 0;
-    }
-    .tools-atmos picture,
-    .tools-atmos img,
-    .tools-atmos video {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center 42%;
-    }
-    .tools-atmos video {
-      position: absolute;
-      inset: 0;
-      opacity: 0.55;
-    }
-    .tools-atmos::after {
-      content: '';
-      position: absolute;
-      inset: 0;
       background:
-        linear-gradient(180deg, rgba(10, 10, 15, 0.74) 0%, rgba(10, 10, 15, 0.9) 55%, rgba(10, 10, 15, 0.97) 100%),
-        radial-gradient(ellipse 50% 42% at 78% 28%, rgba(255, 255, 255, 0.04) 0%, transparent 70%);
+        radial-gradient(ellipse 70% 50% at 50% -10%, rgba(91, 107, 248, 0.18), transparent 60%),
+        var(--ink);
     }
-    .tools-section > .container {
-      position: relative;
-      z-index: 1;
+    main {
+      max-width: 34rem;
+      text-align: center;
     }
-    @media (prefers-reduced-motion: reduce) {
-      .tools-atmos video {
-        display: none;
-      }
+    .brand {
+      font-weight: 300;
+      font-size: clamp(2.4rem, 8vw, 3.4rem);
+      letter-spacing: 0.02em;
+      margin: 0 0 1rem;
+      line-height: 1;
     }
-    .credits-strip {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1px;
-      background: var(--edge);
-      border: 1px solid var(--edge);
-      border-radius: 14px;
-      overflow: hidden;
-      margin-top: 2rem;
+    h1 {
+      font-family: "Cal Sans", sans-serif;
+      font-size: clamp(1.15rem, 3.5vw, 1.45rem);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      margin: 0 0 1rem;
     }
-    .credits-strip article {
-      background: var(--surface);
-      padding: 1.35rem 1.5rem;
-    }
-    .credits-strip h3 {
-      font-family: 'Cal Sans', sans-serif;
-      font-size: 1rem;
-      margin-bottom: 0.4rem;
-    }
-    .credits-strip p {
+    p {
+      margin: 0 0 0.85rem;
       color: var(--muted);
-      font-size: 14px;
-      line-height: 1.6;
+      line-height: 1.55;
+      font-size: 1.02rem;
+    }
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    a:hover { text-decoration: underline; }
+    .note {
+      margin-top: 1.75rem;
+      font-size: 0.9rem;
+      color: #6b6b88;
     }
   </style>
 </head>
 <body>
-
-<nav class="site-nav" aria-label="Primary">
-  <a href="/" class="nav-brand" aria-label="Keyweaver"><img src="/images/keyweaver-logo.svg" alt="" width="162" height="28" /></a>
-  <ul class="nav-links">
-    <li class="nav-products-wrap">
-      <details class="nav-products">
-        <summary>Plugins</summary>
-        <div class="nav-products-menu" role="menu">
-          <p class="nav-products-label">After Effects</p>
-          <a href="/cuemark" role="menuitem">Cuemark<span>AI Captions</span></a>
-          <a href="/trillian" role="menuitem">Trillian<span>AI Voiceover</span></a>
-          <a href="/tambourine" role="menuitem">Tambourine<span>AI Music &amp; SFX</span></a>
-          <a href="/superconductor" role="menuitem">Superconductor<span>AI Video</span></a>
-          <a href="/ludo" role="menuitem">Ludo<span>Motion Toolkit</span></a>
-          <p class="nav-products-label">Premiere Pro</p>
-          <a href="/trillian" role="menuitem">Trillian<span>AI Voiceover</span></a>
-          <a href="/tambourine" role="menuitem">Tambourine<span>AI Music &amp; SFX</span></a>
-          <a href="/superconductor" role="menuitem">Superconductor<span>AI Video</span></a>
-        </div>
-      </details>
-    </li>
-    <li>
-      <details class="nav-products">
-        <summary>Tools</summary>
-        <div class="nav-products-menu" role="menu">
-          <a href="/video-seo" role="menuitem">Video SEO<span>One brief → platform copy</span></a>
-          <a href="/campaign-kit" role="menuitem">Campaign Kit<span>One brief → asset recipes</span></a>
-          <a href="/shot-list" role="menuitem">Shot List<span>One brief → shoot plan</span></a>
-        </div>
-      </details>
-    </li>
-    <li><a href="/create">Create</a></li>
-    <li><a href="/pricing">Credits</a></li>
-    <li><a href="/download">Download</a></li>
-    <li><a href="/help">Help</a></li>
-  </ul>
-  <div class="nav-cta">
-    <a href="/login" class="btn btn-ghost">Sign in</a>
-    <a href="/download" class="btn btn-primary">Download free</a>
-  </div>
-</nav>
-
-<div class="site-banner" id="deleted-banner" role="status">
-  <span>Your account has been deleted.</span>
-  <button type="button" id="deleted-banner-dismiss">Dismiss</button>
-</div>
-
-<section class="hub-hero">
-  <div class="hub-hero-inner">
-    <div class="hub-hero-copy">
-      <h1 class="hub-brand">Keyweaver</h1>
-      <p class="hub-headline">Plugins that stay in your timeline.</p>
-      <p class="hub-lead">AI captions, video, voice, and sound - plus a motion toolkit. Five for After Effects. Three for Premiere Pro. One account. Shared credits.</p>
-      <div class="hub-ctas">
-        <a href="/download" class="btn btn-primary btn-xl">Download free</a>
-        <a href="#plugins" class="btn btn-ghost btn-xl">Explore plugins</a>
-      </div>
-      <p class="hub-note">Free to install · Per-panel guest trials · Shared credits after you create an account</p>
-      <p class="hub-note" style="margin-top:0.35rem;opacity:0.85;">Windows · macOS · After Effects 2022+ · Premiere Pro 2022+</p>
-    </div>
-    <div class="hub-hero-visual">
-      <picture>
-        <source srcset="/images/plugins-main.webp" type="image/webp" />
-        <img
-          src="/images/plugins-main.png"
-          alt="Keyweaver plugin suite: Cuemark, Ludo, Superconductor, Tambourine, and Trillian"
-          width="1376"
-          height="768"
-          decoding="async"
-          fetchpriority="high"
-        />
-      </picture>
-    </div>
-  </div>
-</section>
-
-<hr class="divider" />
-
-<section class="section" id="plugins">
-  <div class="container">
-    <p class="section-label">The suite</p>
-    <h2 class="section-title">Eight plugins. One Keyweaver account.</h2>
-    <p class="section-sub">Install what you need from Keyweaver Manager - five After Effects panels and three Premiere Pro panels. Cuemark stays on After Effects.</p>
-
-    <p class="section-label" style="margin-top:2.5rem;">After Effects</p>
-    <h3 class="section-title" style="font-size:clamp(1.35rem,3vw,1.75rem);">Five plugins for AE</h3>
-    <div class="product-grid">
-      <a class="product-card product-card--cuemark" href="/cuemark">
-        <span class="product-card-logo"><img src="/images/plugins/cuemark-web-logo.svg" alt="" width="200" height="40" /></span>
-        <div class="product-card-category">AI Captions · After Effects</div>
-        <h3>Cuemark</h3>
-        <p>Transcribe, style, and sync AI subtitles as native text layers - without leaving your edit.</p>
-        <span class="product-card-cta">Explore Cuemark →</span>
-      </a>
-
-      <a class="product-card product-card--trillian" href="/trillian">
-        <span class="product-card-logo"><img src="/images/plugins/trillian-web-logo.svg" alt="" width="200" height="40" /></span>
-        <div class="product-card-category">AI Voiceover · After Effects (+ Premiere)</div>
-        <h3>Trillian</h3>
-        <p>Turn scripts into narration voices and import audio into After Effects or Premiere Pro in one flow.</p>
-        <span class="product-card-cta">Explore Trillian →</span>
-      </a>
-
-      <a class="product-card product-card--tambourine" href="/tambourine">
-        <span class="product-card-logo"><img src="/images/plugins/tamborine-web-logo.svg" alt="" width="200" height="40" /></span>
-        <div class="product-card-category">AI Music &amp; SFX · After Effects (+ Premiere)</div>
-        <h3>Tambourine</h3>
-        <p>Generate music beds and SFX for the edit, then place them on the AE or Premiere timeline where you need them.</p>
-        <span class="product-card-cta">Explore Tambourine →</span>
-      </a>
-
-      <a class="product-card product-card--superconductor" href="/superconductor">
-        <span class="product-card-logo"><img src="/images/plugins/superconductor-web-logo.svg" alt="" width="200" height="40" /></span>
-        <div class="product-card-category">AI Video · After Effects (+ Premiere)</div>
-        <h3>Superconductor</h3>
-        <p>Prompt short AI b-roll, plates, and cutaways, then drop them straight into your AE composition or Premiere sequence.</p>
-        <span class="product-card-cta">Explore Superconductor →</span>
-      </a>
-
-      <a class="product-card product-card--ludo" href="/ludo">
-        <span class="product-card-logo"><img src="/images/plugins/ludo-web-logo.svg" alt="" width="200" height="40" /></span>
-        <div class="product-card-category">Motion Toolkit · After Effects</div>
-        <h3>Ludo</h3>
-        <p>Animation, keyframe, text, layout, and export tools for everyday After Effects work.</p>
-        <span class="product-card-cta">Explore Ludo →</span>
-      </a>
-    </div>
-
-    <p class="section-label" style="margin-top:3rem;" id="premiere">Premiere Pro</p>
-    <h3 class="section-title" style="font-size:clamp(1.35rem,3vw,1.75rem);">Three plugins for Premiere</h3>
-    <p class="section-sub">Same Keyweaver Manager catalog - install the Premiere build of each tool.</p>
-    <div class="product-grid">
-      <a class="product-card product-card--trillian" href="/trillian">
-        <span class="product-card-logo"><img src="/images/plugins/trillian-web-logo.svg" alt="" width="200" height="40" /></span>
-        <div class="product-card-category">AI Voiceover · Premiere Pro</div>
-        <h3>Trillian for Premiere</h3>
-        <p>Generate narration in Premiere Pro and place audio on your sequence timeline.</p>
-        <span class="product-card-cta">Explore Trillian →</span>
-      </a>
-
-      <a class="product-card product-card--tambourine" href="/tambourine">
-        <span class="product-card-logo"><img src="/images/plugins/tamborine-web-logo.svg" alt="" width="200" height="40" /></span>
-        <div class="product-card-category">AI Music &amp; SFX · Premiere Pro</div>
-        <h3>Tambourine for Premiere</h3>
-        <p>Prompt music beds and sound effects, then drop them into your Premiere edit.</p>
-        <span class="product-card-cta">Explore Tambourine →</span>
-      </a>
-
-      <a class="product-card product-card--superconductor" href="/superconductor">
-        <span class="product-card-logo"><img src="/images/plugins/superconductor-web-logo.svg" alt="" width="200" height="40" /></span>
-        <div class="product-card-category">AI Video · Premiere Pro</div>
-        <h3>Superconductor for Premiere</h3>
-        <p>Generate short AI clips and import them straight onto your Premiere timeline.</p>
-        <span class="product-card-cta">Explore Superconductor →</span>
-      </a>
-    </div>
-  </div>
-</section>
-
-<hr class="divider" />
-
-<section class="section tools-section" id="tools">
-  <div class="tools-atmos" aria-hidden="true">
-    <picture>
-      <source srcset="/images/tools-atmosphere.webp" type="image/webp" />
-      <img
-        src="/images/tools-atmosphere.png"
-        alt=""
-        width="1344"
-        height="768"
-        decoding="async"
-        loading="lazy"
-      />
-    </picture>
-    <video
-      class="tools-atmos-video"
-      muted
-      playsinline
-      autoplay
-      loop
-      preload="metadata"
-      poster="/images/tools-atmosphere.png"
-      disablepictureinpicture
-      disableRemotePlayback
-    >
-      <source
-        src="https://customer-2vnlyvi12yb7n8s2.cloudflarestream.com/b83ba7493b80eaf9bf16036008cdbffb/downloads/default.mp4"
-        type="video/mp4"
-      />
-    </video>
-  </div>
-  <div class="container">
-    <p class="section-label">Tools</p>
-    <h2 class="section-title">Finish a publish job</h2>
-    <p class="section-sub">One brief → shoot plan → platform titles → thumb recipes. Stay in the pack until you publish. Video SEO: 2 free AI writes, then purchased credits. Shot List and Campaign Kit free packs stay free; AI stills need purchased credits.</p>
-    <div class="product-grid">
-      <a class="product-card" href="/create">
-        <div class="product-card-category">60 free credits</div>
-        <h3>Create</h3>
-        <p>Prompt to video, image, music, sound effects, or a 3D model. Upload a reference and download the file.</p>
-        <span class="product-card-cta">Open Create →</span>
-      </a>
-      <a class="product-card" href="/shot-list">
-        <div class="product-card-category">Free · On-set plan</div>
-        <h3>Shot List</h3>
-        <p>Editable shoot plan with framing, moves, audio, and print-for-set. Brief syncs to the other tools.</p>
-        <span class="product-card-cta">Open Shot List →</span>
-      </a>
-      <a class="product-card" href="/video-seo">
-        <div class="product-card-category">2 free AI · then credits</div>
-        <h3>Video SEO</h3>
-        <p>Paste-ready titles, descriptions, tags, and hashtags. Download the pack, keep history, refine one platform cheaply.</p>
-        <span class="product-card-cta">Open Video SEO →</span>
-      </a>
-      <a class="product-card" href="/campaign-kit">
-        <div class="product-card-category">Free recipes · paid stills</div>
-        <h3>Campaign Kit</h3>
-        <p>Aspect-safe prompts and burn-ins for free. Bought credits → finished thumbs and teasers.</p>
-        <span class="product-card-cta">Open Campaign Kit →</span>
-      </a>
-    </div>
-  </div>
-</section>
-
-<hr class="divider" />
-
-<section class="section" id="credits">
-  <div class="container">
-    <p class="section-label">Credits</p>
-    <h2 class="section-title">One balance across the AI tools</h2>
-    <p class="section-sub">Sign up free for starter credits. Top up with packs or a subscription. Ludo and free Tools do not use credits. Campaign Kit AI render needs purchased credits.</p>
-    <div class="credits-strip">
-      <article>
-        <h3>Shared pool</h3>
-        <p>Cuemark, Superconductor, Trillian, and Tambourine draw from the same Keyweaver Credits balance.</p>
-      </article>
-      <article>
-        <h3>Try without an account</h3>
-        <p>Each AI panel includes a guest trial. Create a free account when you want credits that follow you.</p>
-      </article>
-      <article>
-        <h3>Simple pricing</h3>
-        <p>Credit packs never expire. Monthly and yearly plans refresh your balance automatically.</p>
-      </article>
-    </div>
-    <div style="margin-top:2rem; display:flex; flex-wrap:wrap; gap:0.75rem;">
-      <a href="/pricing" class="btn btn-primary btn-lg">See pricing</a>
-      <a href="/signup" class="btn btn-ghost btn-lg">Create free account</a>
-    </div>
-  </div>
-</section>
-
-<section class="cta-band">
-  <h2>Install once. Open in AE or Premiere.</h2>
-  <p>Windows and macOS: install Keyweaver Manager, then install any After Effects or Premiere Pro plugin from the catalog.</p>
-  <div class="hub-ctas">
-    <a href="/download" class="btn btn-primary btn-xl">Go to download</a>
-    <a href="/help" class="btn btn-ghost btn-xl">Help centre</a>
-  </div>
-</section>
-
-<footer class="site-footer">
-  <p>© 2026 Keyweaver Ltd. All rights reserved.</p>
-  <p class="footer-entity">Registered in England &amp; Wales · Company no. 17283644 · 20 Wenlock Road, London, N1 7GU</p>
-  <ul class="footer-products">
-    <li><a href="/cuemark">Cuemark</a></li>
-    <li><a href="/superconductor">Superconductor</a></li>
-    <li><a href="/trillian">Trillian</a></li>
-    <li><a href="/tambourine">Tambourine</a></li>
-    <li><a href="/ludo">Ludo</a></li>
-  </ul>
-  <ul class="footer-links">
-    <li><a href="/blog">Blog</a></li>
-    <li><a href="/video-seo">Video SEO</a></li>
-    <li><a href="/campaign-kit">Campaign Kit</a></li>
-    <li><a href="/shot-list">Shot List</a></li>
-    <li><a href="/legal/privacy">Privacy</a></li>
-    <li><a href="/legal/terms">Terms</a></li>
-    <li><a href="/legal/cookies">Cookies</a></li>
-    <li><a href="/changelog">Release notes</a></li>
-    <li><a href="/help">Help</a></li>
-    <li><a href="/about">About</a></li>
-  </ul>
-</footer>
-
-<script src="/js/help-widget.js" defer></script>
-<script src="/js/cuemark-turnstile.js"></script>
-<script>
-(function () {
-  var params = new URLSearchParams(window.location.search);
-  if (params.get('deleted') !== '1') return;
-  var banner = document.getElementById('deleted-banner');
-  if (banner) banner.classList.add('is-visible');
-  params.delete('deleted');
-  var query = params.toString();
-  history.replaceState(null, '', window.location.pathname + (query ? '?' + query : ''));
-  var dismiss = document.getElementById('deleted-banner-dismiss');
-  if (dismiss && banner) {
-    dismiss.addEventListener('click', function () {
-      banner.classList.remove('is-visible');
-    });
-  }
-})();
-</script>
+  <main>
+    <p class="brand">Keyweaver</p>
+    <h1>We’re paused for now</h1>
+    <p>New downloads and sign-ups are unavailable while the company is wound down.</p>
+    <p>If you already have the plugins installed, they should keep working as usual for a while.</p>
+    <p class="note">Questions: <a href="mailto:hello@keyweaver.io">hello@keyweaver.io</a></p>
+  </main>
 </body>
 </html>

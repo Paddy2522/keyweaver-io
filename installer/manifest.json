@@ -1,244 +1,35 @@
 {
-    "manifestVersion":  1,
-    "bootstrapMinVersion":  "1.0.0",
-    "publisher":  "Keyweaver Ltd",
-    "catalogUrl":  "https://keyweaver.io/installer/manifest.json",
-    "manager":  {
-                    "version":  "1.0.25",
-                    "baseUrl":  "https://keyweaver.io/installer/manager/",
-                    "files":  {
-                                  "Keyweaver-Manager.ps1":  "2a850bd16484836799f23460132a78e64fc161b19c578fabd83c001c55226fc4",
-                                  "Keyweaver-InstallLib.ps1":  "0a23bbac8fcacabd871f261fc51a55261ab52ca93ecd48266f6ba7e24d36fcff",
-                                  "Keyweaver-Manager-Launcher.ps1":  "8f0eaffb5762de02b5521e2fd68b851e2ee62c54f42e5fdccd95a982dfa93f6e",
-                                  "Sync-KeyweaverManagerRuntime.ps1":  "21230c134a1daaf901971817d14d317c53cd34f3df1daf54f6605885712c57bb",
-                                  "Keyweaver-Manager.exe":  "f0186fc48cfe4a266d178c6db8c440de5bbdafef02a6aa808cad4b3b4dcb042d",
-                                  "Keyweaver-Manager.cmd":  "56add36ae43a1dab56844b8fbb589815554900005008275d83b60a2c3f8ed7bd",
-                                  "Keyweaver-Manager.vbs":  "a27d0a42064c2d38cc548a317ae4701d56e9526d42bd014be40690e15733058c",
-                                  "keyweaver.ico":  "a2133d99221ac192cb3e42b008e7edb59d1ef8ad539168785189b1de191e1d4f",
-                                  "images/keyweaver-logo.png":  "4b0b8c6eb33d056c4040711d5d8a68085803a91b9300aa1252ed94c77c551d9b",
-                                  "images/cuemark-logo.png":  "662898c3eb53a987439e9d9421fb79b22a7d633cfdb7ff5bfdd126d76790e8ba",
-                                  "images/cuemark-icon.png":  "4454a2e74a11f7d7361df4662a3456f7904867f032f69210b5c09d3f1ac98e80",
-                                  "images/superconductor-logo.png":  "90eb00377403f4e9cd0c5e7188c6657a0631e9f46c7ec826af9c2d0acd21a42e",
-                                  "images/superconductor-icon.png":  "f209a228a1e5b2b9807512c5c49b40eadea5371eef2fd7782d7a7c06bb77d918",
-                                  "images/ludo-logo.png":  "473da1a826789e2d4c585f158320c1a30df1ef9f0413b828de16a4d7219323bd",
-                                  "images/ludo-icon.png":  "faef406bcb5e700ff19eb3f7ba6b47093d9aa92f8c6524f673d1d41d26fe7cc0",
-                                  "images/trillian-logo.png":  "ee7954730e5a750ef6c7626ef080ae2d4043f2908610cb64aa6303ff10a1055b",
-                                  "images/trillian-icon.png":  "378d36ad7c927c8e86f38834d13e9214ed1d7ec422b0ac4b63a31ab04242a78e",
-                                  "images/tamborine-logo.png":  "c700cf8bc9468dc1cef15e445190132c2dfe397b81216690f0b5ddbd1246840c",
-                                  "images/tamborine-icon.png":  "ff6293f90bdc07dbc36b12ff78d1472f03af0b3445569fe897c5f1499bae25e0"
-                              }
-                },
-    "products":  [
-                     {
-                         "id":  "cuemark",
-                         "displayName":  "Cuemark by Keyweaver",
-                         "description":  "AI subtitles and captions inside Adobe After Effects.",
-                         "panelId":  "com.captioncraft.panel",
-                         "version":  "1.0.9",
-                         "host":  "AEFT",
-                         "hostLabel":  "After Effects",
-                         "platforms":  {
-                                           "win":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Cuemark-Install-win-v1.0.9.zip",
-                                                       "sha256":  "3458964e63146ae09a42857ce88490bbde56ab82cc989aedfd5b5151f3474534",
-                                                       "sizeBytes":  50284326,
-                                                       "installScript":  "cuemark-install-windows.ps1"
-                                                   },
-                                           "mac":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Cuemark-Install-mac-v1.0.9.zip",
-                                                       "sha256":  "973485cf43862ba9fcff42d0576f8702d901c01501c35849875369cdc52a8519",
-                                                       "sizeBytes":  67698191,
-                                                       "installScript":  "cuemark-install-macos.sh"
-                                                   }
-                                       },
-                         "helpUrl":  "https://keyweaver.io/help#cuemark",
-                         "menuPath":  "Window -\u003e Extensions -\u003e Keyweaver - Cuemark",
-                         "accent":  "#3D9CF0"
-                     },
-                     {
-                         "id":  "trillian",
-                         "displayName":  "Trillian by Keyweaver",
-                         "description":  "AI voiceover and narration you can drop into your comp.",
-                         "panelId":  "com.keyweaver.trillian.panel",
-                         "version":  "0.1.8",
-                         "host":  "AEFT",
-                         "hostLabel":  "After Effects",
-                         "platforms":  {
-                                           "win":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Trillian-Install-win-v0.1.8.zip",
-                                                       "sha256":  "ac83c0564a18789da50d84c8525c9a2602a47dfc8beb5fc066810286917619bd",
-                                                       "sizeBytes":  125969,
-                                                       "installScript":  "trillian-install-windows.ps1"
-                                                   },
-                                           "mac":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Trillian-Install-mac-v0.1.8.zip",
-                                                       "sha256":  "97031d031d8eafa848c22eede05ac268915de0dc8b1a62a74668d09ff5ac7310",
-                                                       "sizeBytes":  125433,
-                                                       "installScript":  "trillian-install-macos.sh"
-                                                   }
-                                       },
-                         "helpUrl":  "https://keyweaver.io/help#trillian",
-                         "menuPath":  "Window -\u003e Extensions -\u003e Keyweaver - Trillian",
-                         "accent":  "#B56BFF"
-                     },
-                     {
-                         "id":  "tamborine",
-                         "displayName":  "Tambourine by Keyweaver",
-                         "description":  "Generate music beds and sound effects for your edit.",
-                         "panelId":  "com.keyweaver.tamborine.panel",
-                         "version":  "0.1.8",
-                         "host":  "AEFT",
-                         "hostLabel":  "After Effects",
-                         "platforms":  {
-                                           "win":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Tambourine-Install-win-v0.1.8.zip",
-                                                       "sha256":  "0c81501b6d881725bba4a389d99959f1a763b6627c2ead9efea5a443f9bea306",
-                                                       "sizeBytes":  123059,
-                                                       "installScript":  "tamborine-install-windows.ps1"
-                                                   },
-                                           "mac":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Tambourine-Install-mac-v0.1.8.zip",
-                                                       "sha256":  "585ea05dc7d371cc50d55168609a324e21ea420565af322f60fd86d88ec5b170",
-                                                       "sizeBytes":  122522,
-                                                       "installScript":  "tamborine-install-macos.sh"
-                                                   }
-                                       },
-                         "helpUrl":  "https://keyweaver.io/help#tambourine",
-                         "menuPath":  "Window -\u003e Extensions -\u003e Keyweaver - Tambourine",
-                         "accent":  "#E8952F"
-                     },
-                     {
-                         "id":  "superconductor",
-                         "displayName":  "Superconductor by Keyweaver",
-                         "description":  "AI video shots and motion plates inside After Effects.",
-                         "panelId":  "com.keyweaver.superconductor.panel",
-                         "version":  "0.1.7",
-                         "host":  "AEFT",
-                         "hostLabel":  "After Effects",
-                         "platforms":  {
-                                           "win":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Superconductor-Install-win-v0.1.7.zip",
-                                                       "sha256":  "540717d3994d9a7fa70ed25dbd4d41d98359241e97fe7556feb01b6edb92444e",
-                                                       "sizeBytes":  126992,
-                                                       "installScript":  "superconductor-install-windows.ps1"
-                                                   },
-                                           "mac":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Superconductor-Install-mac-v0.1.7.zip",
-                                                       "sha256":  "cd6dedb748c2a2fa11733af6eebedad69bdbbab751996fca5c6e508ea51f5b53",
-                                                       "sizeBytes":  126455,
-                                                       "installScript":  "superconductor-install-macos.sh"
-                                                   }
-                                       },
-                         "helpUrl":  "https://keyweaver.io/help#superconductor",
-                         "menuPath":  "Window -\u003e Extensions -\u003e Keyweaver - Superconductor",
-                         "accent":  "#5B6BF8"
-                     },
-                     {
-                         "id":  "ludo",
-                         "displayName":  "Ludo by Keyweaver",
-                         "description":  "Motion toolkit - animation, text, layout, colour, and export.",
-                         "panelId":  "com.keyweaver.ludo.panel",
-                         "version":  "0.3.12",
-                         "host":  "AEFT",
-                         "hostLabel":  "After Effects",
-                         "platforms":  {
-                                           "win":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Ludo-Install-win-v0.3.12.zip",
-                                                       "sha256":  "eabf63e93bc1a86b3b0d523e7f49021cb0d7dc2af6add01d203e81282d34f4c3",
-                                                       "sizeBytes":  304963,
-                                                       "installScript":  "ludo-install-windows.ps1"
-                                                   },
-                                           "mac":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Ludo-Install-mac-v0.3.12.zip",
-                                                       "sha256":  "107501bc00cc3eb46dc8cf9bb0749659fb1e5beb7894f8e17a8750d4d8c5f011",
-                                                       "sizeBytes":  304428,
-                                                       "installScript":  "ludo-install-macos.sh"
-                                                   }
-                                       },
-                         "helpUrl":  "https://keyweaver.io/help#ludo",
-                         "menuPath":  "Window -\u003e Extensions -\u003e Keyweaver - Ludo",
-                         "accent":  "#34D399"
-                     },
-                     {
-                         "id":  "trillian-premiere",
-                         "displayName":  "Trillian for Premiere",
-                         "description":  "AI voiceover and narration for Adobe Premiere Pro.",
-                         "panelId":  "com.keyweaver.trillian.premiere.panel",
-                         "version":  "0.1.9",
-                         "host":  "PPRO",
-                         "hostLabel":  "Premiere Pro",
-                         "platforms":  {
-                                           "win":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Trillian-Premiere-Install-win-v0.1.9.zip",
-                                                       "sha256":  "b29a437e96d1be29f4d3b0bfb6578859106827c7350d6f04c99da86f78f43a5a",
-                                                       "sizeBytes":  126819,
-                                                       "installScript":  "trillian-premiere-install-windows.ps1"
-                                                   },
-                                           "mac":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Trillian-Premiere-Install-mac-v0.1.9.zip",
-                                                       "sha256":  "5963d34e9b7697a0ec1795fe18198be52d00e1829da714d47dd7611d3b9ba7ef",
-                                                       "sizeBytes":  126299,
-                                                       "installScript":  "trillian-premiere-install-macos.sh"
-                                                   }
-                                       },
-                         "helpUrl":  "https://keyweaver.io/help#trillian",
-                         "menuPath":  "Window -\u003e Extensions -\u003e Keyweaver - Trillian",
-                         "accent":  "#B56BFF"
-                     },
-                     {
-                         "id":  "tamborine-premiere",
-                         "displayName":  "Tambourine for Premiere",
-                         "description":  "Generate music beds and sound effects in Premiere Pro.",
-                         "panelId":  "com.keyweaver.tamborine.premiere.panel",
-                         "version":  "0.1.9",
-                         "host":  "PPRO",
-                         "hostLabel":  "Premiere Pro",
-                         "platforms":  {
-                                           "win":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Tambourine-Premiere-Install-win-v0.1.9.zip",
-                                                       "sha256":  "e8e761a5641d5c9c65f82735a7db11334f26e32cbf3b586b9e749d9c56078b8c",
-                                                       "sizeBytes":  125196,
-                                                       "installScript":  "tamborine-premiere-install-windows.ps1"
-                                                   },
-                                           "mac":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Tambourine-Premiere-Install-mac-v0.1.9.zip",
-                                                       "sha256":  "45408619e4469e3a98c11e3456380acb8d4f97a7573697070a763fb9a65b8544",
-                                                       "sizeBytes":  124675,
-                                                       "installScript":  "tamborine-premiere-install-macos.sh"
-                                                   }
-                                       },
-                         "helpUrl":  "https://keyweaver.io/help#tambourine",
-                         "menuPath":  "Window -\u003e Extensions -\u003e Keyweaver - Tambourine",
-                         "accent":  "#E8952F"
-                     },
-                     {
-                         "id":  "superconductor-premiere",
-                         "displayName":  "Superconductor for Premiere",
-                         "description":  "AI video shots and motion plates for Premiere Pro.",
-                         "panelId":  "com.keyweaver.superconductor.premiere.panel",
-                         "version":  "0.1.8",
-                         "host":  "PPRO",
-                         "hostLabel":  "Premiere Pro",
-                         "platforms":  {
-                                           "win":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Superconductor-Premiere-Install-win-v0.1.8.zip",
-                                                       "sha256":  "59f81277a8e812d804e2c46fbf4463915d6a1aa424b911f1c7e49203728b6e90",
-                                                       "sizeBytes":  127484,
-                                                       "installScript":  "superconductor-premiere-install-windows.ps1"
-                                                   },
-                                           "mac":  {
-                                                       "packageUrl":  "https://keyweaver.io/downloads/Superconductor-Premiere-Install-mac-v0.1.8.zip",
-                                                       "sha256":  "4effc3da8f4acc4dde8e6e48d3e700dc33b05b04de51ea8c0a934958fa3ec3d1",
-                                                       "sizeBytes":  126965,
-                                                       "installScript":  "superconductor-premiere-install-macos.sh"
-                                                   }
-                                       },
-                         "helpUrl":  "https://keyweaver.io/help#superconductor",
-                         "menuPath":  "Window -\u003e Extensions -\u003e Keyweaver - Superconductor",
-                         "accent":  "#5B6BF8"
-                     }
-                 ],
-    "promotions":  [
-
-                   ]
+    "manifestVersion": 1,
+    "bootstrapMinVersion": "1.0.0",
+    "publisher": "Keyweaver Ltd",
+    "catalogUrl": "https://keyweaver.io/installer/manifest.json",
+    "manager": {
+        "version": "1.0.25",
+        "baseUrl": "https://keyweaver.io/installer/manager/",
+        "files": {
+            "Keyweaver-Manager.ps1": "2a850bd16484836799f23460132a78e64fc161b19c578fabd83c001c55226fc4",
+            "Keyweaver-InstallLib.ps1": "0a23bbac8fcacabd871f261fc51a55261ab52ca93ecd48266f6ba7e24d36fcff",
+            "Keyweaver-Manager-Launcher.ps1": "8f0eaffb5762de02b5521e2fd68b851e2ee62c54f42e5fdccd95a982dfa93f6e",
+            "Sync-KeyweaverManagerRuntime.ps1": "21230c134a1daaf901971817d14d317c53cd34f3df1daf54f6605885712c57bb",
+            "Keyweaver-Manager.exe": "f0186fc48cfe4a266d178c6db8c440de5bbdafef02a6aa808cad4b3b4dcb042d",
+            "Keyweaver-Manager.cmd": "56add36ae43a1dab56844b8fbb589815554900005008275d83b60a2c3f8ed7bd",
+            "Keyweaver-Manager.vbs": "a27d0a42064c2d38cc548a317ae4701d56e9526d42bd014be40690e15733058c",
+            "keyweaver.ico": "a2133d99221ac192cb3e42b008e7edb59d1ef8ad539168785189b1de191e1d4f",
+            "images/keyweaver-logo.png": "4b0b8c6eb33d056c4040711d5d8a68085803a91b9300aa1252ed94c77c551d9b",
+            "images/cuemark-logo.png": "662898c3eb53a987439e9d9421fb79b22a7d633cfdb7ff5bfdd126d76790e8ba",
+            "images/cuemark-icon.png": "4454a2e74a11f7d7361df4662a3456f7904867f032f69210b5c09d3f1ac98e80",
+            "images/superconductor-logo.png": "90eb00377403f4e9cd0c5e7188c6657a0631e9f46c7ec826af9c2d0acd21a42e",
+            "images/superconductor-icon.png": "f209a228a1e5b2b9807512c5c49b40eadea5371eef2fd7782d7a7c06bb77d918",
+            "images/ludo-logo.png": "473da1a826789e2d4c585f158320c1a30df1ef9f0413b828de16a4d7219323bd",
+            "images/ludo-icon.png": "faef406bcb5e700ff19eb3f7ba6b47093d9aa92f8c6524f673d1d41d26fe7cc0",
+            "images/trillian-logo.png": "ee7954730e5a750ef6c7626ef080ae2d4043f2908610cb64aa6303ff10a1055b",
+            "images/trillian-icon.png": "378d36ad7c927c8e86f38834d13e9214ed1d7ec422b0ac4b63a31ab04242a78e",
+            "images/tamborine-logo.png": "c700cf8bc9468dc1cef15e445190132c2dfe397b81216690f0b5ddbd1246840c",
+            "images/tamborine-icon.png": "ff6293f90bdc07dbc36b12ff78d1472f03af0b3445569fe897c5f1499bae25e0"
+        }
+    },
+    "products": [],
+    "promotions": [],
+    "sunset": true,
+    "sunsetMessage": "Keyweaver downloads are paused. Existing installs are unaffected."
 }

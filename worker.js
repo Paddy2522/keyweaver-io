@@ -11,15 +11,37 @@ export default {
     const path = url.pathname;
     const lower = path.toLowerCase();
 
-    // Non-content paths Google has discovered from JS strings / Stream UI.
-    // Real APIs live on keyweaver-backend.vercel.app — these hosts must stay out of the index.
+    // --- Sunset mode: block new downloads; show placeholder for marketing pages ---
+    // Existing plugin installs keep using the backend APIs; only acquisition is stopped.
+    if (lower === '/downloads' || lower.startsWith('/downloads/')) {
+      return new Response('Downloads are unavailable. Keyweaver is paused.', {
+        status: 410,
+        headers: {
+          'Content-Type': 'text/plain; charset=utf-8',
+          'X-Robots-Tag': 'noindex, nofollow',
+          'Cache-Control': 'no-store',
+        },
+      });
+    }
+
+    const isStaticAsset =
+      lower.startsWith('/images/') ||
+      lower.startsWith('/css/') ||
+      lower.startsWith('/js/') ||
+      lower.startsWith('/installer/') ||
+      lower === '/downloads.json' ||
+      lower === '/changelog.json' ||
+      lower === '/robots.txt' ||
+      lower === '/sitemap.xml' ||
+      lower === '/favicon.ico' ||
+      /\.(png|jpe?g|webp|gif|svg|ico|woff2?|ttf|map|json)$/i.test(lower);
+
+    // Non-content junk paths
     const isJunk =
       lower === '/api' ||
       lower.startsWith('/api/') ||
       lower === '/manifest' ||
-      lower.startsWith('/manifest/') ||
-      lower === '/downloads' ||
-      lower === '/downloads/';
+      lower.startsWith('/manifest/');
 
     if (isJunk) {
       return new Response('Not found', {
@@ -33,7 +55,10 @@ export default {
     }
 
     let assetRequest = request;
-    if (path === '/' || path === '') {
+    if (!isStaticAsset) {
+      // All marketing / clean URLs → placeholder homepage
+      assetRequest = new Request(new URL('/index.html', url), request);
+    } else if (path === '/' || path === '') {
       assetRequest = new Request(new URL('/index.html', url), request);
     }
 
@@ -47,8 +72,11 @@ export default {
 
     const headers = new Headers(response.headers);
 
-    // Soft-signal: never index error pages even if a crawler keeps the URL.
     if (response.status === 404 || response.status === 410) {
+      headers.set('X-Robots-Tag', 'noindex, nofollow');
+    }
+
+    if (isHtml) {
       headers.set('X-Robots-Tag', 'noindex, nofollow');
     }
 
